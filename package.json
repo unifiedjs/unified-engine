@@ -1,7 +1,7 @@
 {
   "name": "unified-engine",
   "version": "0.0.0",
-  "description": "Engine for processing multiple files with unified",
+  "description": "Engine to process multiple files with unified",
   "license": "MIT",
   "keywords": [
     "unified",

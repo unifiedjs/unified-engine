@@ -3,7 +3,7 @@
  * @copyright 2016 Titus Wormer
  * @license MIT
  * @module unified-engine
- * @fileoverview Engine for processing multiple files with unified.
+ * @fileoverview Engine to process multiple files with unified.
  */
 
 'use strict';

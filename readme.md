@@ -6,7 +6,7 @@
 > yet to bubble through to the ecosystem before all examples start
 > working.
 
-Engine for processing multiple files with [**unified**][unified],
+Engine to process multiple files with [**unified**][unified],
 allowing users to [configure][] from the file-system.
 
 ## Installation
