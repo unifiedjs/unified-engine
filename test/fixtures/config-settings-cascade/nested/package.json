@@ -1,0 +1,8 @@
+{
+  "fooConfig": {
+    "settings": {
+      "nested-package": true,
+      "cascade": 6
+    }
+  }
+}

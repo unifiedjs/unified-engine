@@ -1,0 +1,8 @@
+{
+  "fooConfig": {
+    "plugins": {
+      "test": null,
+      "test-2": null
+    }
+  }
+}

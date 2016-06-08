@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "test",
+    "test-2"
+  ]
+}

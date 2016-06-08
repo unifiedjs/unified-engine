@@ -1,0 +1,8 @@
+{
+  "fooConfig": {
+    "settings": {
+      "package": true,
+      "cascade": 3
+    }
+  }
+}

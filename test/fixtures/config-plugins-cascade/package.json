@@ -1,0 +1,11 @@
+{
+  "fooConfig": {
+    "coverage": "quuuux",
+    "plugins": {
+      "test": {
+        "package": ["foo", "bar", "baz"],
+        "cascade": 2
+      }
+    }
+  }
+}

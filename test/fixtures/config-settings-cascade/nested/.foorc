@@ -1,0 +1,6 @@
+{
+  "settings": {
+    "nested-rc": true,
+    "cascade": 4
+  }
+}
