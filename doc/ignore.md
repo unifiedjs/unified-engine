@@ -19,8 +19,8 @@ found, the closest one to `cwd` takes precedence.
 
 By default hidden directories, those starting with a dot (`.`), such as
 `.git`, and `node_modules` are not searched.  These can be included by
-either passing them directly in [`globs`][globs], or by using a negated
-ignore pattern (for example, `!.git`).
+either passing them directly in `globs`, or by using a negated ignore
+pattern (for example, `!.git`).
 
 ###### Example
 

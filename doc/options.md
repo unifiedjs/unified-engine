@@ -92,8 +92,8 @@ Paths or [globs][glob] to files and directories to process.  Fileglobs
 (for example, `*.md`) can be given to add all matching files.
 Directories can be given alongside [`extensions`][extensions] to search
 directories for files matching an extension (for example, `dir` to add
-`dir/readme.txt` and `dir/sub/history.text` if [`extensions`][extensions]
-is `['txt', 'text']`).
+`dir/readme.txt` and `dir/sub/history.text` if `extensions` is
+`['txt', 'text']`).
 
 *   Type: `Array.<string>`;
 *   Default: `[]`.
@@ -119,8 +119,8 @@ engine({
 
 ## `options.extensions`
 
-If `globs` matches directories, those directories are searched for
-files whose extension matches the given `extensions`.
+If [`globs`][globs] matches directories, those directories are searched
+for files whose extension matches the given `extensions`.
 
 *   Type: `Array.<string>`;
 *   Default: `[]`.
@@ -190,7 +190,7 @@ Yields:
 
 ## `options.filePath`
 
-File path to process the given file on `streamIn` as, if any.
+File path to process the given file on [`streamIn`][stream-in] as, if any.
 
 *   Type: `string` (optional).
 
@@ -235,8 +235,8 @@ Yields:
 
 Stream to write processed files to.  This behaviour is suppressed if:
 
-*   `out` is `false`;
-*   `output` is not `false`;
+*   [`out`][out] is `false`;
+*   [`output`][output] is not `false`;
 *   multiple files are processed;
 *   a fatal error occurred while processing a file.
 
@@ -298,8 +298,8 @@ engine({
 
 Whether to write the processed file to [`streamOut`][stream-out].  The
 default behaviour is to only write under some conditions, as specified
-in the section on [`streamOut`][stream-out], but if `out` is `false`
-nothing will be written to [`streamOut`][stream-out].
+in the section on `streamOut`, but if `out` is `false` nothing will be
+written to `streamOut`.
 
 *   Type: `boolean`;
 *   Default: depends (see above).
@@ -588,8 +588,9 @@ engine({
 
 ## `options.detectConfig`
 
-Whether to search for [configuration][configure] files (`$rcName`,
-`$rcName.js`, and `package.json` with `$packageField`).
+Whether to search for [configuration][configure] files
+([`$rcName`][rc-name], `$rcName.js`, and `package.json` with
+[`$packageField`][package-field]).
 
 *   Type: `boolean`, optional;
 
@@ -673,8 +674,9 @@ engine({
 
 ## `options.ignoreName`
 
-Name of ignore file to load.  If given and [`detectIgnore`][detect-ignore]
-is not `false`, `$ignoreName` files are loaded.
+Name of [ignore file][ignore] to load.  If given and
+[`detectIgnore`][detect-ignore] is not `false`, `$ignoreName` files are
+loaded.
 
 *   Type: `string`, optional.
 
@@ -700,7 +702,7 @@ engine({
 
 ## `options.detectIgnore`
 
-Whether to search for ignore files (`$ignoreName`).
+Whether to search for [ignore file][ignore] ([`$ignoreName`][ignore-name]).
 
 *   Type: `boolean`, optional;
 *   Default: `true` if [`ignoreName`][ignore-name] is given.
@@ -728,8 +730,8 @@ engine({
 
 ## `options.ignorePath`
 
-File-path to JSON file to load, regardless of [`detectIgnore`][detect-ignore]
-or [`ignoreName`][ignore-name].
+File-path to [ignore file][ignore] to load, regardless of
+[`detectIgnore`][detect-ignore] or [`ignoreName`][ignore-name].
 
 *   Type: `string`, optional.
 
@@ -966,7 +968,7 @@ engine({
 ## `options.files`
 
 References to files to process.  When `files` are given, [`globs`][globs],
-[`streamIn`][stream-in], and ignore files are not honoured.
+[`streamIn`][stream-in], and [ignore files][ignore] are not honoured.
 
 *   Type: [`Array.<VFile>`][vfile], optional.
 
@@ -1029,6 +1031,8 @@ engine({
 
 [configure]: ./configure.md
 
+[ignore]: ./ignore.md
+
 [api]: ../readme.md#api
 
 [globs]: #optionsglobs
@@ -1038,6 +1042,10 @@ engine({
 [stream-in]: #optionsstreamin
 
 [stream-out]: #optionsstreamout
+
+[out]: #optionsout
+
+[output]: #optionsoutput
 
 [tree]: #optionstree
 

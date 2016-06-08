@@ -76,7 +76,7 @@ module.exports = {
 
 ## Cascade
 
-Precedence is as follows (where earlier represents higher precedence):
+Precedence is as follows (earlier represents higher precedence):
 
 *   [`plugins`][plugins], [`settings`][settings], and [`output`][output]
     passed in [`options`][options];
@@ -87,9 +87,9 @@ Precedence is as follows (where earlier represents higher precedence):
     fields in `package.json` in the directory of the processed file,
     and in ancestral directories;
 
-*   Files named `$rcName`, `$rcName.js`, and `$packageField` fields
-    in `package.json` in the directory of the processed file, and in
-    ancestral directories;
+*   Files named [`$rcName`][rc-name], `$rcName.js`, and
+    [`$packageField`][package-field] fields in `package.json` in the
+    directory of the processed file, and in ancestral directories;
 
 *   If no `$rcName` or `$rcName.js`, or `$packageField` in `package.json`
     were detected, per-user configuration files (`~/$rcName` and
