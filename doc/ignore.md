@@ -17,8 +17,10 @@ Ignore files do not cascade.  Before searching for [`globs`][globs] in
 searched for files named `$ignoreName`.  If multiple ignore files are
 found, the closest one to `cwd` takes precedence.
 
-By default hidden directories, those starting with a dot (`.`), such as
-`.git`, and `node_modules` are not searched.  These can be included by
+Files in `node_modules` are never included.
+
+Hidden directories (those starting with a dot, `.`), such as
+`.git` are normally not searched.  These can be included by
 either passing them directly in `globs`, or by using a negated ignore
 pattern (for example, `!.git`).
 
