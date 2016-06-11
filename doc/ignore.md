@@ -49,8 +49,9 @@ to ignore a given path.
 
 *   Lines which start with an octothorp (`#`) are ignored;
 
-*   Lines which start with a interrogation-mark (`!`) negate, thus re-adding
-    an ignored file path;
+*   Lines which start with a interrogation-mark (`!`) negate, thus
+    re-adding an ignored file path.  **Note**: using negation patterns
+    comes at a significant performance cost.
 
 For documentation on support of wild-cards (`*`, `?`), brace expressions
 (`{one,two}`), and more, see [`minimatch`][minimatch].
