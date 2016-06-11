@@ -14,7 +14,7 @@
     "debug": "^2.2.0",
     "fn-name": "^2.0.1",
     "glob": "^7.0.3",
-    "globby": "^4.1.0",
+    "globby": "^5.0.0",
     "is-hidden": "^1.0.1",
     "load-plugin": "^1.0.0",
     "minimatch": "^3.0.0",
