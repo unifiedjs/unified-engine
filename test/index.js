@@ -1111,7 +1111,7 @@ test('engine', function (t) {
     });
 
     t.test('stdin', function (st) {
-        st.plan(1);
+        st.plan(2);
 
         st.test('should support stdin', function (sst) {
             var stdout = spy();
@@ -1135,17 +1135,55 @@ test('engine', function (t) {
             engine({
                 'processor': noop,
                 'cwd': join(fixtures, 'empty'),
+                'streamIn': stream,
                 'streamOut': stdout.stream,
-                'streamError': stderr.stream,
-                'globs': [],
-                'streamIn': stream
+                'streamError': stderr.stream
             }, function (err, code) {
                 sst.equal(
                     stdout(),
                     '1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n',
-                    'should report'
+                    'should output by default'
                 );
 
+                sst.error(err, 'should not fail fatally');
+                sst.equal(code, 0, 'should exit with `0`');
+
+                sst.equal(
+                    stderr(),
+                    '<stdin>: no issues found\n',
+                    'should report'
+                );
+            });
+        });
+
+        st.test('should not output if `out: false`', function (sst) {
+            var stdout = spy();
+            var stderr = spy();
+            var stream = new PassThrough();
+            var index = 0;
+
+            sst.plan(4);
+
+            function send() {
+                if (++index > 10) {
+                    stream.end();
+                } else {
+                    stream.write(index + '\n');
+                    setTimeout(send, 10);
+                }
+            }
+
+            send();
+
+            engine({
+                'processor': noop,
+                'cwd': join(fixtures, 'empty'),
+                'streamIn': stream,
+                'streamOut': stdout.stream,
+                'streamError': stderr.stream,
+                'out': false
+            }, function (err, code) {
+                sst.equal(stdout(), '', 'should not output without `out`');
                 sst.error(err, 'should not fail fatally');
                 sst.equal(code, 0, 'should exit with `0`');
 
@@ -1159,9 +1197,9 @@ test('engine', function (t) {
     });
 
     t.test('output', function (st) {
-        st.plan(10);
+        st.plan(11);
 
-        st.test('should write one file to stdout', function (sst) {
+        st.test('should not write to stdout on dirs', function (sst) {
             var cwd = join(fixtures, 'one-file');
             var stdout = spy();
             var stderr = spy();
@@ -1179,6 +1217,38 @@ test('engine', function (t) {
                 'streamOut': stdout.stream,
                 'streamError': stderr.stream,
                 'globs': ['.'],
+                'extensions': ['txt']
+            }, function (err, code) {
+                sst.equal(stdout(), '', 'should write');
+                sst.error(err, 'should not fail fatally');
+                sst.equal(code, 0, 'should exit with `0`');
+
+                sst.equal(
+                    stderr(),
+                    'one.txt: no issues found\n',
+                    'should report'
+                );
+            });
+        });
+
+        st.test('should write to stdout on one file', function (sst) {
+            var cwd = join(fixtures, 'one-file');
+            var stdout = spy();
+            var stderr = spy();
+
+            sst.plan(4);
+
+            engine({
+                'processor': noop().use(function () {
+                    return function (tree) {
+                        /* Change the tree */
+                        tree.value = 'two';
+                    }
+                }),
+                'cwd': cwd,
+                'streamOut': stdout.stream,
+                'streamError': stderr.stream,
+                'globs': ['one.txt'],
                 'extensions': ['txt']
             }, function (err, code) {
                 sst.equal(stdout(), 'two\n', 'should write');
@@ -1211,7 +1281,7 @@ test('engine', function (t) {
                 'streamError': stderr.stream,
                 'streamOut': stdout.stream,
                 'out': false,
-                'globs': ['.'],
+                'globs': ['one.txt'],
                 'extensions': ['txt']
             }, function (err, code) {
                 sst.equal(stdout(), '', 'should not write');
@@ -1757,7 +1827,6 @@ test('engine', function (t) {
                 'cwd': join(fixtures, 'empty'),
                 'streamOut': stdout.stream,
                 'streamError': stderr.stream,
-                'globs': [],
                 'streamIn': stream,
                 'filePath': 'foo/bar.baz'
             }, function (err, code) {

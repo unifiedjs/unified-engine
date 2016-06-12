@@ -110,8 +110,7 @@ var remark = require('remark');
 engine({
     'processor': remark,
     'globs': ['README', 'doc'],
-    'extensions': ['md'],
-    'out': false
+    'extensions': ['md']
 }, function (err) {
     if (err) throw err;
 });
