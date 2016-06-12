@@ -2,6 +2,12 @@
 
 <!--lint disable no-multiple-toplevel-headings-->
 
+1.1.1 / 2016-06-12
+==================
+
+*   Fix bug where `output` in config files was not honoured ([`cf1b4d4`](https://github.com/wooorm/unified-engine/commit/cf1b4d4))
+*   Fix bug when piping empty file ([`2da3a5f`](https://github.com/wooorm/unified-engine/commit/2da3a5f))
+
 1.1.0 / 2016-06-12
 ==================
 
