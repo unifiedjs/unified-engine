@@ -222,7 +222,7 @@ test('engine', function (t) {
     );
 
     t.test('input', function (st) {
-        st.plan(10);
+        st.plan(11);
 
         st.test('should fail without input', function (sst) {
             var stream = new PassThrough();
@@ -244,6 +244,30 @@ test('engine', function (t) {
             });
 
             stream.end();
+        });
+
+        st.test('should not fail on empty input stream', function (sst) {
+            var stderr = spy();
+            var stream = new PassThrough();
+
+            sst.plan(3);
+
+            engine({
+                'processor': noop,
+                'streamIn': stream,
+                'streamError': stderr.stream
+            }, function (err, code) {
+                sst.error(err, 'should not fail fatally');
+                sst.equal(code, 0, 'should exit with `0`');
+
+                sst.equal(
+                    stderr(),
+                    '<stdin>: no issues found\n',
+                    'should report'
+                );
+            });
+
+            stream.end('');
         });
 
         st.test('should report unfound given files', function (sst) {
