@@ -188,8 +188,8 @@ configures the parser and compiler of the processor.
 ###### `plugins`
 
 The `plugins` field, related to [`plugins`][plugins] in `options`, has
-either an array of plug-in names or an object mapping plug-in names to
-their options.
+either an array of plug-in names (or paths) or an object mapping plug-in’s
+to their options.
 
 Plug-in options can be `false`, which specifies that a plug-in should
 not be used.  In all other cases, they are treated as an object, and

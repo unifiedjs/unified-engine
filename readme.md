@@ -136,7 +136,7 @@ Process files according to `options` and invoke `callback` when done.
         — File-path to a ignore file to load.
 
     *   [`plugins`][plugins] (`Object`, optional)
-        — Map of plug-in names and options to use.
+        — Map of plug-in names or paths and options to use.
 
     *   [`pluginPrefix`][plugin-prefix] (`string`, optional)
         — When given, optional prefix to use when searching for plug-ins.
