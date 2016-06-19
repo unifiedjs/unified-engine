@@ -2,6 +2,12 @@
 
 <!--lint disable no-multiple-toplevel-headings-->
 
+1.2.0 / 2016-06-19
+==================
+
+*   Re-add support for `node_modules` ([`e58fa19`](https://github.com/wooorm/unified-engine/commit/e58fa19))
+*   Update docs to mention loading plug-ins by path ([`21567a0`](https://github.com/wooorm/unified-engine/commit/21567a0))
+
 1.1.1 / 2016-06-12
 ==================
 
