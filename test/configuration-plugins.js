@@ -121,6 +121,8 @@ test('configuration', function (t) {
       packageField: 'fooConfig',
       extensions: ['txt']
     }, function (err, code) {
+      var plugin = join(fixtures, 'not-a-plugin', 'test.js');
+
       st.error(err, 'should not fail fatally');
       st.equal(code, 1, 'should exit with `1`');
 
@@ -128,7 +130,7 @@ test('configuration', function (t) {
         stderr().split('\n').slice(0, 2).join('\n'),
         [
           'one.txt',
-          '        1:1  error    Error: Loading `test` ' +
+          '        1:1  error    Error: Loading `' + plugin + '` ' +
             'should give a function, not `[object ' +
             'Object]`'
         ].join('\n'),
