@@ -46,6 +46,12 @@ An example **rc** file could look as follows:
 
 An example **rc.js** file could look as follows:
 
+Scripts expose either an object, or a function which when invoked
+returns an object.  The latter is given the current configuration for
+a file.  This configuration always has a `plugins` object where the
+keys are resolved absolute paths to plugins, where the values are
+objects or `false`.
+
 ```js
 /**
  * @fileoverview Local remark configuration.
@@ -57,8 +63,8 @@ module.exports = {
     /* Custom natural-language validation. */
     'script/natural-language': null,
     'lint': {
-        /* Ignore `final-definition` for `license` */
-        final-definition: false
+      /* Ignore `final-definition` for `license` */
+      'final-definition': false
     },
     'license': null
   },

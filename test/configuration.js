@@ -23,7 +23,7 @@ var fixtures = join(__dirname, 'fixtures');
 
 /* Tests. */
 test('configuration', function (t) {
-  t.plan(10);
+  t.plan(11);
 
   engine({
     processor: noop,
@@ -82,6 +82,38 @@ test('configuration', function (t) {
         ].join('\n'),
         'should fail fatally when custom .rc files ' +
         'are malformed'
+      );
+    });
+  });
+
+  t.test('should support `.rc.js` module functions', function (st) {
+    var cwd = join(fixtures, 'rc-script-function');
+    var stderr = spy();
+
+    st.plan(4);
+
+    engine({
+      processor: noop,
+      cwd: cwd,
+      streamError: stderr.stream,
+      globs: ['.'],
+      rcName: '.foorc',
+      extensions: ['txt']
+    }, function (err, code, result) {
+      var cache = result.configuration.cache;
+
+      st.error(err, 'should not fail fatally');
+      st.equal(code, 0, 'should exit with `0`');
+      st.equal(Object.keys(cache).length, 1, 'should have on cache entry');
+
+      st.deepEqual(
+        cache[cwd],
+        {
+          plugins: {},
+          one: true,
+          fromFunction: true
+        },
+        'should invoke scripts exposing functions (with current config)'
       );
     });
   });
