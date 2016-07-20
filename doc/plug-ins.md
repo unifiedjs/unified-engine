@@ -24,26 +24,26 @@ var engine = require('unified-engine');
 var remark = require('remark');
 
 function plugin(processor, options, set) {
-    function completer(set) {
-        console.log('done:', set.valueOf().map(function (file) {
-            return file.filePath();
-        }));
-    }
+  function completer(set) {
+    console.log('done:', set.valueOf().map(function (file) {
+      return file.filePath();
+    }));
+  }
 
-    /* Ensure the completer runs once per file-set. */
-    completer.pluginId = 'some-plugin-id';
+  /* Ensure the completer runs once per file-set. */
+  completer.pluginId = 'some-plugin-id';
 
-    set.use(completer);
+  set.use(completer);
 
-    set.add('history.md');
+  set.add('history.md');
 }
 
 engine({
-    'processor': remark(),
-    'injectedPlugins': [plugin],
-    'globs': ['readme.md']
+  processor: remark(),
+  injectedPlugins: [plugin],
+  globs: ['readme.md']
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 

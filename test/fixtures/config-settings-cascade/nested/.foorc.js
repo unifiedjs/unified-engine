@@ -1,4 +1,4 @@
 module.exports.settings = {
-  'nested-module': true,
+  nestedModule: true,
   cascade: 5
 }

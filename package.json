@@ -42,10 +42,7 @@
     "lib/"
   ],
   "devDependencies": {
-    "eslint": "^2.0.0",
     "istanbul": "^0.4.0",
-    "jscs": "^3.0.0",
-    "jscs-jsdoc": "^2.0.0",
     "remark-cli": "^1.0.0",
     "remark-comment-config": "^4.0.0",
     "remark-github": "^5.0.0",
@@ -53,16 +50,41 @@
     "remark-toc": "^3.0.0",
     "remark-validate-links": "^4.0.0",
     "tape": "^4.4.0",
-    "unified": "^4.0.1"
+    "unified": "^4.0.1",
+    "xo": "^0.16.0"
   },
   "scripts": {
     "build-md": "remark . --quiet --frail",
     "build": "npm run build-md",
-    "lint-api": "eslint .",
-    "lint-style": "jscs --reporter inline .",
-    "lint": "npm run lint-api && npm run lint-style",
+    "lint": "xo",
     "test-api": "node test/index.js",
     "test-coverage": "istanbul cover test/index.js",
     "test": "npm run build && npm run lint && npm run test-coverage"
+  },
+  "remarkConfig": {
+    "output": true,
+    "plugins": {
+      "lint": null,
+      "github": null,
+      "toc": {
+        "maxDepth": 3
+      },
+      "validate-links": null,
+      "comment-config": null
+    },
+    "settings": {
+      "bullet": "*"
+    }
+  },
+  "xo": {
+    "space": true,
+    "rules": {
+      "complexity": "off",
+      "eqeqeq": "off",
+      "guard-for-in": "off",
+      "max-depth": "off",
+      "max-lines": "off",
+      "no-eq-null": "off"
+    }
   }
 }

@@ -1,14 +1,14 @@
 module.exports = {
-    'missing': undefined,
-    'plugins': {
-        'test': {
-        'module': true,
-        'cascade': 1
+  missing: undefined,
+  plugins: {
+    test: {
+      module: true,
+      cascade: 1
     },
-    'test-3': null,
-    'test-4': {},
+    test3: null,
+    test4: {},
 
     // Set plug-ins to `false` to turn them off.
-    'test5': false
+    test5: false
   }
 }

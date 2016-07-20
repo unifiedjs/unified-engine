@@ -52,10 +52,8 @@ the report to **stderr**(4), and formatted document to **stdout**(4).
 var engine = require('unified-engine');
 var remark = require('remark');
 
-engine({
-    'processor': remark
-}, function (err) {
-    if (err) throw err;
+engine({processor: remark}, function (err) {
+  if (err) throw err;
 });
 ```
 
@@ -77,12 +75,12 @@ var engine = require('unified-engine');
 var remark = require('remark');
 
 engine({
-    'processor': remark(),
-    'cwd': path.join(process.cwd(), 'doc'),
-    'globs': ['readme.md'],
-    'output': true
+  processor: remark(),
+  cwd: path.join(process.cwd(), 'doc'),
+  globs: ['readme.md'],
+  output: true
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -108,9 +106,9 @@ var engine = require('unified-engine');
 var remark = require('remark');
 
 engine({
-    'processor': remark,
-    'globs': ['README', 'doc'],
-    'extensions': ['md']
+  processor: remark,
+  globs: ['README', 'doc'],
+  extensions: ['md']
 }, function (err) {
     if (err) throw err;
 });
@@ -134,10 +132,10 @@ var engine = require('unified-engine');
 var remark = require('remark');
 
 engine({
-    'processor': remark,
-    'globs': ['.'],
-    'extensions': ['md', 'mkd', 'markdown'],
-    'output': true
+  processor: remark,
+  globs: ['.'],
+  extensions: ['md', 'mkd', 'markdown'],
+  output: true
 }, function (err) {
     if (err) throw err;
 });
@@ -163,18 +161,18 @@ var remark = require('remark');
 var lint = require('remark-lint');
 
 engine({
-    'processor': remark(),
-    'injectedPlugins': [lint],
-    'streamIn': stream,
-    'out': false
+  processor: remark(),
+  injectedPlugins: [lint],
+  streamIn: stream,
+  out: false
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 
 stream.write('doc');
 
 setTimeout(function () {
-    stream.end('ument');
+  stream.end('ument');
 }, 100);
 ```
 
@@ -205,19 +203,19 @@ var remark = require('remark');
 var lint = require('remark-lint');
 
 engine({
-    'processor': remark(),
-    'injectedPlugins': [lint],
-    'filePath': '~/alpha/bravo/charlie.md',
-    'streamIn': stream,
-    'out': false
+  processor: remark(),
+  injectedPlugins: [lint],
+  filePath: '~/alpha/bravo/charlie.md',
+  streamIn: stream,
+  out: false
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 
 stream.write('doc');
 
 setTimeout(function () {
-    stream.end('ument');
+  stream.end('ument');
 }, 100);
 ```
 
@@ -256,11 +254,11 @@ var engine = require('unified-engine');
 var remark = require('remark');
 
 engine({
-    'processor': remark(),
-    'globs': ['readme.md'],
-    'streamOut': fs.createWriteStream('readme-two.md')
+  processor: remark(),
+  globs: ['readme.md'],
+  streamOut: fs.createWriteStream('readme-two.md')
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -283,13 +281,13 @@ var remark = require('remark');
 var lint = require('remark-lint');
 
 engine({
-    'processor': remark(),
-    'globs': ['readme.md'],
-    'injectedPlugins': [lint],
-    'out': false,
-    'streamErr': fs.createWriteStream('report.txt')
+  processor: remark(),
+  globs: ['readme.md'],
+  injectedPlugins: [lint],
+  out: false,
+  streamErr: fs.createWriteStream('report.txt')
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -314,12 +312,12 @@ var remark = require('remark');
 var lint = require('remark-lint');
 
 engine({
-    'processor': remark(),
-    'globs': ['readme.md'],
-    'injectedPlugins': [lint],
-    'out': false
+  processor: remark(),
+  globs: ['readme.md'],
+  injectedPlugins: [lint],
+  out: false
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -355,12 +353,12 @@ var remark = require('remark');
 var lint = require('remark-lint');
 
 engine({
-    'processor': remark(),
-    'globs': ['source/'],
-    'extensions': ['md'],
-    'output': 'destination/'
+  processor: remark(),
+  globs: ['source/'],
+  extensions: ['md'],
+  output: 'destination/'
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -385,12 +383,12 @@ var remark = require('remark');
 var unlink = require('remark-unlink');
 
 engine({
-    'processor': remark(),
-    'injectedPlugins': [unlink],
-    'globs': ['tree.json'],
-    'tree': true
+  processor: remark(),
+  injectedPlugins: [unlink],
+  globs: ['tree.json'],
+  tree: true
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -446,12 +444,12 @@ var remark = require('remark');
 var unlink = require('remark-unlink');
 
 engine({
-    'processor': remark(),
-    'injectedPlugins': [unlink],
-    'globs': ['tree.json'],
-    'treeIn': true
+  processor: remark(),
+  injectedPlugins: [unlink],
+  globs: ['tree.json'],
+  treeIn: true
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -499,12 +497,12 @@ var remark = require('remark');
 var unlink = require('remark-unlink');
 
 engine({
-    'processor': remark(),
-    'injectedPlugins': [unlink],
-    'globs': ['doc.md'],
-    'treeOut': true
+  processor: remark(),
+  injectedPlugins: [unlink],
+  globs: ['doc.md'],
+  treeOut: true
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -550,11 +548,11 @@ var engine = require('unified-engine');
 var remark = require('remark');
 
 engine({
-    'processor': remark(),
-    'rcName': '.remarkrc',
-    'globs': ['readme.md']
+  processor: remark(),
+  rcName: '.remarkrc',
+  globs: ['readme.md']
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -577,11 +575,11 @@ var engine = require('unified-engine');
 var remark = require('remark');
 
 engine({
-    'processor': remark(),
-    'packageField': 'remarkConfig',
-    'globs': ['readme.md']
+  processor: remark(),
+  packageField: 'remarkConfig',
+  globs: ['readme.md']
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -607,13 +605,13 @@ var engine = require('unified-engine');
 var remark = require('remark');
 
 engine({
-    'processor': remark(),
-    'detectConfig': false,
-    'rcName': '.remarkrc',
-    'packageField': 'remarkConfig',
-    'globs': ['readme.md']
+  processor: remark(),
+  detectConfig: false,
+  rcName: '.remarkrc',
+  packageField: 'remarkConfig',
+  globs: ['readme.md']
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -637,11 +635,11 @@ var engine = require('unified-engine');
 var remark = require('remark');
 
 engine({
-    'processor': remark(),
-    'rcPath': 'config.json',
-    'globs': ['readme.md']
+  processor: remark(),
+  rcPath: 'config.json',
+  globs: ['readme.md']
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -661,13 +659,13 @@ var engine = require('unified-engine');
 var remark = require('remark');
 
 engine({
-    'processor': remark(),
-    'globs': ['readme.md'],
-    'settings': {
-        'position': false
-    }
+  processor: remark(),
+  globs: ['readme.md'],
+  settings: {
+    position: false
+  }
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -690,12 +688,12 @@ var engine = require('unified-engine');
 var remark = require('remark');
 
 engine({
-    'processor': remark(),
-    'globs': ['.'],
-    'extensions': ['md'],
-    'ignoreName': '.remarkignore'
+  processor: remark(),
+  globs: ['.'],
+  extensions: ['md'],
+  ignoreName: '.remarkignore'
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -717,13 +715,13 @@ var engine = require('unified-engine');
 var remark = require('remark');
 
 engine({
-    'processor': remark(),
-    'globs': ['.'],
-    'extensions': ['md'],
-    'ignoreName': '.remarkignore',
-    'detectIgnore': false
+  processor: remark(),
+  globs: ['.'],
+  extensions: ['md'],
+  ignoreName: '.remarkignore',
+  detectIgnore: false
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -744,12 +742,12 @@ var engine = require('unified-engine');
 var remark = require('remark');
 
 engine({
-    'processor': remark(),
-    'globs': ['.'],
-    'extensions': ['md'],
-    'ignorePath': '.gitignore'
+  processor: remark(),
+  globs: ['.'],
+  extensions: ['md'],
+  ignorePath: '.gitignore'
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -773,13 +771,13 @@ var engine = require('unified-engine');
 var remark = require('remark');
 
 engine({
-    'processor': remark(),
-    'globs': ['readme.md'],
-    'plugins': {
-        'remark-lint': null
-    }
+  processor: remark(),
+  globs: ['readme.md'],
+  plugins: {
+    'remark-lint': null
+  }
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -806,14 +804,14 @@ var engine = require('unified-engine');
 var remark = require('remark');
 
 engine({
-    'processor': remark(),
-    'globs': ['readme.md'],
-    'pluginPrefix': 'remark',
-    'plugins': {
-        'lint': null
-    }
+  processor: remark(),
+  globs: ['readme.md'],
+  pluginPrefix: 'remark',
+  plugins: {
+    lint: null
+  }
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -840,11 +838,11 @@ var remark = require('remark');
 var lint = require('remark-lint');
 
 engine({
-    'processor': remark(),
-    'globs': ['readme.md'],
-    'injectedPlugins': [lint]
+  processor: remark(),
+  globs: ['readme.md'],
+  injectedPlugins: [lint]
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -864,12 +862,12 @@ var engine = require('unified-engine');
 var remark = require('remark');
 
 engine({
-    'processor': remark(),
-    'globs': ['readme.md'],
-    'color': true,
-    'out': false
+  processor: remark(),
+  globs: ['readme.md'],
+  color: true,
+  out: false
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -896,14 +894,14 @@ var engine = require('unified-engine');
 var remark = require('remark');
 
 engine({
-    'processor': remark(),
-    'globs': ['readme.md'],
-    'plugins': {
-        'lint': null
-    },
-    'silent': true
+  processor: remark(),
+  globs: ['readme.md'],
+  plugins: {
+    lint: null
+  },
+  silent: true
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -925,14 +923,14 @@ var engine = require('unified-engine');
 var remark = require('remark');
 
 engine({
-    'processor': remark(),
-    'globs': ['readme.md'],
-    'plugins': {
-        'lint': null
-    },
-    'quiet': true
+  processor: remark(),
+  globs: ['readme.md'],
+  plugins: {
+    lint: null
+  },
+  quiet: true
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -953,14 +951,14 @@ var engine = require('unified-engine');
 var remark = require('remark');
 
 engine({
-    'processor': remark(),
-    'globs': ['readme.md'],
-    'plugins': {
-        'lint': null
-    },
-    'frail': true
+  processor: remark(),
+  globs: ['readme.md'],
+  plugins: {
+    lint: null
+  },
+  frail: true
 }, function (err, code) {
-    process.exit(err ? 1 : code);
+  process.exit(err ? 1 : code);
 });
 ```
 
@@ -981,10 +979,10 @@ var remark = require('remark');
 var vfile = require('vfile');
 
 engine({
-    'processor': remark(),
-    'files': [vfile('# Hello')]
+  processor: remark(),
+  files: [vfile('# Hello')]
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 

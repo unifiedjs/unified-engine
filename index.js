@@ -8,10 +8,5 @@
 
 'use strict';
 
-/* eslint-env node */
-
-/*
- * Expose.
- */
-
+/* Expose. */
 module.exports = require('./lib/index.js');

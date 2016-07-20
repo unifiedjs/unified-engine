@@ -52,20 +52,20 @@ An example **rc.js** file could look as follows:
  */
 
 module.exports = {
-    'output': true,
-    'plugins': {
-        /* Custom natural-language validation. */
-        'script/natural-language': null,
-        'lint': {
-            /* Ignore `final-definition` for `license` */
-            'final-definition': false
-        },
-        'license': null
+  output: true,
+  plugins: {
+    /* Custom natural-language validation. */
+    'script/natural-language': null,
+    'lint': {
+        /* Ignore `final-definition` for `license` */
+        final-definition: false
     },
-    'settings': {
-        /* I personally like asterisks. */
-        'bullet': '*'
-    }
+    'license': null
+  },
+  settings: {
+    /* I personally like asterisks. */
+    bullet: '*'
+  }
 };
 ```
 

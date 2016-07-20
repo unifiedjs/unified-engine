@@ -29,16 +29,16 @@ var engine = require('unified-engine');
 var remark = require('remark');
 
 engine({
-    'processor': remark,
-    'globs': ['.'],
-    'extensions': ['md', 'markdown', 'mkd', 'mkdn', 'mkdown'],
-    'pluginPrefix': 'remark',
-    'rcName': '.remarkrc',
-    'packageField': 'remarkConfig',
-    'ignoreName': '.remarkignore',
-    'color': true
+  processor: remark,
+  globs: ['.'],
+  extensions: ['md', 'markdown', 'mkd', 'mkdn', 'mkdown'],
+  pluginPrefix: 'remark',
+  rcName: '.remarkrc',
+  packageField: 'remarkConfig',
+  ignoreName: '.remarkignore',
+  color: true
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 

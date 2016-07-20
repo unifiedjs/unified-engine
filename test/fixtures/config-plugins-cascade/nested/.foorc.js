@@ -1,9 +1,9 @@
 var opts = {
-    'nested-module': true,
-    'cascade': 5
+  nestedModule: true,
+  cascade: 5
 };
 
 module.exports.plugins = {
-    'test': opts,
-    'test-2': opts
+  test: opts,
+  test2: opts
 }
