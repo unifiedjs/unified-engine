@@ -23,7 +23,7 @@ var fixtures = join(__dirname, 'fixtures');
 
 /* Tests. */
 test('configuration', function (t) {
-  t.plan(9);
+  t.plan(10);
 
   engine({
     processor: noop,
@@ -78,6 +78,37 @@ test('configuration', function (t) {
         [
           'one.txt',
           '        1:1  error    Error: Cannot read ' +
+              'configuration file'
+        ].join('\n'),
+        'should fail fatally when custom .rc files ' +
+        'are malformed'
+      );
+    });
+  });
+
+  t.test('should support `.rc.yaml` modules', function (st) {
+    var stderr = spy();
+
+    st.plan(3);
+
+    engine({
+      processor: noop,
+      cwd: join(fixtures, 'malformed-rc-yaml'),
+      streamError: stderr.stream,
+      globs: ['.'],
+      rcName: '.foorc',
+      extensions: ['txt']
+    }, function (err, code) {
+      var report = stderr().split('\n').slice(0, 2).join('\n');
+
+      st.error(err, 'should not fail fatally');
+      st.equal(code, 1, 'should exit with `1`');
+
+      st.equal(
+        report.slice(0, report.lastIndexOf(':')),
+        [
+          'one.txt',
+          '        1:1  error    YAMLException: Cannot read ' +
               'configuration file'
         ].join('\n'),
         'should fail fatally when custom .rc files ' +
@@ -247,13 +278,15 @@ test('configuration', function (t) {
         options,
         {
           rc: true,
-          module: true,
+          script: true,
+          yaml: true,
           package: true,
           nestedRc: true,
-          nestedModule: true,
+          nestedYAML: true,
+          nestedScript: true,
           nestedPackage: true,
-          cascade: 4 // `.rc` precedes over `.rc.js`,
-          // in turn over `package.json`.
+          cascade: 5 // `.rc` precedes over `.rc.js`,
+          // `.rc.yaml`, and `package.json`.
         },
         'should correctly cascade settings'
       );

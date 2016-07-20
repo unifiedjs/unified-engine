@@ -1,4 +1,4 @@
 module.exports.settings = {
-  module: true,
+  script: true,
   cascade: 2
 }

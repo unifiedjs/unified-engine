@@ -2,7 +2,7 @@ module.exports = function (processor, options) {
   processor.t.deepEqual(
     options,
     {
-      nestedModule: true,
+      nestedScript: true,
       cascade: 5
     },
     'should pass the correct options to plugin `test2`'

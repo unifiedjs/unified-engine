@@ -2,7 +2,7 @@ module.exports = {
   missing: undefined,
   plugins: {
     test: {
-      module: true,
+      script: true,
       cascade: 1
     },
     test3: null,

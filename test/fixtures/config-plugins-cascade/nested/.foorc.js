@@ -1,5 +1,5 @@
 var opts = {
-  nestedModule: true,
+  nestedScript: true,
   cascade: 5
 };
 

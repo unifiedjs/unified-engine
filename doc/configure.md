@@ -9,7 +9,7 @@ through configuration files.
     is turned on, depending on the following options:
 
     *   If [`rcName`][rc-name] is given, `$rcName` (JSON) and
-        `$rcName.js` (CommonJS) are loaded;
+        `$rcName.js` (CommonJS), and `$rcName.yaml` (YAML) are loaded;
 
     *   If [`packageField`][package-field] is given, `package.json`
         (JSON) files are loaded and their `$packageField`s are
@@ -69,6 +69,23 @@ module.exports = {
 };
 ```
 
+###### Example
+
+An example **rc.yaml** file could look as follows:
+
+```js
+output: true
+plugins:
+  - lint
+  - document
+  - minify
+settings:
+  verbose: true
+  quote: "'"
+  quoteSmart: true
+  preferUnquoted: true
+```
+
 ## Table of Contents
 
 *   [Cascade](#cascade)
@@ -83,21 +100,22 @@ Precedence is as follows (earlier represents higher precedence):
 
 *   Configuration from [`rcPath`][rc-path] in [`options`][options];
 
-*   Configuration from `$rcName`, `$rcName.js`, and `$packageField`
-    fields in `package.json` in the directory of the processed file,
-    and in ancestral directories;
+*   Configuration from `$rcName`, `$rcName.js`, `$rcName.yaml`, and
+    `$packageField` fields in `package.json` in the directory of the
+    processed file, and in ancestral directories;
 
-*   Files named [`$rcName`][rc-name], `$rcName.js`, and
+*   Files named [`$rcName`][rc-name], `$rcName.js`, `$rcName.yaml`, and
     [`$packageField`][package-field] fields in `package.json` in the
     directory of the processed file, and in ancestral directories;
 
-*   If no `$rcName` or `$rcName.js`, or `$packageField` in `package.json`
-    were detected, per-user configuration files (`~/$rcName` and
-    `~/$rcName.js`) are used.
+*   If no `$rcName`, `$rcName.js`, `$rcName.yaml`, or `$packageField`
+    in `package.json` were detected, per-user configuration files
+    (`~/$rcName`, `~/$rcName.js`, `~/$rcName.yaml`) are used.
 
-If more than one `$rcName`, `$rcName.js`, or `package.json` are
-found in a directory, the file named `$rcName` takes precedence in the
-cascade over `$rcName.js`, which in turn precedes over `package.json`.
+If more than one `$rcName`, `$rcName.js`, `$rcName.yaml`, or
+`package.json` are found in a directory, the file named `$rcName`
+takes precedence in the cascade over `$rcName.js`, which in turn
+precedes over `$rcName.yaml`, which in turn precedes over `package.json`.
 
 For example, for the following project, where `rcName` is `.foorc` and
 `packageField` is `fooConfig`:

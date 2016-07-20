@@ -528,20 +528,22 @@ Yields:
 
 Name of [configuration][configure] file to load.  If given and
 [`detectConfig`][detect-config] is not `false`, `$rcName` files
-are loaded and parsed as JSON, and `$rcName.js` are required.
+are loaded and parsed as JSON, `$rcName.js` are `require`d, and
+`$rcName.yaml` are loaded with `js-yaml` (`safeLoad`).
 
 If configuration files are found in the directory of the processed file
 or any of its ancestral directories (whether `package.json`, if
-`packageField` is given, or `$rcName` or `$rcName.js`),
-`$home/$rcName` and `$home/$rcName.js` are also checked and loaded if
-they exist (where `$home` refers to the user’s [home directory][user-home]).
+`packageField` is given, or `$rcName`, `$rcName.js`, or `$rcName.yaml`),
+`$home/$rcName`, `$home/$rcName.js`, and `$home/$rcName.yaml` are also
+checked and loaded if they exist (where `$home` refers to the user’s
+[home directory][user-home]).
 
 *   Type: `string`, optional.
 
 ###### Example
 
 The following example processes `readme.md`, and allows configuration
-from `.remarkrc` and `.remarkrc.js` files.
+from `.remarkrc`, `.remarkrc.js`, and `.remarkrc.yaml` files.
 
 ```js
 var engine = require('unified-engine');
@@ -586,8 +588,8 @@ engine({
 ## `options.detectConfig`
 
 Whether to search for [configuration][configure] files
-([`$rcName`][rc-name], `$rcName.js`, and `package.json` with
-[`$packageField`][package-field]).
+([`$rcName`][rc-name], `$rcName.js`, `$rcName.yaml`, and `package.json`
+with [`$packageField`][package-field]).
 
 *   Type: `boolean`, optional;
 
@@ -621,7 +623,9 @@ File-path to a JSON file to load, regardless of
 [`detectConfig`][detect-config] or [`rcName`][rc-name].
 
 > **Note:** Be careful not to pass a file which is also detected.
-> **Note:** Do not pass `package.json` files or `.js` files.
+> **Note:** Do not pass `package.json` files.  JavaScript and YAML
+> can be passed but must have correct extensions (`.js` or `.yaml`,
+> respectivly).
 
 *   Type: `string`, optional.
 
