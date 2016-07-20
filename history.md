@@ -2,6 +2,13 @@
 
 <!--lint disable no-multiple-toplevel-headings-->
 
+1.3.0 / 2016-07-20
+==================
+
+*   Add support for `$rcName.yaml` configuration files ([`514d384`](https://github.com/wooorm/unified-engine/commit/514d384))
+*   Update `vfile-reporter` ([`85a49cc`](https://github.com/wooorm/unified-engine/commit/85a49cc))
+*   Refactor code-style to use `xo` ([`b6d8a85`](https://github.com/wooorm/unified-engine/commit/b6d8a85))
+
 1.2.0 / 2016-06-19
 ==================
 
