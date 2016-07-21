@@ -28,6 +28,7 @@ authors.
 *   [options.ignoreName](#optionsignorename)
 *   [options.detectIgnore](#optionsdetectignore)
 *   [options.ignorePath](#optionsignorepath)
+*   [options.silentlyIgnore](#optionssilentlyignore)
 *   [options.plugins](#optionsplugins)
 *   [options.pluginPrefix](#optionspluginprefix)
 *   [options.injectedPlugins](#optionsinjectedplugins)
@@ -755,6 +756,13 @@ engine({
 });
 ```
 
+## `options.silentlyIgnore`
+
+Skip given (in [`globs`][globs] or [`files`][files]) files which are
+ignored by [ignore files][ignore], instead of warning about them.
+
+*   Type: `boolean`, default: `false`.
+
 ## `options.plugins`
 
 Plug-ins to load by their name and attach with options to the processor
@@ -968,8 +976,7 @@ engine({
 
 ## `options.files`
 
-References to files to process.  When `files` are given, [`globs`][globs],
-[`streamIn`][stream-in], and [ignore files][ignore] are not honoured.
+References to files to process.
 
 *   Type: [`Array.<VFile>`][vfile], optional.
 
@@ -1065,3 +1072,5 @@ engine({
 [ignore-name]: #optionsignorename
 
 [silent]: #optionssilent
+
+[files]: #optionsfiles

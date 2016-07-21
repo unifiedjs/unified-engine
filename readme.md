@@ -135,6 +135,9 @@ Process files according to `options` and invoke `callback` when done.
     *   [`ignorePath`][ignore-path] (`string`, optional)
         — File-path to a ignore file to load.
 
+    *   [`silentlyIgnore`][silently-ignore] (`boolean`, default: `false`)
+        — Skip given files if they are ignored.
+
     *   [`plugins`][plugins] (`Object`, optional)
         — Map of plug-in names or paths and options to use.
 
@@ -265,6 +268,8 @@ files work.
 [ignore-name]: doc/options.md#optionsignorename
 
 [ignore-path]: doc/options.md#optionsignorepath
+
+[silently-ignore]: doc/options.md#optionssilentlyignore
 
 [plugin-prefix]: doc/options.md#optionspluginprefix
 

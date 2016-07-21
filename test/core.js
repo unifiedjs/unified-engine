@@ -9,22 +9,13 @@
 'use strict';
 
 /* Dependencies. */
-var path = require('path');
-var PassThrough = require('stream').PassThrough;
 var test = require('tape');
 var unified = require('unified');
-var toVFile = require('to-vfile');
 var engine = require('..');
-
-/* Methods. */
-var join = path.join;
-
-/* Constants. */
-var fixtures = join(__dirname, 'fixtures');
 
 /* Tests. */
 test('engine', function (t) {
-  t.plan(9);
+  t.plan(6);
 
   t.throws(
     function () {
@@ -65,63 +56,6 @@ test('engine', function (t) {
       );
     });
   });
-
-  t.test('should fail when with `files` and `ignoreName`', function (st) {
-    st.plan(1);
-
-    engine({
-      processor: unified,
-      files: [
-        toVFile(join(fixtures, 'one-file', 'one.txt'))
-      ],
-      ignoreName: '.fooignore'
-    }, function (err) {
-      st.equal(
-        err.message,
-        'Cannot accept both `files` and `ignoreName`',
-        'should fail'
-      );
-    });
-  });
-
-  t.test('should fail when with `files` and `globs`', function (st) {
-    st.plan(1);
-
-    engine({
-      processor: unified,
-      files: [
-        toVFile(join(fixtures, 'one-file', 'one.txt'))
-      ],
-      globs: ['.']
-    }, function (err) {
-      st.equal(
-        err.message,
-        'Cannot accept both `files` and `globs`',
-        'should fail'
-      );
-    });
-  });
-
-  t.test(
-    'should fail when with `files` and `streamIn`',
-    function (st) {
-      st.plan(1);
-
-      engine({
-        processor: unified,
-        files: [
-          toVFile(join(fixtures, 'one-file', 'one.txt'))
-        ],
-        streamIn: new PassThrough()
-      }, function (err) {
-        st.equal(
-          err.message,
-          'Cannot accept both `files` and `streamIn`',
-          'should fail'
-        );
-      });
-    }
-  );
 
   t.test(
     'should fail when with `detectConfig` and without `rcName`',

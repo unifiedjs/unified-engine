@@ -26,7 +26,7 @@ var fixtures = join(__dirname, 'fixtures');
 
 /* Tests. */
 test('input', function (t) {
-  t.plan(11);
+  t.plan(14);
 
   t.test('should fail without input', function (st) {
     var stream = new PassThrough();
@@ -231,7 +231,46 @@ test('input', function (t) {
     });
   });
 
-  t.test('should include given ignored files', function (st) {
+  t.test('should include given ignored files (#1)', function (st) {
+    var cwd = join(fixtures, 'ignore-file');
+    var stderr = spy();
+
+    st.plan(3);
+
+    engine({
+      processor: noop,
+      cwd: cwd,
+      streamError: stderr.stream,
+      ignoreName: '.fooignore',
+      files: [
+        toVFile(join(cwd, 'one.txt')),
+        toVFile(join(cwd, 'nested', 'two.txt')),
+        toVFile(join(cwd, 'nested', 'three.txt'))
+      ]
+    }, function (err, code) {
+      st.error(err, 'should not fail fatally');
+      st.equal(code, 1, 'should exit with `1`');
+
+      st.equal(
+        stderr(),
+        [
+          'one.txt: no issues found',
+          '',
+          'nested/two.txt',
+          '        1:1  error    Cannot process ' +
+              'given file: it’s ignored',
+          '',
+          'nested/three.txt: no issues found',
+          '',
+          '✖ 1 error',
+          ''
+        ].join('\n'),
+        'should report'
+      );
+    });
+  });
+
+  t.test('should include given ignored files (#2)', function (st) {
     var stderr = spy();
 
     st.plan(3);
@@ -265,7 +304,68 @@ test('input', function (t) {
     });
   });
 
-  t.test('should not search if given files', function (st) {
+  t.test('silentlyIgnore: skip detected ignored files', function (st) {
+    var cwd = join(fixtures, 'ignore-file');
+    var stderr = spy();
+
+    st.plan(3);
+
+    engine({
+      processor: noop,
+      cwd: cwd,
+      streamError: stderr.stream,
+      ignoreName: '.fooignore',
+      silentlyIgnore: true,
+      files: [
+        toVFile(join(cwd, 'one.txt')),
+        toVFile(join(cwd, 'nested', 'two.txt')),
+        toVFile(join(cwd, 'nested', 'three.txt'))
+      ]
+    }, function (err, code) {
+      st.error(err, 'should not fail fatally');
+      st.equal(code, 0, 'should exit with `0`');
+
+      st.equal(
+        stderr(),
+        [
+          'one.txt: no issues found',
+          'nested/three.txt: no issues found',
+          ''
+        ].join('\n'),
+        'should report'
+      );
+    });
+  });
+
+  t.test('silentlyIgnore: skip detected ignored files', function (st) {
+    var stderr = spy();
+
+    st.plan(3);
+
+    engine({
+      processor: noop,
+      cwd: join(fixtures, 'globs-ignore'),
+      silentlyIgnore: true,
+      streamError: stderr.stream,
+      globs: ['node_modules/ignore-one.txt', '.'],
+      extensions: ['txt']
+    }, function (err, code) {
+      st.error(err, 'should not fail fatally');
+      st.equal(code, 0, 'should exit with `0`');
+
+      st.equal(
+        stderr(),
+        [
+          'nested/two.txt: no issues found',
+          'one.txt: no issues found',
+          ''
+        ].join('\n'),
+        'should report'
+      );
+    });
+  });
+
+  t.test('should search if given files', function (st) {
     var cwd = join(fixtures, 'simple-structure');
     var stderr = spy();
 
@@ -275,10 +375,9 @@ test('input', function (t) {
       processor: noop,
       cwd: cwd,
       streamError: stderr.stream,
-      files: [
-        toVFile(join(cwd, 'one.txt')),
-        toVFile(join(cwd, 'nested', 'two.txt'))
-      ]
+      globs: ['nested'],
+      extensions: ['txt'],
+      files: [toVFile(join(cwd, 'one.txt'))]
     }, function (err, code) {
       st.error(err, 'should not fail fatally');
       st.equal(code, 0, 'should exit with `0`');
@@ -286,6 +385,7 @@ test('input', function (t) {
       st.equal(
         stderr(),
         'one.txt: no issues found\n' +
+        'nested/three.txt: no issues found\n' +
         'nested/two.txt: no issues found\n',
         'should report'
       );
