@@ -2,6 +2,15 @@
 
 <!--lint disable no-multiple-toplevel-headings-->
 
+1.4.0 / 2016-07-21
+==================
+
+*   Add pretty errors when loading JSON ([`81613d6`](https://github.com/wooorm/unified-engine/commit/81613d6))
+*   Add support for ignoring given `files` ([`b9e8f90`](https://github.com/wooorm/unified-engine/commit/b9e8f90))
+*   Add support for script configs as a function ([`1b52844`](https://github.com/wooorm/unified-engine/commit/1b52844))
+*   Add consolidation of plugins ([`1dbbebe`](https://github.com/wooorm/unified-engine/commit/1dbbebe))
+*   Fix bug where `output` from settings wasn’t honoured ([`4d12640`](https://github.com/wooorm/unified-engine/commit/4d12640))
+
 1.3.0 / 2016-07-20
 ==================
 
