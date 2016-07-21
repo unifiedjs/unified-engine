@@ -42,17 +42,18 @@ test('tree', function (t) {
       treeIn: true,
       globs: ['doc.json']
     }, function (err, code) {
-      var report = stderr(true).split('\n').slice(0, 2);
-
-      report[1] = report[1].slice(0, report[1].indexOf('of'));
-
       st.error(err, 'should not fail fatally');
       st.equal(code, 1, 'should exit with `1`');
 
       st.equal(
-        report.join('\n'),
-        'doc.json\n' +
-        '        1:1  error    SyntaxError: Unexpected end ',
+        stderr(true).split('\n').slice(0, 4).join('\n'),
+        [
+          'doc.json',
+          '        1:1  error    JSONError: Cannot ' +
+            'read file as tree: doc.json',
+          'No data, empty input at 1:1',
+          '^'
+        ].join('\n'),
         'should report'
       );
     });

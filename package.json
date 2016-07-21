@@ -18,6 +18,7 @@
     "js-yaml": "^3.6.1",
     "load-plugin": "^1.0.0",
     "minimatch": "^3.0.0",
+    "parse-json": "^2.2.0",
     "to-vfile": "^1.0.0",
     "user-home": "^2.0.0",
     "vfile-find-down": "^1.0.0",

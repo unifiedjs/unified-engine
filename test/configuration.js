@@ -180,31 +180,30 @@ test('configuration', function (t) {
   });
 
   t.test('should support searching package files', function (st) {
+    var cwd = join(fixtures, 'malformed-package-file');
     var stderr = spy();
 
     st.plan(3);
 
     engine({
       processor: noop,
-      cwd: join(fixtures, 'malformed-package-file'),
+      cwd: cwd,
       streamError: stderr.stream,
       globs: ['.'],
       packageField: 'fooConfig',
       extensions: ['txt']
     }, function (err, code) {
-      var report = stderr().split('\n').slice(0, 2);
-
-      report[1] = report[1].slice(0, report[1].lastIndexOf(':'));
-
       st.error(err, 'should not fail fatally');
       st.equal(code, 1, 'should exit with `1`');
 
       st.equal(
-        report.join('\n'),
+        stderr().split('\n').slice(0, 4).join('\n'),
         [
           'one.txt',
-          '        1:1  error    SyntaxError: Cannot ' +
-              'read configuration file'
+          '        1:1  error    JSONError: Cannot ' +
+            'read configuration file: ' + join(cwd, 'package.json'),
+          'No data, empty input at 1:1',
+          '^'
         ].join('\n'),
         'should report'
       );
