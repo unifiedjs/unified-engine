@@ -2,12 +2,15 @@
 
 <!--lint disable heading-increment no-duplicate-headings-->
 
-> **unified** recently changed its interface.  These changes have
-> yet to bubble through to the ecosystem before all examples start
-> working.
-
 Engine to process multiple files with [**unified**][unified],
 allowing users to [configure][] from the file-system.
+
+## Projects
+
+The following projects wrap the engine:
+
+*   [unified-args][args] — Create CLIs for processors;
+*   [unified-engine-atom][atom] — Create Atom Linters for processors.
 
 ## Installation
 
@@ -292,3 +295,7 @@ files work.
 [ignore]: doc/ignore.md
 
 [plug-ins]: doc/plug-ins.md
+
+[atom]: https://github.com/wooorm/unified-engine-atom
+
+[args]: https://github.com/wooorm/unified-args
