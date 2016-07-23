@@ -2,6 +2,14 @@
 
 <!--lint disable no-multiple-toplevel-headings-->
 
+1.4.1 / 2016-07-23
+==================
+
+*   Add section on projects ([`3daf73f`](https://github.com/wooorm/unified-engine/commit/3daf73f))
+*   Refactor debugging messages ([`4c62bfe`](https://github.com/wooorm/unified-engine/commit/4c62bfe))
+*   Fix bug where `output` from config files wasn’t honoured ([`5900b65`](https://github.com/wooorm/unified-engine/commit/5900b65))
+*   Update `globby` ([`6bec14f`](https://github.com/wooorm/unified-engine/commit/6bec14f))
+
 1.4.0 / 2016-07-21
 ==================
 
