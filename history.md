@@ -2,6 +2,12 @@
 
 <!--lint disable no-multiple-toplevel-headings-->
 
+1.5.0 / 2016-07-25
+==================
+
+*   Fix bug where `files` didn’t filter properly ([`db6f562`](https://github.com/wooorm/unified-engine/commit/db6f562))
+*   Add `alwaysStringify` option ([`a57f523`](https://github.com/wooorm/unified-engine/commit/a57f523))
+
 1.4.1 / 2016-07-23
 ==================
 
