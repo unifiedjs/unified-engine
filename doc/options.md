@@ -363,6 +363,16 @@ engine({
 });
 ```
 
+###### `options.alwaysStringify`
+
+Whether to always stringify successful documents.  By default,
+documents are stringified when it’s detected a file is to be written
+to **stdout**(4) or the file system.  If files are handled and
+possibly written somewhere later, set this option to `true`.
+
+*   Type: `boolean`;
+*   Default: `false`.
+
 ## `options.tree`
 
 Whether to treat both input and output as a syntax tree.  If given,

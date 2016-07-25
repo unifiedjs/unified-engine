@@ -102,6 +102,9 @@ Process files according to `options` and invoke `callback` when done.
     *   [`output`][output] (`boolean` or `string`, default: `false`)
         — Whether to write successfully processed files, and where to.
 
+    *   [`alwaysStringify`][always-stringify] (`boolean`, default: `false`)
+        — Whether to always compile successfully processed files.
+
     *   [`tree`][tree] (`boolean`, default: `false`)
         — Whether to treat both input and output as a syntax tree.
 
@@ -163,7 +166,7 @@ Process files according to `options` and invoke `callback` when done.
         — Treat warnings as errors.
 
     *   [`files`][files] (`Array.<VFile>`, optional)
-        — Use the given files instead of searching for files.
+        — Use the given files (in addition to searching for `globs`).
 
 #### `function callback(err[, code, context])`
 
@@ -249,6 +252,8 @@ files work.
 [out]: doc/options.md#optionsout
 
 [output]: doc/options.md#optionsoutput
+
+[always-stringify]: doc/options.md#optionsalwaysstringify
 
 [tree]: doc/options.md#optionstree
 
