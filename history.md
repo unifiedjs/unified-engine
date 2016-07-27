@@ -2,6 +2,11 @@
 
 <!--lint disable no-multiple-toplevel-headings-->
 
+1.5.1 / 2016-07-27
+==================
+
+*   Fix error if stdin cannot be accessed ([`d6bccf7`](https://github.com/wooorm/unified-engine/commit/d6bccf7))
+
 1.5.0 / 2016-07-25
 ==================
 
