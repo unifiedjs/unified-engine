@@ -10,6 +10,7 @@ allowing users to [configure][] from the file-system.
 The following projects wrap the engine:
 
 *   [unified-args][args] — Create CLIs for processors;
+*   [unified-engine-gulp][gulp] — Create Gulp plug-ins;
 *   [unified-engine-atom][atom] — Create Atom Linters for processors.
 
 ## Installation
@@ -302,5 +303,7 @@ files work.
 [plug-ins]: doc/plug-ins.md
 
 [atom]: https://github.com/wooorm/unified-engine-atom
+
+[gulp]: https://github.com/wooorm/unified-engine-gulp
 
 [args]: https://github.com/wooorm/unified-args
