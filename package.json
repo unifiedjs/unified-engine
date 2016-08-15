@@ -65,10 +65,16 @@
   "remarkConfig": {
     "output": true,
     "plugins": {
-      "lint": null,
+      "lint": {
+        "no-missing-blank-lines": {"exceptTightLists": true},
+        "list-item-spacing": false,
+        "heading-increment": false,
+        "no-duplicate-headings": false
+      },
       "github": null,
       "toc": {
-        "maxDepth": 3
+        "maxDepth": 3,
+        "tight": true
       },
       "validate-links": null,
       "comment-config": null

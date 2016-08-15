@@ -1,7 +1,5 @@
 # Plug-ins
 
-<!--lint disable heading-increment no-duplicate-headings-->
-
 [**unified-engine**][api] supports plug-ins as `function`s from
 engine authors (from [`injectedPlugins`][injected-plugins]) and plug-in
 names from engine users ([`plugins`][plugins] and [configuration
@@ -60,9 +58,8 @@ are reported (or written).
 ## Table of Contents
 
 *   [FileSet](#fileset)
-
     *   [fileSet.valueOf()](#filesetvalueof)
-    *   [fileSet.add(file | filePath)](#filesetaddfile--filepath)
+    *   [fileSet.add(file|filePath)](#filesetaddfilefilepath)
     *   [fileSet.use(completer)](#filesetusecompleter)
 
 ## `FileSet`
@@ -76,7 +73,7 @@ to plug-ins as an argument to the attacher.
 Access the files in a set.  Returns a list of [`VFile`][vfile]s being
 processed.
 
-### `fileSet.add(file | filePath)`
+### `fileSet.add(file|filePath)`
 
 Add a file to be processed.  The given file is processed like
 other files with a few differences.  The added files are:
@@ -112,7 +109,6 @@ passed to [`next`][next]), no further completers run and all files fail.
 ###### Returns
 
 *   `Error`.
-
 *   `Promise` — If a promise is returned, the function is asynchronous,
     and **must** be resolved (with nothing) or rejected (with an `Error`).
 

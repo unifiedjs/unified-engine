@@ -1,20 +1,15 @@
 # Configuration
 
-<!--lint disable heading-increment no-duplicate-headings-->
-
 [**unified-engine**][api] accepts configuration through options and
 through configuration files.
 
 *   Configuration files are detected if [`detectConfig`][detect-config]
     is turned on, depending on the following options:
-
     *   If [`rcName`][rc-name] is given, `$rcName` (JSON) and
         `$rcName.js` (CommonJS), and `$rcName.yaml` (YAML) are loaded;
-
     *   If [`packageField`][package-field] is given, `package.json`
         (JSON) files are loaded and their `$packageField`s are
         used as configuration.
-
 *   One configuration file (JSON) can be given through [`rcPath`][rc-path],
     this is loaded regardless of `detectConfig` and `rcName`.
 
@@ -103,17 +98,13 @@ Precedence is as follows (earlier represents higher precedence):
 
 *   [`plugins`][plugins], [`settings`][settings], and [`output`][output]
     passed in [`options`][options];
-
 *   Configuration from [`rcPath`][rc-path] in [`options`][options];
-
 *   Configuration from `$rcName`, `$rcName.js`, `$rcName.yaml`, and
     `$packageField` fields in `package.json` in the directory of the
     processed file, and in ancestral directories;
-
 *   Files named [`$rcName`][rc-name], `$rcName.js`, `$rcName.yaml`, and
     [`$packageField`][package-field] fields in `package.json` in the
     directory of the processed file, and in ancestral directories;
-
 *   If no `$rcName`, `$rcName.js`, `$rcName.yaml`, or `$packageField`
     in `package.json` were detected, per-user configuration files
     (`~/$rcName`, `~/$rcName.js`, `~/$rcName.yaml`) are used.

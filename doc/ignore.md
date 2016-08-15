@@ -1,13 +1,10 @@
 # Ignoring
 
-<!--lint disable heading-increment no-duplicate-headings-->
-
 [**unified-engine**][api] accepts patterns to ignore when looking for
 files to process, through ignore files.
 
 *   Ignore files are detected if [`detectIgnore`][detect-ignore]
     is turned on and [`ignoreName`][ignore-name] is given.
-
 *   One ignore file can be given through [`ignorePath`][ignore-path],
     this is loaded regardless of `detectIgnore` and `ignoreName`,
     and turns off searching for other ignore files.
@@ -43,11 +40,8 @@ Each line in an ignore file provides a pattern which describes whether
 to ignore a given path.
 
 *   Lines are trimmed of white space;
-
 *   Empty lines are ignored;
-
 *   Lines which start with an octothorp (`#`) are ignored;
-
 *   Lines which start with a interrogation-mark (`!`) negate, thus
     re-adding an ignored file path.  **Note**: using negation patterns
     comes at a significant performance cost.

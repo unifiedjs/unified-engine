@@ -1,7 +1,5 @@
 # Options
 
-<!--lint disable heading-increment no-duplicate-headings-->
-
 [**unified-engine**][api] can be configured extensively by engine
 authors.
 
@@ -328,14 +326,11 @@ Whether to write successfully processed files, and where to.  This can
 be set from configuration files.
 
 *   When `true`, overwrites the given files;
-
 *   When pointing to an existing directory, files are written
     to that directory and keep their filenames and extensions;
-
 *   When the parent directory of the given path exists and one
     file is processed, the file is written to the given path
     using the given filename (and optionally extension);
-
 *   Otherwise, a fatal error is thrown.
 
 <!-- Info: -->
@@ -603,7 +598,6 @@ Whether to search for [configuration][configure] files
 with [`$packageField`][package-field]).
 
 *   Type: `boolean`, optional;
-
 *   Default: `true` if [`rcName`][rc-name] or [`packageField`][package-field]
     are given.
 
