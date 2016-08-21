@@ -51,7 +51,7 @@
     "remark-toc": "^3.0.0",
     "remark-validate-links": "^4.0.0",
     "tape": "^4.4.0",
-    "unified": "^4.0.1",
+    "unified": "^5.0.0",
     "xo": "^0.16.0"
   },
   "scripts": {
