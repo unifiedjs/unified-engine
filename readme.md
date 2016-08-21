@@ -35,6 +35,7 @@ engine({
   globs: ['.'],
   extensions: ['md', 'markdown', 'mkd', 'mkdn', 'mkdown'],
   pluginPrefix: 'remark',
+  presetPrefix: 'remark-preset',
   rcName: '.remarkrc',
   packageField: 'remarkConfig',
   ignoreName: '.remarkignore',
@@ -116,6 +117,8 @@ when done.
     — Map of plug-in names or paths and options to use.
 *   [`pluginPrefix`][plugin-prefix] (`string`, optional)
     — When given, optional prefix to use when searching for plug-ins.
+*   [`presetPrefix`][preset-prefix] (`string`, optional)
+    — When given, optional prefix to use when searching for presets.
 *   [`injectedPlugins`][injected-plugins] (`Array`, optional)
     — List of loaded plug-ins to use.
 *   [`color`][color] (`boolean`, default: `false`)
@@ -239,6 +242,8 @@ files work.
 [silently-ignore]: doc/options.md#optionssilentlyignore
 
 [plugin-prefix]: doc/options.md#optionspluginprefix
+
+[preset-prefix]: doc/options.md#optionspresetprefix
 
 [plugins]: doc/options.md#optionsplugins
 

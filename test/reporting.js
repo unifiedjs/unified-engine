@@ -33,7 +33,7 @@ test('reporting', function (t) {
     engine({
       processor: noop().use(function () {
         return function (tree, file) {
-          file.warn('Warning');
+          file.message('Warning');
         };
       }),
       cwd: join(fixtures, 'one-file'),
@@ -48,7 +48,7 @@ test('reporting', function (t) {
         stderr(),
         [
           'one.txt',
-          '        1:1  warning  Warning',
+          '  1:1  warning  Warning',
           '',
           '⚠ 1 warning',
           ''
@@ -68,8 +68,8 @@ test('reporting', function (t) {
       engine({
         processor: noop().use(function () {
           return function (tree, file) {
-            if (file.filename === 'two') {
-              file.warn('Warning!');
+            if (file.stem === 'two') {
+              file.message('Warning!');
             }
           };
         }),
@@ -86,7 +86,7 @@ test('reporting', function (t) {
           stderr(),
           [
             'two.txt',
-            '        1:1  warning  Warning!',
+            '  1:1  warning  Warning!',
             '',
             '⚠ 1 warning',
             ''
@@ -120,8 +120,7 @@ test('reporting', function (t) {
   );
 
   t.test(
-    'should not report succesful files when ' +
-    '`silent`',
+    'should not report succesful files when `silent`',
     function (st) {
       var stderr = spy();
 
@@ -130,9 +129,9 @@ test('reporting', function (t) {
       engine({
         processor: noop().use(function () {
           return function (tree, file) {
-            file.warn('Warning!');
+            file.message('Warning!');
 
-            if (file.filename === 'two') {
+            if (file.stem === 'two') {
               file.fail('Error!');
             }
           };
@@ -150,7 +149,7 @@ test('reporting', function (t) {
           stderr(),
           [
             'two.txt',
-            '        1:1  error    Error!',
+            '  1:1  error  Error!',
             '',
             '✖ 1 error',
             ''

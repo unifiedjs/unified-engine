@@ -10,7 +10,7 @@ through configuration files.
     *   If [`packageField`][package-field] is given, `package.json`
         (JSON) files are loaded and their `$packageField`s are
         used as configuration.
-*   One configuration file (JSON) can be given through [`rcPath`][rc-path],
+*   One configuration file can be given through [`rcPath`][rc-path],
     this is loaded regardless of `detectConfig` and `rcName`.
 
 ###### Example
@@ -20,32 +20,25 @@ An example **rc** file could look as follows:
 ```json
 {
   "output": true,
+  "presets": ["lint-recommended"],
   "settings": {
     "bullet": "*",
     "ruleRepetition": 3,
     "fences": true
   },
-  "plugins": {
-    "inline-links": null,
-    "lint": {
-      "external": [
-        "remark-lint-no-empty-sections"
-      ],
-      "maximum-line-length": false
-    }
-  }
+  "plugins": ["inline-links"]
 }
 ```
 
 ###### Example
-
-An example **rc.js** file could look as follows:
 
 Scripts expose either an object, or a function which when invoked
 returns an object.  The latter is given the current configuration for
 a file.  This configuration always has a `plugins` object where the
 keys are resolved absolute paths to plugins, where the values are
 objects or `false`.
+
+An example **rc.js** file could look as follows:
 
 ```js
 /**
@@ -54,15 +47,12 @@ objects or `false`.
 
 module.exports = {
   output: true,
-  plugins: {
+  preset: 'lint-recommended',
+  plugins: [
     /* Custom natural-language validation. */
-    'script/natural-language': null,
-    'lint': {
-      /* Ignore `final-definition` for `license` */
-      'final-definition': false
-    },
-    'license': null
-  },
+    'script/natural-language',
+    'license'
+  ],
   settings: {
     /* I personally like asterisks. */
     bullet: '*'
@@ -199,6 +189,49 @@ configures the parser and compiler of the processor.
 ```
 
 *   Type: `Object`.
+
+###### `presets`
+
+The `presets` field has either a list of preset names (or paths) or an
+object mapping presets to their options.  It’s also possible to pass
+one preset by passing a `string`.
+
+Presets are in fact configuration files as well: go ahead and publish
+your configuration files, if they’re in JSON or JS, on npm.
+
+Accepts a string:
+
+```json
+{
+  "presets": "foo"
+}
+```
+
+Accepts an array:
+
+```json
+{
+  "presets": [
+    "foo",
+    "bar"
+  ]
+}
+```
+
+Or an object:
+
+```json
+{
+  "presets": {
+    "foo": null,
+    "bar": {
+      "baz": "qux"
+    }
+  }
+}
+```
+
+*   Type: `string`, `Array.<string>` or `Object.<string, Object>`.
 
 ###### `plugins`
 

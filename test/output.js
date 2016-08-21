@@ -317,8 +317,8 @@ test('output', function (t) {
           /* Change the tree */
           tree.value = 'two';
 
-          /* Remove the file-path */
-          file.directory = file.filename = file.extension = null;
+          /* Remove the file-path. */
+          file.history = [];
         };
       }),
       cwd: cwd,
@@ -334,7 +334,7 @@ test('output', function (t) {
       st.equal(input, '', 'should not modify the input');
       st.equal(
         stderr(true),
-        'one.txt: no issues found\n',
+        '<stdin>: no issues found\n',
         'should not report'
       );
     });
@@ -364,8 +364,8 @@ test('output', function (t) {
       st.equal(
         report.join('\n'),
         'one.txt\n' +
-        '        1:1  error    Error: Cannot write ' +
-            'multiple files to single output',
+        '  1:1  error  Error: Cannot write multiple files to ' +
+          'single output',
         'should report'
       );
     });
@@ -397,8 +397,7 @@ test('output', function (t) {
         st.equal(
           report.join('\n'),
           'one.txt\n' +
-          '        1:1  error    Error: Cannot read ' +
-          'output directory. Error:\n',
+          '  1:1  error  Error: Cannot read output directory. Error:\n',
           'should report'
         );
       });

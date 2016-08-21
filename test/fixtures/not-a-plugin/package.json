@@ -1,5 +1,5 @@
 {
   "fooConfig": {
-    "plugins": ["test"]
+    "plugins": ["./test"]
   }
 }

@@ -44,8 +44,7 @@ test('color', function (t) {
         stderr(),
         [
           '\x1b[4m\x1b[31mreadme.md\x1b[39m\x1b[24m',
-          '        1:1  \x1b[31merror\x1b[39m    No ' +
-              'such file or directory',
+          '  1:1  \x1b[31merror\x1b[39m  No such file or directory',
           '',
           '\x1b[31m✖\x1b[39m 1 error',
           ''

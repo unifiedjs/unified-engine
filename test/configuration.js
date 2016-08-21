@@ -27,7 +27,7 @@ test('configuration', function (t) {
 
   engine({
     processor: noop,
-    cwd: join(fixtures, 'empty'),
+    cwd: join(fixtures, 'one-file'),
     globs: ['.'],
     rcPath: '.foorc',
     extensions: ['txt']
@@ -77,8 +77,7 @@ test('configuration', function (t) {
         report,
         [
           'one.txt',
-          '        1:1  error    Error: Cannot read ' +
-              'configuration file'
+          '  1:1  error  Error: Cannot read configuration file'
         ].join('\n'),
         'should fail fatally when custom .rc files ' +
         'are malformed'
@@ -140,8 +139,7 @@ test('configuration', function (t) {
         report.slice(0, report.lastIndexOf(':')),
         [
           'one.txt',
-          '        1:1  error    YAMLException: Cannot read ' +
-              'configuration file'
+          '  1:1  error  YAMLException: Cannot read configuration file'
         ].join('\n'),
         'should fail fatally when custom .rc files ' +
         'are malformed'
@@ -200,8 +198,8 @@ test('configuration', function (t) {
         stderr().split('\n').slice(0, 4).join('\n'),
         [
           'one.txt',
-          '        1:1  error    JSONError: Cannot ' +
-            'read configuration file: ' + join(cwd, 'package.json'),
+          '  1:1  error  JSONError: Cannot read configuration ' +
+            'file: ' + join(cwd, 'package.json'),
           'No data, empty input at 1:1',
           '^'
         ].join('\n'),

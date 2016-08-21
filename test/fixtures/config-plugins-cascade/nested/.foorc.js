@@ -4,6 +4,6 @@ var opts = {
 };
 
 module.exports.plugins = {
-  test: opts,
-  test2: opts
+  './test': opts,
+  './test2': opts
 }

@@ -38,7 +38,7 @@ test('completers', function (t) {
 
     function testSet(set, nr) {
       var paths = set.files.map(function (file) {
-        return file.filePath();
+        return file.path;
       });
 
       st.deepEqual(

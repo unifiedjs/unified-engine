@@ -49,8 +49,7 @@ test('tree', function (t) {
         stderr(true).split('\n').slice(0, 4).join('\n'),
         [
           'doc.json',
-          '        1:1  error    JSONError: Cannot ' +
-            'read file as tree: doc.json',
+          '  1:1  error  JSONError: Cannot read file as JSON',
           'No data, empty input at 1:1',
           '^'
         ].join('\n'),
@@ -197,7 +196,7 @@ test('tree', function (t) {
       processor: noop,
       cwd: cwd,
       streamError: stderr.stream,
-      output: 'bar',
+      output: 'bar.json',
       treeOut: true,
       files: [
         toVFile(join(cwd, 'one.txt'))

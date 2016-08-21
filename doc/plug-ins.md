@@ -24,7 +24,7 @@ var remark = require('remark');
 function plugin(processor, options, set) {
   function completer(set) {
     console.log('done:', set.valueOf().map(function (file) {
-      return file.filePath();
+      return file.path;
     }));
   }
 

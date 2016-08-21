@@ -2,7 +2,7 @@
   "fooConfig": {
     "coverage": "quuuux",
     "plugins": {
-      "test": {
+      "./test": {
         "package": ["foo", "bar", "baz"],
         "cascade": 2
       }

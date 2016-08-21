@@ -1,0 +1,11 @@
+{
+  "presets": {
+    "./preset": {"some": "ignored stuff"}
+  },
+  "plugins": {
+    "./plugin": {
+      "two": false,
+      "three": true
+    }
+  }
+}

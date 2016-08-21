@@ -13,6 +13,7 @@ require('./input');
 require('./ignore');
 require('./configuration');
 require('./configuration-plugins');
+require('./configuration-presets');
 require('./stdin');
 require('./output');
 require('./tree');

@@ -73,7 +73,7 @@ test('configuration', function (t) {
         stderr().split('\n').slice(0, 2).join('\n'),
         [
           'one.txt',
-          '        1:1  error    Error: Boom!'
+          '  1:1  error  Error: Boom!'
         ].join('\n'),
         'should report'
       );
@@ -100,8 +100,7 @@ test('configuration', function (t) {
         stderr().split('\n').slice(0, 2).join('\n'),
         [
           'one.txt',
-          '        1:1  error    Error: Cannot find ' +
-            'module \'missing\''
+          '  1:1  error  Error: Cannot find module \'missing\''
         ].join('\n'),
         'should report'
       );
@@ -130,9 +129,8 @@ test('configuration', function (t) {
         stderr().split('\n').slice(0, 2).join('\n'),
         [
           'one.txt',
-          '        1:1  error    Error: Loading `' + plugin + '` ' +
-            'should give a function, not `[object ' +
-            'Object]`'
+          '  1:1  error  Error: Loading `' + plugin + '` should ' +
+            'give a function, not `[object Object]`'
         ].join('\n'),
         'should report'
       );
@@ -159,7 +157,7 @@ test('configuration', function (t) {
         stderr().split('\n').slice(0, 2).join('\n'),
         [
           'one.txt',
-          '        1:1  error    Error: Missing `required`'
+          '  1:1  error  Error: Missing `required`'
         ].join('\n'),
         'should report'
       );

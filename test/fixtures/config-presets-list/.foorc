@@ -1,0 +1,12 @@
+{
+  "presets": [
+    "./three",
+    "./four"
+  ],
+  "plugins": {
+    "./plugin": {
+      "bravo": false,
+      "charlie": true
+    }
+  }
+}

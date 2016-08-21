@@ -80,7 +80,7 @@ test('input', function (t) {
         stderr(),
         [
           'readme.md',
-          '        1:1  error    No such file or directory',
+          '  1:1  error  No such file or directory',
           '',
           '✖ 1 error',
           ''
@@ -255,10 +255,8 @@ test('input', function (t) {
         stderr(),
         [
           'one.txt: no issues found',
-          '',
           'nested/two.txt',
-          '        1:1  error    Cannot process ' +
-              'given file: it’s ignored',
+          '  1:1  error  Cannot process given file: it’s ignored',
           '',
           'nested/three.txt: no issues found',
           '',
@@ -289,10 +287,8 @@ test('input', function (t) {
         stderr(),
         [
           'nested/two.txt: no issues found',
-          '',
           'node_modules/ignore-one.txt',
-          '        1:1  error    Cannot process ' +
-              'specified file: it’s ignored',
+          '  1:1  error  Cannot process specified file: it’s ignored',
           '',
           'one.txt: no issues found',
           '',

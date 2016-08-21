@@ -29,6 +29,7 @@ authors.
 *   [options.silentlyIgnore](#optionssilentlyignore)
 *   [options.plugins](#optionsplugins)
 *   [options.pluginPrefix](#optionspluginprefix)
+*   [options.presetPrefix](#optionspresetprefix)
 *   [options.injectedPlugins](#optionsinjectedplugins)
 *   [options.color](#optionscolor)
 *   [options.silent](#optionssilent)
@@ -327,10 +328,10 @@ be set from configuration files.
 
 *   When `true`, overwrites the given files;
 *   When pointing to an existing directory, files are written
-    to that directory and keep their filenames and extensions;
+    to that directory and keep their basename;
 *   When the parent directory of the given path exists and one
     file is processed, the file is written to the given path
-    using the given filename (and optionally extension);
+    using the given basename;
 *   Otherwise, a fatal error is thrown.
 
 <!-- Info: -->
@@ -829,6 +830,46 @@ engine({
 }, function (err) {
   if (err) throw err;
 });
+```
+
+## `options.presetPrefix`
+
+Allow presets to be loaded from configuration files without their
+prefix.
+
+*   Type: `string` or `false`, optional.
+
+###### Example
+
+The following example processes `readme.md` and loads the
+`lint-recommended` preset (from a `package.json`).
+Because `presetPrefix` is given, this resolves to
+`remark-preset-lint-recommended`.
+
+```js
+var engine = require('unified-engine');
+var remark = require('remark');
+
+engine({
+  processor: remark(),
+  globs: ['readme.md'],
+  packageField: 'remarkConfig',
+  presetPrefix: 'remark-preset'
+}, function (err) {
+  if (err) throw err;
+});
+```
+
+Where `package.json` contains:
+
+```json
+{
+  "name": "foo",
+  "private": true,
+  "remarkConfig": {
+    "presets": "lint-recommended"
+  }
+}
 ```
 
 ## `options.injectedPlugins`

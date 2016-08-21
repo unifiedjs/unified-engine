@@ -1,6 +1,6 @@
 {
   "plugins": [
-    "test",
-    "test2"
+    "./test",
+    "./test2"
   ]
 }
