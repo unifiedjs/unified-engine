@@ -38,7 +38,7 @@ test('configuration-presets', function (t) {
       rcName: '.foorc',
       extensions: ['txt']
     }, function (err, code) {
-      var out = stderr().split('\n').slice(0, 3).join('\n');
+      var out = stderr().split('\n').slice(0, 2).join('\n');
 
       st.deepEqual(
         [err, code, out],
@@ -46,8 +46,7 @@ test('configuration-presets', function (t) {
           null,
           1,
           'nested/two.txt\n' +
-          '  1:1  error  Error: Cannot read configuration file: ./preset\n' +
-          'ENOENT: no such file or directory, open \'./preset\''
+          '  1:1  error  Error: Cannot read configuration file: ./preset'
         ],
         'should fail'
       );
