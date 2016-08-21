@@ -2,6 +2,12 @@
 
 <!--lint disable no-multiple-toplevel-headings-->
 
+2.0.0 / 2016-08-21
+==================
+
+*   Add support for presets, more ([`850d3f2`](https://github.com/wooorm/unified-engine/commit/850d3f2))
+*   Refactor docs ([`d45fb4a`](https://github.com/wooorm/unified-engine/commit/d45fb4a))
+
 1.5.1 / 2016-07-27
 ==================
 
