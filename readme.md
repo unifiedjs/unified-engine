@@ -110,7 +110,7 @@ when done.
     `ignoreName` is given)
     — Whether to search for ignore files.
 *   [`ignorePath`][ignore-path] (`string`, optional)
-    — File-path to a ignore file to load.
+    — File-path to an ignore file to load.
 *   [`silentlyIgnore`][silently-ignore] (`boolean`, default: `false`)
     — Skip given files if they are ignored.
 *   [`plugins`][plugins] (`Object`, optional)

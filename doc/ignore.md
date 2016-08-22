@@ -42,7 +42,7 @@ to ignore a given path.
 *   Lines are trimmed of white space;
 *   Empty lines are ignored;
 *   Lines which start with an octothorp (`#`) are ignored;
-*   Lines which start with a interrogation-mark (`!`) negate, thus
+*   Lines which start with an interrogation-mark (`!`) negate, thus
     re-adding an ignored file path.  **Note**: using negation patterns
     comes at a significant performance cost.
 
