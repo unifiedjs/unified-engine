@@ -100,7 +100,7 @@ test('configuration', function (t) {
         stderr().split('\n').slice(0, 2).join('\n'),
         [
           'one.txt',
-          '  1:1  error  Error: Cannot find module \'missing\''
+          '  1:1  error  Error: Cannot find module `missing`'
         ].join('\n'),
         'should report'
       );
