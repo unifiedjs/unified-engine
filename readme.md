@@ -114,7 +114,9 @@ when done.
 *   [`silentlyIgnore`][silently-ignore] (`boolean`, default: `false`)
     — Skip given files if they are ignored.
 *   [`plugins`][plugins] (`Object`, optional)
-    — Map of plug-in names or paths and options to use.
+    — Map of plug-in names or paths to their options.
+*   [`presets`][presets] (`Object`, optional)
+    — Map of preset names or paths to their options.
 *   [`pluginPrefix`][plugin-prefix] (`string`, optional)
     — When given, optional prefix to use when searching for plug-ins.
 *   [`presetPrefix`][preset-prefix] (`string`, optional)
@@ -248,6 +250,8 @@ files work.
 [preset-prefix]: doc/options.md#optionspresetprefix
 
 [config-transform]: doc/options.md#optionsconfigtransform
+
+[presets]: doc/options.md#optionspresets
 
 [plugins]: doc/options.md#optionsplugins
 

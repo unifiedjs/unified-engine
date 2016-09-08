@@ -23,7 +23,7 @@ var fixtures = join(__dirname, 'fixtures');
 
 /* Tests. */
 test('configuration', function (t) {
-  t.plan(11);
+  t.plan(13);
 
   engine({
     processor: noop,
@@ -261,6 +261,65 @@ test('configuration', function (t) {
           'nested/three.txt: no issues found',
           'nested/two.txt: no issues found',
           'one.txt: no issues found',
+          ''
+        ].join('\n'),
+        'should report'
+      );
+    });
+  });
+
+  t.test('should fail on invalid `presets`', function (st) {
+    var stderr = spy();
+
+    st.plan(3);
+
+    engine({
+      processor: noop,
+      cwd: join(fixtures, 'rc-file'),
+      streamError: stderr.stream,
+      globs: ['.'],
+      presets: {missing: null},
+      extensions: ['txt']
+    }, function (err, code) {
+      st.error(err, 'should not fail fatally');
+      st.equal(code, 1, 'should exit with `1`');
+
+      st.equal(
+        stderr().split('\n').slice(0, 2).join('\n'),
+        [
+          'nested/four.txt',
+          '  1:1  error  Error: Cannot read configuration file: missing'
+        ].join('\n'),
+        'should report'
+      );
+    });
+  });
+
+  t.test('should support given `presets`', function (st) {
+    var stderr = spy();
+
+    st.plan(3);
+
+    engine({
+      processor: noop,
+      cwd: join(fixtures, 'rc-file'),
+      streamError: stderr.stream,
+      globs: ['.'],
+      presets: {
+        './.foorc': null
+      },
+      extensions: ['txt']
+    }, function (err, code) {
+      st.error(err, 'should not fail fatally');
+      st.equal(code, 0, 'should exit with `0`');
+
+      st.equal(
+        stderr(),
+        [
+          'nested/four.txt: no issues found',
+          'nested/three.txt: no issues found',
+          'one.txt: no issues found',
+          'two.txt: no issues found',
           ''
         ].join('\n'),
         'should report'

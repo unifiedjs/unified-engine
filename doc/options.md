@@ -28,6 +28,7 @@ authors.
 *   [options.ignorePath](#optionsignorepath)
 *   [options.silentlyIgnore](#optionssilentlyignore)
 *   [options.plugins](#optionsplugins)
+*   [options.presets](#optionspresets)
 *   [options.pluginPrefix](#optionspluginprefix)
 *   [options.presetPrefix](#optionspresetprefix)
 *   [options.configTransform](#optionsconfigtransform)
@@ -774,10 +775,8 @@ ignored by [ignore files][ignore], instead of warning about them.
 Plug-ins to load by their name and attach with options to the processor
 for every processed file.
 
-*   Type: `Object`, optional.  Each key is the [name of a
-    plug-in][load-plugin], and the value is an optional object to be
-    used as configuration for the plug-in.  Values can be `false` to
-    specify that a certain plug-in should _not_ be loaded.
+*   Type: `Object`, `Array`, `string`, optional.  Same format as
+    [`plugins` in config files][config-plugins].
 
 ###### Example
 
@@ -793,6 +792,33 @@ engine({
   globs: ['readme.md'],
   plugins: {
     'remark-lint': null
+  }
+}, function (err) {
+  if (err) throw err;
+});
+```
+
+## `options.presets`
+
+Presets to load by their name or path.
+
+*   Type: `Object`, `Array`, `string`, optional.  Same format as
+    [`presets` in config files][config-presets].
+
+###### Example
+
+The following example processes `index.html` and loads the
+`rehype-preset-minify` preset.
+
+```js
+var engine = require('unified-engine');
+var rehype = require('rehype');
+
+engine({
+  processor: rehype,
+  globs: ['index.html'],
+  presets: {
+    'rehype-preset-minify': null
   }
 }, function (err) {
   if (err) throw err;
@@ -1111,8 +1137,6 @@ engine({
 
 [user-home]: https://github.com/sindresorhus/user-home
 
-[load-plugin]: https://github.com/wooorm/load-plugin#loadpluginname-options
-
 [vfile]: https://github.com/wooorm/vfile
 
 [vfile-reporter]: https://github.com/wooorm/vfile-reporter
@@ -1166,3 +1190,7 @@ engine({
 [silent]: #optionssilent
 
 [files]: #optionsfiles
+
+[config-plugins]: ./configure.md#plugins
+
+[config-presets]: ./configure.md#presets
