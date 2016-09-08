@@ -2,6 +2,13 @@
 
 <!--lint disable no-multiple-toplevel-headings heading-style-->
 
+2.1.0 / 2016-09-08
+==================
+
+*   Add support for `presets` in options ([`7e268a2`](https://github.com/wooorm/unified-engine/commit/7e268a2))
+*   Add `configTransform` option ([`2978f5c`](https://github.com/wooorm/unified-engine/commit/2978f5c))
+*   Fix plugin existence false-positives ([`b54cc2d`](https://github.com/wooorm/unified-engine/commit/b54cc2d))
+
 2.0.0 / 2016-08-21
 ==================
 
