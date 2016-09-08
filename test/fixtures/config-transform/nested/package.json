@@ -1,0 +1,10 @@
+{
+  "foo": {
+    "options": {
+      "foxtrot": true
+    },
+    "plugs": {
+      "./test": null
+    }
+  }
+}

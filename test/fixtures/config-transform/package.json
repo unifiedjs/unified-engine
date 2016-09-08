@@ -1,0 +1,13 @@
+{
+  "foo": {
+    "options": {
+      "charlie": true
+    },
+    "plugs": {
+      "./test": {
+        "package": ["foo", "bar", "baz"],
+        "cascade": 2
+      }
+    }
+  }
+}

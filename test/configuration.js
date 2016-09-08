@@ -103,7 +103,7 @@ test('configuration', function (t) {
 
       st.error(err, 'should not fail fatally');
       st.equal(code, 0, 'should exit with `0`');
-      st.equal(Object.keys(cache).length, 1, 'should have on cache entry');
+      st.equal(Object.keys(cache).length, 1, 'should have one cache entry');
 
       st.deepEqual(
         cache[cwd],

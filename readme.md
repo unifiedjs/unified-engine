@@ -119,6 +119,8 @@ when done.
     — When given, optional prefix to use when searching for plug-ins.
 *   [`presetPrefix`][preset-prefix] (`string`, optional)
     — When given, optional prefix to use when searching for presets.
+*   [`configTransform`][config-transform] (`Function`, optional)
+    — Transform config files from a different schema.
 *   [`injectedPlugins`][injected-plugins] (`Array`, optional)
     — List of loaded plug-ins to use.
 *   [`color`][color] (`boolean`, default: `false`)
@@ -244,6 +246,8 @@ files work.
 [plugin-prefix]: doc/options.md#optionspluginprefix
 
 [preset-prefix]: doc/options.md#optionspresetprefix
+
+[config-transform]: doc/options.md#optionsconfigtransform
 
 [plugins]: doc/options.md#optionsplugins
 

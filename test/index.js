@@ -14,6 +14,7 @@ require('./ignore');
 require('./configuration');
 require('./configuration-plugins');
 require('./configuration-presets');
+require('./configuration-transform');
 require('./stdin');
 require('./output');
 require('./tree');

@@ -30,6 +30,7 @@ authors.
 *   [options.plugins](#optionsplugins)
 *   [options.pluginPrefix](#optionspluginprefix)
 *   [options.presetPrefix](#optionspresetprefix)
+*   [options.configTransform](#optionsconfigtransform)
 *   [options.injectedPlugins](#optionsinjectedplugins)
 *   [options.color](#optionscolor)
 *   [options.silent](#optionssilent)
@@ -868,6 +869,52 @@ Where `package.json` contains:
   "private": true,
   "remarkConfig": {
     "presets": "lint-recommended"
+  }
+}
+```
+
+## `options.configTransform`
+
+Want configuration files in a different format?  Pass a `configTransform`
+function.  It will be invoked with the parsed value from configuration
+files and should return a config object (with `presets`, `plugins`,
+`settings`, and/or `output`).
+
+*   Type: `Function`, optional.
+
+###### Example
+
+The following example processes `readme.md` and loads options from
+`custom` (from a `package.json`).  `configTransform` is invoked with
+those options and transforms it to configuration **unified-engine**
+understands.
+
+```js
+var engine = require('unified-engine');
+var remark = require('remark');
+
+engine({
+  processor: remark(),
+  globs: ['readme.md'],
+  packageField: 'custom',
+  configTransform: function (options) {
+    return {
+      output: (options || {}).generate
+    }
+  }
+}, function (err) {
+  if (err) throw err;
+});
+```
+
+Where `package.json` contains:
+
+```json
+{
+  "name": "foo",
+  "private": true,
+  "custom": {
+    "generate": true
   }
 }
 ```
