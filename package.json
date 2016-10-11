@@ -49,7 +49,7 @@
     "remark-preset-wooorm": "^1.0.0",
     "tape": "^4.4.0",
     "unified": "^5.0.0",
-    "xo": "^0.16.0"
+    "xo": "^0.17.0"
   },
   "scripts": {
     "build-md": "remark . --quiet --frail",
@@ -72,6 +72,9 @@
   "xo": {
     "space": true,
     "rules": {
+      "unicorn/explicit-length-check": "off",
+      "import/no-dynamic-require": "off",
+      "import/no-unassigned-import": "off",
       "complexity": "off",
       "eqeqeq": "off",
       "guard-for-in": "off",
