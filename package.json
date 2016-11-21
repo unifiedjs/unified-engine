@@ -8,6 +8,19 @@
     "processor",
     "engine"
   ],
+  "repository": "https://github.com/wooorm/unified-engine",
+  "bugs": "https://github.com/wooorm/unified-engine/issues",
+  "author": "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
+  "contributors": [
+    "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)"
+  ],
+  "engines": {
+    "node": ">=0.11.0"
+  },
+  "files": [
+    "index.js",
+    "lib/"
+  ],
   "dependencies": {
     "concat-stream": "^1.5.1",
     "debug": "^2.2.0",
@@ -27,24 +40,8 @@
     "vfile-reporter": "^3.0.0",
     "vfile-statistics": "^1.0.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/wooorm/unified-engine.git"
-  },
-  "bugs": "https://github.com/wooorm/unified-engine/issues",
-  "author": "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
-  "contributors": [
-    "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)"
-  ],
-  "engines": {
-    "node": ">=0.11.0"
-  },
-  "files": [
-    "index.js",
-    "lib/"
-  ],
   "devDependencies": {
-    "nyc": "^8.1.0",
+    "nyc": "^9.0.1",
     "remark-cli": "^2.0.0",
     "remark-preset-wooorm": "^1.0.0",
     "tape": "^4.4.0",
@@ -52,10 +49,10 @@
     "xo": "^0.17.0"
   },
   "scripts": {
-    "build-md": "remark . --quiet --frail",
+    "build-md": "remark . -qfo",
     "build": "npm run build-md",
     "lint": "xo",
-    "test-api": "node test/index.js",
+    "test-api": "node test",
     "test-coverage": "nyc --reporter lcov tape test/index.js",
     "test": "npm run build && npm run lint && npm run test-coverage"
   },
@@ -66,7 +63,6 @@
     "branches": 100
   },
   "remarkConfig": {
-    "output": true,
     "presets": "wooorm"
   },
   "xo": {
@@ -79,7 +75,6 @@
       "eqeqeq": "off",
       "guard-for-in": "off",
       "max-depth": "off",
-      "max-lines": "off",
       "no-eq-null": "off"
     }
   }
