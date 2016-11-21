@@ -46,12 +46,12 @@ test('tree', function (t) {
       st.equal(code, 1, 'should exit with `1`');
 
       st.equal(
-        stderr(true).split('\n').slice(0, 4).join('\n'),
+        stderr(true).split('\n').slice(0, 3).join('\n'),
         [
           'doc.json',
-          '  1:1  error  JSONError: Cannot read file as JSON',
-          'No data, empty input at 1:1',
-          '^'
+          '  1:1  error  TypeError: Cannot read file as JSON',
+          'Invalid property descriptor. Cannot both specify ' +
+          'accessors and a value or writable attribute, #<Object>'
         ].join('\n'),
         'should report'
       );

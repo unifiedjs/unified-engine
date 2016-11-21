@@ -136,10 +136,10 @@ test('configuration', function (t) {
       st.equal(code, 1, 'should exit with `1`');
 
       st.equal(
-        report.slice(0, report.lastIndexOf(':')),
+        report,
         [
           'one.txt',
-          '  1:1  error  YAMLException: Cannot read configuration file'
+          '  1:1  error  Error'
         ].join('\n'),
         'should fail fatally when custom .rc files ' +
         'are malformed'
@@ -195,13 +195,13 @@ test('configuration', function (t) {
       st.equal(code, 1, 'should exit with `1`');
 
       st.equal(
-        stderr().split('\n').slice(0, 4).join('\n'),
+        stderr().split('\n').slice(0, 3).join('\n'),
         [
           'one.txt',
-          '  1:1  error  JSONError: Cannot read configuration ' +
-            'file: ' + join(cwd, 'package.json'),
-          'No data, empty input at 1:1',
-          '^'
+          '  1:1  error  TypeError: Cannot read configuration file: ' +
+            join(cwd, 'package.json'),
+          'Invalid property descriptor. Cannot both specify accessors ' +
+          'and a value or writable attribute, #<Object>'
         ].join('\n'),
         'should report'
       );
