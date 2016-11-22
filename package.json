@@ -44,7 +44,7 @@
     "nyc": "^9.0.1",
     "remark-cli": "^2.0.0",
     "remark-preset-wooorm": "^1.0.0",
-    "tape": "^4.4.0",
+    "tape": "^4.6.3",
     "unified": "^5.0.0",
     "xo": "^0.17.0"
   },
