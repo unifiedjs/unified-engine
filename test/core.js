@@ -1,19 +1,9 @@
-/**
- * @author Titus Wormer
- * @copyright 2016 Titus Wormer
- * @license MIT
- * @module unified-engine
- * @fileoverview Test suite for `unified-engine`.
- */
-
 'use strict';
 
-/* Dependencies. */
 var test = require('tape');
 var unified = require('unified');
 var engine = require('..');
 
-/* Tests. */
 test('engine', function (t) {
   t.plan(6);
 

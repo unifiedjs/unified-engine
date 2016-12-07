@@ -41,16 +41,12 @@ objects or `false`.
 An example **rc.js** file could look as follows:
 
 ```js
-/**
- * @fileoverview Local remark configuration.
- */
-
 module.exports = {
   output: true,
   preset: 'lint-recommended',
   plugins: [
     /* Custom natural-language validation. */
-    'script/natural-language',
+    './script/natural-language',
     'license'
   ],
   settings: {

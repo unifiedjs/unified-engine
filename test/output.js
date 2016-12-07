@@ -1,14 +1,5 @@
-/**
- * @author Titus Wormer
- * @copyright 2016 Titus Wormer
- * @license MIT
- * @module unified-engine
- * @fileoverview Test suite for `unified-engine`.
- */
-
 'use strict';
 
-/* Dependencies. */
 var fs = require('fs');
 var path = require('path');
 var test = require('tape');
@@ -17,15 +8,12 @@ var noop = require('./util/noop-processor');
 var spy = require('./util/spy');
 var engine = require('..');
 
-/* Methods. */
 var join = path.join;
 var read = fs.readFileSync;
 var unlink = fs.unlinkSync;
 
-/* Constants. */
 var fixtures = join(__dirname, 'fixtures');
 
-/* Tests. */
 test('output', function (t) {
   t.plan(11);
 
