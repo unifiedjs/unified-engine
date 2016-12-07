@@ -136,10 +136,10 @@ test('configuration', function (t) {
       st.equal(code, 1, 'should exit with `1`');
 
       st.equal(
-        report,
+        report.slice(0, report.lastIndexOf(':')),
         [
           'one.txt',
-          '  1:1  error  Error'
+          '  1:1  error  Error: Cannot read configuration file'
         ].join('\n'),
         'should fail fatally when custom .rc files ' +
         'are malformed'
@@ -195,13 +195,11 @@ test('configuration', function (t) {
       st.equal(code, 1, 'should exit with `1`');
 
       st.equal(
-        stderr().split('\n').slice(0, 3).join('\n'),
+        stderr().split('\n').slice(0, 2).join('\n'),
         [
           'one.txt',
-          '  1:1  error  TypeError: Cannot read configuration file: ' +
-            join(cwd, 'package.json'),
-          'Invalid property descriptor. Cannot both specify accessors ' +
-          'and a value or writable attribute, #<Object>'
+          '  1:1  error  Error: Cannot read configuration file: ' +
+            join(cwd, 'package.json')
         ].join('\n'),
         'should report'
       );
