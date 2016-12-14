@@ -23,7 +23,7 @@
   ],
   "dependencies": {
     "concat-stream": "^1.5.1",
-    "debug": "^2.2.0",
+    "debug": "^2.4.0",
     "fn-name": "^2.0.1",
     "glob": "^7.0.3",
     "globby": "^6.0.0",
