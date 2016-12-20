@@ -35,7 +35,7 @@
     "to-vfile": "^2.0.0",
     "trough": "^1.0.0",
     "user-home": "^2.0.0",
-    "vfile-find-down": "^2.0.0",
+    "vfile-find-down": "^2.0.1",
     "vfile-find-up": "^2.0.0",
     "vfile-reporter": "^3.0.0",
     "vfile-statistics": "^1.0.0"
