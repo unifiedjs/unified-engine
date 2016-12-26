@@ -11,23 +11,40 @@ var join = path.join;
 var fixtures = join(__dirname, 'fixtures');
 
 test('ignore', function (t) {
-  t.plan(6);
+  t.plan(5);
 
-  engine({
-    processor: noop,
-    cwd: join(fixtures, 'empty'),
-    globs: ['.'],
-    detectIgnore: false,
-    ignorePath: '.missing-ignore',
-    extensions: ['txt']
-  }, function (err) {
-    t.equal(
-      err.message.slice(0, err.message.indexOf(':')),
-      'Cannot read ignore file',
-      'should fail fatally when custom ignore files ' +
-      'are not found'
-    );
-  });
+  t.test(
+    'should fail fatally when custom ignore files ' +
+    'are not found',
+    function (st) {
+      var cwd = join(fixtures, 'simple-structure');
+      var stderr = spy();
+
+      st.plan(3);
+
+      engine({
+        processor: noop,
+        cwd: cwd,
+        streamError: stderr.stream,
+        globs: ['one.txt'],
+        detectIgnore: false,
+        ignorePath: '.missing-ignore',
+        extensions: ['txt']
+      }, function (err, code) {
+        st.error(err, 'should not fail fatally');
+        st.equal(code, 1, 'should exit with `1`');
+
+        st.equal(
+          stderr().split('\n').slice(0, 2).join('\n'),
+          [
+            'one.txt',
+            '  1:1  error  Error: Cannot read given file `.missing-ignore`'
+          ].join('\n'),
+          'should report'
+        );
+      });
+    }
+  );
 
   t.test('should support custom ignore files', function (st) {
     var stderr = spy();
@@ -106,35 +123,6 @@ test('ignore', function (t) {
       st.equal(
         stderr(),
         [
-          'one.txt: no issues found',
-          ''
-        ].join('\n'),
-        'should report'
-      );
-    });
-  });
-
-  t.test('should look into negated hidden files', function (st) {
-    var stderr = spy();
-
-    st.plan(3);
-
-    engine({
-      processor: noop,
-      cwd: join(fixtures, 'hidden-directory'),
-      streamError: stderr.stream,
-      globs: ['.'],
-      detectIgnore: true,
-      ignoreName: '.fooignore',
-      extensions: ['txt']
-    }, function (err, code) {
-      st.error(err, 'should not fail fatally');
-      st.equal(code, 0, 'should exit with `0`');
-
-      st.equal(
-        stderr(),
-        [
-          '.hidden/two.txt: no issues found',
           'one.txt: no issues found',
           ''
         ].join('\n'),

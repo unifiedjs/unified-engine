@@ -15,6 +15,7 @@ authors.
 *   [options.streamError](#optionsstreamerror)
 *   [options.out](#optionsout)
 *   [options.output](#optionsoutput)
+*   [options.alwaysStringify](#optionsalwaysstringify)
 *   [options.tree](#optionstree)
 *   [options.treeIn](#optionstreein)
 *   [options.treeOut](#optionstreeout)
@@ -28,9 +29,7 @@ authors.
 *   [options.ignorePath](#optionsignorepath)
 *   [options.silentlyIgnore](#optionssilentlyignore)
 *   [options.plugins](#optionsplugins)
-*   [options.presets](#optionspresets)
 *   [options.pluginPrefix](#optionspluginprefix)
-*   [options.presetPrefix](#optionspresetprefix)
 *   [options.configTransform](#optionsconfigtransform)
 *   [options.injectedPlugins](#optionsinjectedplugins)
 *   [options.color](#optionscolor)
@@ -90,17 +89,19 @@ engine({
 
 Paths or [globs][glob] to files and directories to process.  Fileglobs
 (for example, `*.md`) can be given to add all matching files.
-Directories can be given alongside [`extensions`][extensions] to search
-directories for files matching an extension (for example, `dir` to add
-`dir/readme.txt` and `dir/sub/history.text` if `extensions` is
-`['txt', 'text']`).
+Directories and globs to directories can be given alongside
+[`extensions`][extensions] to search directories for files matching an
+extension (for example, `dir` to add `dir/readme.txt` and `dir/sub/history.text`
+if `extensions` is `['txt', 'text']`).  This searching will not include
+`node_modules` or hidden directories (those starting with a dot, `.`, like
+`.git`).
 
 *   Type: `Array.<string>`;
 *   Default: `[]`.
 
 ###### Example
 
-The following example reformats `README` and all files with an `md`
+The following example processes `README` and all files with an `md`
 extension in `doc`.
 
 ```js
@@ -112,7 +113,7 @@ engine({
   globs: ['README', 'doc'],
   extensions: ['md']
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -139,7 +140,7 @@ engine({
   extensions: ['md', 'mkd', 'markdown'],
   output: true
 }, function (err) {
-    if (err) throw err;
+  if (err) throw err;
 });
 ```
 
@@ -164,7 +165,7 @@ var lint = require('remark-lint');
 
 engine({
   processor: remark(),
-  injectedPlugins: [lint],
+  injectedPlugins: [[lint, {finalNewline: true}]],
   streamIn: stream,
   out: false
 }, function (err) {
@@ -182,7 +183,7 @@ Yields:
 
 ```txt
 <stdin>
-        1:1  warning  Missing newline character at end of file  final-newline
+  1:1  warning  Missing newline character at end of file  final-newline  remark-lint
 
 ⚠ 1 warning
 ```
@@ -206,7 +207,7 @@ var lint = require('remark-lint');
 
 engine({
   processor: remark(),
-  injectedPlugins: [lint],
+  injectedPlugins: [[lint, {finalNewline: true}]],
   filePath: '~/alpha/bravo/charlie.md',
   streamIn: stream,
   out: false
@@ -225,7 +226,7 @@ Yields:
 
 ```txt
 ~/alpha/bravo/charlie.md
-        1:1  warning  Missing newline character at end of file  final-newline
+  1:1  warning  Missing newline character at end of file  final-newline  remark-lint
 
 ⚠ 1 warning
 ```
@@ -285,7 +286,7 @@ var lint = require('remark-lint');
 engine({
   processor: remark(),
   globs: ['readme.md'],
-  injectedPlugins: [lint],
+  injectedPlugins: [[lint, {finalNewline: true}]],
   out: false,
   streamErr: fs.createWriteStream('report.txt')
 }, function (err) {
@@ -329,11 +330,11 @@ Whether to write successfully processed files, and where to.  This can
 be set from configuration files.
 
 *   When `true`, overwrites the given files;
+*   When `false`, does not write to the file-system;
 *   When pointing to an existing directory, files are written
-    to that directory and keep their basename;
+    to that directory and keep their original basenames;
 *   When the parent directory of the given path exists and one
-    file is processed, the file is written to the given path
-    using the given basename;
+    file is processed, the file is written to the given path;
 *   Otherwise, a fatal error is thrown.
 
 <!-- Info: -->
@@ -361,12 +362,12 @@ engine({
 });
 ```
 
-###### `options.alwaysStringify`
+## `options.alwaysStringify`
 
-Whether to always stringify successful documents.  By default,
-documents are stringified when it’s detected a file is to be written
-to **stdout**(4) or the file system.  If files are handled and
-possibly written somewhere later, set this option to `true`.
+Whether to always stringify successful documents.  By default, documents are
+stringified when it’s detected that a file is to be written to **stdout**(4)
+or the file system.  If files are handled and possibly written somewhere later,
+set this option to `true`.
 
 *   Type: `boolean`;
 *   Default: `false`.
@@ -538,14 +539,7 @@ Yields:
 Name of [configuration][configure] file to load.  If given and
 [`detectConfig`][detect-config] is not `false`, `$rcName` files
 are loaded and parsed as JSON, `$rcName.js` are `require`d, and
-`$rcName.yaml` are loaded with `js-yaml` (`safeLoad`).
-
-If configuration files are found in the directory of the processed file
-or any of its ancestral directories (whether `package.json`, if
-`packageField` is given, or `$rcName`, `$rcName.js`, or `$rcName.yaml`),
-`$home/$rcName`, `$home/$rcName.js`, and `$home/$rcName.yaml` are also
-checked and loaded if they exist (where `$home` refers to the user’s
-[home directory][user-home]).
+`$rcName.yml` and `$rcName.yaml` are loaded with `js-yaml` (`safeLoad`).
 
 *   Type: `string`, optional.
 
@@ -606,9 +600,8 @@ with [`$packageField`][package-field]).
 
 ###### Example
 
-The following example processes `readme.md` but does **not** allow
-configuration from `.remarkrc` or `package.json` files, because
-`detectConfig` is `false`.
+The following example processes `readme.md` but does **not** allow configuration
+from `.remarkrc` or `package.json` files, as `detectConfig` is `false`.
 
 ```js
 var engine = require('unified-engine');
@@ -627,13 +620,13 @@ engine({
 
 ## `options.rcPath`
 
-File-path to a JSON file to load, regardless of
+File-path to a config file to load, regardless of
 [`detectConfig`][detect-config] or [`rcName`][rc-name].
 
-> **Note:** Be careful not to pass a file which is also detected.
-> **Note:** Do not pass `package.json` files.  JavaScript and YAML
-> can be passed but must have correct extensions (`.js` or `.yaml`,
-> respectivly).
+If the file’s extension is `yml` or `yaml`, it’s loaded as YAML.  If the
+file’s extension is `js`, it’s `require`d.  If the file’s basename is
+`package.json`, the property at [`packageField`][package-field] is used.
+Otherwise, the file is parsed as JSON.
 
 *   Type: `string`, optional.
 
@@ -673,9 +666,7 @@ var remark = require('remark');
 engine({
   processor: remark(),
   globs: ['readme.md'],
-  settings: {
-    position: false
-  }
+  settings: {position: false}
 }, function (err) {
   if (err) throw err;
 });
@@ -790,36 +781,7 @@ var remark = require('remark');
 engine({
   processor: remark(),
   globs: ['readme.md'],
-  plugins: {
-    'remark-lint': null
-  }
-}, function (err) {
-  if (err) throw err;
-});
-```
-
-## `options.presets`
-
-Presets to load by their name or path.
-
-*   Type: `Object`, `Array`, `string`, optional.  Same format as
-    [`presets` in config files][config-presets].
-
-###### Example
-
-The following example processes `index.html` and loads the
-`rehype-preset-minify` preset.
-
-```js
-var engine = require('unified-engine');
-var rehype = require('rehype');
-
-engine({
-  processor: rehype,
-  globs: ['index.html'],
-  presets: {
-    'rehype-preset-minify': null
-  }
+  plugins: ['remark-lint']
 }, function (err) {
   if (err) throw err;
 });
@@ -851,60 +813,17 @@ engine({
   processor: remark(),
   globs: ['readme.md'],
   pluginPrefix: 'remark',
-  plugins: {
-    lint: null
-  }
+  plugins: ['lint']
 }, function (err) {
   if (err) throw err;
 });
-```
-
-## `options.presetPrefix`
-
-Allow presets to be loaded from configuration files without their
-prefix.
-
-*   Type: `string` or `false`, optional.
-
-###### Example
-
-The following example processes `readme.md` and loads the
-`lint-recommended` preset (from a `package.json`).
-Because `presetPrefix` is given, this resolves to
-`remark-preset-lint-recommended`.
-
-```js
-var engine = require('unified-engine');
-var remark = require('remark');
-
-engine({
-  processor: remark(),
-  globs: ['readme.md'],
-  packageField: 'remarkConfig',
-  presetPrefix: 'remark-preset'
-}, function (err) {
-  if (err) throw err;
-});
-```
-
-Where `package.json` contains:
-
-```json
-{
-  "name": "foo",
-  "private": true,
-  "remarkConfig": {
-    "presets": "lint-recommended"
-  }
-}
 ```
 
 ## `options.configTransform`
 
 Want configuration files in a different format?  Pass a `configTransform`
 function.  It will be invoked with the parsed value from configuration
-files and should return a config object (with `presets`, `plugins`,
-`settings`, and/or `output`).
+files and should return a config object (with `plugins` and/or `settings`).
 
 *   Type: `Function`, optional.
 
@@ -923,10 +842,8 @@ engine({
   processor: remark(),
   globs: ['readme.md'],
   packageField: 'custom',
-  configTransform: function (options) {
-    return {
-      output: (options || {}).generate
-    }
+  configTransform: function (config) {
+    return {settings: (config || {}).options};
   }
 }, function (err) {
   if (err) throw err;
@@ -940,7 +857,9 @@ Where `package.json` contains:
   "name": "foo",
   "private": true,
   "custom": {
-    "generate": true
+    "options": {
+      "position": false
+    }
   }
 }
 ```
@@ -1135,8 +1054,6 @@ engine({
 
 [unified-description]: https://github.com/wooorm/unified#description
 
-[user-home]: https://github.com/sindresorhus/user-home
-
 [vfile]: https://github.com/wooorm/vfile
 
 [vfile-reporter]: https://github.com/wooorm/vfile-reporter
@@ -1192,5 +1109,3 @@ engine({
 [files]: #optionsfiles
 
 [config-plugins]: ./configure.md#plugins
-
-[config-presets]: ./configure.md#presets

@@ -1,0 +1,3 @@
+exports.plugins = {
+  './plugin': null
+};

@@ -1,8 +1,0 @@
-{
-  "options": {
-    "delta": true
-  },
-  "plugs": [
-    "./test"
-  ]
-}

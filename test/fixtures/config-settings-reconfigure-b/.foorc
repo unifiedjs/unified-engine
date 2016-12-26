@@ -1,0 +1,4 @@
+{
+  "plugins": ["./preset"],
+  "settings": {"alpha": true}
+}

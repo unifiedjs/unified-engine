@@ -14,11 +14,15 @@ Ignore files do not cascade.  Before searching for [`globs`][globs] in
 searched for files named `$ignoreName`.  If multiple ignore files are
 found, the closest one to `cwd` takes precedence.
 
-`node_modules` and hidden directories (those starting with a dot, `.`),
-such as `.git` are normally not searched.  These can be included by
-either passing them directly in `globs`, or by using a negated ignore
-pattern (for example, `!.git`).  Note that this results in poor
-performance because _all_ paths must be searched.
+If paths or globs to directories are given to the engine, they will be searched
+for matching files, but `node_modules` and hidden directories (those starting
+with a dot, `.`, such as `.git`) are normally not searched.  Pass paths or globs
+to files instead to include files inside `node_modules` and hidden directories.
+
+The format for **ignore** files is the same as [`.gitignore`][gitignore] files,
+so it’s also possible to pass those for [`ignorePath`][ignore-path] in
+[`options`][options]. [**node-ignore**][node-ignore] is used under the hood, see
+its documentation for more information.
 
 ###### Example
 
@@ -30,33 +34,11 @@ components
 
 # Fixtures.
 test/{input,tree}
-
-!some/.hidden/directory
 ```
-
-## Syntax
-
-Each line in an ignore file provides a pattern which describes whether
-to ignore a given path.
-
-*   Lines are trimmed of white space;
-*   Empty lines are ignored;
-*   Lines which start with an octothorp (`#`) are ignored;
-*   Lines which start with an interrogation-mark (`!`) negate, thus
-    re-adding an ignored file path.  **Note**: using negation patterns
-    comes at a significant performance cost.
-
-For documentation on support of wild-cards (`*`, `?`), brace expressions
-(`{one,two}`), and more, see [`minimatch`][minimatch].
-
-This format is the same as **gitignore**(5), so it’s also possible to
-pass those for [`ignorePath`][ignore-path] in [`options`][options].
 
 <!-- Definitions -->
 
 [api]: ../readme.md#api
-
-[minimatch]: https://github.com/isaacs/minimatch
 
 [options]: options.md#options
 
@@ -69,3 +51,7 @@ pass those for [`ignorePath`][ignore-path] in [`options`][options].
 [ignore-name]: options.md#optionsignorename
 
 [ignore-path]: options.md#optionsignorepath
+
+[gitignore]: https://git-scm.com/docs/gitignore
+
+[node-ignore]: https://github.com/kaelzhang/node-ignore

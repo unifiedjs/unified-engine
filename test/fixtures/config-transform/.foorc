@@ -1,6 +1,0 @@
-{
-  "options": {
-    "alpha": true
-  },
-  "plugs": ["./test"]
-}

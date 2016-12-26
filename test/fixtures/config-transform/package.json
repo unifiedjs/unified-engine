@@ -1,12 +1,11 @@
 {
   "foo": {
     "options": {
-      "charlie": true
+      "foxtrot": true
     },
     "plugs": {
       "./test": {
-        "package": ["foo", "bar", "baz"],
-        "cascade": 2
+        "golf": false
       }
     }
   }

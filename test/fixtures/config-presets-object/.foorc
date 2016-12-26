@@ -1,5 +1,0 @@
-{
-  "presets": {
-    "./preset": {"options": "for", "the": "preset"}
-  }
-}

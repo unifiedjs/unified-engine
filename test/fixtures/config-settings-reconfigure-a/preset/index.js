@@ -1,0 +1,1 @@
+exports.settings = {alpha: false};

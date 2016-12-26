@@ -19,18 +19,17 @@ test('`configTransform`', function (t) {
     st.plan(7);
 
     engine({
-      processor: noop.use(function (processor) {
+      processor: noop().use(function (processor) {
         processor.t = st;
       }),
       streamError: stderr.stream,
       cwd: join(fixtures, 'config-transform'),
       globs: ['.'],
-      rcName: '.foorc',
       packageField: 'foo',
       configTransform: configTransform,
       extensions: ['txt']
     }, function (err, code, result) {
-      var cache = result.configuration.cache;
+      var cache = result.configuration.findUp.cache;
       var keys = Object.keys(cache);
 
       st.error(err, 'should not fail fatally');
@@ -39,31 +38,19 @@ test('`configTransform`', function (t) {
 
       st.deepEqual(
         cache[keys[0]].settings,
-        {
-          charlie: true,
-          bravo: true,
-          alpha: true,
-          foxtrot: true,
-          echo: true,
-          delta: true
-        },
+        {foxtrot: true},
         'should set the correct settings'
       );
 
       st.deepEqual(
-        cache[keys[0]].plugins[join(fixtures, 'config-transform', 'test.js')],
-        {
-          package: ['foo', 'bar', 'baz'],
-          cascade: 5,
-          script: true,
-          nestedScript: true
-        },
+        cache[keys[0]].plugins[0][1],
+        {golf: false},
         'should pass the correct options to plugins'
       );
 
       st.equal(
         stderr(),
-        'nested/one.txt: no issues found\n'
+        'one.txt: no issues found\n'
       );
     });
 

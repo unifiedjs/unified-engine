@@ -3,7 +3,7 @@
 var fs = require('fs');
 var path = require('path');
 var test = require('tape');
-var toVFile = require('to-vfile');
+var vfile = require('to-vfile');
 var noop = require('./util/noop-processor');
 var spy = require('./util/spy');
 var engine = require('..');
@@ -15,7 +15,7 @@ var unlink = fs.unlinkSync;
 var fixtures = join(__dirname, 'fixtures');
 
 test('output', function (t) {
-  t.plan(11);
+  t.plan(12);
 
   t.test('should not write to stdout on dirs', function (st) {
     var cwd = join(fixtures, 'one-file');
@@ -263,6 +263,39 @@ test('output', function (t) {
     });
   });
 
+  t.test('should not create intermediate directories', function (st) {
+    var cwd = join(fixtures, 'simple-structure');
+    var stderr = spy();
+
+    st.plan(1);
+
+    engine({
+      processor: noop(),
+      cwd: cwd,
+      streamError: stderr.stream,
+      output: 'missing/bar',
+      globs: ['one.txt'],
+      extensions: ['txt']
+    }, function (err, code) {
+      var report = stderr().split('\n').slice(0, 3).join('\n');
+      var fp = join(cwd, 'missing');
+
+      st.deepEqual(
+        [err, code, report],
+        [
+          null,
+          1,
+          [
+            'one.txt',
+            '  1:1  error  Error: Cannot read parent directory. Error:',
+            'ENOENT: no such file or directory, stat \'' + fp + '\''
+          ].join('\n')
+        ],
+        'should report'
+      );
+    });
+  });
+
   t.test('should write injected files', function (st) {
     var cwd = join(fixtures, 'one-file');
     var stderr = spy();
@@ -279,7 +312,7 @@ test('output', function (t) {
       cwd: cwd,
       streamError: stderr.stream,
       output: true,
-      files: [toVFile(join(cwd, 'one.txt'))]
+      files: [vfile(join(cwd, 'one.txt'))]
     }, function (err, code) {
       var input = read(join(cwd, 'one.txt'), 'utf8');
 

@@ -7,9 +7,9 @@ allowing users to [configure][] from the file-system.
 
 The following projects wrap the engine:
 
-*   [unified-args][args] — Create CLIs for processors;
-*   [unified-engine-gulp][gulp] — Create Gulp plug-ins;
-*   [unified-engine-atom][atom] — Create Atom Linters for processors.
+*   [unified-args][args] — Create CLIs for processors
+*   [unified-engine-gulp][gulp] — Create Gulp plug-ins
+*   [unified-engine-atom][atom] — Create Atom Linters for processors
 
 ## Installation
 
@@ -35,7 +35,6 @@ engine({
   globs: ['.'],
   extensions: ['md', 'markdown', 'mkd', 'mkdn', 'mkdown'],
   pluginPrefix: 'remark',
-  presetPrefix: 'remark-preset',
   rcName: '.remarkrc',
   packageField: 'remarkConfig',
   ignoreName: '.remarkignore',
@@ -115,12 +114,8 @@ when done.
     — Skip given files if they are ignored.
 *   [`plugins`][plugins] (`Object`, optional)
     — Map of plug-in names or paths to their options.
-*   [`presets`][presets] (`Object`, optional)
-    — Map of preset names or paths to their options.
 *   [`pluginPrefix`][plugin-prefix] (`string`, optional)
     — When given, optional prefix to use when searching for plug-ins.
-*   [`presetPrefix`][preset-prefix] (`string`, optional)
-    — When given, optional prefix to use when searching for presets.
 *   [`configTransform`][config-transform] (`Function`, optional)
     — Transform config files from a different schema.
 *   [`injectedPlugins`][injected-plugins] (`Array`, optional)
@@ -247,11 +242,7 @@ files work.
 
 [plugin-prefix]: doc/options.md#optionspluginprefix
 
-[preset-prefix]: doc/options.md#optionspresetprefix
-
 [config-transform]: doc/options.md#optionsconfigtransform
-
-[presets]: doc/options.md#optionspresets
 
 [plugins]: doc/options.md#optionsplugins
 

@@ -1,2 +1,2 @@
-./nested
-!./nested/three.txt
+nested/*
+!nested/three.txt

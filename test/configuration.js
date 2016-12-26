@@ -13,37 +13,106 @@ var fixtures = join(__dirname, 'fixtures');
 test('configuration', function (t) {
   t.plan(13);
 
-  engine({
-    processor: noop,
-    cwd: join(fixtures, 'one-file'),
-    globs: ['.'],
-    rcPath: '.foorc',
-    extensions: ['txt']
-  }, function (err) {
-    t.equal(
-      err.message.slice(0, err.message.indexOf(':')),
-      'Cannot read configuration file',
-      'should fail fatally when custom .rc files ' +
-      'are not found'
-    );
-  });
+  t.test(
+    'should fail fatally when custom .rc files ' +
+    'are not found',
+    function (st) {
+      var stderr = spy();
 
-  engine({
-    processor: noop,
-    cwd: join(fixtures, 'malformed-rc'),
-    globs: ['.'],
-    rcPath: '.foorc',
-    extensions: ['txt']
-  }, function (err) {
-    t.equal(
-      err.message.slice(0, err.message.indexOf(':')),
-      'Cannot read configuration file',
-      'should fail fatally when custom .rc files ' +
-      'are malformed'
-    );
-  });
+      st.plan(3);
 
-  t.test('should support `.rc.js` modules', function (st) {
+      engine({
+        processor: noop,
+        streamError: stderr.stream,
+        cwd: join(fixtures, 'one-file'),
+        globs: ['.'],
+        rcPath: '.foorc',
+        extensions: ['txt']
+      }, function (err, code) {
+        var report = stderr().split('\n').slice(0, 2).join('\n');
+        st.error(err, 'should not fail fatally');
+        st.equal(code, 1, 'should exit with `1`');
+
+        st.equal(
+          report,
+          [
+            'one.txt',
+            '  1:1  error  Error: Cannot read given file `.foorc`'
+          ].join('\n'),
+          'should fail'
+        );
+      });
+    }
+  );
+
+  t.test(
+    'should fail fatally when custom .rc files ' +
+    'are malformed (empty)',
+    function (st) {
+      var stderr = spy();
+
+      st.plan(3);
+
+      engine({
+        processor: noop,
+        streamError: stderr.stream,
+        cwd: join(fixtures, 'malformed-rc-empty'),
+        globs: ['.'],
+        rcPath: '.foorc',
+        extensions: ['txt']
+      }, function (err, code) {
+        var report = stderr().split('\n').slice(0, 2).join('\n');
+        st.error(err, 'should not fail fatally');
+        st.equal(code, 1, 'should exit with `1`');
+
+        st.equal(
+          report,
+          [
+            'one.txt',
+            '  1:1  error  Error: Cannot parse given file `.foorc`'
+          ].join('\n'),
+          'should fail'
+        );
+      });
+    }
+  );
+
+  t.test(
+    'should fail fatally when custom .rc files ' +
+    'are malformed (invalid)',
+    function (st) {
+      var stderr = spy();
+
+      st.plan(1);
+
+      engine({
+        processor: noop,
+        streamError: stderr.stream,
+        cwd: join(fixtures, 'malformed-rc-invalid'),
+        globs: ['.'],
+        rcPath: '.foorc.js',
+        extensions: ['txt']
+      }, function (err, code) {
+        var report = stderr().split('\n').slice(0, 3).join('\n');
+
+        st.deepEqual(
+          [err, code, report],
+          [
+            null,
+            1,
+            [
+              'one.txt',
+              '  1:1  error  Error: Cannot parse given file `.foorc.js`',
+              'Error: Expected preset, not `false`'
+            ].join('\n')
+          ],
+          'should support valid .rc modules'
+        );
+      });
+    }
+  );
+
+  t.test('should support `.rc.js` modules (1)', function (st) {
     var stderr = spy();
 
     st.plan(3);
@@ -57,7 +126,6 @@ test('configuration', function (t) {
       extensions: ['txt']
     }, function (err, code) {
       var report = stderr().split('\n').slice(0, 2).join('\n');
-      report = report.slice(0, report.lastIndexOf(':'));
       st.error(err, 'should not fail fatally');
       st.equal(code, 1, 'should exit with `1`');
 
@@ -65,7 +133,7 @@ test('configuration', function (t) {
         report,
         [
           'one.txt',
-          '  1:1  error  Error: Cannot read configuration file'
+          '  1:1  error  Error: Cannot parse file `.foorc.js`'
         ].join('\n'),
         'should fail fatally when custom .rc files ' +
         'are malformed'
@@ -73,34 +141,50 @@ test('configuration', function (t) {
     });
   });
 
-  t.test('should support `.rc.js` module functions', function (st) {
-    var cwd = join(fixtures, 'rc-script-function');
+  t.test('should support `.rc.js` modules (2)', function (st) {
     var stderr = spy();
 
-    st.plan(4);
+    st.plan(1);
 
     engine({
       processor: noop,
-      cwd: cwd,
+      cwd: join(fixtures, 'rc-module'),
       streamError: stderr.stream,
       globs: ['.'],
       rcName: '.foorc',
       extensions: ['txt']
-    }, function (err, code, result) {
-      var cache = result.configuration.cache;
-
-      st.error(err, 'should not fail fatally');
-      st.equal(code, 0, 'should exit with `0`');
-      st.equal(Object.keys(cache).length, 1, 'should have one cache entry');
+    }, function (err, code) {
+      var report = stderr().split('\n').slice(0, 2).join('\n');
 
       st.deepEqual(
-        cache[cwd],
-        {
-          plugins: {},
-          one: true,
-          fromFunction: true
-        },
-        'should invoke scripts exposing functions (with current config)'
+        [err, code, report],
+        [null, 0, 'one.txt: no issues found\n'],
+        'should support valid .rc modules'
+      );
+    });
+  });
+
+  t.test('should support `.rc.js` modules (3)', function (st) {
+    var stderr = spy();
+
+    st.plan(1);
+
+    require('./fixtures/rc-module/.foorc'); // eslint-disable-line import/no-unassigned-import
+
+    engine({
+      processor: noop,
+      cwd: join(fixtures, 'rc-module'),
+      streamError: stderr.stream,
+      globs: ['.'],
+      rcName: '.foorc',
+      extensions: ['txt']
+    }, function (err, code) {
+      var report = stderr().split('\n').slice(0, 2).join('\n');
+
+      st.deepEqual(
+        [err, code, report],
+        [null, 0, 'one.txt: no issues found\n'],
+        'should use Node’s module caching (coverage)'
       );
     });
   });
@@ -124,10 +208,10 @@ test('configuration', function (t) {
       st.equal(code, 1, 'should exit with `1`');
 
       st.equal(
-        report.slice(0, report.lastIndexOf(':')),
+        report,
         [
           'one.txt',
-          '  1:1  error  Error: Cannot read configuration file'
+          '  1:1  error  Error: Cannot parse file `.foorc.yaml`'
         ].join('\n'),
         'should fail fatally when custom .rc files ' +
         'are malformed'
@@ -186,8 +270,7 @@ test('configuration', function (t) {
         stderr().split('\n').slice(0, 2).join('\n'),
         [
           'one.txt',
-          '  1:1  error  Error: Cannot read configuration file: ' +
-            join(cwd, 'package.json')
+          '  1:1  error  Error: Cannot parse file `package.json`'
         ].join('\n'),
         'should report'
       );
@@ -254,93 +337,31 @@ test('configuration', function (t) {
     });
   });
 
-  t.test('should fail on invalid `presets`', function (st) {
+  t.test('should not search if `detectConfig` is `false`', function (st) {
     var stderr = spy();
 
     st.plan(3);
 
     engine({
       processor: noop,
-      cwd: join(fixtures, 'rc-file'),
+      cwd: join(fixtures, 'malformed-rc-module'),
       streamError: stderr.stream,
       globs: ['.'],
-      presets: {missing: null},
-      extensions: ['txt']
-    }, function (err, code) {
-      st.error(err, 'should not fail fatally');
-      st.equal(code, 1, 'should exit with `1`');
-
-      st.equal(
-        stderr().split('\n').slice(0, 2).join('\n'),
-        [
-          'nested/four.txt',
-          '  1:1  error  Error: Cannot read configuration file: missing'
-        ].join('\n'),
-        'should report'
-      );
-    });
-  });
-
-  t.test('should support given `presets`', function (st) {
-    var stderr = spy();
-
-    st.plan(3);
-
-    engine({
-      processor: noop,
-      cwd: join(fixtures, 'rc-file'),
-      streamError: stderr.stream,
-      globs: ['.'],
-      presets: {
-        './.foorc': null
-      },
-      extensions: ['txt']
+      extensions: ['txt'],
+      detectConfig: false,
+      rcName: '.foorc'
     }, function (err, code) {
       st.error(err, 'should not fail fatally');
       st.equal(code, 0, 'should exit with `0`');
 
       st.equal(
         stderr(),
-        [
-          'nested/four.txt: no issues found',
-          'nested/three.txt: no issues found',
-          'one.txt: no issues found',
-          'two.txt: no issues found',
-          ''
-        ].join('\n'),
-        'should report'
+        'one.txt: no issues found\n',
+        'should not search for configuration of ' +
+        '`detectConfig` is set to `false`'
       );
     });
   });
-
-  t.test(
-    'should not search if `detectConfig` is `false`',
-    function (st) {
-      var stderr = spy();
-
-      st.plan(3);
-
-      engine({
-        processor: noop,
-        cwd: join(fixtures, 'malformed-rc-module'),
-        streamError: stderr.stream,
-        globs: ['.'],
-        extensions: ['txt'],
-        detectConfig: false,
-        rcName: '.foorc'
-      }, function (err, code) {
-        st.error(err, 'should not fail fatally');
-        st.equal(code, 0, 'should exit with `0`');
-
-        st.equal(
-          stderr(),
-          'one.txt: no issues found\n',
-          'should not search for configuration of ' +
-          '`detectConfig` is set to `false`'
-        );
-      });
-    }
-  );
 
   t.test('should cascade `settings`', function (st) {
     var stderr = spy();
@@ -348,23 +369,7 @@ test('configuration', function (t) {
     st.plan(4);
 
     function Parser(file, options) {
-      st.deepEqual(
-        options,
-        {
-          rc: true,
-          script: true,
-          yaml: true,
-          package: true,
-          nestedRc: true,
-          nestedYAML: true,
-          nestedScript: true,
-          nestedPackage: true,
-          cascade: 5 // `.rc` precedes over `.rc.js`,
-          // `.rc.yaml`, and `package.json`.
-        },
-        'should correctly cascade settings'
-      );
-
+      st.deepEqual(options, {alpha: true}, 'should configure');
       this.value = file.toString();
     }
 
@@ -376,7 +381,7 @@ test('configuration', function (t) {
       processor: noop().use(function (processor) {
         processor.Parser = Parser;
       }),
-      cwd: join(fixtures, 'config-settings-cascade'),
+      cwd: join(fixtures, 'config-settings'),
       streamError: stderr.stream,
       globs: ['.'],
       packageField: 'fooConfig',
@@ -388,7 +393,7 @@ test('configuration', function (t) {
 
       st.equal(
         stderr(),
-        'nested/one.txt: no issues found\n',
+        'one.txt: no issues found\n',
         'should report'
       );
     });

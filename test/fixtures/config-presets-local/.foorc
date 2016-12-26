@@ -1,6 +1,6 @@
 {
-  "presets": "./preset",
   "plugins": {
+    "./preset": null,
     "./plugin": {
       "two": false,
       "three": true

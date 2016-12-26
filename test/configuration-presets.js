@@ -11,35 +11,7 @@ var join = path.join;
 var fixtures = join(__dirname, 'fixtures');
 
 test('configuration-presets', function (t) {
-  t.plan(7);
-
-  t.test('should fail on missing `presets`', function (st) {
-    var stderr = spy();
-
-    st.plan(1);
-
-    engine({
-      processor: noop,
-      cwd: join(fixtures, 'config-presets-missing'),
-      streamError: stderr.stream,
-      globs: ['.'],
-      rcName: '.foorc',
-      extensions: ['txt']
-    }, function (err, code) {
-      var out = stderr().split('\n').slice(0, 2).join('\n');
-
-      st.deepEqual(
-        [err, code, out],
-        [
-          null,
-          1,
-          'nested/two.txt\n' +
-          '  1:1  error  Error: Cannot read configuration file: ./preset'
-        ],
-        'should fail'
-      );
-    });
-  });
+  t.plan(8);
 
   t.test('should fail on invalid `presets`', function (st) {
     var root = join(fixtures, 'config-presets-invalid');
@@ -55,59 +27,28 @@ test('configuration-presets', function (t) {
       rcName: '.foorc',
       extensions: ['txt']
     }, function (err, code) {
-      var out = stderr().split('\n').slice(0, 3).join('\n');
-
       st.deepEqual(
-        [err, code, out.replace(path.join(root, 'preset.js'), '???')],
+        [err, code, stderr().split('\n').slice(0, 3).join('\n')],
         [
           null,
           1,
-          'nested/two.txt\n' +
-          '  1:1  error  Error: Cannot read configuration file: ???\n' +
-          'invalid'
+          'one.txt\n' +
+          '  1:1  error  Error: Cannot parse file `.foorc`\n' +
+          'Expected a list or object of plugins, not `./preset`'
         ],
         'should fail'
       );
     });
   });
 
-  t.test('should supports `presets` as `string`', function (st) {
+  t.test('should support plugins with the same name', function (st) {
     var stderr = spy();
 
     /* More assertions are in loaded plugins. */
     st.plan(3);
 
     engine({
-      processor: noop.use(function (processor) {
-        processor.t = st;
-      }),
-      cwd: join(fixtures, 'config-presets-string'),
-      streamError: stderr.stream,
-      globs: ['.'],
-      rcName: '.foorc',
-      extensions: ['txt']
-    }, function (err, code) {
-      st.deepEqual(
-        [err, code, stderr()],
-        [
-          null,
-          0,
-          'nested/two.txt: no issues found\n' +
-          'one.txt: no issues found\n'
-        ],
-        'should succeed'
-      );
-    });
-  });
-
-  t.test('should prefer local plugins', function (st) {
-    var stderr = spy();
-
-    /* More assertions are in loaded plugins. */
-    st.plan(3);
-
-    engine({
-      processor: noop.use(function (processor) {
+      processor: noop().use(function (processor) {
         processor.t = st;
       }),
       cwd: join(fixtures, 'config-presets-local'),
@@ -121,7 +62,6 @@ test('configuration-presets', function (t) {
         [
           null,
           0,
-          'nested/two.txt: no issues found\n' +
           'one.txt: no issues found\n'
         ],
         'should succeed'
@@ -129,46 +69,38 @@ test('configuration-presets', function (t) {
     });
   });
 
-  t.test('should supports `presets` as `Array.<string>`', function (st) {
+  t.test('should handle missing plugins in presets', function (st) {
     var stderr = spy();
 
-    /* More assertions are in loaded plugins. */
-    st.plan(3);
+    st.plan(1);
 
     engine({
-      processor: noop.use(function (processor) {
-        processor.t = st;
-      }),
-      cwd: join(fixtures, 'config-presets-list'),
+      processor: noop,
+      cwd: join(fixtures, 'config-presets-missing-plugin'),
       streamError: stderr.stream,
       globs: ['.'],
       rcName: '.foorc',
       extensions: ['txt']
     }, function (err, code) {
       st.deepEqual(
-        [err, code, stderr()],
-        [
-          null,
-          0,
-          'nested/two.txt: no issues found\n' +
-          'one.txt: no issues found\n'
-        ],
+        [err, code, stderr().split('\n').slice(0, 2).join('\n')],
+        [null, 1, 'one.txt\n  1:1  error  Error: Could not find module `./plugin`'],
         'should succeed'
       );
     });
   });
 
-  t.test('should supports `presets` as `Object` (1)', function (st) {
+  t.test('should reconfigure plugins', function (st) {
     var stderr = spy();
 
-    /* More assertions are in loaded plugins. */
-    st.plan(3);
+    /* One more assertion is loaded in the plugin. */
+    st.plan(2);
 
     engine({
-      processor: noop.use(function (processor) {
+      processor: noop().use(function (processor) {
         processor.t = st;
       }),
-      cwd: join(fixtures, 'config-presets-object'),
+      cwd: join(fixtures, 'config-plugins-reconfigure'),
       streamError: stderr.stream,
       globs: ['.'],
       rcName: '.foorc',
@@ -176,28 +108,23 @@ test('configuration-presets', function (t) {
     }, function (err, code) {
       st.deepEqual(
         [err, code, stderr()],
-        [
-          null,
-          0,
-          'nested/two.txt: no issues found\n' +
-          'one.txt: no issues found\n'
-        ],
+        [null, 0, 'one.txt: no issues found\n'],
         'should succeed'
       );
     });
   });
 
-  t.test('should supports `presets` as `Object` (2)', function (st) {
+  t.test('should reconfigure required plugins', function (st) {
     var stderr = spy();
 
-    /* More assertions are in loaded plugins. */
-    st.plan(3);
+    /* One more assertion is loaded in the plugin. */
+    st.plan(2);
 
     engine({
-      processor: noop.use(function (processor) {
+      processor: noop().use(function (processor) {
         processor.t = st;
       }),
-      cwd: join(fixtures, 'config-presets-object-no-func'),
+      cwd: join(fixtures, 'config-preset-plugins-reconfigure'),
       streamError: stderr.stream,
       globs: ['.'],
       rcName: '.foorc',
@@ -205,12 +132,101 @@ test('configuration-presets', function (t) {
     }, function (err, code) {
       st.deepEqual(
         [err, code, stderr()],
-        [
-          null,
-          0,
-          'nested/two.txt: no issues found\n' +
-          'one.txt: no issues found\n'
-        ],
+        [null, 0, 'one.txt: no issues found\n'],
+        'should succeed'
+      );
+    });
+  });
+
+  t.test('Should reconfigure: turn plugins off', function (st) {
+    var stderr = spy();
+
+    /* More assertions are in loaded plugins. */
+    st.plan(1);
+
+    engine({
+      processor: noop,
+      cwd: join(fixtures, 'config-plugins-reconfigure-off'),
+      streamError: stderr.stream,
+      globs: ['.'],
+      rcName: '.foorc',
+      extensions: ['txt']
+    }, function (err, code) {
+      st.deepEqual(
+        [err, code, stderr()],
+        [null, 0, 'one.txt: no issues found\n'],
+        'should succeed'
+      );
+    });
+  });
+
+  t.test('should reconfigure settings', function (st) {
+    var stderr = spy();
+
+    Parser.prototype.parse = parse;
+
+    st.plan(2);
+
+    function attacher(proc) {
+      proc.Parser = Parser;
+    }
+
+    function Parser(file, options) {
+      st.deepEqual(options, {alpha: true}, 'should configure');
+      this.value = file.toString();
+    }
+
+    function parse() {
+      return {type: 'text', value: this.value};
+    }
+
+    engine({
+      processor: noop().use(attacher),
+      cwd: join(fixtures, 'config-settings-reconfigure-a'),
+      streamError: stderr.stream,
+      globs: ['.'],
+      rcName: '.foorc',
+      extensions: ['txt']
+    }, function (err, code) {
+      st.deepEqual(
+        [err, code, stderr()],
+        [null, 0, 'one.txt: no issues found\n'],
+        'should succeed'
+      );
+    });
+  });
+
+  t.test('should reconfigure settings (2)', function (st) {
+    var stderr = spy();
+
+    Parser.prototype.parse = parse;
+
+    st.plan(2);
+
+    function attacher(proc) {
+      proc.Parser = Parser;
+    }
+
+    function Parser(file, options) {
+      st.deepEqual(options, {alpha: true}, 'should configure');
+      this.value = file.toString();
+    }
+
+    function parse() {
+      return {type: 'text', value: this.value};
+    }
+
+    engine({
+      processor: noop().use(attacher),
+      cwd: join(fixtures, 'config-settings-reconfigure-b'),
+      streamError: stderr.stream,
+      globs: ['.'],
+      rcName: '.foorc',
+      extensions: ['txt']
+    }, function (err, code) {
+      st.deepEqual(
+        [err, code, stderr()],
+        [null, 0, 'one.txt: no issues found\n'],
         'should succeed'
       );
     });

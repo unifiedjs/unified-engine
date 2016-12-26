@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "./preset",
+    ["./preset/plugin", {"two": false, "three": true}]
+  ]
+}

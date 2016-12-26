@@ -1,0 +1,6 @@
+{
+  "plugins": {
+    "./preset": null,
+    "./plugin": false
+  }
+}

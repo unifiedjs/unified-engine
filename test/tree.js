@@ -3,7 +3,7 @@
 var fs = require('fs');
 var path = require('path');
 var test = require('tape');
-var toVFile = require('to-vfile');
+var vfile = require('to-vfile');
 var noop = require('./util/noop-processor');
 var spy = require('./util/spy');
 var engine = require('..');
@@ -185,7 +185,7 @@ test('tree', function (t) {
       output: 'bar.json',
       treeOut: true,
       files: [
-        toVFile(join(cwd, 'one.txt'))
+        vfile(join(cwd, 'one.txt'))
       ]
     }, function (err, code) {
       /* Remove the file. */

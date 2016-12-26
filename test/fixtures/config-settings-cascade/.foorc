@@ -1,6 +1,6 @@
 {
   "settings": {
-    "rc": true,
-    "cascade": 1
+    "alpha": true,
+    "delta": 1
   }
 }

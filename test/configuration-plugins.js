@@ -16,11 +16,11 @@ test('configuration', function (t) {
   t.test('should cascade `plugins`', function (st) {
     var stderr = spy();
 
-    // More assertions are in loaded plugins.
-    st.plan(7);
+    /* One more assertions is loaded in a plugin. */
+    st.plan(4);
 
     engine({
-      processor: noop.use(function (processor) {
+      processor: noop().use(function (processor) {
         processor.t = st;
       }),
       cwd: join(fixtures, 'config-plugins-cascade'),
@@ -58,10 +58,12 @@ test('configuration', function (t) {
       st.equal(code, 1, 'should exit with `1`');
 
       st.equal(
-        stderr().split('\n').slice(0, 2).join('\n'),
+        stderr().split('\n').slice(0, 4).join('\n'),
         [
           'one.txt',
-          '  1:1  error  Error: Boom!'
+          '  1:1  error  Error: Cannot parse file `package.json`',
+          'Cannot parse script `test.js`',
+          'Error: Boom!'
         ].join('\n'),
         'should report'
       );
@@ -88,7 +90,7 @@ test('configuration', function (t) {
         stderr().split('\n').slice(0, 2).join('\n'),
         [
           'one.txt',
-          '  1:1  error  Error: Cannot find module `missing`'
+          '  1:1  error  Error: Could not find module `missing`'
         ].join('\n'),
         'should report'
       );
@@ -98,7 +100,7 @@ test('configuration', function (t) {
   t.test('should handle invalid plugins', function (st) {
     var stderr = spy();
 
-    st.plan(3);
+    st.plan(1);
 
     engine({
       processor: noop,
@@ -108,19 +110,19 @@ test('configuration', function (t) {
       packageField: 'fooConfig',
       extensions: ['txt']
     }, function (err, code) {
-      var plugin = join(fixtures, 'not-a-plugin', 'test.js');
+      var report = stderr().split('\n').slice(0, 3).join('\n');
 
-      st.error(err, 'should not fail fatally');
-      st.equal(code, 1, 'should exit with `1`');
-
-      st.equal(
-        stderr().split('\n').slice(0, 2).join('\n'),
+      st.deepEqual(
+        [err, code, report],
         [
-          'one.txt',
-          '  1:1  error  Error: Loading `' + plugin + '` should ' +
-            'give a function, not `[object Object]`'
-        ].join('\n'),
-        'should report'
+          null,
+          1,
+          [
+            'one.txt',
+            '  1:1  error  Error: Cannot parse file `package.json`',
+            'Error: Expected preset or plugin, not false, at `test.js`'
+          ].join('\n')
+        ]
       );
     });
   });
