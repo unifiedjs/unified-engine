@@ -20,7 +20,7 @@ test('file-path', function (t) {
     engine({
       processor: noop,
       cwd: join(fixtures, 'simple-structure'),
-      globs: ['.'],
+      files: ['.'],
       filePath: 'qux/quux.foo',
       extensions: ['txt']
     }, function (err) {

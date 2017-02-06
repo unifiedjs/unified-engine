@@ -28,7 +28,7 @@ test('tree', function (t) {
       cwd: cwd,
       streamError: stderr.stream,
       treeIn: true,
-      globs: ['doc.json']
+      files: ['doc.json']
     }, function (err, code) {
       st.error(err, 'should not fail fatally');
       st.equal(code, 1, 'should exit with `1`');
@@ -63,7 +63,7 @@ test('tree', function (t) {
         streamError: stderr.stream,
         output: true,
         tree: true,
-        globs: ['doc']
+        files: ['doc']
       }, function (err, code) {
         var doc = read(join(cwd, 'doc.json'), 'utf8');
 
@@ -105,7 +105,7 @@ test('tree', function (t) {
       streamError: stderr.stream,
       output: true,
       treeIn: true,
-      globs: ['doc'],
+      files: ['doc'],
       extensions: ['foo']
     }, function (err, code) {
       var doc = read(join(cwd, 'doc.foo'), 'utf8');
@@ -147,7 +147,7 @@ test('tree', function (t) {
       streamError: stderr.stream,
       output: true,
       treeOut: true,
-      globs: ['.'],
+      files: ['.'],
       extensions: ['txt']
     }, function (err, code) {
       var doc = read(join(cwd, 'one.json'), 'utf8');

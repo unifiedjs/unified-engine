@@ -24,7 +24,7 @@ test('settings', function (t) {
       processor: noop().use(attacher),
       cwd: join(fixtures, 'one-file'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       extensions: ['txt'],
       settings: {alpha: true}
     }, function (err, code) {
@@ -61,7 +61,7 @@ test('settings', function (t) {
       processor: noop().use(attacher),
       cwd: join(fixtures, 'config-settings-cascade'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       extensions: ['txt'],
       rcName: '.foorc',
       settings: {alpha: false, bravo: 'charlie'}
@@ -105,7 +105,7 @@ test('plugins', function (t) {
       processor: noop,
       cwd: join(fixtures, 'one-file'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       extensions: ['txt'],
       plugins: [one, [two, {alpha: true}]]
     }, function (err, code) {
@@ -142,7 +142,7 @@ test('plugins', function (t) {
       }),
       cwd: join(fixtures, 'config-plugins-reconfigure'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       extensions: ['txt'],
       plugins: ['./preset', ['./preset/plugin', {two: false, three: true}]]
     }, function (err, code) {
@@ -165,7 +165,7 @@ test('plugins', function (t) {
       }),
       cwd: join(fixtures, 'config-plugins-reconfigure'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       extensions: ['txt'],
       plugins: {
         './preset': null,

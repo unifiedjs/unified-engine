@@ -32,7 +32,7 @@ var remark = require('remark');
 
 engine({
   processor: remark,
-  globs: ['.'],
+  files: ['.'],
   extensions: ['md', 'markdown', 'mkd', 'mkdn', 'mkdown'],
   pluginPrefix: 'remark',
   rcName: '.remarkrc',
@@ -66,10 +66,10 @@ when done.
     — Unified processor to transform files.
 *   [`cwd`][cwd] (`string`, default: `process.cwd()`)
     — Directory to search files in, load plug-ins from, and more.
-*   [`globs`][globs] (`Array.<string>`, optional)
-    — Paths or globs to files and directories to process.
+*   [`files`][files] (`Array.<string|VFile>`, optional)
+    — Paths or globs to files and directories, or virtual files, to process.
 *   [`extensions`][extensions] (`Array.<string>`, optional)
-    — If `globs` matches directories, include files with `extensions`
+    — If `files` matches directories, include files with `extensions`
 *   [`streamIn`][stream-in] (`ReadableStream`, default: `process.stdin`)
     — Stream to read from if no files are found or given.
 *   [`filePath`][file-path] (`string`, optional)
@@ -126,8 +126,6 @@ when done.
     — Do not report successful files.
 *   [`frail`][frail] (`boolean`, default: `false`)
     — Treat warnings as errors.
-*   [`files`][files] (`Array.<VFile>`, optional)
-    — Use the given files (in addition to searching for `globs`).
 
 #### `function callback(err[, code, context])`
 
@@ -195,8 +193,6 @@ files work.
 [processor]: doc/options.md#optionsprocessor
 
 [cwd]: doc/options.md#optionscwd
-
-[globs]: doc/options.md#optionsglobs
 
 [extensions]: doc/options.md#optionsextensions
 

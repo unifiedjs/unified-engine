@@ -26,7 +26,7 @@ test('reporting', function (t) {
       }),
       cwd: join(fixtures, 'one-file'),
       streamError: stderr.stream,
-      globs: ['one.txt'],
+      files: ['one.txt'],
       frail: true
     }, function (err, code) {
       st.error(err, 'should not fail fatally');
@@ -63,7 +63,7 @@ test('reporting', function (t) {
         }),
         cwd: join(fixtures, 'two-files'),
         streamError: stderr.stream,
-        globs: ['.'],
+        files: ['.'],
         extensions: ['txt'],
         quiet: true
       }, function (err, code) {
@@ -96,7 +96,7 @@ test('reporting', function (t) {
         processor: noop(),
         cwd: join(fixtures, 'one-file'),
         streamError: stderr.stream,
-        globs: ['.'],
+        files: ['.'],
         extensions: ['txt'],
         quiet: true
       }, function (err, code) {
@@ -126,7 +126,7 @@ test('reporting', function (t) {
         }),
         cwd: join(fixtures, 'two-files'),
         streamError: stderr.stream,
-        globs: ['.'],
+        files: ['.'],
         extensions: ['txt'],
         silent: true
       }, function (err, code) {

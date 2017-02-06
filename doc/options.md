@@ -7,7 +7,7 @@ authors.
 
 *   [options.processor](#optionsprocessor)
 *   [options.cwd](#optionscwd)
-*   [options.globs](#optionsglobs)
+*   [options.files](#optionsfiles)
 *   [options.extensions](#optionsextensions)
 *   [options.streamIn](#optionsstreamin)
 *   [options.filePath](#optionsfilepath)
@@ -35,7 +35,6 @@ authors.
 *   [options.silent](#optionssilent)
 *   [options.quiet](#optionsquiet)
 *   [options.frail](#optionsfrail)
-*   [options.files](#optionsfiles)
 
 ## `options.processor`
 
@@ -77,17 +76,17 @@ var remark = require('remark');
 engine({
   processor: remark(),
   cwd: path.join(process.cwd(), 'doc'),
-  globs: ['readme.md'],
+  files: ['readme.md'],
   output: true
 }, function (err) {
   if (err) throw err;
 });
 ```
 
-## `options.globs`
+## `options.files`
 
-Paths or [globs][glob] to files and directories to process.  Fileglobs
-(for example, `*.md`) can be given to add all matching files.
+Paths or [globs][glob], or [vfile][]s to files and directories to process.
+Fileglobs (for example, `*.md`) can be given to add all matching files.
 Directories and globs to directories can be given alongside
 [`extensions`][extensions] to search directories for files matching an
 extension (for example, `dir` to add `dir/readme.txt` and `dir/sub/history.text`
@@ -109,7 +108,7 @@ var remark = require('remark');
 
 engine({
   processor: remark,
-  globs: ['README', 'doc'],
+  files: ['README', 'doc'],
   extensions: ['md']
 }, function (err) {
   if (err) throw err;
@@ -118,7 +117,7 @@ engine({
 
 ## `options.extensions`
 
-If [`globs`][globs] matches directories, those directories are searched
+If [`files`][files] matches directories, those directories are searched
 for files whose extension matches the given `extensions`.
 
 *   Type: `Array.<string>`;
@@ -135,7 +134,7 @@ var remark = require('remark');
 
 engine({
   processor: remark,
-  globs: ['.'],
+  files: ['.'],
   extensions: ['md', 'mkd', 'markdown'],
   output: true
 }, function (err) {
@@ -257,7 +256,7 @@ var remark = require('remark');
 
 engine({
   processor: remark(),
-  globs: ['readme.md'],
+  files: ['readme.md'],
   streamOut: fs.createWriteStream('readme-two.md')
 }, function (err) {
   if (err) throw err;
@@ -284,7 +283,7 @@ var lint = require('remark-lint');
 
 engine({
   processor: remark(),
-  globs: ['readme.md'],
+  files: ['readme.md'],
   plugins: [[lint, {finalNewline: true}]],
   out: false,
   streamErr: fs.createWriteStream('report.txt')
@@ -315,7 +314,7 @@ var lint = require('remark-lint');
 
 engine({
   processor: remark(),
-  globs: ['readme.md'],
+  files: ['readme.md'],
   plugins: [lint],
   out: false
 }, function (err) {
@@ -353,7 +352,7 @@ var lint = require('remark-lint');
 
 engine({
   processor: remark(),
-  globs: ['source/'],
+  files: ['source/'],
   extensions: ['md'],
   output: 'destination/'
 }, function (err) {
@@ -394,7 +393,7 @@ var unlink = require('remark-unlink');
 engine({
   processor: remark(),
   plugins: [unlink],
-  globs: ['tree.json'],
+  files: ['tree.json'],
   tree: true
 }, function (err) {
   if (err) throw err;
@@ -455,7 +454,7 @@ var unlink = require('remark-unlink');
 engine({
   processor: remark(),
   plugins: [unlink],
-  globs: ['tree.json'],
+  files: ['tree.json'],
   treeIn: true
 }, function (err) {
   if (err) throw err;
@@ -508,7 +507,7 @@ var unlink = require('remark-unlink');
 engine({
   processor: remark(),
   plugins: [unlink],
-  globs: ['doc.md'],
+  files: ['doc.md'],
   treeOut: true
 }, function (err) {
   if (err) throw err;
@@ -554,7 +553,7 @@ var remark = require('remark');
 engine({
   processor: remark(),
   rcName: '.remarkrc',
-  globs: ['readme.md']
+  files: ['readme.md']
 }, function (err) {
   if (err) throw err;
 });
@@ -581,7 +580,7 @@ var remark = require('remark');
 engine({
   processor: remark(),
   packageField: 'remarkConfig',
-  globs: ['readme.md']
+  files: ['readme.md']
 }, function (err) {
   if (err) throw err;
 });
@@ -611,7 +610,7 @@ engine({
   detectConfig: false,
   rcName: '.remarkrc',
   packageField: 'remarkConfig',
-  globs: ['readme.md']
+  files: ['readme.md']
 }, function (err) {
   if (err) throw err;
 });
@@ -641,7 +640,7 @@ var remark = require('remark');
 engine({
   processor: remark(),
   rcPath: 'config.json',
-  globs: ['readme.md']
+  files: ['readme.md']
 }, function (err) {
   if (err) throw err;
 });
@@ -664,7 +663,7 @@ var remark = require('remark');
 
 engine({
   processor: remark(),
-  globs: ['readme.md'],
+  files: ['readme.md'],
   settings: {position: false}
 }, function (err) {
   if (err) throw err;
@@ -691,7 +690,7 @@ var remark = require('remark');
 
 engine({
   processor: remark(),
-  globs: ['.'],
+  files: ['.'],
   extensions: ['md'],
   ignoreName: '.remarkignore'
 }, function (err) {
@@ -718,7 +717,7 @@ var remark = require('remark');
 
 engine({
   processor: remark(),
-  globs: ['.'],
+  files: ['.'],
   extensions: ['md'],
   ignoreName: '.remarkignore',
   detectIgnore: false
@@ -745,7 +744,7 @@ var remark = require('remark');
 
 engine({
   processor: remark(),
-  globs: ['.'],
+  files: ['.'],
   extensions: ['md'],
   ignorePath: '.gitignore'
 }, function (err) {
@@ -755,8 +754,8 @@ engine({
 
 ## `options.silentlyIgnore`
 
-Skip given (in [`globs`][globs] or [`files`][files]) files which are
-ignored by [ignore files][ignore], instead of warning about them.
+Skip given [`files`][files] which are ignored by [ignore files][ignore],
+instead of warning about them.
 
 *   Type: `boolean`, default: `false`.
 
@@ -779,7 +778,7 @@ var remark = require('remark');
 
 engine({
   processor: remark(),
-  globs: ['readme.md'],
+  files: ['readme.md'],
   plugins: ['remark-lint']
 }, function (err) {
   if (err) throw err;
@@ -810,7 +809,7 @@ var remark = require('remark');
 
 engine({
   processor: remark(),
-  globs: ['readme.md'],
+  files: ['readme.md'],
   pluginPrefix: 'remark',
   plugins: ['lint']
 }, function (err) {
@@ -839,7 +838,7 @@ var remark = require('remark');
 
 engine({
   processor: remark(),
-  globs: ['readme.md'],
+  files: ['readme.md'],
   packageField: 'custom',
   configTransform: function (config) {
     return {settings: (config || {}).options};
@@ -880,7 +879,7 @@ var remark = require('remark');
 
 engine({
   processor: remark(),
-  globs: ['readme.md'],
+  files: ['readme.md'],
   color: true,
   out: false
 }, function (err) {
@@ -912,7 +911,7 @@ var remark = require('remark');
 
 engine({
   processor: remark(),
-  globs: ['readme.md'],
+  files: ['readme.md'],
   plugins: {lint: null},
   silent: true
 }, function (err) {
@@ -939,7 +938,7 @@ var remark = require('remark');
 
 engine({
   processor: remark(),
-  globs: ['readme.md'],
+  files: ['readme.md'],
   plugins: {lint: null},
   quiet: true
 }, function (err) {
@@ -965,34 +964,11 @@ var remark = require('remark');
 
 engine({
   processor: remark(),
-  globs: ['readme.md'],
+  files: ['readme.md'],
   plugins: {lint: null},
   frail: true
 }, function (err, code) {
   process.exit(err ? 1 : code);
-});
-```
-
-## `options.files`
-
-References to files to process.
-
-*   Type: [`Array.<VFile>`][vfile], optional.
-
-###### Example
-
-The following example processes a given virtual file.
-
-```js
-var engine = require('unified-engine');
-var remark = require('remark');
-var vfile = require('vfile');
-
-engine({
-  processor: remark(),
-  files: [vfile('# Hello')]
-}, function (err) {
-  if (err) throw err;
 });
 ```
 
@@ -1037,8 +1013,6 @@ engine({
 [ignore]: ./ignore.md
 
 [api]: ../readme.md#api
-
-[globs]: #optionsglobs
 
 [extensions]: #optionsextensions
 

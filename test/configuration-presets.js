@@ -23,7 +23,7 @@ test('configuration-presets', function (t) {
       processor: noop,
       cwd: root,
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       rcName: '.foorc',
       extensions: ['txt']
     }, function (err, code) {
@@ -53,7 +53,7 @@ test('configuration-presets', function (t) {
       }),
       cwd: join(fixtures, 'config-presets-local'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       rcName: '.foorc',
       extensions: ['txt']
     }, function (err, code) {
@@ -78,7 +78,7 @@ test('configuration-presets', function (t) {
       processor: noop,
       cwd: join(fixtures, 'config-presets-missing-plugin'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       rcName: '.foorc',
       extensions: ['txt']
     }, function (err, code) {
@@ -102,7 +102,7 @@ test('configuration-presets', function (t) {
       }),
       cwd: join(fixtures, 'config-plugins-reconfigure'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       rcName: '.foorc',
       extensions: ['txt']
     }, function (err, code) {
@@ -126,7 +126,7 @@ test('configuration-presets', function (t) {
       }),
       cwd: join(fixtures, 'config-preset-plugins-reconfigure'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       rcName: '.foorc',
       extensions: ['txt']
     }, function (err, code) {
@@ -148,7 +148,7 @@ test('configuration-presets', function (t) {
       processor: noop,
       cwd: join(fixtures, 'config-plugins-reconfigure-off'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       rcName: '.foorc',
       extensions: ['txt']
     }, function (err, code) {
@@ -184,7 +184,7 @@ test('configuration-presets', function (t) {
       processor: noop().use(attacher),
       cwd: join(fixtures, 'config-settings-reconfigure-a'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       rcName: '.foorc',
       extensions: ['txt']
     }, function (err, code) {
@@ -220,7 +220,7 @@ test('configuration-presets', function (t) {
       processor: noop().use(attacher),
       cwd: join(fixtures, 'config-settings-reconfigure-b'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       rcName: '.foorc',
       extensions: ['txt']
     }, function (err, code) {

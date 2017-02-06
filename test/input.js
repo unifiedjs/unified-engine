@@ -59,7 +59,7 @@ test('input', function (t) {
       processor: unified,
       cwd: join(fixtures, 'empty'),
       streamError: stderr.stream,
-      globs: ['readme.md']
+      files: ['readme.md']
     }, function (err, code) {
       st.error(err, 'should not fail fatally');
       st.equal(code, 1, 'should exit with `1`');
@@ -84,7 +84,7 @@ test('input', function (t) {
     engine({
       processor: unified,
       cwd: join(fixtures, 'directory'),
-      globs: ['empty/']
+      files: ['empty/']
     }, function (err) {
       st.equal(
         err.message,
@@ -103,7 +103,7 @@ test('input', function (t) {
       processor: noop,
       cwd: join(fixtures, 'extensions'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       extensions: ['txt', '.text']
     }, function (err, code) {
       st.error(err, 'should not fail fatally');
@@ -132,7 +132,7 @@ test('input', function (t) {
       processor: noop,
       cwd: join(fixtures, 'extensions'),
       streamError: stderr.stream,
-      globs: ['nested'],
+      files: ['nested'],
       extensions: ['txt', 'text']
     }, function (err, code) {
       st.error(err, 'should not fail fatally');
@@ -156,7 +156,7 @@ test('input', function (t) {
       processor: noop,
       cwd: join(fixtures, 'globs'),
       streamError: stderr.stream,
-      globs: ['*/*.+(txt|text)'],
+      files: ['*/*.+(txt|text)'],
       extensions: []
     }, function (err, code) {
       st.error(err, 'should not fail fatally');
@@ -180,7 +180,7 @@ test('input', function (t) {
       processor: noop,
       cwd: join(fixtures, 'globs'),
       streamError: stderr.stream,
-      globs: ['*/*.txt', '*/*.text'],
+      files: ['*/*.txt', '*/*.text'],
       extensions: []
     }, function (err, code) {
       st.error(err, 'should not fail fatally');
@@ -204,7 +204,7 @@ test('input', function (t) {
       processor: noop,
       cwd: join(fixtures, 'globs'),
       streamError: stderr.stream,
-      globs: ['**/nested'],
+      files: ['**/nested'],
       extensions: []
     }, function (err, code) {
       st.error(err, 'should not fail fatally');
@@ -254,7 +254,7 @@ test('input', function (t) {
       processor: noop,
       cwd: join(fixtures, 'globs-ignore'),
       streamError: stderr.stream,
-      globs: ['**/*.txt'],
+      files: ['**/*.txt'],
       extensions: []
     }, function (err, code) {
       st.error(err, 'should not fail fatally');
@@ -318,7 +318,7 @@ test('input', function (t) {
       cwd: join(fixtures, 'ignore-file'),
       streamError: stderr.stream,
       ignoreName: '.fooignore',
-      globs: ['**/*.txt']
+      files: ['**/*.txt']
     }, function (err, code) {
       st.error(err, 'should not fail fatally');
       st.equal(code, 1, 'should exit with `1`');
@@ -384,7 +384,7 @@ test('input', function (t) {
       silentlyIgnore: true,
       streamError: stderr.stream,
       ignoreName: '.fooignore',
-      globs: ['**/*.txt']
+      files: ['**/*.txt']
     }, function (err, code) {
       st.error(err, 'should not fail fatally');
       st.equal(code, 0, 'should exit with `0`');
@@ -411,9 +411,8 @@ test('input', function (t) {
       processor: noop,
       cwd: cwd,
       streamError: stderr.stream,
-      globs: ['nested'],
       extensions: ['txt'],
-      files: [vfile(join(cwd, 'one.txt'))]
+      files: ['nested', vfile(join(cwd, 'one.txt'))]
     }, function (err, code) {
       st.error(err, 'should not fail fatally');
       st.equal(code, 0, 'should exit with `0`');

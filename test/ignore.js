@@ -26,7 +26,7 @@ test('ignore', function (t) {
         processor: noop,
         cwd: cwd,
         streamError: stderr.stream,
-        globs: ['one.txt'],
+        files: ['one.txt'],
         detectIgnore: false,
         ignorePath: '.missing-ignore',
         extensions: ['txt']
@@ -55,7 +55,7 @@ test('ignore', function (t) {
       processor: noop,
       cwd: join(fixtures, 'ignore-file'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       detectIgnore: false,
       ignorePath: '.fooignore',
       extensions: ['txt']
@@ -84,7 +84,7 @@ test('ignore', function (t) {
       processor: noop,
       cwd: join(fixtures, 'ignore-file'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       detectIgnore: true,
       ignoreName: '.fooignore',
       extensions: ['txt']
@@ -113,7 +113,7 @@ test('ignore', function (t) {
       processor: noop,
       cwd: join(fixtures, 'hidden-directory'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       // no `ignoreName`
       extensions: ['txt']
     }, function (err, code) {
@@ -140,7 +140,7 @@ test('ignore', function (t) {
       processor: noop,
       cwd: join(fixtures, 'simple-structure'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       detectIgnore: true,
       ignoreName: '.fooignore',
       extensions: ['txt']

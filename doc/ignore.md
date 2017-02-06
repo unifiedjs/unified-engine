@@ -9,7 +9,7 @@ files to process, through ignore files.
     this is loaded regardless of `detectIgnore` and `ignoreName`,
     and turns off searching for other ignore files.
 
-Ignore files do not cascade.  Before searching for [`globs`][globs] in
+Ignore files do not cascade.  Before searching for [`files`][files] in
 [`cwd`][cwd], that directory and all its ancestral directories are
 searched for files named `$ignoreName`.  If multiple ignore files are
 found, the closest one to `cwd` takes precedence.
@@ -44,7 +44,7 @@ test/{input,tree}
 
 [cwd]: options.md#optionscwd
 
-[globs]: options.md#optionsglobs
+[files]: options.md#optionsfiles
 
 [detect-ignore]: options.md#optionsdetectignore
 

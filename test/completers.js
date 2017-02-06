@@ -103,7 +103,7 @@ test('completers', function (t) {
         }
       ],
       cwd: join(fixtures, 'two-files'),
-      globs: ['one.txt']
+      files: ['one.txt']
     }, function (err, code) {
       st.error(err, 'should not fail fatally');
       st.equal(code, 0, 'should exit with `0`');
@@ -130,7 +130,7 @@ test('completers', function (t) {
         }
       ],
       cwd: cwd,
-      globs: ['foo.txt'],
+      files: ['foo.txt'],
       output: 'nested/'
     }, function (err, code) {
       var doc = read(join(cwd, 'nested', 'foo.txt'), 'utf8');

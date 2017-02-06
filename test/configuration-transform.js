@@ -24,7 +24,7 @@ test('`configTransform`', function (t) {
       }),
       streamError: stderr.stream,
       cwd: join(fixtures, 'config-transform'),
-      globs: ['.'],
+      files: ['.'],
       packageField: 'foo',
       configTransform: configTransform,
       extensions: ['txt']

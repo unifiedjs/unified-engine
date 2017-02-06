@@ -34,7 +34,7 @@ function plugin(processor, options, set) {
 engine({
   processor: remark(),
   injectedPlugins: [plugin],
-  globs: ['readme.md']
+  files: ['readme.md']
 }, function (err) {
   if (err) throw err;
 });

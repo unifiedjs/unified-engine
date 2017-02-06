@@ -25,7 +25,7 @@ test('configuration', function (t) {
         processor: noop,
         streamError: stderr.stream,
         cwd: join(fixtures, 'one-file'),
-        globs: ['.'],
+        files: ['.'],
         rcPath: '.foorc',
         extensions: ['txt']
       }, function (err, code) {
@@ -57,7 +57,7 @@ test('configuration', function (t) {
         processor: noop,
         streamError: stderr.stream,
         cwd: join(fixtures, 'malformed-rc-empty'),
-        globs: ['.'],
+        files: ['.'],
         rcPath: '.foorc',
         extensions: ['txt']
       }, function (err, code) {
@@ -89,7 +89,7 @@ test('configuration', function (t) {
         processor: noop,
         streamError: stderr.stream,
         cwd: join(fixtures, 'malformed-rc-invalid'),
-        globs: ['.'],
+        files: ['.'],
         rcPath: '.foorc.js',
         extensions: ['txt']
       }, function (err, code) {
@@ -121,7 +121,7 @@ test('configuration', function (t) {
       processor: noop,
       cwd: join(fixtures, 'malformed-rc-module'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       rcName: '.foorc',
       extensions: ['txt']
     }, function (err, code) {
@@ -150,7 +150,7 @@ test('configuration', function (t) {
       processor: noop,
       cwd: join(fixtures, 'rc-module'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       rcName: '.foorc',
       extensions: ['txt']
     }, function (err, code) {
@@ -175,7 +175,7 @@ test('configuration', function (t) {
       processor: noop,
       cwd: join(fixtures, 'rc-module'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       rcName: '.foorc',
       extensions: ['txt']
     }, function (err, code) {
@@ -198,7 +198,7 @@ test('configuration', function (t) {
       processor: noop,
       cwd: join(fixtures, 'malformed-rc-yaml'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       rcName: '.foorc',
       extensions: ['txt']
     }, function (err, code) {
@@ -228,7 +228,7 @@ test('configuration', function (t) {
       processor: noop,
       cwd: join(fixtures, 'rc-file'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       rcPath: '.foorc',
       extensions: ['txt']
     }, function (err, code) {
@@ -259,7 +259,7 @@ test('configuration', function (t) {
       processor: noop,
       cwd: cwd,
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       packageField: 'fooConfig',
       extensions: ['txt']
     }, function (err, code) {
@@ -286,7 +286,7 @@ test('configuration', function (t) {
       processor: noop,
       cwd: join(fixtures, 'rc-file'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       rcName: '.foorc',
       extensions: ['txt']
     }, function (err, code) {
@@ -316,7 +316,7 @@ test('configuration', function (t) {
       processor: noop,
       cwd: join(fixtures, 'simple-structure'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       packageField: 'fooConfig',
       rcName: '.foorc',
       extensions: ['txt']
@@ -346,7 +346,7 @@ test('configuration', function (t) {
       processor: noop,
       cwd: join(fixtures, 'malformed-rc-module'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       extensions: ['txt'],
       detectConfig: false,
       rcName: '.foorc'
@@ -383,7 +383,7 @@ test('configuration', function (t) {
       }),
       cwd: join(fixtures, 'config-settings'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       packageField: 'fooConfig',
       rcName: '.foorc',
       extensions: ['txt']

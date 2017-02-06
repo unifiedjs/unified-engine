@@ -22,7 +22,7 @@ test('color', function (t) {
       processor: noop,
       cwd: join(fixtures, 'empty'),
       streamError: stderr.stream,
-      globs: ['readme.md'],
+      files: ['readme.md'],
       color: true
     }, function (err, code) {
       st.error(err, 'should not fail fatally');

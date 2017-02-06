@@ -25,7 +25,7 @@ test('configuration', function (t) {
       }),
       cwd: join(fixtures, 'config-plugins-cascade'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       packageField: 'fooConfig',
       rcName: '.foorc',
       extensions: ['txt']
@@ -50,7 +50,7 @@ test('configuration', function (t) {
       processor: noop,
       cwd: join(fixtures, 'malformed-plugin'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       packageField: 'fooConfig',
       extensions: ['txt']
     }, function (err, code) {
@@ -79,7 +79,7 @@ test('configuration', function (t) {
       processor: noop,
       cwd: join(fixtures, 'missing-plugin'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       packageField: 'fooConfig',
       extensions: ['txt']
     }, function (err, code) {
@@ -106,7 +106,7 @@ test('configuration', function (t) {
       processor: noop,
       cwd: join(fixtures, 'not-a-plugin'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       packageField: 'fooConfig',
       extensions: ['txt']
     }, function (err, code) {
@@ -136,7 +136,7 @@ test('configuration', function (t) {
       processor: noop,
       cwd: join(fixtures, 'throwing-plugin'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       packageField: 'fooConfig',
       extensions: ['txt']
     }, function (err, code) {
@@ -163,7 +163,7 @@ test('configuration', function (t) {
       processor: noop,
       cwd: join(fixtures, 'one-file'),
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       plugins: [
         function (processor, options) {
           st.equal(options, undefined, 'should support a plug-in');

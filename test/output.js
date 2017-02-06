@@ -34,7 +34,7 @@ test('output', function (t) {
       cwd: cwd,
       streamOut: stdout.stream,
       streamError: stderr.stream,
-      globs: ['.'],
+      files: ['.'],
       extensions: ['txt']
     }, function (err, code) {
       st.equal(stdout(), '', 'should write');
@@ -66,7 +66,7 @@ test('output', function (t) {
       cwd: cwd,
       streamOut: stdout.stream,
       streamError: stderr.stream,
-      globs: ['one.txt'],
+      files: ['one.txt'],
       extensions: ['txt']
     }, function (err, code) {
       st.equal(stdout(), 'two\n', 'should write');
@@ -99,7 +99,7 @@ test('output', function (t) {
       streamError: stderr.stream,
       streamOut: stdout.stream,
       out: false,
-      globs: ['one.txt'],
+      files: ['one.txt'],
       extensions: ['txt']
     }, function (err, code) {
       st.equal(stdout(), '', 'should not write');
@@ -132,7 +132,7 @@ test('output', function (t) {
       streamError: stderr.stream,
       cwd: cwd,
       out: false,
-      globs: ['.'],
+      files: ['.'],
       extensions: ['txt']
     }, function (err, code) {
       st.equal(stdout(), '', 'should not write');
@@ -164,7 +164,7 @@ test('output', function (t) {
       cwd: cwd,
       streamError: stderr.stream,
       output: true,
-      globs: ['.'],
+      files: ['.'],
       extensions: ['txt']
     }, function (err, code) {
       var doc = read(join(cwd, 'one.txt'), 'utf8');
@@ -201,7 +201,7 @@ test('output', function (t) {
       cwd: cwd,
       streamError: stderr.stream,
       output: 'four.txt',
-      globs: ['one.txt'],
+      files: ['one.txt'],
       extensions: ['txt']
     }, function (err, code) {
       var input = read(join(cwd, 'one.txt'), 'utf8');
@@ -240,7 +240,7 @@ test('output', function (t) {
       cwd: cwd,
       streamError: stderr.stream,
       output: 'nested/',
-      globs: ['one.txt'],
+      files: ['one.txt'],
       extensions: ['txt']
     }, function (err, code) {
       var input = read(join(cwd, 'one.txt'), 'utf8');
@@ -274,7 +274,7 @@ test('output', function (t) {
       cwd: cwd,
       streamError: stderr.stream,
       output: 'missing/bar',
-      globs: ['one.txt'],
+      files: ['one.txt'],
       extensions: ['txt']
     }, function (err, code) {
       var report = stderr().split('\n').slice(0, 3).join('\n');
@@ -345,7 +345,7 @@ test('output', function (t) {
       cwd: cwd,
       streamError: stderr.stream,
       output: true,
-      globs: ['one.txt'],
+      files: ['one.txt'],
       extensions: ['txt']
     }, function (err, code) {
       var input = read(join(cwd, 'one.txt'), 'utf8');
@@ -372,7 +372,7 @@ test('output', function (t) {
       cwd: cwd,
       streamError: stderr.stream,
       output: 'three.txt',
-      globs: ['.'],
+      files: ['.'],
       extensions: ['txt']
     }, function (err, code) {
       var report = stderr(true).split('\n').slice(0, 2);
@@ -405,7 +405,7 @@ test('output', function (t) {
         cwd: cwd,
         streamError: stderr.stream,
         output: 'three/',
-        globs: ['.'],
+        files: ['.'],
         extensions: ['txt']
       }, function (err, code) {
         var report = stderr(true).split('\n').slice(0, 3);
