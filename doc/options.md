@@ -31,7 +31,6 @@ authors.
 *   [options.plugins](#optionsplugins)
 *   [options.pluginPrefix](#optionspluginprefix)
 *   [options.configTransform](#optionsconfigtransform)
-*   [options.injectedPlugins](#optionsinjectedplugins)
 *   [options.color](#optionscolor)
 *   [options.silent](#optionssilent)
 *   [options.quiet](#optionsquiet)
@@ -165,7 +164,7 @@ var lint = require('remark-lint');
 
 engine({
   processor: remark(),
-  injectedPlugins: [[lint, {finalNewline: true}]],
+  plugins: [[lint, {finalNewline: true}]],
   streamIn: stream,
   out: false
 }, function (err) {
@@ -207,7 +206,7 @@ var lint = require('remark-lint');
 
 engine({
   processor: remark(),
-  injectedPlugins: [[lint, {finalNewline: true}]],
+  plugins: [[lint, {finalNewline: true}]],
   filePath: '~/alpha/bravo/charlie.md',
   streamIn: stream,
   out: false
@@ -286,7 +285,7 @@ var lint = require('remark-lint');
 engine({
   processor: remark(),
   globs: ['readme.md'],
-  injectedPlugins: [[lint, {finalNewline: true}]],
+  plugins: [[lint, {finalNewline: true}]],
   out: false,
   streamErr: fs.createWriteStream('report.txt')
 }, function (err) {
@@ -317,7 +316,7 @@ var lint = require('remark-lint');
 engine({
   processor: remark(),
   globs: ['readme.md'],
-  injectedPlugins: [lint],
+  plugins: [lint],
   out: false
 }, function (err) {
   if (err) throw err;
@@ -394,7 +393,7 @@ var unlink = require('remark-unlink');
 
 engine({
   processor: remark(),
-  injectedPlugins: [unlink],
+  plugins: [unlink],
   globs: ['tree.json'],
   tree: true
 }, function (err) {
@@ -455,7 +454,7 @@ var unlink = require('remark-unlink');
 
 engine({
   processor: remark(),
-  injectedPlugins: [unlink],
+  plugins: [unlink],
   globs: ['tree.json'],
   treeIn: true
 }, function (err) {
@@ -508,7 +507,7 @@ var unlink = require('remark-unlink');
 
 engine({
   processor: remark(),
-  injectedPlugins: [unlink],
+  plugins: [unlink],
   globs: ['doc.md'],
   treeOut: true
 }, function (err) {
@@ -766,7 +765,7 @@ ignored by [ignore files][ignore], instead of warning about them.
 Plug-ins to load by their name and attach with options to the processor
 for every processed file.
 
-*   Type: `Object`, `Array`, `string`, optional.  Same format as
+*   Type: `Object`, `Array`, optional.  Same format as
     [`plugins` in config files][config-plugins].
 
 ###### Example
@@ -864,37 +863,6 @@ Where `package.json` contains:
 }
 ```
 
-## `options.injectedPlugins`
-
-Already loaded plug-ins to attach with their options to the processor
-for every processed file.
-
-> **Note:** Be careful not to pass plug-ins which are also detected
-> as that results in the same plug-in being attached multiple times.
-
-*   Type: `Array`, optional.  Each entry is either a plug-in,
-    or an array with two values: the first being the plug-in and the
-    second its (optional) configuration.
-
-###### Example
-
-The following example processes `readme.md` and uses the `lint`
-plug-in.
-
-```js
-var engine = require('unified-engine');
-var remark = require('remark');
-var lint = require('remark-lint');
-
-engine({
-  processor: remark(),
-  globs: ['readme.md'],
-  injectedPlugins: [lint]
-}, function (err) {
-  if (err) throw err;
-});
-```
-
 ## `options.color`
 
 Whether to [report][vfile-reporter] with ANSI colour sequences.
@@ -945,9 +913,7 @@ var remark = require('remark');
 engine({
   processor: remark(),
   globs: ['readme.md'],
-  plugins: {
-    lint: null
-  },
+  plugins: {lint: null},
   silent: true
 }, function (err) {
   if (err) throw err;
@@ -974,9 +940,7 @@ var remark = require('remark');
 engine({
   processor: remark(),
   globs: ['readme.md'],
-  plugins: {
-    lint: null
-  },
+  plugins: {lint: null},
   quiet: true
 }, function (err) {
   if (err) throw err;
@@ -1002,9 +966,7 @@ var remark = require('remark');
 engine({
   processor: remark(),
   globs: ['readme.md'],
-  plugins: {
-    lint: null
-  },
+  plugins: {lint: null},
   frail: true
 }, function (err, code) {
   process.exit(err ? 1 : code);

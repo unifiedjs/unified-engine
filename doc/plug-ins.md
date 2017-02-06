@@ -1,10 +1,5 @@
 # Plug-ins
 
-[**unified-engine**][api] supports plug-ins as `function`s from
-engine authors (from [`injectedPlugins`][injected-plugins]) and plug-in
-names from engine users ([`plugins`][plugins] and [configuration
-files][configure]).
-
 Normally, **unified** plug-ins receive upon attaching two arguments:
 `processor` (the [`Processor`][unified-processor] it’s attached to) and
 `options` (an `Object` users can provide to configure the plug-in).
@@ -137,18 +132,10 @@ the function **may** finish asynchronous, and **must** invoke
 
 [unified-processor]: https://github.com/wooorm/unified#processor
 
-[api]: ../readme.md#api
-
-[configure]: configure.md
-
 [completer]: #function-completerfileset-next
 
 [next]: #function-nexterr
 
 [file-set]: #fileset
-
-[injected-plugins]: options.md#optionsinjectedplugins
-
-[plugins]: options.md#optionsplugins
 
 [stream-out]: options.md#optionsstreamout

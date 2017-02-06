@@ -118,8 +118,6 @@ when done.
     — When given, optional prefix to use when searching for plug-ins.
 *   [`configTransform`][config-transform] (`Function`, optional)
     — Transform config files from a different schema.
-*   [`injectedPlugins`][injected-plugins] (`Array`, optional)
-    — List of loaded plug-ins to use.
 *   [`color`][color] (`boolean`, default: `false`)
     — Whether to report with ANSI colour sequences.
 *   [`silent`][silent] (`boolean`, default: `false`)
@@ -245,8 +243,6 @@ files work.
 [config-transform]: doc/options.md#optionsconfigtransform
 
 [plugins]: doc/options.md#optionsplugins
-
-[injected-plugins]: doc/options.md#optionsinjectedplugins
 
 [color]: doc/options.md#optionscolor
 

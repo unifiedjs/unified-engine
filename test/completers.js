@@ -47,7 +47,7 @@ test('completers', function (t) {
     engine({
       processor: noop,
       streamError: stderr.stream,
-      injectedPlugins: [
+      plugins: [
         function (processor, settings, set) {
           st.equal(
             typeof set,
@@ -124,7 +124,7 @@ test('completers', function (t) {
     engine({
       processor: noop,
       streamError: stderr.stream,
-      injectedPlugins: [
+      plugins: [
         function (processor, settings, set) {
           set.add('bar.text');
         }

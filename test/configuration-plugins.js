@@ -164,7 +164,7 @@ test('configuration', function (t) {
       cwd: join(fixtures, 'one-file'),
       streamError: stderr.stream,
       globs: ['.'],
-      injectedPlugins: [
+      plugins: [
         function (processor, options) {
           st.equal(options, undefined, 'should support a plug-in');
         },
