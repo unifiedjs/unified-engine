@@ -990,17 +990,17 @@ engine({
 
 [tty]: https://nodejs.org/api/tty.html
 
-[unified-description]: https://github.com/wooorm/unified#description
+[unified-description]: https://github.com/unifiedjs/unified#description
 
-[vfile]: https://github.com/wooorm/vfile
+[vfile]: https://github.com/vfile/vfile
 
-[vfile-reporter]: https://github.com/wooorm/vfile-reporter
+[vfile-reporter]: https://github.com/vfile/vfile-reporter
 
 [json-stringify]: https://developer.mozilla.org/JavaScript/Reference/Global_Objects/JSON/stringify
 
-[fatal]: https://github.com/wooorm/vfile#vfilefailreason-position-ruleid
+[fatal]: https://github.com/vfile/vfile#vfilefailreason-position-ruleid
 
-[processor]: https://github.com/wooorm/unified#processor
+[processor]: https://github.com/unifiedjs/unified#processor
 
 [remark]: https://github.com/wooorm/remark
 

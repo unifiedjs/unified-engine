@@ -164,13 +164,13 @@ files work.
 
 <!-- Definitions -->
 
-[travis-badge]: https://img.shields.io/travis/wooorm/unified-engine.svg
+[travis-badge]: https://img.shields.io/travis/unifiedjs/unified-engine.svg
 
-[travis]: https://travis-ci.org/wooorm/unified-engine
+[travis]: https://travis-ci.org/unifiedjs/unified-engine
 
-[codecov-badge]: https://img.shields.io/codecov/c/github/wooorm/unified-engine.svg
+[codecov-badge]: https://img.shields.io/codecov/c/github/unifiedjs/unified-engine.svg
 
-[codecov]: https://codecov.io/github/wooorm/unified-engine
+[codecov]: https://codecov.io/github/unifiedjs/unified-engine
 
 [npm-install]: https://docs.npmjs.com/cli/install
 
@@ -178,13 +178,13 @@ files work.
 
 [author]: http://wooorm.com
 
-[unified]: https://github.com/wooorm/unified
+[unified]: https://github.com/unifiedjs/unified
 
-[unified-processor]: https://github.com/wooorm/unified#processor
+[unified-processor]: https://github.com/unifiedjs/unified#processor
 
 [remark]: https://github.com/wooorm/remark
 
-[fatal]: https://github.com/wooorm/vfile#vfilefailreason-position-ruleid
+[fatal]: https://github.com/vfile/vfile#vfilefailreason-position-ruleid
 
 [callback]: #function-callbackerr-code-context
 
@@ -256,8 +256,8 @@ files work.
 
 [plug-ins]: doc/plug-ins.md
 
-[atom]: https://github.com/wooorm/unified-engine-atom
+[atom]: https://github.com/unifiedjs/unified-engine-atom
 
-[gulp]: https://github.com/wooorm/unified-engine-gulp
+[gulp]: https://github.com/unifiedjs/unified-engine-gulp
 
-[args]: https://github.com/wooorm/unified-args
+[args]: https://github.com/unifiedjs/unified-args

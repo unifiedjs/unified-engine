@@ -128,9 +128,9 @@ the function **may** finish asynchronous, and **must** invoke
 
 <!-- Definitions -->
 
-[vfile]: https://github.com/wooorm/vfile
+[vfile]: https://github.com/vfile/vfile
 
-[unified-processor]: https://github.com/wooorm/unified#processor
+[unified-processor]: https://github.com/unifiedjs/unified#processor
 
 [completer]: #function-completerfileset-next
 
