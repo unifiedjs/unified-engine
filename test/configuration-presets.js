@@ -48,8 +48,8 @@ test('configuration-presets', function (t) {
     st.plan(3);
 
     engine({
-      processor: noop().use(function (processor) {
-        processor.t = st;
+      processor: noop().use(function () {
+        this.t = st;
       }),
       cwd: join(fixtures, 'config-presets-local'),
       streamError: stderr.stream,
@@ -97,8 +97,8 @@ test('configuration-presets', function (t) {
     st.plan(2);
 
     engine({
-      processor: noop().use(function (processor) {
-        processor.t = st;
+      processor: noop().use(function () {
+        this.t = st;
       }),
       cwd: join(fixtures, 'config-plugins-reconfigure'),
       streamError: stderr.stream,
@@ -121,8 +121,8 @@ test('configuration-presets', function (t) {
     st.plan(2);
 
     engine({
-      processor: noop().use(function (processor) {
-        processor.t = st;
+      processor: noop().use(function () {
+        this.t = st;
       }),
       cwd: join(fixtures, 'config-preset-plugins-reconfigure'),
       streamError: stderr.stream,
@@ -163,21 +163,15 @@ test('configuration-presets', function (t) {
   t.test('should reconfigure settings', function (st) {
     var stderr = spy();
 
-    Parser.prototype.parse = parse;
-
     st.plan(2);
 
-    function attacher(proc) {
-      proc.Parser = Parser;
+    function attacher() {
+      this.Parser = parser;
+      st.deepEqual(this.data('settings'), {alpha: true}, 'should configure');
     }
 
-    function Parser(file, options) {
-      st.deepEqual(options, {alpha: true}, 'should configure');
-      this.value = file.toString();
-    }
-
-    function parse() {
-      return {type: 'text', value: this.value};
+    function parser(doc) {
+      return {type: 'text', value: doc};
     }
 
     engine({
@@ -199,21 +193,15 @@ test('configuration-presets', function (t) {
   t.test('should reconfigure settings (2)', function (st) {
     var stderr = spy();
 
-    Parser.prototype.parse = parse;
-
     st.plan(2);
 
-    function attacher(proc) {
-      proc.Parser = Parser;
+    function attacher() {
+      st.deepEqual(this.data('settings'), {alpha: true}, 'should configure');
+      this.Parser = parser;
     }
 
-    function Parser(file, options) {
-      st.deepEqual(options, {alpha: true}, 'should configure');
-      this.value = file.toString();
-    }
-
-    function parse() {
-      return {type: 'text', value: this.value};
+    function parser(doc) {
+      return {type: 'text', value: doc};
     }
 
     engine({

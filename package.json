@@ -48,7 +48,7 @@
     "remark-cli": "^2.0.0",
     "remark-preset-wooorm": "^1.0.0",
     "tape": "^4.4.0",
-    "unified": "^5.0.0",
+    "unified": "^6.0.0",
     "xo": "^0.17.0",
     "xtend": "^4.0.1"
   },

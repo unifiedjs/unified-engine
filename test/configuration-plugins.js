@@ -20,8 +20,8 @@ test('configuration', function (t) {
     st.plan(4);
 
     engine({
-      processor: noop().use(function (processor) {
-        processor.t = st;
+      processor: noop().use(function () {
+        this.t = st;
       }),
       cwd: join(fixtures, 'config-plugins-cascade'),
       streamError: stderr.stream,
@@ -165,11 +165,11 @@ test('configuration', function (t) {
       streamError: stderr.stream,
       files: ['.'],
       plugins: [
-        function (processor, options) {
+        function (options) {
           st.equal(options, undefined, 'should support a plug-in');
         },
         [
-          function (processor, options) {
+          function (options) {
             st.deepEqual(
               options,
               {foo: 'bar'},

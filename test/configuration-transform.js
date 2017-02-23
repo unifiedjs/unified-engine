@@ -19,8 +19,8 @@ test('`configTransform`', function (t) {
     st.plan(7);
 
     engine({
-      processor: noop().use(function (processor) {
-        processor.t = st;
+      processor: noop().use(function () {
+        this.t = st;
       }),
       streamError: stderr.stream,
       cwd: join(fixtures, 'config-transform'),

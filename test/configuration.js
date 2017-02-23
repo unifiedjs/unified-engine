@@ -368,19 +368,17 @@ test('configuration', function (t) {
 
     st.plan(4);
 
-    function Parser(file, options) {
-      st.deepEqual(options, {alpha: true}, 'should configure');
-      this.value = file.toString();
+    function plugin() {
+      st.deepEqual(this.data('settings'), {alpha: true}, 'should configure');
+      this.Parser = parser;
     }
 
-    Parser.prototype.parse = function () {
-      return {type: 'text', value: this.value};
-    };
+    function parser(doc) {
+      return {type: 'text', value: doc};
+    }
 
     engine({
-      processor: noop().use(function (processor) {
-        processor.Parser = Parser;
-      }),
+      processor: noop().use(plugin),
       cwd: join(fixtures, 'config-settings'),
       streamError: stderr.stream,
       files: ['.'],

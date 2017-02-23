@@ -1,5 +1,5 @@
-module.exports = function (processor, options) {
-  processor.t.deepEqual(
+module.exports = function (options) {
+  this.t.deepEqual(
     options,
     {
       one: true,

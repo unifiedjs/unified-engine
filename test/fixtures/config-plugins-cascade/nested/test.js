@@ -1,3 +1,3 @@
-module.exports = function (processor) {
-  processor.t.pass();
+module.exports = function () {
+  this.t.pass();
 };

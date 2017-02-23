@@ -18,8 +18,6 @@ test('settings', function (t) {
 
     st.plan(2);
 
-    Parser.prototype.parse = parse;
-
     engine({
       processor: noop().use(attacher),
       cwd: join(fixtures, 'one-file'),
@@ -35,18 +33,13 @@ test('settings', function (t) {
       );
     });
 
-    function attacher(processor) {
-      processor.Parser = Parser;
+    function attacher() {
+      st.deepEqual(this.data('settings'), {alpha: true}, 'should configure');
+      this.Parser = parser;
     }
 
-    function Parser(file, options) {
-      st.deepEqual(options, {alpha: true}, 'should configure');
-
-      this.value = file.toString();
-    }
-
-    function parse() {
-      return {type: 'text', value: this.value};
+    function parser(doc) {
+      return {type: 'text', value: doc};
     }
   });
 
@@ -54,8 +47,6 @@ test('settings', function (t) {
     var stderr = spy();
 
     st.plan(2);
-
-    Parser.prototype.parse = parse;
 
     engine({
       processor: noop().use(attacher),
@@ -73,22 +64,17 @@ test('settings', function (t) {
       );
     });
 
-    function attacher(processor) {
-      processor.Parser = Parser;
-    }
-
-    function Parser(file, options) {
+    function attacher() {
       st.deepEqual(
-        options,
+        this.data('settings'),
         {alpha: false, bravo: 'charlie', delta: 1},
         'should configure'
       );
-
-      this.value = file.toString();
+      this.Parser = parser;
     }
 
-    function parse() {
-      return {type: 'text', value: this.value};
+    function parser(doc) {
+      return {type: 'text', value: doc};
     }
   });
 });
@@ -123,7 +109,7 @@ test('plugins', function (t) {
       }
     }
 
-    function two(proc, options) {
+    function two(options) {
       return transformer;
       function transformer() {
         st.deepEqual(options, {alpha: true}, 'transformer');
@@ -137,8 +123,8 @@ test('plugins', function (t) {
     st.plan(2);
 
     engine({
-      processor: noop().use(function (proc) {
-        proc.t = st;
+      processor: noop().use(function () {
+        this.t = st;
       }),
       cwd: join(fixtures, 'config-plugins-reconfigure'),
       streamError: stderr.stream,
@@ -160,8 +146,8 @@ test('plugins', function (t) {
     st.plan(2);
 
     engine({
-      processor: noop().use(function (proc) {
-        proc.t = st;
+      processor: noop().use(function () {
+        this.t = st;
       }),
       cwd: join(fixtures, 'config-plugins-reconfigure'),
       streamError: stderr.stream,
