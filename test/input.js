@@ -14,7 +14,7 @@ var join = path.join;
 var fixtures = join(__dirname, 'fixtures');
 
 test('input', function (t) {
-  t.plan(16);
+  t.plan(18);
 
   t.test('should fail without input', function (st) {
     var stream = new PassThrough();
@@ -303,6 +303,59 @@ test('input', function (t) {
           '✖ 1 error',
           ''
         ].join('\n'),
+        'should report'
+      );
+    });
+  });
+
+  t.test('should not atempt to read files with `contents` (1)', function (st) {
+    var stderr = spy();
+    var cwd = join(fixtures, 'ignore-file');
+    var file = vfile({path: join(cwd, 'not-existing.txt'), contents: 'foo'});
+
+    st.plan(3);
+
+    engine({
+      processor: noop,
+      cwd: cwd,
+      streamError: stderr.stream,
+      ignoreName: '.fooignore',
+      files: [file]
+    }, function (err, code) {
+      st.error(err, 'should not fail fatally');
+      st.equal(code, 1, 'should exit with `1`');
+
+      st.equal(
+        stderr(),
+        [
+          'not-existing.txt',
+          '  1:1  error  Cannot process specified file: it’s ignored',
+          '',
+          '✖ 1 error',
+          ''
+        ].join('\n'),
+        'should report'
+      );
+    });
+  });
+
+  t.test('should not atempt to read files with `contents` (2)', function (st) {
+    var stderr = spy();
+    var cwd = join(fixtures, 'ignore-file');
+    var file = vfile({path: join(cwd, 'not-existing-2.txt'), contents: 'foo'});
+
+    st.plan(1);
+
+    engine({
+      processor: noop,
+      cwd: cwd,
+      streamError: stderr.stream,
+      ignoreName: '.fooignore',
+      files: [file]
+    }, function (err, code) {
+      st.deepEqual(
+        [err, code, stderr()],
+        [null, 0, 'not-existing-2.txt: no issues found\n'],
         'should report'
       );
     });

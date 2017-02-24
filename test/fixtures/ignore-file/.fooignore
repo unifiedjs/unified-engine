@@ -1,2 +1,3 @@
 nested/*
 !nested/three.txt
+not-existing.txt
