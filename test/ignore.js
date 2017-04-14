@@ -114,7 +114,7 @@ test('ignore', function (t) {
       cwd: join(fixtures, 'hidden-directory'),
       streamError: stderr.stream,
       files: ['.'],
-      // no `ignoreName`
+      // No `ignoreName`.
       extensions: ['txt']
     }, function (err, code) {
       st.error(err, 'should not fail fatally');
