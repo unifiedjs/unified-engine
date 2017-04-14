@@ -821,7 +821,8 @@ engine({
 
 Want configuration files in a different format?  Pass a `configTransform`
 function.  It will be invoked with the parsed value from configuration
-files and should return a config object (with `plugins` and/or `settings`).
+files and the file-path to the found file, and should return a config
+object (with `plugins` and/or `settings`).
 
 *   Type: `Function`, optional.
 
