@@ -1,0 +1,12 @@
+{
+  "foo": {
+    "settings": {
+      "charlie": true
+    },
+    "plugins": {
+      "./test-found": {
+        "delta": false
+      }
+    }
+  }
+}

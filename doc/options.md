@@ -30,6 +30,7 @@ authors.
 *   [options.silentlyIgnore](#optionssilentlyignore)
 *   [options.plugins](#optionsplugins)
 *   [options.pluginPrefix](#optionspluginprefix)
+*   [options.defaultConfig](#optionsdefaultconfig)
 *   [options.configTransform](#optionsconfigtransform)
 *   [options.color](#optionscolor)
 *   [options.silent](#optionssilent)
@@ -815,6 +816,50 @@ engine({
 }, function (err) {
   if (err) throw err;
 });
+```
+
+## `options.defaultConfig`
+
+Optional object with `plugins` and/or `settings` to use if no config file is
+supplied by the user.
+
+*   Type: `Object`, optional.
+
+###### Example
+
+The following example processes `readme.md`.  If `package.json` exists, that
+config is used, otherwise the configuration at `defaultConfig` is used.
+
+```js
+var engine = require('unified-engine');
+var remark = require('remark');
+
+engine({
+  processor: remark(),
+  files: ['readme.md'],
+  packageField: 'remarkConfig',
+  defaultConfig: {
+    settings: {
+      commonmark: true
+    }
+  }
+}, function (err) {
+  if (err) throw err;
+});
+```
+
+Where `package.json` contains:
+
+```json
+{
+  "name": "foo",
+  "private": true,
+  "remarkConfig": {
+    "settings": {
+      "footnotes": true
+    }
+  }
+}
 ```
 
 ## `options.configTransform`

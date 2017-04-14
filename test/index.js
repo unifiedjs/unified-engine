@@ -9,6 +9,7 @@ require('./configuration');
 require('./configuration-plugins');
 require('./configuration-presets');
 require('./configuration-transform');
+require('./configuration-default');
 require('./stdin');
 require('./output');
 require('./tree');
