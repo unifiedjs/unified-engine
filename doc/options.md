@@ -32,6 +32,8 @@ authors.
 *   [options.pluginPrefix](#optionspluginprefix)
 *   [options.defaultConfig](#optionsdefaultconfig)
 *   [options.configTransform](#optionsconfigtransform)
+*   [options.reporter](#optionsreporter)
+*   [options.reporterOptions](#optionsreporteroptions)
 *   [options.color](#optionscolor)
 *   [options.silent](#optionssilent)
 *   [options.quiet](#optionsquiet)
@@ -266,7 +268,7 @@ engine({
 
 ## `options.streamError`
 
-Stream to write the [report][vfile-reporter] (if any) to.
+Stream to write the [report][reporter] (if any) to.
 
 *   Type: [`WritableStream`][writable];
 *   Default: [`process.stderr`][stderr].
@@ -908,11 +910,72 @@ Where `package.json` contains:
 }
 ```
 
+## `options.reporter`
+
+Reporter to use.  Reporters must be loadable from the [`cwd`][root] (e.g., by
+installing them from that directory with npm).  Reporters must be [VFile
+reporters][reporters].
+
+*   Type: `string` or `function`, optional, default:
+    `require('vfile-reporter')`.  If `string`, the reporter’s prefix
+    (`vfile-reporter-`) can be omitted, so if `json` is given,
+    `vfile-reporter-json` is loaded if it exists, and otherwise the `json`
+    module itself is loaded (which in this example won’t work as it’s not
+    a reporter).
+
+###### Note
+
+The [`quiet`][quiet], [`silent`][silent], and [`color`][color] options may not
+work with the used reporter.
+
+###### Example
+
+The following example processes all HTML files in the current directory with
+rehype, configures the processor with `.rehyperc` files, and prints a report
+in [json][], with [reporter options][reporteroptions].
+
+```js
+var engine = require('unified-engine');
+var rehype = require('rehype');
+
+engine({
+  processor: rehype(),
+  files: ['.'],
+  extensions: ['html'],
+  rcName: '.rehyperc',
+  reporter: 'json',
+  reporterOptions: {
+    pretty: true
+  }
+}, function (err) {
+  if (err) throw err;
+});
+```
+
+## `options.reporterOptions`
+
+Options to pass to the [reporter][].
+
+*   Type: `Object`, optional.
+
+###### Note
+
+The [`quiet`][quiet], [`silent`][silent], and [`color`][color] options are
+preferred over `reporterOptions` (and passed too).
+
+###### Example
+
+See [reporter][] for an example.
+
 ## `options.color`
 
 Whether to [report][vfile-reporter] with ANSI colour sequences.
 
 *   Type: `boolean`, default: `false`.
+
+###### Note
+
+This option may not work with the used [reporter][].
 
 ###### Example
 
@@ -945,6 +1008,10 @@ Show only [fatal][] errors in the [report][vfile-reporter].
 
 *   Type: `boolean`, default: `false`.
 
+###### Note
+
+This option may not work with the used [reporter][].
+
 ###### Example
 
 The following example [lints][remark-lint] `readme.md` but does not
@@ -972,6 +1039,10 @@ Whether to ignore processed files without any messages in the
 success message.
 
 *   Type: `boolean`, default: [`options.silent`][silent].
+
+###### Note
+
+This option may not work with the used [reporter][].
 
 ###### Example
 
@@ -1086,8 +1157,22 @@ engine({
 
 [ignore-name]: #optionsignorename
 
+[quiet]: #optionsquiet
+
 [silent]: #optionssilent
+
+[color]: #optionscolor
 
 [files]: #optionsfiles
 
+[root]: #optionscwd
+
+[reporter]: #optionsreporter
+
+[reporteroptions]: #optionsreporteroptions
+
 [config-plugins]: ./configure.md#plugins
+
+[reporters]: https://github.com/vfile/vfile#reporters
+
+[json]: https://github.com/vfile/vfile-reporter-json

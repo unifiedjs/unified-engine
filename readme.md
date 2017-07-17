@@ -118,6 +118,11 @@ when done.
     — When given, optional prefix to use when searching for plug-ins
 *   [`configTransform`][config-transform] (`Function`, optional)
     — Transform config files from a different schema
+*   [`reporter`][reporter] (`string` or `function`, default:
+    `require('vfile-reporter')`)
+    — Reporter to use
+*   [`reporterOptions`][reporteroptions] (`Object?`, optional)
+    — Config to pass to the used reporter
 *   [`color`][color] (`boolean`, default: `false`)
     — Whether to report with ANSI colour sequences
 *   [`silent`][silent] (`boolean`, default: `false`)
@@ -125,7 +130,7 @@ when done.
 *   [`quiet`][quiet] (`boolean`, default: `silent`)
     — Do not report successful files
 *   [`frail`][frail] (`boolean`, default: `false`)
-    — Treat warnings as errors
+    — Call back with an unsuccessful (`1`) code on warnings as well as errors
 
 #### `function callback(err[, code, context])`
 
@@ -239,6 +244,10 @@ files work.
 [config-transform]: doc/options.md#optionsconfigtransform
 
 [plugins]: doc/options.md#optionsplugins
+
+[reporter]: doc/options.md#optionsreporter
+
+[reporteroptions]: doc/options.md#optionsreporteroptions
 
 [color]: doc/options.md#optionscolor
 
