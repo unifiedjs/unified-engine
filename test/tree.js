@@ -124,7 +124,7 @@ test('tree', function (t) {
 
       st.equal(
         doc,
-        'two\n',
+        'two',
         'should write the transformed doc as `foo`'
       );
     });

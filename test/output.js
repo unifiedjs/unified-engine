@@ -69,7 +69,7 @@ test('output', function (t) {
       files: ['one.txt'],
       extensions: ['txt']
     }, function (err, code) {
-      st.equal(stdout(), 'two\n', 'should write');
+      st.equal(stdout(), 'two', 'should write');
       st.error(err, 'should not fail fatally');
       st.equal(code, 0, 'should exit with `0`');
 
@@ -181,7 +181,7 @@ test('output', function (t) {
         'should report'
       );
 
-      st.equal(doc, 'two\n', 'should write the transformed doc');
+      st.equal(doc, 'two', 'should write the transformed doc');
     });
   });
 
@@ -220,7 +220,7 @@ test('output', function (t) {
       );
 
       st.equal(input, '', 'should not modify the input');
-      st.equal(output, 'two\n', 'should write the transformed doc');
+      st.equal(output, 'two', 'should write the transformed doc');
     });
   });
 
@@ -259,7 +259,7 @@ test('output', function (t) {
       );
 
       st.equal(input, '', 'should not modify the input');
-      st.equal(output, 'two\n', 'should write the transformed doc');
+      st.equal(output, 'two', 'should write the transformed doc');
     });
   });
 
@@ -322,7 +322,7 @@ test('output', function (t) {
       st.error(err, 'should not fail fatally');
       st.equal(code, 0, 'should exit with `0`');
       st.equal(stderr(), 'one.txt: written\n', 'should not report');
-      st.equal(input, 'two\n', 'should not modify the input');
+      st.equal(input, 'two', 'should not modify the input');
     });
   });
 
