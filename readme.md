@@ -7,13 +7,13 @@ allowing users to [configure][] from the file-system.
 
 The following projects wrap the engine:
 
-*   [unified-args][args] — Create CLIs for processors
-*   [unified-engine-gulp][gulp] — Create Gulp plug-ins
-*   [unified-engine-atom][atom] — Create Atom Linters for processors
+*   [`unified-args`][args] — Create CLIs for processors
+*   [`unified-engine-gulp`][gulp] — Create Gulp plug-ins
+*   [`unified-engine-atom`][atom] — Create Atom Linters for processors
 
 ## Installation
 
-[npm][npm-install]:
+[npm][]:
 
 ```bash
 npm install unified-engine
@@ -63,69 +63,69 @@ when done.
 ###### [`options`][options]
 
 *   [`processor`][processor] ([`Processor`][unified-processor])
-    — Unified processor to transform files.
+    — Unified processor to transform files
 *   [`cwd`][cwd] (`string`, default: `process.cwd()`)
-    — Directory to search files in, load plug-ins from, and more.
+    — Directory to search files in, load plug-ins from, and more
 *   [`files`][files] (`Array.<string|VFile>`, optional)
-    — Paths or globs to files and directories, or virtual files, to process.
+    — Paths or globs to files and directories, or virtual files, to process
 *   [`extensions`][extensions] (`Array.<string>`, optional)
     — If `files` matches directories, include files with `extensions`
 *   [`streamIn`][stream-in] (`ReadableStream`, default: `process.stdin`)
-    — Stream to read from if no files are found or given.
+    — Stream to read from if no files are found or given
 *   [`filePath`][file-path] (`string`, optional)
-    — File path to process the given file on `streamIn` as.
+    — File path to process the given file on `streamIn` as
 *   [`streamOut`][stream-out] (`WritableStream`, default: `process.stdout`)
-    — Stream to write processed files to.
+    — Stream to write processed files to
 *   [`streamError`][stream-error] (`WritableStream`, default:
     `process.stderr`)
-    — Stream to write the report (if any) to.
+    — Stream to write the report (if any) to
 *   [`out`][out] (`boolean`, default: depends)
-    — Whether to write the processed file to `streamOut`.
+    — Whether to write the processed file to `streamOut`
 *   [`output`][output] (`boolean` or `string`, default: `false`)
-    — Whether to write successfully processed files, and where to.
+    — Whether to write successfully processed files, and where to
 *   [`alwaysStringify`][always-stringify] (`boolean`, default: `false`)
-    — Whether to always compile successfully processed files.
+    — Whether to always compile successfully processed files
 *   [`tree`][tree] (`boolean`, default: `false`)
-    — Whether to treat both input and output as a syntax tree.
+    — Whether to treat both input and output as a syntax tree
 *   [`treeIn`][tree-in] (`boolean`, default: `tree`)
-    — Whether to treat input as a syntax tree.
+    — Whether to treat input as a syntax tree
 *   [`treeOut`][tree-out] (`boolean`, default: `tree`)
-    — Whether to treat output as a syntax tree.
+    — Whether to treat output as a syntax tree
 *   [`rcName`][rc-name] (`string`, optional)
-    — Name of configuration files to load.
+    — Name of configuration files to load
 *   [`packageField`][package-field] (`string`, optional)
     — Property at which configuration can be found in `package.json`
-    files.
+    files
 *   [`detectConfig`][detect-config] (`boolean`, default: whether
     `rcName` or `packageField` is given)
-    — Whether to search for configuration files.
+    — Whether to search for configuration files
 *   [`rcPath`][rc-path] (`string`, optional)
-    — File-path to a configuration file to load.
+    — File-path to a configuration file to load
 *   [`settings`][settings] (`Object`, optional)
-    — Configuration for the parser and compiler of the processor.
+    — Configuration for the parser and compiler of the processor
 *   [`ignoreName`][ignore-name] (`string`, optional)
-    — Name of ignore files to load.
+    — Name of ignore files to load
 *   [`detectIgnore`][detect-ignore] (`boolean`, default: whether
     `ignoreName` is given)
-    — Whether to search for ignore files.
+    — Whether to search for ignore files
 *   [`ignorePath`][ignore-path] (`string`, optional)
-    — File-path to an ignore file to load.
+    — File-path to an ignore file to load
 *   [`silentlyIgnore`][silently-ignore] (`boolean`, default: `false`)
-    — Skip given files if they are ignored.
+    — Skip given files if they are ignored
 *   [`plugins`][plugins] (`Object`, optional)
-    — Map of plug-in names or paths to their options.
+    — Map of plug-in names or paths to their options
 *   [`pluginPrefix`][plugin-prefix] (`string`, optional)
-    — When given, optional prefix to use when searching for plug-ins.
+    — When given, optional prefix to use when searching for plug-ins
 *   [`configTransform`][config-transform] (`Function`, optional)
-    — Transform config files from a different schema.
+    — Transform config files from a different schema
 *   [`color`][color] (`boolean`, default: `false`)
-    — Whether to report with ANSI colour sequences.
+    — Whether to report with ANSI colour sequences
 *   [`silent`][silent] (`boolean`, default: `false`)
-    — Report only fatal errors.
+    — Report only fatal errors
 *   [`quiet`][quiet] (`boolean`, default: `silent`)
-    — Do not report successful files.
+    — Do not report successful files
 *   [`frail`][frail] (`boolean`, default: `false`)
-    — Treat warnings as errors.
+    — Treat warnings as errors
 
 #### `function callback(err[, code, context])`
 
@@ -137,7 +137,7 @@ processing context.
 ###### Parameters
 
 *   `err` (`Error`) — Fatal error.
-*   `code` (`number`) — Either `0`, if successful, or `1`, if
+*   `code` (`number`) — Either `0` if successful, or `1` if
     unsuccessful.  The latter occurs if [fatal][] errors
     happen when processing individual files, or if [`frail`][frail]
     is set and warnings occur.
@@ -172,7 +172,7 @@ files work.
 
 [codecov]: https://codecov.io/github/unifiedjs/unified-engine
 
-[npm-install]: https://docs.npmjs.com/cli/install
+[npm]: https://docs.npmjs.com/cli/install
 
 [license]: LICENSE
 
