@@ -2,6 +2,7 @@
 
 var fs = require('fs');
 var path = require('path');
+var PassThrough = require('stream').PassThrough;
 var test = require('tape');
 var vfile = require('to-vfile');
 var noop = require('./util/noop-processor');
@@ -15,7 +16,7 @@ var unlink = fs.unlinkSync;
 var fixtures = join(__dirname, 'fixtures');
 
 test('tree', function (t) {
-  t.plan(5);
+  t.plan(7);
 
   t.test('should fail on malformed input', function (st) {
     var cwd = join(fixtures, 'malformed-tree');
@@ -168,6 +169,72 @@ test('tree', function (t) {
         doc,
         '{\n  "type": "text",\n  "value": "two"\n}\n',
         'should write the transformed doc as JSON'
+      );
+    });
+  });
+
+  t.test('should support `treeOut` for stdin', function (st) {
+    var stdin = new PassThrough();
+    var stdout = spy();
+    var stderr = spy();
+
+    setTimeout(send, 50);
+
+    function send() {
+      stdin.end('\n');
+    }
+
+    st.plan(1);
+
+    engine({
+      processor: noop,
+      streamIn: stdin,
+      streamOut: stdout.stream,
+      streamError: stderr.stream,
+      treeOut: true
+    }, function (err, code) {
+      st.deepEqual(
+        [err, code, stderr(), stdout()],
+        [
+          null,
+          0,
+          '<stdin>: no issues found\n',
+          '{\n  "type": "text",\n  "value": "\\n"\n}\n'
+        ],
+        'should work'
+      );
+    });
+  });
+
+  t.test('should support `treeIn` for stdin', function (st) {
+    var stdin = new PassThrough();
+    var stdout = spy();
+    var stderr = spy();
+
+    setTimeout(send, 50);
+
+    function send() {
+      stdin.end('{"type":"text","value":"\\n"}');
+    }
+
+    st.plan(1);
+
+    engine({
+      processor: noop,
+      streamIn: stdin,
+      streamOut: stdout.stream,
+      streamError: stderr.stream,
+      treeIn: true
+    }, function (err, code) {
+      st.deepEqual(
+        [err, code, stderr(), stdout()],
+        [
+          null,
+          0,
+          '<stdin>: no issues found\n',
+          '\n'
+        ],
+        'should work'
       );
     });
   });
