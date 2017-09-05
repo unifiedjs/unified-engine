@@ -1,7 +1,7 @@
 # unified-engine [![Build Status][travis-badge]][travis] [![Coverage Status][codecov-badge]][codecov]
 
-Engine to process multiple files with [**unified**][unified],
-allowing users to [configure][] from the file-system.
+Engine to process multiple files with [**unified**][unified], allowing users
+to [configure][] from the file-system.
 
 ## Projects
 
@@ -21,10 +21,10 @@ npm install unified-engine
 
 ## Usage
 
-The following example processes all files in the current directory
-with a markdown extension with [**remark**][remark], allows
-[configuration][configure] from `.remarkrc` and `package.json` files,
-ignoring files from `.remarkignore` files, and more.
+The following example processes all files in the current directory with a
+markdown extension with [**remark**][remark], allows [configuration][configure]
+from `.remarkrc` and `package.json` files, ignoring files from `.remarkignore`
+files, and more.
 
 ```js
 var engine = require('unified-engine');
@@ -57,8 +57,8 @@ engine({
 
 ### `engine(options, callback)`
 
-Process files according to `options` and invoke [`callback`][callback]
-when done.
+Process files according to `options` and invoke [`callback`][callback] when
+done.
 
 ###### [`options`][options]
 
@@ -76,8 +76,7 @@ when done.
     — File path to process the given file on `streamIn` as
 *   [`streamOut`][stream-out] (`WritableStream`, default: `process.stdout`)
     — Stream to write processed files to
-*   [`streamError`][stream-error] (`WritableStream`, default:
-    `process.stderr`)
+*   [`streamError`][stream-error] (`WritableStream`, default: `process.stderr`)
     — Stream to write the report (if any) to
 *   [`out`][out] (`boolean`, default: depends)
     — Whether to write the processed file to `streamOut`
@@ -94,10 +93,9 @@ when done.
 *   [`rcName`][rc-name] (`string`, optional)
     — Name of configuration files to load
 *   [`packageField`][package-field] (`string`, optional)
-    — Property at which configuration can be found in `package.json`
-    files
-*   [`detectConfig`][detect-config] (`boolean`, default: whether
-    `rcName` or `packageField` is given)
+    — Property at which configuration can be found in `package.json` files
+*   [`detectConfig`][detect-config] (`boolean`, default: whether `rcName` or
+    `packageField` is given)
     — Whether to search for configuration files
 *   [`rcPath`][rc-path] (`string`, optional)
     — File-path to a configuration file to load
@@ -105,17 +103,17 @@ when done.
     — Configuration for the parser and compiler of the processor
 *   [`ignoreName`][ignore-name] (`string`, optional)
     — Name of ignore files to load
-*   [`detectIgnore`][detect-ignore] (`boolean`, default: whether
-    `ignoreName` is given)
+*   [`detectIgnore`][detect-ignore] (`boolean`, default: whether `ignoreName`
+    is given)
     — Whether to search for ignore files
 *   [`ignorePath`][ignore-path] (`string`, optional)
     — File-path to an ignore file to load
 *   [`silentlyIgnore`][silently-ignore] (`boolean`, default: `false`)
     — Skip given files if they are ignored
-*   [`plugins`][plugins] (`Object`, optional)
-    — Map of plug-in names or paths to their options
+*   [`plugins`][plugins] (`Array|Object`, optional)
+    — Plug-ins to use
 *   [`pluginPrefix`][plugin-prefix] (`string`, optional)
-    — When given, optional prefix to use when searching for plug-ins
+    — Optional prefix to use when searching for plug-ins
 *   [`configTransform`][config-transform] (`Function`, optional)
     — Transform config files from a different schema
 *   [`reporter`][reporter] (`string` or `function`, default:

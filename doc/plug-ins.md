@@ -9,8 +9,8 @@ given: [`fileSet`][file-set].
 
 ###### Example
 
-The following example processes `readme.md` and uses a plug-in
-which adds a “completer” and another file (`history.md`).
+The following example processes `readme.md` and uses a plug-in that adds a
+“completer” and another file (`history.md`).
 
 ```js
 var engine = require('unified-engine');
@@ -109,12 +109,11 @@ passed to [`next`][next]), no further completers run and all files fail.
 
 ###### Properties
 
-*   `pluginId` (`string`) — Plug-ins specified through various
-    mechanisms are attached to a new [`processor`][unified-processor]
-    for each file.  If a `completer` is `use`d multiple times, it is
-    invoked multiple times as well.  To ensure completers don’t get
-    re-attached, specify a `pluginId`.  This will ensure only one
-    completer per `pluginId` is added.
+*   `pluginId` (`string`) — Plug-ins specified through various mechanisms are
+    attached to a new [`processor`][unified-processor] for each file.  If a
+    `completer` is `use`d multiple times, it is invoked multiple times as well.
+    To ensure completers don’t get re-attached, specify a `pluginId`.  This
+    will ensure only one completer per `pluginId` is added.
 
 ##### `function next([err])`
 

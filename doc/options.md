@@ -1,7 +1,6 @@
 # Options
 
-[**unified-engine**][api] can be configured extensively by engine
-authors.
+[`unified-engine`][api] can be configured extensively by engine authors.
 
 ## Table of Contents
 
@@ -47,8 +46,8 @@ Unified processor to transform files.
 
 ###### Example
 
-The following example reformats **stdin**(4) using [remark][], writes
-the report to **stderr**(4), and formatted document to **stdout**(4).
+The following example reformats **stdin**(4) using [remark][], writes the
+report to **stderr**(4), and formatted document to **stdout**(4).
 
 ```js
 var engine = require('unified-engine');
@@ -68,8 +67,8 @@ Directory to search files in, load plug-ins from, and more.
 
 ###### Example
 
-The following example reformats `readme.md`.  The `doc` directory is
-used to process from.
+The following example reformats `readme.md`.  The `doc` directory is used to
+process from.
 
 ```js
 var path = require('path');
@@ -102,8 +101,8 @@ if `extensions` is `['txt', 'text']`).  This searching will not include
 
 ###### Example
 
-The following example processes `README` and all files with an `md`
-extension in `doc`.
+The following example processes `README` and all files with an `md` extension
+in `doc`.
 
 ```js
 var engine = require('unified-engine');
@@ -120,16 +119,19 @@ engine({
 
 ## `options.extensions`
 
-If [`files`][files] matches directories, those directories are searched
-for files whose extension matches the given `extensions`.
+If [`files`][files] matches directories, those directories are searched for
+files whose extension matches the given `extensions`.
+
+In addition, if [`treeIn`][tree-in] is turned on and [`output`][output] is
+`true` or points to a directory, generated files are given the first extension.
 
 *   Type: `Array.<string>`
 *   Default: `[]`
 
 ###### Example
 
-The following example reformats all files with `md`, `markdown`, and
-`mkd` extensions in the current directory.
+The following example reformats all files with `md`, `markdown`, and `mkd`
+extensions in the current directory.
 
 ```js
 var engine = require('unified-engine');
@@ -147,26 +149,26 @@ engine({
 
 ## `options.streamIn`
 
-Stream to read from if no files are found or given.  If `streamIn` is
-the only possible source of input but it’s a [TTY][], an error is
-thrown.
+Stream to read from if no files are found or given.  If `streamIn` is the only
+possible source of input but it’s a [TTY][], an error is thrown.
 
 *   Type: [`ReadableStream`][readable]
 *   Default: [`process.stdin`][stdin]
 
 ###### Example
 
-The following example [lints][remark-lint] an incoming stream.
+The following example uses [`remark-lint`][remark-lint] to lint an incoming
+stream.
 
 ```js
 var engine = require('unified-engine');
 var stream = require('stream').PassThrough();
 var remark = require('remark');
-var lint = require('remark-lint');
+var recommended = require('remark-preset-lint-recommended');
 
 engine({
   processor: remark(),
-  plugins: [[lint, {finalNewline: true}]],
+  plugins: [recommended],
   streamIn: stream,
   out: false
 }, function (err) {
@@ -197,18 +199,18 @@ File path to process the given file on [`streamIn`][stream-in] as, if any.
 
 ###### Example
 
-The following example shows the same as before, with a `filePath`
-added, which is seen in the report:
+The following example shows the same as before, with a `filePath` added, which
+is shown in the report:
 
 ```js
 var engine = require('unified-engine');
 var stream = require('stream').PassThrough();
 var remark = require('remark');
-var lint = require('remark-lint');
+var recommended = require('remark-preset-lint-recommended');
 
 engine({
   processor: remark(),
-  plugins: [[lint, {finalNewline: true}]],
+  plugins: [recommended],
   filePath: '~/alpha/bravo/charlie.md',
   streamIn: stream,
   out: false
@@ -248,8 +250,8 @@ Stream to write processed files to.  This behaviour is suppressed if:
 
 ###### Example
 
-The following example reads `readme.md` and writes the compiled document
-to `readme-two.md`.  Note that this can also be achieved by passing
+The following example reads `readme.md` and writes the compiled document to
+`readme-two.md`.  Note that this can also be achieved by passing
 `output: 'readme-two.md'` instead of `streamOut`.
 
 ```js
@@ -275,19 +277,19 @@ Stream to write the [report][reporter] (if any) to.
 
 ###### Example
 
-The following example [lints][remark-lint] `readme.md` and writes the
-report to `report.txt`.
+The following example uses [`remark-lint`][remark-lint] to lint `readme.md` and
+writes the report to `report.txt`.
 
 ```js
 var fs = require('fs');
 var engine = require('unified-engine');
 var remark = require('remark');
-var lint = require('remark-lint');
+var recommended = require('remark-preset-lint-recommended');
 
 engine({
   processor: remark(),
   files: ['readme.md'],
-  plugins: [[lint, {finalNewline: true}]],
+  plugins: [recommended],
   out: false,
   streamErr: fs.createWriteStream('report.txt')
 }, function (err) {
@@ -297,28 +299,28 @@ engine({
 
 ## `options.out`
 
-Whether to write the processed file to [`streamOut`][stream-out].  The
-default behaviour is to only write under some conditions, as specified
-in the section on `streamOut`, but if `out` is `false` nothing will be
-written to `streamOut`.
+Whether to write the processed file to [`streamOut`][stream-out].  The default
+behaviour is to only write under some conditions, as specified in the section
+on [`streamOut`][stream-out], but if `out` is `false` nothing will be written
+to `streamOut`.
 
 *   Type: `boolean`
 *   Default: depends (see above)
 
 ###### Example
 
-The following example [lints][remark-lint] `readme.md`, writes the report,
-and ignores the compiled document.
+The following example uses [`remark-lint`][remark-lint] to lint `readme.md`,
+writes the report, and ignores the compiled document.
 
 ```js
 var engine = require('unified-engine');
 var remark = require('remark');
-var lint = require('remark-lint');
+var recommended = require('remark-preset-lint-recommended');
 
 engine({
   processor: remark(),
   files: ['readme.md'],
-  plugins: [lint],
+  plugins: [recommended],
   out: false
 }, function (err) {
   if (err) throw err;
@@ -327,16 +329,19 @@ engine({
 
 ## `options.output`
 
-Whether to write successfully processed files, and where to.  This can
-be set from configuration files.
+Whether to write successfully processed files and where to.
 
 *   When `true`, overwrites the given files
 *   When `false`, does not write to the file-system
-*   When pointing to an existing directory, files are written
-    to that directory and keep their original basenames
-*   When the parent directory of the given path exists and one
-    file is processed, the file is written to the given path
+*   When pointing to an existing directory, files are written to that directory
+    and keep their original basenames
+*   When the parent directory of the given path exists and one file is
+    processed, the file is written to the given path
 *   Otherwise, a fatal error is thrown
+
+Note that if [`treeIn`][tree-in] is turned on, generated files get the first
+defined [`extensions`][extensions].  If [`treeOut`][tree-out] is turned on,
+generated files receive the `'json'` extension.
 
 <!-- Info: -->
 
@@ -345,19 +350,18 @@ be set from configuration files.
 
 ###### Example
 
-The following example writes all files in `source/` with an `md`
-extension, compiled, to `destination/`.
+The following example writes all files in `src/` with an `md` extension,
+compiled, to `dest/`.
 
 ```js
 var engine = require('unified-engine');
 var remark = require('remark');
-var lint = require('remark-lint');
 
 engine({
   processor: remark(),
-  files: ['source/'],
+  files: ['src/'],
   extensions: ['md'],
-  output: 'destination/'
+  output: 'dest/'
 }, function (err) {
   if (err) throw err;
 });
@@ -375,18 +379,17 @@ set this option to `true`.
 
 ## `options.tree`
 
-Whether to treat both input and output as a syntax tree.  If given,
-specifies the default value for both [`treeIn`][tree-in] and
-[`treeOut`][tree-out].
+Whether to treat both input and output as a syntax tree.  If given, specifies
+the default value for both [`treeIn`][tree-in] and [`treeOut`][tree-out].
 
 *   Type: `boolean`, optional
 *   Default: `false`
 
 ###### Example
 
-The following example reads `tree.json`, then
-[**remark-unlink**][remark-unlink] transforms the syntax tree, and the
-transformed tree is written to **stdout**(4).
+The following example reads `tree.json`, then [`remark-unlink`][remark-unlink]
+transforms the syntax tree, and the transformed tree is written to
+**stdout**(4).
 
 ```js
 var engine = require('unified-engine');
@@ -433,21 +436,21 @@ Yields:
 
 ## `options.treeIn`
 
-Treat input as a [`JSON.stringify`][json-stringify]d syntax tree, thus
-skipping the [parsing phase][unified-description] and passing the syntax
-tree right through to transformers.
+Treat input as a [`JSON.stringify`][json-stringify]d syntax tree, thus skipping
+the [parsing phase][unified-description] and passing the syntax tree right
+through to transformers.
 
-If [`extensions`][extensions] are given, sets the extension of processed
-files to the first.
+If [`extensions`][extensions] are given, sets the extension of processed files
+to the first one.
 
 *   Type: `boolean`, optional
 *   Default: [`options.tree`][tree]
 
 ###### Example
 
-The following example reads `tree.json`, then
-[**remark-unlink**][remark-unlink] transforms the syntax tree, the tree
-is compiled, and the resulting document is written to **stdout**(4).
+The following example reads `tree.json`, then [`remark-unlink`][remark-unlink]
+transforms the syntax tree, the tree is compiled, and the resulting document is
+written to **stdout**(4).
 
 ```js
 var engine = require('unified-engine');
@@ -488,19 +491,19 @@ foo
 
 ## `options.treeOut`
 
-Skip the [compilation phase][unified-description] and compile the
-transformed syntax tree to JSON.
+Skip the [compilation phase][unified-description] and compile the transformed
+syntax tree to JSON.
 
-Sets the extension of processed files to `json`.
+Sets the extension of processed files to `json`, if possible.
 
 *   Type: `boolean`, optional
 *   Default: [`options.tree`][tree]
 
 ###### Example
 
-The following example shows a script which reads and parses `doc.md`,
-then [**remark-unlink**][remark-unlink] transforms the syntax tree, and
-the tree is written to **stdout**(4).
+The following example shows a script which reads and parses `doc.md`, then
+[`remark-unlink`][remark-unlink] transforms the syntax tree, and the tree is
+written to **stdout**(4).
 
 ```js
 var engine = require('unified-engine');
@@ -538,16 +541,16 @@ Yields:
 ## `options.rcName`
 
 Name of [configuration][configure] file to load.  If given and
-[`detectConfig`][detect-config] is not `false`, `$rcName` files
-are loaded and parsed as JSON, `$rcName.js` are `require`d, and
-`$rcName.yml` and `$rcName.yaml` are loaded with `js-yaml` (`safeLoad`).
+[`detectConfig`][detect-config] is not `false`, `$rcName` files are loaded and
+parsed as JSON, `$rcName.js` are `require`d, and `$rcName.yml` and
+`$rcName.yaml` are loaded with `js-yaml` (`safeLoad`).
 
 *   Type: `string`, optional
 
 ###### Example
 
-The following example processes `readme.md`, and allows configuration
-from `.remarkrc`, `.remarkrc.js`, and `.remarkrc.yaml` files.
+The following example processes `readme.md`, and allows configuration from
+`.remarkrc`, `.remarkrc.js`, and `.remarkrc.yaml` files.
 
 ```js
 var engine = require('unified-engine');
@@ -564,17 +567,17 @@ engine({
 
 ## `options.packageField`
 
-Property at which [configuration][configure] can live in `package.json`
-files.  If given and [`detectConfig`][detect-config] is not `false`,
-`package.json` files are loaded and parsed as JSON and their
-`$packageField` property is used for configuration.
+Property at which [configuration][configure] can live in `package.json` files.
+If given and [`detectConfig`][detect-config] is not `false`, `package.json`
+files are loaded and parsed as JSON and their `$packageField` property is used
+for configuration.
 
 *   Type: `string`, optional
 
 ###### Example
 
-The following example processes `readme.md`, and allows configuration
-from `remarkConfig` fields in `package.json` files.
+The following example processes `readme.md`, and allows configuration from
+`remarkConfig` fields in `package.json` files.
 
 ```js
 var engine = require('unified-engine');
@@ -591,9 +594,9 @@ engine({
 
 ## `options.detectConfig`
 
-Whether to search for [configuration][configure] files
-([`$rcName`][rc-name], `$rcName.js`, `$rcName.yaml`, and `package.json`
-with [`$packageField`][package-field]).
+Whether to search for [configuration][configure] files ([`$rcName`][rc-name],
+`$rcName.js`, `$rcName.yaml`, and `package.json` with
+[`$packageField`][package-field]).
 
 *   Type: `boolean`, optional
 *   Default: `true` if [`rcName`][rc-name] or [`packageField`][package-field]
@@ -624,17 +627,17 @@ engine({
 File-path to a config file to load, regardless of
 [`detectConfig`][detect-config] or [`rcName`][rc-name].
 
-If the file’s extension is `yml` or `yaml`, it’s loaded as YAML.  If the
-file’s extension is `js`, it’s `require`d.  If the file’s basename is
-`package.json`, the property at [`packageField`][package-field] is used.
-Otherwise, the file is parsed as JSON.
+If the file’s extension is `yml` or `yaml`, it’s loaded as YAML.  If the file’s
+extension is `js`, it’s `require`d.  If the file’s basename is `package.json`,
+the property at [`packageField`][package-field] is used.  Otherwise, the file
+is parsed as JSON.
 
 *   Type: `string`, optional
 
 ###### Example
 
-The following example processes `readme.md` and loads configuration
-from `config.json`.
+The following example processes `readme.md` and loads configuration from
+`config.json`.
 
 ```js
 var engine = require('unified-engine');
@@ -651,14 +654,14 @@ engine({
 
 ## `options.settings`
 
-Configuration for the parser and the compiler of the processor.
+Configuration for the parser and compiler of the processor.
 
 *   Type: `Object`, optional
 
 ###### Example
 
-The following example processes `readme.md` and configures the parser
-and compiler with `position: false`.
+The following example processes `readme.md` and configures the parser and
+compiler with `position: false`.
 
 ```js
 var engine = require('unified-engine');
@@ -676,16 +679,15 @@ engine({
 ## `options.ignoreName`
 
 Name of [ignore file][ignore] to load.  If given and
-[`detectIgnore`][detect-ignore] is not `false`, `$ignoreName` files are
-loaded.
+[`detectIgnore`][detect-ignore] is not `false`, `$ignoreName` files are loaded.
 
 *   Type: `string`, optional
 
 ###### Example
 
-The following example processes files in the current working directory
-with an `md` extension, and is configured to ignore file paths from the
-closest `.remarkignore` file.
+The following example processes files in the current working directory with an
+`md` extension, and is configured to ignore file paths from the closest
+`.remarkignore` file.
 
 ```js
 var engine = require('unified-engine');
@@ -703,16 +705,16 @@ engine({
 
 ## `options.detectIgnore`
 
-Whether to search for [ignore file][ignore] ([`$ignoreName`][ignore-name]).
+Whether to search for [ignore file][ignore]s ([`$ignoreName`][ignore-name]).
 
 *   Type: `boolean`, optional
 *   Default: `true` if [`ignoreName`][ignore-name] is given
 
 ###### Example
 
-The following example processes files in the current working directory
-with an `md` extension but does **not** ignore file paths from the
-closest `.remarkignore` file, because `detectIgnore` is `false`.
+The following example processes files in the current working directory with an
+`md` extension but does **not** ignore file paths from the closest
+`.remarkignore` file, because `detectIgnore` is `false`.
 
 ```js
 var engine = require('unified-engine');
@@ -738,8 +740,8 @@ File-path to [ignore file][ignore] to load, regardless of
 
 ###### Example
 
-The following example processes files in the current working directory
-with an `md` extension and ignores file paths specified in `.gitignore`.
+The following example processes files in the current working directory with an
+`md` extension and ignores file paths specified in `.gitignore`.
 
 ```js
 var engine = require('unified-engine');
@@ -764,16 +766,16 @@ instead of warning about them.
 
 ## `options.plugins`
 
-Plug-ins to load by their name and attach with options to the processor
-for every processed file.
+Plug-ins to load and attach with options to the processor for every processed
+file.
 
-*   Type: `Object`, `Array`, optional.  Same format as
-    [`plugins` in config files][config-plugins]
+*   Type: `Object`, `Array`, optional.  Same format as [`plugins` in config
+    files][config-plugins]
 
 ###### Example
 
-The following example processes `readme.md` and loads the `remark-lint`
-plug-in.
+The following example processes `readme.md` and loads the
+`remark-preset-lint-recommended` plug-in.
 
 ```js
 var engine = require('unified-engine');
@@ -782,7 +784,7 @@ var remark = require('remark');
 engine({
   processor: remark(),
   files: ['readme.md'],
-  plugins: ['remark-lint']
+  plugins: ['remark-preset-lint-recommended']
 }, function (err) {
   if (err) throw err;
 });
@@ -790,21 +792,21 @@ engine({
 
 ## `options.pluginPrefix`
 
-Allow plug-ins to be specified without a prefix.  For example,
-if a plug-in is specified with a name of `foo`, and `pluginPrefix`
-is `bar`, both `bar-foo` and `foo` are checked in `node_modules/`
-directories.
+Allow plug-ins to be specified without a prefix.  For example, if a plug-in is
+specified with a name of `foo`, and `pluginPrefix` is `bar`, both `bar-foo` and
+`foo` are checked in `node_modules/` directories.
 
-> **Note:** If a prefix is specified, plug-ins with that prefix are
-> preferred over plug-ins without that prefix.
+> **Note**: If a prefix is specified, plug-ins with that prefix are preferred
+> over plug-ins without that prefix.
 
 *   Type: `string`, optional
 
 ###### Example
 
-The following example processes `readme.md` and loads the `lint`
-plug-in.  Because `pluginPrefix` is given, this resolved to `remark-lint`
-from `node_modules/` if available.
+The following example processes `readme.md` and loads the
+`preset-lint-recommended` plug-in.  Because `pluginPrefix` is given, this
+resolves to `remark-preset-lint-recommended` from `node_modules/` if
+available.
 
 ```js
 var engine = require('unified-engine');
@@ -814,7 +816,7 @@ engine({
   processor: remark(),
   files: ['readme.md'],
   pluginPrefix: 'remark',
-  plugins: ['lint']
+  plugins: ['preset-lint-recommended']
 }, function (err) {
   if (err) throw err;
 });
@@ -867,18 +869,17 @@ Where `package.json` contains:
 ## `options.configTransform`
 
 Want configuration files in a different format?  Pass a `configTransform`
-function.  It will be invoked with the parsed value from configuration
-files and the file-path to the found file, and should return a config
-object (with `plugins` and/or `settings`).
+function.  It will be invoked with the parsed value from configuration files
+and the file-path to the found file, and should return a config object (with
+`plugins` and/or `settings`).
 
 *   Type: `Function`, optional
 
 ###### Example
 
-The following example processes `readme.md` and loads options from
-`custom` (from a `package.json`).  `configTransform` is invoked with
-those options and transforms it to configuration **unified-engine**
-understands.
+The following example processes `readme.md` and loads options from `custom`
+(from a `package.json`).  `configTransform` is invoked with those options and
+transforms it to configuration `unified-engine` understands.
 
 ```js
 var engine = require('unified-engine');
@@ -912,13 +913,13 @@ Where `package.json` contains:
 
 ## `options.reporter`
 
-Reporter to use.  Reporters must be loadable from the [`cwd`][root] (e.g., by
+Reporter to use.  Reporters must be loadable from the [`cwd`][root] (such as by
 installing them from that directory with npm).  Reporters must be [VFile
 reporters][reporters].
 
 *   Type: `string` or `function`, optional, default:
-    `require('vfile-reporter')`.  If `string`, the reporter’s prefix
-    (`vfile-reporter-`) can be omitted, so if `json` is given,
+    [`require('vfile-reporter')`][vfile-reporter].  If `string`, the reporter’s
+    prefix (`vfile-reporter-`) can be omitted, so if `json` is given,
     `vfile-reporter-json` is loaded if it exists, and otherwise the `json`
     module itself is loaded (which in this example won’t work as it’s not
     a reporter)
@@ -965,11 +966,11 @@ preferred over `reporterOptions` (and passed too).
 
 ###### Example
 
-See [reporter][] for an example.
+See [`options.reporter`][reporter] for an example.
 
 ## `options.color`
 
-Whether to [report][vfile-reporter] with ANSI colour sequences.
+Whether to [report][reporter] with ANSI colour sequences.
 
 *   Type: `boolean`, default: `false`
 
@@ -1004,7 +1005,7 @@ Yields:
 
 ## `options.silent`
 
-Show only [fatal][] errors in the [report][vfile-reporter].
+Show only [fatal][] errors in the [report][reporter].
 
 *   Type: `boolean`, default: `false`
 
@@ -1014,8 +1015,8 @@ This option may not work with the used [reporter][].
 
 ###### Example
 
-The following example [lints][remark-lint] `readme.md` but does not
-report any warnings or success messages, only fatal errors, if they
+The following example uses [`remark-lint`][remark-lint] to lint `readme.md` but
+does not report any warnings or success messages, only fatal errors, if they
 occur.
 
 ```js
@@ -1025,7 +1026,7 @@ var remark = require('remark');
 engine({
   processor: remark(),
   files: ['readme.md'],
-  plugins: {lint: null},
+  plugins: ['remark-preset-lint-recommended'],
   silent: true
 }, function (err) {
   if (err) throw err;
@@ -1035,8 +1036,7 @@ engine({
 ## `options.quiet`
 
 Whether to ignore processed files without any messages in the
-[report][vfile-reporter].  The default behaviour is to show a
-success message.
+[report][reporter].  The default behaviour is to show a success message.
 
 *   Type: `boolean`, default: [`options.silent`][silent]
 
@@ -1046,8 +1046,8 @@ This option may not work with the used [reporter][].
 
 ###### Example
 
-The following example [lints][remark-lint] `readme.md`.  Nothing is
-reported if the file processed successfully.
+The following example uses [`remark-lint`][remark-lint] to lint `readme.md`.
+Nothing is reported if the file processed successfully.
 
 ```js
 var engine = require('unified-engine');
@@ -1056,7 +1056,7 @@ var remark = require('remark');
 engine({
   processor: remark(),
   files: ['readme.md'],
-  plugins: {lint: null},
+  plugins: ['remark-preset-lint-recommended'],
   quiet: true
 }, function (err) {
   if (err) throw err;
@@ -1071,9 +1071,9 @@ Count warnings as errors when calculating if the process succeeded.
 
 ###### Example
 
-The following example [lints][remark-lint] `readme.md` and logs the exit
-code.  Normally, only errors turn the `code` to `1`, but in `frail` mode
-lint warnings result in the same.
+The following example uses [`remark-lint`][remark-lint] to lint `readme.md` and
+logs the exit code.  Normally, only errors turn the `code` to `1`, but in
+`frail` mode lint warnings result in the same.
 
 ```js
 var engine = require('unified-engine');
@@ -1082,7 +1082,7 @@ var remark = require('remark');
 engine({
   processor: remark(),
   files: ['readme.md'],
-  plugins: {lint: null},
+  plugins: ['remark-preset-lint-recommended'],
   frail: true
 }, function (err, code) {
   process.exit(err ? 1 : code);

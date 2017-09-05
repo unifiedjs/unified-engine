@@ -1,24 +1,26 @@
 # Configuration
 
-[**unified-engine**][api] accepts configuration through options and
-through configuration files.
+[`unified-engine`][api] accepts configuration through options and through
+configuration files.
 
-*   One configuration file can be given through [`rcPath`][rc-path],
-    this is loaded regardless of `detectConfig` and `rcName`.
-*   Otherwise, configuration files are detected if
-    [`detectConfig`][detect-config] is turned on, depending on the following
-    options:
+## Explicit configuration
 
-    *   If [`rcName`][rc-name] is given, `$rcName` (JSON),
-        `$rcName.js` (CommonJS), `$rcName.yml` (YAML), and `$rcName.yaml` (YAML)
-        are loaded;
-    *   If [`packageField`][package-field] is given, `package.json`
-        (JSON) files are loaded and their `$packageField`s are
-        used as configuration.
+One configuration file can be given through [`rcPath`][rc-path], this is loaded
+regardless of `detectConfig` and `rcName`.
 
-    In this case, the first file that is searched for in a directory is used
-    as the configuration.  If no file is found, the parent directory is search,
-    and so on.
+## Implicit configuration
+
+Otherwise, configuration files are detected if [`detectConfig`][detect-config]
+is turned on, depending on the following options:
+
+*   If [`rcName`][rc-name] is given, `$rcName` (JSON), `$rcName.js` (CommonJS),
+    `$rcName.yml` (YAML), and `$rcName.yaml` (YAML) are loaded
+*   If [`packageField`][package-field] is given, `package.json` (JSON) files
+    are loaded and their `$packageField`s are used as configuration
+
+In this case, the first file that is searched for in a directory is used
+as the configuration.  If no file is found, the parent directory is searched,
+and so on.
 
 ###### Example
 
@@ -86,15 +88,14 @@ configures the parser and compiler of the processor.
 
 ###### `plugins`
 
-The `plugins` field, related to [`plugins`][plugins] in `options`, has
-either an array of plug-in names (or paths) or an object mapping plug-in’s
-to their options.
+The `plugins` field, related to [`plugins`][plugins] in `options`, has either
+an array of plug-in names (or paths) or plugin–options tuples, or an object
+mapping plug-in’s to their options.
 
-Plug-in options can be `false`, which specifies that a plug-in should
-not be used.  In all other cases, they are treated as an object, and
-merged by the cascade.  Thus, it’s possible to specify part of the
-options from one configuration file, and overwrite or extend it from
-another file.
+Plug-in options can be `false`, which specifies that a plug-in should not be
+used.  In all other cases, they are treated as an object, and merged by the
+cascade.  Thus, it’s possible to specify part of the options from one
+configuration file, and overwrite or extend it from another file.
 
 Accepts an array:
 
@@ -102,7 +103,8 @@ Accepts an array:
 {
   "plugins": [
     "foo",
-    "bar"
+    "bar",
+    ["qux", {"quux": true}]
   ]
 }
 ```
