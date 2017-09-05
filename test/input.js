@@ -110,7 +110,7 @@ test('input', function (t) {
       st.equal(code, 0, 'should exit with `0`');
 
       st.equal(
-        stderr(true),
+        stderr(),
         [
           'bar.text: no issues found',
           'foo.txt: no issues found',

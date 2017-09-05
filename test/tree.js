@@ -34,7 +34,7 @@ test('tree', function (t) {
       st.equal(code, 1, 'should exit with `1`');
 
       st.equal(
-        stderr(true).split('\n').slice(0, 2).join('\n'),
+        stderr().split('\n').slice(0, 2).join('\n'),
         [
           'doc.json',
           '  1:1  error  Error: Cannot read file as JSON'
@@ -74,7 +74,7 @@ test('tree', function (t) {
         st.equal(code, 0, 'should exit with `0`');
 
         st.equal(
-          stderr(true),
+          stderr(),
           'doc > doc.json: written\n',
           'should report'
         );
@@ -117,7 +117,7 @@ test('tree', function (t) {
       st.equal(code, 0, 'should exit with `0`');
 
       st.equal(
-        stderr(true),
+        stderr(),
         'doc > doc.foo: written\n',
         'should report'
       );
@@ -159,7 +159,7 @@ test('tree', function (t) {
       st.equal(code, 0, 'should exit with `0`');
 
       st.equal(
-        stderr(true),
+        stderr(),
         'one.txt > one.json: written\n',
         'should report'
       );
@@ -194,7 +194,7 @@ test('tree', function (t) {
       st.error(err, 'should not fail fatally');
       st.equal(code, 0, 'should exit with `0`');
       st.equal(
-        stderr(true),
+        stderr(),
         'one.txt > bar.json: written\n',
         'should report'
       );

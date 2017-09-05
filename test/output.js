@@ -214,7 +214,7 @@ test('output', function (t) {
       st.equal(code, 0, 'should exit with `0`');
 
       st.equal(
-        stderr(true),
+        stderr(),
         'one.txt > four.txt: written\n',
         'should report'
       );
@@ -253,7 +253,7 @@ test('output', function (t) {
       st.equal(code, 0, 'should exit with `0`');
 
       st.equal(
-        stderr(true),
+        stderr(),
         'one.txt > nested/one.txt: written\n',
         'should report'
       );
@@ -354,7 +354,7 @@ test('output', function (t) {
       st.equal(code, 0, 'should exit with `0`');
       st.equal(input, '', 'should not modify the input');
       st.equal(
-        stderr(true),
+        stderr(),
         '<stdin>: no issues found\n',
         'should not report'
       );
@@ -375,7 +375,7 @@ test('output', function (t) {
       files: ['.'],
       extensions: ['txt']
     }, function (err, code) {
-      var report = stderr(true).split('\n').slice(0, 2);
+      var report = stderr().split('\n').slice(0, 2);
 
       report[1] = report[1].slice(0, report[1].lastIndexOf(':'));
 
@@ -408,7 +408,7 @@ test('output', function (t) {
         files: ['.'],
         extensions: ['txt']
       }, function (err, code) {
-        var report = stderr(true).split('\n').slice(0, 3);
+        var report = stderr().split('\n').slice(0, 3);
 
         report[2] = report[2].slice(0, report[2].indexOf('ENOENT'));
 
