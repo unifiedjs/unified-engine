@@ -82,7 +82,7 @@ configures the parser and compiler of the processor.
 }
 ```
 
-*   Type: `Object`.
+*   Type: `Object`
 
 ###### `plugins`
 
@@ -120,7 +120,7 @@ Or an object:
 }
 ```
 
-*   Type: `Array.<string>` or `Object.<*>`.
+*   Type: `Array.<string>` or `Object.<*>`
 
 <!-- Definitions -->
 

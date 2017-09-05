@@ -4,10 +4,10 @@
 files to process, through ignore files.
 
 *   Ignore files are detected if [`detectIgnore`][detect-ignore]
-    is turned on and [`ignoreName`][ignore-name] is given.
+    is turned on and [`ignoreName`][ignore-name] is given
 *   One ignore file can be given through [`ignorePath`][ignore-path],
     this is loaded regardless of `detectIgnore` and `ignoreName`,
-    and turns off searching for other ignore files.
+    and turns off searching for other ignore files
 
 Ignore files do not cascade.  Before searching for [`files`][files] in
 [`cwd`][cwd], that directory and all its ancestral directories are

@@ -43,7 +43,7 @@ authors.
 
 Unified processor to transform files.
 
-*   Type: [`Processor`][processor].
+*   Type: [`Processor`][processor]
 
 ###### Example
 
@@ -63,8 +63,8 @@ engine({processor: remark}, function (err) {
 
 Directory to search files in, load plug-ins from, and more.
 
-*   Type: `string`;
-*   Default: [`process.cwd()`][cwd].
+*   Type: `string`
+*   Default: [`process.cwd()`][cwd]
 
 ###### Example
 
@@ -97,8 +97,8 @@ if `extensions` is `['txt', 'text']`).  This searching will not include
 `node_modules` or hidden directories (those starting with a dot, `.`, like
 `.git`).
 
-*   Type: `Array.<string>`;
-*   Default: `[]`.
+*   Type: `Array.<string>`
+*   Default: `[]`
 
 ###### Example
 
@@ -123,8 +123,8 @@ engine({
 If [`files`][files] matches directories, those directories are searched
 for files whose extension matches the given `extensions`.
 
-*   Type: `Array.<string>`;
-*   Default: `[]`.
+*   Type: `Array.<string>`
+*   Default: `[]`
 
 ###### Example
 
@@ -151,8 +151,8 @@ Stream to read from if no files are found or given.  If `streamIn` is
 the only possible source of input but it’s a [TTY][], an error is
 thrown.
 
-*   Type: [`ReadableStream`][readable];
-*   Default: [`process.stdin`][stdin].
+*   Type: [`ReadableStream`][readable]
+*   Default: [`process.stdin`][stdin]
 
 ###### Example
 
@@ -193,7 +193,7 @@ Yields:
 
 File path to process the given file on [`streamIn`][stream-in] as, if any.
 
-*   Type: `string` (optional).
+*   Type: `string` (optional)
 
 ###### Example
 
@@ -236,15 +236,15 @@ Yields:
 
 Stream to write processed files to.  This behaviour is suppressed if:
 
-*   [`out`][out] is `false`;
-*   [`output`][output] is not `false`;
-*   multiple files are processed;
-*   a fatal error occurred while processing a file.
+*   [`out`][out] is `false`
+*   [`output`][output] is not `false`
+*   multiple files are processed
+*   a fatal error occurred while processing a file
 
 <!-- Info: -->
 
-*   Type: [`WritableStream`][writable];
-*   Default: [`process.stdout`][stdout].
+*   Type: [`WritableStream`][writable]
+*   Default: [`process.stdout`][stdout]
 
 ###### Example
 
@@ -270,8 +270,8 @@ engine({
 
 Stream to write the [report][reporter] (if any) to.
 
-*   Type: [`WritableStream`][writable];
-*   Default: [`process.stderr`][stderr].
+*   Type: [`WritableStream`][writable]
+*   Default: [`process.stderr`][stderr]
 
 ###### Example
 
@@ -302,8 +302,8 @@ default behaviour is to only write under some conditions, as specified
 in the section on `streamOut`, but if `out` is `false` nothing will be
 written to `streamOut`.
 
-*   Type: `boolean`;
-*   Default: depends (see above).
+*   Type: `boolean`
+*   Default: depends (see above)
 
 ###### Example
 
@@ -330,18 +330,18 @@ engine({
 Whether to write successfully processed files, and where to.  This can
 be set from configuration files.
 
-*   When `true`, overwrites the given files;
-*   When `false`, does not write to the file-system;
+*   When `true`, overwrites the given files
+*   When `false`, does not write to the file-system
 *   When pointing to an existing directory, files are written
-    to that directory and keep their original basenames;
+    to that directory and keep their original basenames
 *   When the parent directory of the given path exists and one
-    file is processed, the file is written to the given path;
-*   Otherwise, a fatal error is thrown.
+    file is processed, the file is written to the given path
+*   Otherwise, a fatal error is thrown
 
 <!-- Info: -->
 
-*   Type: `string` or `boolean`;
-*   Default: `false`.
+*   Type: `string` or `boolean`
+*   Default: `false`
 
 ###### Example
 
@@ -370,8 +370,8 @@ stringified when it’s detected that a file is to be written to **stdout**(4)
 or the file system.  If files are handled and possibly written somewhere later,
 set this option to `true`.
 
-*   Type: `boolean`;
-*   Default: `false`.
+*   Type: `boolean`
+*   Default: `false`
 
 ## `options.tree`
 
@@ -379,8 +379,8 @@ Whether to treat both input and output as a syntax tree.  If given,
 specifies the default value for both [`treeIn`][tree-in] and
 [`treeOut`][tree-out].
 
-*   Type: `boolean`, optional;
-*   Default: `false`.
+*   Type: `boolean`, optional
+*   Default: `false`
 
 ###### Example
 
@@ -440,8 +440,8 @@ tree right through to transformers.
 If [`extensions`][extensions] are given, sets the extension of processed
 files to the first.
 
-*   Type: `boolean`, optional;
-*   Default: [`options.tree`][tree].
+*   Type: `boolean`, optional
+*   Default: [`options.tree`][tree]
 
 ###### Example
 
@@ -493,8 +493,8 @@ transformed syntax tree to JSON.
 
 Sets the extension of processed files to `json`.
 
-*   Type: `boolean`, optional;
-*   Default: [`options.tree`][tree].
+*   Type: `boolean`, optional
+*   Default: [`options.tree`][tree]
 
 ###### Example
 
@@ -542,7 +542,7 @@ Name of [configuration][configure] file to load.  If given and
 are loaded and parsed as JSON, `$rcName.js` are `require`d, and
 `$rcName.yml` and `$rcName.yaml` are loaded with `js-yaml` (`safeLoad`).
 
-*   Type: `string`, optional.
+*   Type: `string`, optional
 
 ###### Example
 
@@ -569,7 +569,7 @@ files.  If given and [`detectConfig`][detect-config] is not `false`,
 `package.json` files are loaded and parsed as JSON and their
 `$packageField` property is used for configuration.
 
-*   Type: `string`, optional.
+*   Type: `string`, optional
 
 ###### Example
 
@@ -595,9 +595,9 @@ Whether to search for [configuration][configure] files
 ([`$rcName`][rc-name], `$rcName.js`, `$rcName.yaml`, and `package.json`
 with [`$packageField`][package-field]).
 
-*   Type: `boolean`, optional;
+*   Type: `boolean`, optional
 *   Default: `true` if [`rcName`][rc-name] or [`packageField`][package-field]
-    are given.
+    are given
 
 ###### Example
 
@@ -629,7 +629,7 @@ file’s extension is `js`, it’s `require`d.  If the file’s basename is
 `package.json`, the property at [`packageField`][package-field] is used.
 Otherwise, the file is parsed as JSON.
 
-*   Type: `string`, optional.
+*   Type: `string`, optional
 
 ###### Example
 
@@ -653,7 +653,7 @@ engine({
 
 Configuration for the parser and the compiler of the processor.
 
-*   Type: `Object`, optional.
+*   Type: `Object`, optional
 
 ###### Example
 
@@ -679,7 +679,7 @@ Name of [ignore file][ignore] to load.  If given and
 [`detectIgnore`][detect-ignore] is not `false`, `$ignoreName` files are
 loaded.
 
-*   Type: `string`, optional.
+*   Type: `string`, optional
 
 ###### Example
 
@@ -705,8 +705,8 @@ engine({
 
 Whether to search for [ignore file][ignore] ([`$ignoreName`][ignore-name]).
 
-*   Type: `boolean`, optional;
-*   Default: `true` if [`ignoreName`][ignore-name] is given.
+*   Type: `boolean`, optional
+*   Default: `true` if [`ignoreName`][ignore-name] is given
 
 ###### Example
 
@@ -734,7 +734,7 @@ engine({
 File-path to [ignore file][ignore] to load, regardless of
 [`detectIgnore`][detect-ignore] or [`ignoreName`][ignore-name].
 
-*   Type: `string`, optional.
+*   Type: `string`, optional
 
 ###### Example
 
@@ -760,7 +760,7 @@ engine({
 Skip given [`files`][files] which are ignored by [ignore files][ignore],
 instead of warning about them.
 
-*   Type: `boolean`, default: `false`.
+*   Type: `boolean`, default: `false`
 
 ## `options.plugins`
 
@@ -768,7 +768,7 @@ Plug-ins to load by their name and attach with options to the processor
 for every processed file.
 
 *   Type: `Object`, `Array`, optional.  Same format as
-    [`plugins` in config files][config-plugins].
+    [`plugins` in config files][config-plugins]
 
 ###### Example
 
@@ -798,7 +798,7 @@ directories.
 > **Note:** If a prefix is specified, plug-ins with that prefix are
 > preferred over plug-ins without that prefix.
 
-*   Type: `string`, optional.
+*   Type: `string`, optional
 
 ###### Example
 
@@ -825,7 +825,7 @@ engine({
 Optional object with `plugins` and/or `settings` to use if no config file is
 supplied by the user.
 
-*   Type: `Object`, optional.
+*   Type: `Object`, optional
 
 ###### Example
 
@@ -871,7 +871,7 @@ function.  It will be invoked with the parsed value from configuration
 files and the file-path to the found file, and should return a config
 object (with `plugins` and/or `settings`).
 
-*   Type: `Function`, optional.
+*   Type: `Function`, optional
 
 ###### Example
 
@@ -921,7 +921,7 @@ reporters][reporters].
     (`vfile-reporter-`) can be omitted, so if `json` is given,
     `vfile-reporter-json` is loaded if it exists, and otherwise the `json`
     module itself is loaded (which in this example won’t work as it’s not
-    a reporter).
+    a reporter)
 
 ###### Note
 
@@ -956,7 +956,7 @@ engine({
 
 Options to pass to the [reporter][].
 
-*   Type: `Object`, optional.
+*   Type: `Object`, optional
 
 ###### Note
 
@@ -971,7 +971,7 @@ See [reporter][] for an example.
 
 Whether to [report][vfile-reporter] with ANSI colour sequences.
 
-*   Type: `boolean`, default: `false`.
+*   Type: `boolean`, default: `false`
 
 ###### Note
 
@@ -1006,7 +1006,7 @@ Yields:
 
 Show only [fatal][] errors in the [report][vfile-reporter].
 
-*   Type: `boolean`, default: `false`.
+*   Type: `boolean`, default: `false`
 
 ###### Note
 
@@ -1038,7 +1038,7 @@ Whether to ignore processed files without any messages in the
 [report][vfile-reporter].  The default behaviour is to show a
 success message.
 
-*   Type: `boolean`, default: [`options.silent`][silent].
+*   Type: `boolean`, default: [`options.silent`][silent]
 
 ###### Note
 
@@ -1067,7 +1067,7 @@ engine({
 
 Count warnings as errors when calculating if the process succeeded.
 
-*   Type: `boolean`, default: `false`.
+*   Type: `boolean`, default: `false`
 
 ###### Example
 

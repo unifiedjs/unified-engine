@@ -73,16 +73,16 @@ processed.
 Add a file to be processed.  The given file is processed like
 other files with a few differences.  The added files are:
 
-*   Ignored when their file-path is already added;
-*   Never written to the file-system or [`streamOut`][stream-out];
-*   Not reporter.
+*   Ignored when their file-path is already added
+*   Never written to the file-system or [`streamOut`][stream-out]
+*   Not reported for
 
 Returns self.
 
 ###### Parameters
 
-*   `filePath` (`string`) — Path to virtual file;
-*   `file` ([`VFile`][vfile]) — Virtual file.
+*   `filePath` (`string`) — Path to virtual file
+*   `file` ([`VFile`][vfile]) — Virtual file
 
 ### `fileSet.use(completer)`
 
@@ -98,14 +98,14 @@ passed to [`next`][next]), no further completers run and all files fail.
 
 ###### Parameters
 
-*   `fileSet` ([**FileSet**][file-set]);
-*   `next` ([`Function`][next], optional).
+*   `fileSet` ([**FileSet**][file-set])
+*   `next` ([`Function`][next], optional)
 
 ###### Returns
 
-*   `Error`.
+*   `Error`
 *   `Promise` — If a promise is returned, the function is asynchronous,
-    and **must** be resolved (with nothing) or rejected (with an `Error`).
+    and **must** be resolved (with nothing) or rejected (with an `Error`)
 
 ###### Properties
 
@@ -124,7 +124,7 @@ the function **may** finish asynchronous, and **must** invoke
 
 ###### Parameters
 
-*   `err` (`Error`, optional) — Fatal error.
+*   `err` (`Error`, optional) — Fatal error
 
 <!-- Definitions -->
 

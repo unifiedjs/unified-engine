@@ -141,13 +141,13 @@ processing context.
 
 ###### Parameters
 
-*   `err` (`Error`) — Fatal error.
+*   `err` (`Error`) — Fatal error
 *   `code` (`number`) — Either `0` if successful, or `1` if
     unsuccessful.  The latter occurs if [fatal][] errors
     happen when processing individual files, or if [`frail`][frail]
-    is set and warnings occur.
+    is set and warnings occur
 *   `context` (`Object`) — Processing context, containing internally
-    used information and a `files` array with the processed files.
+    used information and a `files` array with the processed files
 
 ## Plug-ins
 
