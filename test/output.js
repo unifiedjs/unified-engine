@@ -330,7 +330,7 @@ test('output', function (t) {
     var cwd = join(fixtures, 'one-file');
     var stderr = spy();
 
-    st.plan(4);
+    st.plan(2);
 
     engine({
       processor: noop().use(function () {
@@ -350,13 +350,18 @@ test('output', function (t) {
     }, function (err, code) {
       var input = read(join(cwd, 'one.txt'), 'utf8');
 
-      st.error(err, 'should not fail fatally');
-      st.equal(code, 0, 'should exit with `0`');
       st.equal(input, '', 'should not modify the input');
-      st.equal(
-        stderr(),
-        '<stdin>: no issues found\n',
-        'should not report'
+
+      st.deepEqual(
+        [err, code, stderr().split('\n').slice(0, 2).join('\n')],
+        [
+          null,
+          1,
+          [
+            '<stdin>',
+            '  1:1  error  Error: Cannot write file without an output path '
+          ].join('\n')
+        ]
       );
     });
   });
