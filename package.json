@@ -20,7 +20,7 @@
   ],
   "dependencies": {
     "concat-stream": "^1.5.1",
-    "debug": "^2.2.0",
+    "debug": "^3.1.0",
     "fault": "^1.0.0",
     "fn-name": "^2.0.1",
     "glob": "^7.0.3",
