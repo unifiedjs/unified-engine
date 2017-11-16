@@ -14,7 +14,7 @@ var join = path.join;
 var fixtures = join(__dirname, 'fixtures');
 
 test('input', function (t) {
-  t.plan(18);
+  t.plan(19);
 
   t.test('should fail without input', function (st) {
     var stream = new PassThrough();
@@ -50,6 +50,21 @@ test('input', function (t) {
     stream.end('');
   });
 
+  t.test('should not fail on unmatched given globs', function (st) {
+    var stderr = spy();
+
+    st.plan(1);
+
+    engine({
+      processor: unified,
+      cwd: join(fixtures, 'empty'),
+      streamError: stderr.stream,
+      files: ['.']
+    }, function (err, code) {
+      st.deepEqual([err, code, stderr()], [null, 0, '']);
+    });
+  });
+
   t.test('should report unfound given files', function (st) {
     var stderr = spy();
 
@@ -78,19 +93,18 @@ test('input', function (t) {
     });
   });
 
-  t.test('should report unfound given directories', function (st) {
+  t.test('should not report unfound given directories', function (st) {
+    var stderr = spy();
+
     st.plan(1);
 
     engine({
       processor: unified,
       cwd: join(fixtures, 'directory'),
+      streamError: stderr.stream,
       files: ['empty/']
-    }, function (err) {
-      st.equal(
-        err.message,
-        'No input',
-        'should fail fatally when with an empty directory'
-      );
+    }, function (err, code) {
+      st.deepEqual([err, code, stderr()], [null, 0, '']);
     });
   });
 
