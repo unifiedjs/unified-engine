@@ -2,6 +2,7 @@
 
 var path = require('path');
 var test = require('tape');
+var strip = require('strip-ansi');
 var noop = require('./util/noop-processor');
 var spy = require('./util/spy');
 var engine = require('..');
@@ -237,17 +238,18 @@ test('reporting', function (t) {
       reporter: 'vfile-reporter-pretty'
     }, function (err, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [err, code, strip(stderr())],
         [
           null,
           0,
           [
             '',
-            '  \x1b[4mone.txt\x1b[24m',
-            '  \x1b[33m⚠\x1b[39m  Info!  ',
+            '  one.txt',
+            '  ⚠  Info!  ',
             '',
-            '  \x1b[33m1 warning\x1b[39m',
-            ''].join('\n')
+            '  1 warning',
+            ''
+          ].join('\n')
         ]
       );
     });

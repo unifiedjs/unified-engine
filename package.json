@@ -43,6 +43,7 @@
     "nyc": "^11.0.0",
     "remark-cli": "^4.0.0",
     "remark-preset-wooorm": "^3.0.0",
+    "strip-ansi": "^4.0.0",
     "tape": "^4.4.0",
     "unified": "^6.0.0",
     "vfile-reporter-json": "^1.0.1",
