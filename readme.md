@@ -51,6 +51,7 @@ engine({
 *   [Plug-ins](#plug-ins)
 *   [Configuration](#configuration)
 *   [Ignoring](#ignoring)
+*   [Contribute](#contribute)
 *   [License](#license)
 
 ## API
@@ -161,6 +162,14 @@ files work.
 
 [`doc/ignore.md`][ignore] describes in detail how ignore files work.
 
+## Contribute
+
+See [`contribute.md` in `unifiedjs/unified`][contribute] for ways to get
+started.
+
+This organisation has a [Code of Conduct][coc].  By interacting with this
+repository, organisation, or community you agree to abide by its terms.
+
 ## License
 
 [MIT][license] © [Titus Wormer][author]
@@ -268,3 +277,7 @@ files work.
 [gulp]: https://github.com/unifiedjs/unified-engine-gulp
 
 [args]: https://github.com/unifiedjs/unified-args
+
+[contribute]: https://github.com/unifiedjs/unified/blob/master/contributing.md
+
+[coc]: https://github.com/unifiedjs/unified/blob/master/code-of-conduct.md
