@@ -1119,9 +1119,9 @@ engine({
 
 [processor]: https://github.com/unifiedjs/unified#processor
 
-[remark]: https://github.com/wooorm/remark
+[remark]: https://github.com/remarkjs/remark
 
-[remark-lint]: https://github.com/wooorm/remark-lint
+[remark-lint]: https://github.com/remarkjs/remark-lint
 
 [remark-unlink]: https://github.com/eush77/remark-unlink
 

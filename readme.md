@@ -194,7 +194,7 @@ repository, organisation, or community you agree to abide by its terms.
 
 [unified-processor]: https://github.com/unifiedjs/unified#processor
 
-[remark]: https://github.com/wooorm/remark
+[remark]: https://github.com/remarkjs/remark
 
 [fatal]: https://github.com/vfile/vfile#vfilefailreason-position-ruleid
 
