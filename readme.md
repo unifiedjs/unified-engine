@@ -91,6 +91,8 @@ done.
     — Whether to treat input as a syntax tree
 *   [`treeOut`][tree-out] (`boolean`, default: `tree`)
     — Whether to treat output as a syntax tree
+*   [`inspect`][inspect] (`boolean`, default: `false`)
+    — Whether to output a formatted syntax tree
 *   [`rcName`][rc-name] (`string`, optional)
     — Name of configuration files to load
 *   [`packageField`][package-field] (`string`, optional)
@@ -227,6 +229,8 @@ repository, organisation, or community you agree to abide by its terms.
 [tree-in]: doc/options.md#optionstreein
 
 [tree-out]: doc/options.md#optionstreeout
+
+[inspect]: doc/options.md#optionsinspect
 
 [detect-config]: doc/options.md#optionsdetectconfig
 

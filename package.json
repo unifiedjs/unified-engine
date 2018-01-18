@@ -33,6 +33,7 @@
     "parse-json": "^4.0.0",
     "to-vfile": "^2.0.0",
     "trough": "^1.0.0",
+    "unist-util-inspect": "^4.1.2",
     "vfile-reporter": "^4.0.0",
     "vfile-statistics": "^1.1.0",
     "x-is-function": "^1.0.4",

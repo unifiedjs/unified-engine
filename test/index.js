@@ -13,6 +13,7 @@ require('./configuration-default');
 require('./stdin');
 require('./output');
 require('./tree');
+require('./inspect');
 require('./file-path');
 require('./color');
 require('./reporting');

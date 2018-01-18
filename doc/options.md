@@ -18,6 +18,7 @@
 *   [options.tree](#optionstree)
 *   [options.treeIn](#optionstreein)
 *   [options.treeOut](#optionstreeout)
+*   [options.inspect](#optionsinspect)
 *   [options.rcName](#optionsrcname)
 *   [options.packageField](#optionspackagefield)
 *   [options.detectConfig](#optionsdetectconfig)
@@ -341,7 +342,8 @@ Whether to write successfully processed files and where to.
 
 Note that if [`treeIn`][tree-in] is turned on, generated files get the first
 defined [`extensions`][extensions].  If [`treeOut`][tree-out] is turned on,
-generated files receive the `'json'` extension.
+generated files receive the `'json'` extension.  If [`inspect`][inspect] is
+turned on, generated files receive the `'txt'` extension.
 
 <!-- Info: -->
 
@@ -536,6 +538,54 @@ Yields:
     "value": "foo"
   }]
 }
+```
+
+## `options.inspect`
+
+Skip the [compilation phase][unified-description] and output a syntax tree
+formatted with [`unist-util-inspect`][unist-util-inspect].
+
+Sets the extension of processed files to `txt` if possible.
+
+Uses ANSI colour sequences in the formatted syntax tree if `color` is turned on.
+
+*   Type: `boolean`, optional
+*   Default: `false`
+
+###### Example
+
+The following example shows a script which reads and parses `doc.md`, then
+[`remark-unlink`][remark-unlink] transforms the syntax tree, the tree is
+formatted with [`unist-util-inspect`][unist-util-inspect], and finally written
+to **stdout**(4).
+
+```js
+var engine = require('unified-engine');
+var remark = require('remark');
+var unlink = require('remark-unlink');
+
+engine({
+  processor: remark(),
+  plugins: [unlink],
+  files: ['doc.md'],
+  inspect: true
+}, function (err) {
+  if (err) throw err;
+});
+```
+
+Where `doc.md` looks as follows:
+
+```md
+[foo](https://example.com)
+```
+
+Yields:
+
+```txt
+root[1] (1:1-2:1, 0-27)
+└─ paragraph[1] (1:1-1:27, 0-26)
+   └─ text: "foo" (1:2-1:5, 1-4)
 ```
 
 ## `options.rcName`
@@ -970,7 +1020,7 @@ See [`options.reporter`][reporter] for an example.
 
 ## `options.color`
 
-Whether to [report][reporter] with ANSI colour sequences.
+Whether to [report][reporter] or [inspect][] with ANSI colour sequences.
 
 *   Type: `boolean`, default: `false`
 
@@ -1147,6 +1197,8 @@ engine({
 
 [tree-out]: #optionstreeout
 
+[inspect]: #optionsinspect
+
 [detect-config]: #optionsdetectconfig
 
 [rc-name]: #optionsrcname
@@ -1176,3 +1228,5 @@ engine({
 [reporters]: https://github.com/vfile/vfile#reporters
 
 [json]: https://github.com/vfile/vfile-reporter-json
+
+[unist-util-inspect]: https://github.com/syntax-tree/unist-util-inspect
