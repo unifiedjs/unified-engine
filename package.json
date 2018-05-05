@@ -42,14 +42,14 @@
   },
   "devDependencies": {
     "nyc": "^11.0.0",
-    "remark-cli": "^4.0.0",
+    "remark-cli": "^5.0.0",
     "remark-preset-wooorm": "^4.0.0",
     "strip-ansi": "^4.0.0",
     "tape": "^4.4.0",
     "unified": "^6.0.0",
     "vfile-reporter-json": "^1.0.1",
     "vfile-reporter-pretty": "^1.0.1",
-    "xo": "^0.18.1"
+    "xo": "^0.21.0"
   },
   "scripts": {
     "build-md": "remark . -qfo",
@@ -74,9 +74,11 @@
     "space": true,
     "esnext": false,
     "rules": {
+      "no-var": "off",
+      "prefer-arrow-callback": "off",
+      "object-shorthand": "off",
       "complexity": "off",
-      "guard-for-in": "off",
-      "max-depth": "off"
+      "guard-for-in": "off"
     }
   }
 }

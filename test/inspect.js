@@ -113,8 +113,8 @@ test('inspect', function (t) {
         [
           null,
           0,
-          '\x1b[4m\x1b[32m<stdin>\x1b[39m\x1b[24m: no issues found\n',
-          'text\x1b[2m: \x1b[22m\x1b[32m"\\n"\x1b[39m\n'
+          '\u001B[4m\u001B[32m<stdin>\u001B[39m\u001B[24m: no issues found\n',
+          'text\u001B[2m: \u001B[22m\u001B[32m"\\n"\u001B[39m\n'
         ],
         'should work'
       );
