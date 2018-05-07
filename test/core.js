@@ -1,85 +1,73 @@
-'use strict';
+'use strict'
 
-var test = require('tape');
-var unified = require('unified');
-var engine = require('..');
+var test = require('tape')
+var unified = require('unified')
+var engine = require('..')
 
-test('engine', function (t) {
-  t.plan(6);
+test('engine', function(t) {
+  t.plan(4)
 
-  t.throws(
-    function () {
-      engine();
-    },
-    /Missing `callback`/,
-    'should throw without `callback`'
-  );
+  t.test('engine', function(st) {
+    st.plan(3)
 
-  engine(null, function (err) {
-    t.equal(
-      err.message,
-      'Missing `processor`',
-      'should fail when without options'
-    );
-  });
+    st.throws(
+      function() {
+        engine()
+      },
+      /Missing `callback`/,
+      'should throw w/o `callback`'
+    )
 
-  engine({}, function (err) {
-    t.equal(
-      err.message,
-      'Missing `processor`',
-      'should fail when without processor'
-    );
-  });
+    engine(null, function(err) {
+      st.equal(
+        err.message,
+        'Missing `processor`',
+        'should fail when w/o options'
+      )
+    })
 
-  t.test('should fail when with `output` and `out`', function (st) {
-    st.plan(1);
+    engine({}, function(err) {
+      st.equal(
+        err.message,
+        'Missing `processor`',
+        'should fail when w/o processor'
+      )
+    })
+  })
 
-    engine({
-      processor: unified,
-      output: true,
-      out: true
-    }, function (err) {
+  t.test('should fail w/ `output` and w/ `out`', function(st) {
+    st.plan(1)
+
+    engine({processor: unified, output: true, out: true}, function(err) {
       st.equal(
         err.message,
         'Cannot accept both `output` and `out`',
         'should fail'
-      );
-    });
-  });
+      )
+    })
+  })
 
-  t.test(
-    'should fail when with `detectConfig` and without `rcName`',
-    function (st) {
-      st.plan(1);
+  t.test('should fail w/ `detectConfig` w/o `rcName`', function(st) {
+    st.plan(1)
 
-      engine({
-        processor: unified,
-        detectConfig: true
-      }, function (err) {
-        st.equal(
-          err.message,
-          'Missing `rcName` or `packageField` with `detectConfig`',
-          'should fail'
-        );
-      });
-    }
-  );
+    engine({processor: unified, detectConfig: true}, function(err) {
+      st.equal(
+        err.message,
+        'Missing `rcName` or `packageField` with `detectConfig`',
+        'should fail'
+      )
+    })
+  })
 
-  t.test(
-    'should fail when with `detectIgnore` and without `ignoreName`',
-    function (st) {
-      st.plan(1);
+  t.test('should fail w/ `detectIgnore` w/o `ignoreName`', function(st) {
+    st.plan(1)
 
-      engine({
-        processor: unified,
-        detectIgnore: true
-      }, function (err) {
-        st.equal(
-          err.message,
-          'Missing `ignoreName` with `detectIgnore`',
-          'should fail'
-        );
-      });
-    }
-  );
-});
+    engine({processor: unified, detectIgnore: true}, function(err) {
+      st.equal(
+        err.message,
+        'Missing `ignoreName` with `detectIgnore`',
+        'should fail'
+      )
+    })
+  })
+})

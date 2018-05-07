@@ -27,21 +27,26 @@ from `.remarkrc` and `package.json` files, ignoring files from `.remarkignore`
 files, and more.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark,
-  files: ['.'],
-  extensions: ['md', 'markdown', 'mkd', 'mkdn', 'mkdown'],
-  pluginPrefix: 'remark',
-  rcName: '.remarkrc',
-  packageField: 'remarkConfig',
-  ignoreName: '.remarkignore',
-  color: true
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark,
+    files: ['.'],
+    extensions: ['md', 'markdown', 'mkd', 'mkdn', 'mkdown'],
+    pluginPrefix: 'remark',
+    rcName: '.remarkrc',
+    packageField: 'remarkConfig',
+    ignoreName: '.remarkignore',
+    color: true
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## Table of Contents

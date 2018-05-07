@@ -1,33 +1,33 @@
-'use strict';
+'use strict'
 
-var PassThrough = require('stream').PassThrough;
+var PassThrough = require('stream').PassThrough
 
-module.exports = spy;
+module.exports = spy
 
 function spy() {
-  var stream = new PassThrough();
-  var output = [];
-  var write;
+  var stream = new PassThrough()
+  var output = []
+  var originalWrite = stream.write
 
-  write = stream.write;
+  stream.write = write
 
-  stream.write = function (chunk, encoding, callback) {
-    callback = typeof encoding === 'function' ? encoding : callback;
+  done.stream = stream
+
+  return done
+
+  function write(chunk, encoding, callback) {
+    callback = typeof encoding === 'function' ? encoding : callback
 
     if (typeof callback === 'function') {
-      setImmediate(callback);
+      setImmediate(callback)
     }
 
-    output.push(chunk);
-  };
-
-  function done() {
-    stream.write = write;
-
-    return output.join('');
+    output.push(chunk)
   }
 
-  done.stream = stream;
+  function done() {
+    stream.write = originalWrite
 
-  return done;
+    return output.join('')
+  }
 }

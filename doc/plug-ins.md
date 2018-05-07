@@ -13,31 +13,37 @@ The following example processes `readme.md` and uses a plug-in that adds a
 “completer” and another file (`history.md`).
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-function plugin(processor, options, set) {
-  function completer(set) {
-    console.log('done:', set.valueOf().map(function (file) {
-      return file.path;
-    }));
-  }
+/* Ensure the completer runs once per file-set. */
+completer.pluginId = 'some-plugin-id'
 
-  /* Ensure the completer runs once per file-set. */
-  completer.pluginId = 'some-plugin-id';
+engine(
+  {
+    processor: remark(),
+    injectedPlugins: [plugin],
+    files: ['readme.md']
+  },
+  done
+)
 
-  set.use(completer);
-
-  set.add('history.md');
+function done(err) {
+  if (err) throw err
 }
 
-engine({
-  processor: remark(),
-  injectedPlugins: [plugin],
-  files: ['readme.md']
-}, function (err) {
-  if (err) throw err;
-});
+function plugin(processor, options, set) {
+  set.use(completer)
+  set.add('history.md')
+}
+
+function completer(set) {
+  console.log('done:', set.valueOf().map(path))
+}
+
+function path(file) {
+  return file.path
+}
 ```
 
 Yields:

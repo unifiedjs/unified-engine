@@ -1,17 +1,18 @@
-'use strict';
+'use strict'
 
-var unified = require('unified');
+var unified = require('unified')
 
-module.exports = unified()
-  .use(function () {
-    this.Parser = parser;
-    this.Compiler = compiler;
+module.exports = unified().use(add)
 
-    function parser(doc) {
-      return {type: 'text', value: doc};
-    }
+function add() {
+  this.Parser = parser
+  this.Compiler = compiler
 
-    function compiler(tree) {
-      return tree.value;
-    }
-  });
+  function parser(doc) {
+    return {type: 'text', value: doc}
+  }
+
+  function compiler(tree) {
+    return tree.value
+  }
+}

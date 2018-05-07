@@ -1,113 +1,110 @@
-'use strict';
+'use strict'
 
-var fs = require('fs');
-var path = require('path');
-var PassThrough = require('stream').PassThrough;
-var test = require('tape');
-var noop = require('./util/noop-processor');
-var spy = require('./util/spy');
-var engine = require('..');
+var fs = require('fs')
+var path = require('path')
+var PassThrough = require('stream').PassThrough
+var test = require('tape')
+var noop = require('./util/noop-processor')
+var spy = require('./util/spy')
+var engine = require('..')
 
-var join = path.join;
-var read = fs.readFileSync;
-var unlink = fs.unlinkSync;
+var join = path.join
+var read = fs.readFileSync
+var unlink = fs.unlinkSync
 
-var fixtures = join(__dirname, 'fixtures');
+var fixtures = join(__dirname, 'fixtures')
 
-test('inspect', function (t) {
-  t.plan(3);
+test('inspect', function(t) {
+  t.plan(3)
 
-  t.test('should write text when `inspect` is given', function (st) {
-    var cwd = join(fixtures, 'one-file');
-    var stderr = spy();
+  t.test('should write text when `inspect` is given', function(st) {
+    var cwd = join(fixtures, 'one-file')
+    var stderr = spy()
 
-    st.plan(4);
+    st.plan(1)
 
-    engine({
-      processor: noop(),
-      cwd: cwd,
-      streamError: stderr.stream,
-      output: 'formatted.txt',
-      inspect: true,
-      files: ['.'],
-      extensions: ['txt']
-    }, function (err, code) {
-      var doc = read(join(cwd, 'formatted.txt'), 'utf8');
+    engine(
+      {
+        processor: noop(),
+        cwd: cwd,
+        streamError: stderr.stream,
+        output: 'formatted.txt',
+        inspect: true,
+        files: ['.'],
+        extensions: ['txt']
+      },
+      onrun
+    )
+
+    function onrun(err, code) {
+      var doc = read(join(cwd, 'formatted.txt'), 'utf8')
 
       /* Remove the file. */
-      unlink(join(cwd, 'formatted.txt'));
+      unlink(join(cwd, 'formatted.txt'))
 
-      st.error(err, 'should not fail fatally');
-      st.equal(code, 0, 'should exit with `0`');
-
-      st.equal(
-        stderr(),
-        'one.txt > formatted.txt: written\n',
-        'should report'
-      );
-
-      st.equal(
-        doc,
-        'text: ""\n',
-        'should write the transformed doc as a formatted syntax tree'
-      );
-    });
-  });
-
-  t.test('should support `inspect` for stdin', function (st) {
-    var stdin = new PassThrough();
-    var stdout = spy();
-    var stderr = spy();
-
-    setTimeout(send, 50);
-
-    function send() {
-      stdin.end('\n');
+      st.deepEqual(
+        [err, code, stderr(), doc],
+        [null, 0, 'one.txt > formatted.txt: written\n', 'text: ""\n'],
+        'should work'
+      )
     }
+  })
 
-    st.plan(1);
+  t.test('should support `inspect` for stdin', function(st) {
+    var stdin = new PassThrough()
+    var stdout = spy()
+    var stderr = spy()
 
-    engine({
-      processor: noop,
-      streamIn: stdin,
-      streamOut: stdout.stream,
-      streamError: stderr.stream,
-      inspect: true
-    }, function (err, code) {
+    setTimeout(send, 50)
+
+    st.plan(1)
+
+    engine(
+      {
+        processor: noop,
+        streamIn: stdin,
+        streamOut: stdout.stream,
+        streamError: stderr.stream,
+        inspect: true
+      },
+      onrun
+    )
+
+    function onrun(err, code) {
       st.deepEqual(
         [err, code, stderr(), stdout()],
-        [
-          null,
-          0,
-          '<stdin>: no issues found\n',
-          'text: "\\n"\n'
-        ],
+        [null, 0, '<stdin>: no issues found\n', 'text: "\\n"\n'],
         'should work'
-      );
-    });
-  });
-
-  t.test('should support `inspect` with colour', function (st) {
-    var stdin = new PassThrough();
-    var stdout = spy();
-    var stderr = spy();
-
-    setTimeout(send, 50);
-
-    function send() {
-      stdin.end('\n');
+      )
     }
 
-    st.plan(1);
+    function send() {
+      stdin.end('\n')
+    }
+  })
 
-    engine({
-      processor: noop,
-      streamIn: stdin,
-      streamOut: stdout.stream,
-      streamError: stderr.stream,
-      inspect: true,
-      color: true
-    }, function (err, code) {
+  t.test('should support `inspect` with colour', function(st) {
+    var stdin = new PassThrough()
+    var stdout = spy()
+    var stderr = spy()
+
+    setTimeout(send, 50)
+
+    st.plan(1)
+
+    engine(
+      {
+        processor: noop,
+        streamIn: stdin,
+        streamOut: stdout.stream,
+        streamError: stderr.stream,
+        inspect: true,
+        color: true
+      },
+      onrun
+    )
+
+    function onrun(err, code) {
       st.deepEqual(
         [err, code, stderr(), stdout()],
         [
@@ -117,7 +114,11 @@ test('inspect', function (t) {
           'text\u001B[2m: \u001B[22m\u001B[32m"\\n"\u001B[39m\n'
         ],
         'should work'
-      );
-    });
-  });
-});
+      )
+    }
+
+    function send() {
+      stdin.end('\n')
+    }
+  })
+})

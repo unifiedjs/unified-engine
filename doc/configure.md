@@ -33,7 +33,10 @@ An example **rc** file could look as follows:
     "ruleRepetition": 3,
     "fences": true
   },
-  "plugins": ["inline-links", "lint-recommended"]
+  "plugins": [
+    "inline-links",
+    "lint-recommended"
+  ]
 }
 ```
 
@@ -46,9 +49,9 @@ exports.plugins = [
   './script/natural-language',
   'lint-recommended',
   'license'
-];
+]
 
-exports.settings = {bullet: '*'};
+exports.settings = {bullet: '*'}
 ```
 
 ###### Example
@@ -104,7 +107,10 @@ Accepts an array:
   "plugins": [
     "foo",
     "bar",
-    ["qux", {"quux": true}]
+    [
+      "qux",
+      {"quux": true}
+    ]
   ]
 }
 ```

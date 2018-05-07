@@ -1,3 +1,3 @@
-module.exports = function () {
-  this.t.pass();
-};
+module.exports = function() {
+  this.t.pass()
+}

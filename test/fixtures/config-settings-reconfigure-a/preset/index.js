@@ -1,1 +1,1 @@
-exports.settings = {alpha: false};
+exports.settings = {alpha: false}

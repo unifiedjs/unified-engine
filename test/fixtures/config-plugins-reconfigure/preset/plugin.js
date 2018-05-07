@@ -1,4 +1,4 @@
-module.exports = function (options) {
+module.exports = function(options) {
   this.t.deepEqual(
     options,
     {
@@ -7,5 +7,5 @@ module.exports = function (options) {
       three: true
     },
     'should pass the correct options to the preset plugin'
-  );
-};
+  )
+}

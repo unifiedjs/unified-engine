@@ -1,1 +1,1 @@
-exports.settings = {};
+exports.settings = {}

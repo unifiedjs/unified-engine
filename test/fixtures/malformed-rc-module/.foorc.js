@@ -1,1 +1,1 @@
-throw new Error('Broken config');
+throw new Error('Broken config')

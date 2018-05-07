@@ -1,64 +1,68 @@
-'use strict';
+'use strict'
 
-var path = require('path');
-var test = require('tape');
-var noop = require('./util/noop-processor');
-var spy = require('./util/spy');
-var engine = require('..');
+var path = require('path')
+var test = require('tape')
+var noop = require('./util/noop-processor')
+var spy = require('./util/spy')
+var engine = require('..')
 
-var join = path.join;
+var join = path.join
 
-var fixtures = join(__dirname, 'fixtures');
+var fixtures = join(__dirname, 'fixtures')
 
-test('`configTransform`', function (t) {
-  t.plan(1);
+test('`configTransform`', function(t) {
+  t.plan(1)
 
-  t.test('should work', function (st) {
-    var stderr = spy();
+  t.test('should work', function(st) {
+    var stderr = spy()
 
-    st.plan(7);
+    /* One more in fixture. */
+    st.plan(5)
 
-    engine({
-      processor: noop().use(function () {
-        this.t = st;
-      }),
-      streamError: stderr.stream,
-      cwd: join(fixtures, 'config-transform'),
-      files: ['.'],
-      packageField: 'foo',
-      configTransform: configTransform,
-      extensions: ['txt']
-    }, function (err, code, result) {
-      var cache = result.configuration.findUp.cache;
-      var keys = Object.keys(cache);
+    engine(
+      {
+        processor: noop().use(addTest),
+        streamError: stderr.stream,
+        cwd: join(fixtures, 'config-transform'),
+        files: ['.'],
+        packageField: 'foo',
+        configTransform: configTransform,
+        extensions: ['txt']
+      },
+      onrun
+    )
 
-      st.error(err, 'should not fail fatally');
-      st.equal(code, 0, 'should exit with `0`');
-      st.equal(keys.length, 1, 'should have one cache entry');
+    function onrun(err, code, result) {
+      var cache = result.configuration.findUp.cache
+      var keys = Object.keys(cache)
+
+      st.equal(keys.length, 1, 'should have one cache entry')
 
       st.deepEqual(
         cache[keys[0]].settings,
         {foxtrot: true},
         'should set the correct settings'
-      );
+      )
 
       st.deepEqual(
         cache[keys[0]].plugins[0][1],
         {golf: false},
         'should pass the correct options to plugins'
-      );
+      )
 
-      st.equal(
-        stderr(),
-        'one.txt: no issues found\n'
-      );
-    });
+      st.deepEqual(
+        [err, code, stderr()],
+        [null, 0, 'one.txt: no issues found\n'],
+        'should succeed'
+      )
+    }
+
+    function addTest() {
+      this.t = st
+    }
 
     function configTransform(raw) {
-      return {
-        settings: raw.options,
-        plugins: raw.plugs
-      };
+      return {settings: raw.options, plugins: raw.plugs}
     }
-  });
-});
+  })
+})

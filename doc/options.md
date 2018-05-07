@@ -51,12 +51,14 @@ The following example reformats **stdin**(4) using [remark][], writes the
 report to **stderr**(4), and formatted document to **stdout**(4).
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({processor: remark}, function (err) {
-  if (err) throw err;
-});
+engine({processor: remark}, done)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.cwd`
@@ -72,18 +74,23 @@ The following example reformats `readme.md`.  The `doc` directory is used to
 process from.
 
 ```js
-var path = require('path');
-var engine = require('unified-engine');
-var remark = require('remark');
+var path = require('path')
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark(),
-  cwd: path.join(process.cwd(), 'doc'),
-  files: ['readme.md'],
-  output: true
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    cwd: path.join(process.cwd(), 'doc'),
+    files: ['readme.md'],
+    output: true
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.files`
@@ -106,16 +113,21 @@ The following example processes `README` and all files with an `md` extension
 in `doc`.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark,
-  files: ['README', 'doc'],
-  extensions: ['md']
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark,
+    files: ['README', 'doc'],
+    extensions: ['md']
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.extensions`
@@ -135,17 +147,22 @@ The following example reformats all files with `md`, `markdown`, and `mkd`
 extensions in the current directory.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark,
-  files: ['.'],
-  extensions: ['md', 'mkd', 'markdown'],
-  output: true
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark,
+    files: ['.'],
+    extensions: ['md', 'mkd', 'markdown'],
+    output: true
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.streamIn`
@@ -162,25 +179,34 @@ The following example uses [`remark-lint`][remark-lint] to lint an incoming
 stream.
 
 ```js
-var engine = require('unified-engine');
-var stream = require('stream').PassThrough();
-var remark = require('remark');
-var recommended = require('remark-preset-lint-recommended');
+var PassThrough = require('stream').PassThrough
+var engine = require('unified-engine')
+var remark = require('remark')
+var recommended = require('remark-preset-lint-recommended')
 
-engine({
-  processor: remark(),
-  plugins: [recommended],
-  streamIn: stream,
-  out: false
-}, function (err) {
-  if (err) throw err;
-});
+var streamIn = new PassThrough()
 
-stream.write('doc');
+engine(
+  {
+    processor: remark(),
+    plugins: [recommended],
+    streamIn: streamIn,
+    out: false
+  },
+  done
+)
 
-setTimeout(function () {
-  stream.end('ument');
-}, 100);
+streamIn.write('doc')
+
+setTimeout(delayed, 100)
+
+function delayed() {
+  streamIn.end('ument')
+}
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 Yields:
@@ -204,26 +230,33 @@ The following example shows the same as before, with a `filePath` added, which
 is shown in the report:
 
 ```js
-var engine = require('unified-engine');
-var stream = require('stream').PassThrough();
-var remark = require('remark');
-var recommended = require('remark-preset-lint-recommended');
+var PassThrough = require('stream').PassThrough
+var engine = require('unified-engine')
+var remark = require('remark')
+var recommended = require('remark-preset-lint-recommended')
 
-engine({
-  processor: remark(),
-  plugins: [recommended],
-  filePath: '~/alpha/bravo/charlie.md',
-  streamIn: stream,
-  out: false
-}, function (err) {
-  if (err) throw err;
-});
+var streamIn = new PassThrough()
 
-stream.write('doc');
+engine(
+  {
+    processor: remark(),
+    plugins: [recommended],
+    filePath: '~/alpha/bravo/charlie.md',
+    streamIn: streamIn,
+    out: false
+  },
+  done
+)
 
-setTimeout(function () {
-  stream.end('ument');
-}, 100);
+streamIn.write('doc')
+
+setTimeout(function() {
+  streamIn.end('ument')
+}, 100)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 Yields:
@@ -256,17 +289,22 @@ The following example reads `readme.md` and writes the compiled document to
 `output: 'readme-two.md'` instead of `streamOut`.
 
 ```js
-var fs = require('fs');
-var engine = require('unified-engine');
-var remark = require('remark');
+var fs = require('fs')
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark(),
-  files: ['readme.md'],
-  streamOut: fs.createWriteStream('readme-two.md')
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    files: ['readme.md'],
+    streamOut: fs.createWriteStream('readme-two.md')
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.streamError`
@@ -282,20 +320,25 @@ The following example uses [`remark-lint`][remark-lint] to lint `readme.md` and
 writes the report to `report.txt`.
 
 ```js
-var fs = require('fs');
-var engine = require('unified-engine');
-var remark = require('remark');
-var recommended = require('remark-preset-lint-recommended');
+var fs = require('fs')
+var engine = require('unified-engine')
+var remark = require('remark')
+var recommended = require('remark-preset-lint-recommended')
 
-engine({
-  processor: remark(),
-  files: ['readme.md'],
-  plugins: [recommended],
-  out: false,
-  streamErr: fs.createWriteStream('report.txt')
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    files: ['readme.md'],
+    plugins: [recommended],
+    out: false,
+    streamErr: fs.createWriteStream('report.txt')
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.out`
@@ -314,18 +357,23 @@ The following example uses [`remark-lint`][remark-lint] to lint `readme.md`,
 writes the report, and ignores the compiled document.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
-var recommended = require('remark-preset-lint-recommended');
+var engine = require('unified-engine')
+var remark = require('remark')
+var recommended = require('remark-preset-lint-recommended')
 
-engine({
-  processor: remark(),
-  files: ['readme.md'],
-  plugins: [recommended],
-  out: false
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    files: ['readme.md'],
+    plugins: [recommended],
+    out: false
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.output`
@@ -356,17 +404,22 @@ The following example writes all files in `src/` with an `md` extension,
 compiled, to `dest/`.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark(),
-  files: ['src/'],
-  extensions: ['md'],
-  output: 'dest/'
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    files: ['src/'],
+    extensions: ['md'],
+    output: 'dest/'
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.alwaysStringify`
@@ -394,18 +447,23 @@ transforms the syntax tree, and the transformed tree is written to
 **stdout**(4).
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
-var unlink = require('remark-unlink');
+var engine = require('unified-engine')
+var remark = require('remark')
+var unlink = require('remark-unlink')
 
-engine({
-  processor: remark(),
-  plugins: [unlink],
-  files: ['tree.json'],
-  tree: true
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    plugins: [unlink],
+    files: ['tree.json'],
+    tree: true
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 Where `tree.json` looks as follows:
@@ -455,18 +513,23 @@ transforms the syntax tree, the tree is compiled, and the resulting document is
 written to **stdout**(4).
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
-var unlink = require('remark-unlink');
+var engine = require('unified-engine')
+var remark = require('remark')
+var unlink = require('remark-unlink')
 
-engine({
-  processor: remark(),
-  plugins: [unlink],
-  files: ['tree.json'],
-  treeIn: true
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    plugins: [unlink],
+    files: ['tree.json'],
+    treeIn: true
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 Where `tree.json` looks as follows:
@@ -508,18 +571,23 @@ The following example shows a script which reads and parses `doc.md`, then
 written to **stdout**(4).
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
-var unlink = require('remark-unlink');
+var engine = require('unified-engine')
+var remark = require('remark')
+var unlink = require('remark-unlink')
 
-engine({
-  processor: remark(),
-  plugins: [unlink],
-  files: ['doc.md'],
-  treeOut: true
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    plugins: [unlink],
+    files: ['doc.md'],
+    treeOut: true
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 Where `doc.md` looks as follows:
@@ -560,18 +628,23 @@ formatted with [`unist-util-inspect`][unist-util-inspect], and finally written
 to **stdout**(4).
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
-var unlink = require('remark-unlink');
+var engine = require('unified-engine')
+var remark = require('remark')
+var unlink = require('remark-unlink')
 
-engine({
-  processor: remark(),
-  plugins: [unlink],
-  files: ['doc.md'],
-  inspect: true
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    plugins: [unlink],
+    files: ['doc.md'],
+    inspect: true
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 Where `doc.md` looks as follows:
@@ -603,16 +676,21 @@ The following example processes `readme.md`, and allows configuration from
 `.remarkrc`, `.remarkrc.js`, and `.remarkrc.yaml` files.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark(),
-  rcName: '.remarkrc',
-  files: ['readme.md']
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    rcName: '.remarkrc',
+    files: ['readme.md']
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.packageField`
@@ -630,16 +708,21 @@ The following example processes `readme.md`, and allows configuration from
 `remarkConfig` fields in `package.json` files.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark(),
-  packageField: 'remarkConfig',
-  files: ['readme.md']
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    packageField: 'remarkConfig',
+    files: ['readme.md']
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.detectConfig`
@@ -658,18 +741,23 @@ The following example processes `readme.md` but does **not** allow configuration
 from `.remarkrc` or `package.json` files, as `detectConfig` is `false`.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark(),
-  detectConfig: false,
-  rcName: '.remarkrc',
-  packageField: 'remarkConfig',
-  files: ['readme.md']
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    detectConfig: false,
+    rcName: '.remarkrc',
+    packageField: 'remarkConfig',
+    files: ['readme.md']
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.rcPath`
@@ -690,16 +778,21 @@ The following example processes `readme.md` and loads configuration from
 `config.json`.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark(),
-  rcPath: 'config.json',
-  files: ['readme.md']
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    rcPath: 'config.json',
+    files: ['readme.md']
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.settings`
@@ -714,16 +807,21 @@ The following example processes `readme.md` and configures the parser and
 compiler with `position: false`.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark(),
-  files: ['readme.md'],
-  settings: {position: false}
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    files: ['readme.md'],
+    settings: {position: false}
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.ignoreName`
@@ -740,17 +838,22 @@ The following example processes files in the current working directory with an
 `.remarkignore` file.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark(),
-  files: ['.'],
-  extensions: ['md'],
-  ignoreName: '.remarkignore'
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    files: ['.'],
+    extensions: ['md'],
+    ignoreName: '.remarkignore'
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.detectIgnore`
@@ -767,18 +870,23 @@ The following example processes files in the current working directory with an
 `.remarkignore` file, because `detectIgnore` is `false`.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark(),
-  files: ['.'],
-  extensions: ['md'],
-  ignoreName: '.remarkignore',
-  detectIgnore: false
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    files: ['.'],
+    extensions: ['md'],
+    ignoreName: '.remarkignore',
+    detectIgnore: false
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.ignorePath`
@@ -794,17 +902,22 @@ The following example processes files in the current working directory with an
 `md` extension and ignores file paths specified in `.gitignore`.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark(),
-  files: ['.'],
-  extensions: ['md'],
-  ignorePath: '.gitignore'
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    files: ['.'],
+    extensions: ['md'],
+    ignorePath: '.gitignore'
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.silentlyIgnore`
@@ -828,16 +941,21 @@ The following example processes `readme.md` and loads the
 `remark-preset-lint-recommended` plug-in.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark(),
-  files: ['readme.md'],
-  plugins: ['remark-preset-lint-recommended']
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    files: ['readme.md'],
+    plugins: ['remark-preset-lint-recommended']
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.pluginPrefix`
@@ -859,17 +977,22 @@ resolves to `remark-preset-lint-recommended` from `node_modules/` if
 available.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark(),
-  files: ['readme.md'],
-  pluginPrefix: 'remark',
-  plugins: ['preset-lint-recommended']
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    files: ['readme.md'],
+    pluginPrefix: 'remark',
+    plugins: ['preset-lint-recommended']
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.defaultConfig`
@@ -885,21 +1008,22 @@ The following example processes `readme.md`.  If `package.json` exists, that
 config is used, otherwise the configuration at `defaultConfig` is used.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark(),
-  files: ['readme.md'],
-  packageField: 'remarkConfig',
-  defaultConfig: {
-    settings: {
-      commonmark: true
-    }
-  }
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    files: ['readme.md'],
+    packageField: 'remarkConfig',
+    defaultConfig: {settings: {commonmark: true}}
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 Where `package.json` contains:
@@ -932,19 +1056,26 @@ The following example processes `readme.md` and loads options from `custom`
 transforms it to configuration `unified-engine` understands.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark(),
-  files: ['readme.md'],
-  packageField: 'custom',
-  configTransform: function (config) {
-    return {settings: (config || {}).options};
-  }
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    files: ['readme.md'],
+    packageField: 'custom',
+    configTransform: configTransform
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
+
+function configTransform(config) {
+  return {settings: (config || {}).options}
+}
 ```
 
 Where `package.json` contains:
@@ -986,21 +1117,24 @@ rehype, configures the processor with `.rehyperc` files, and prints a report
 in [json][], with [reporter options][reporteroptions].
 
 ```js
-var engine = require('unified-engine');
-var rehype = require('rehype');
+var engine = require('unified-engine')
+var rehype = require('rehype')
 
-engine({
-  processor: rehype(),
-  files: ['.'],
-  extensions: ['html'],
-  rcName: '.rehyperc',
-  reporter: 'json',
-  reporterOptions: {
-    pretty: true
-  }
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: rehype(),
+    files: ['.'],
+    extensions: ['html'],
+    rcName: '.rehyperc',
+    reporter: 'json',
+    reporterOptions: {pretty: true}
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.reporterOptions`
@@ -1034,17 +1168,22 @@ The following example processes `readme.md` and uses colour in the
 report.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark(),
-  files: ['readme.md'],
-  color: true,
-  out: false
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    files: ['readme.md'],
+    color: true,
+    out: false
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 Yields:
@@ -1070,17 +1209,22 @@ does not report any warnings or success messages, only fatal errors, if they
 occur.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark(),
-  files: ['readme.md'],
-  plugins: ['remark-preset-lint-recommended'],
-  silent: true
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    files: ['readme.md'],
+    plugins: ['remark-preset-lint-recommended'],
+    silent: true
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.quiet`
@@ -1100,17 +1244,22 @@ The following example uses [`remark-lint`][remark-lint] to lint `readme.md`.
 Nothing is reported if the file processed successfully.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark(),
-  files: ['readme.md'],
-  plugins: ['remark-preset-lint-recommended'],
-  quiet: true
-}, function (err) {
-  if (err) throw err;
-});
+engine(
+  {
+    processor: remark(),
+    files: ['readme.md'],
+    plugins: ['remark-preset-lint-recommended'],
+    quiet: true
+  },
+  done
+)
+
+function done(err) {
+  if (err) throw err
+}
 ```
 
 ## `options.frail`
@@ -1126,17 +1275,22 @@ logs the exit code.  Normally, only errors turn the `code` to `1`, but in
 `frail` mode lint warnings result in the same.
 
 ```js
-var engine = require('unified-engine');
-var remark = require('remark');
+var engine = require('unified-engine')
+var remark = require('remark')
 
-engine({
-  processor: remark(),
-  files: ['readme.md'],
-  plugins: ['remark-preset-lint-recommended'],
-  frail: true
-}, function (err, code) {
-  process.exit(err ? 1 : code);
-});
+engine(
+  {
+    processor: remark(),
+    files: ['readme.md'],
+    plugins: ['remark-preset-lint-recommended'],
+    frail: true
+  },
+  done
+)
+
+function done(err, code) {
+  process.exit(err ? 1 : code)
+}
 ```
 
 <!-- Definitions -->

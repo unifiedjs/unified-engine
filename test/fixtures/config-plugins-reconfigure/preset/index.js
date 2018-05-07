@@ -1,3 +1,1 @@
-exports.plugins = [
-  ['./plugin', {one: true, two: true}]
-];
+exports.plugins = [['./plugin', {one: true, two: true}]]

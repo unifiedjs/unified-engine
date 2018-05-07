@@ -1,1 +1,1 @@
-exports.plugins = {'./plugin': null};
+exports.plugins = {'./plugin': null}

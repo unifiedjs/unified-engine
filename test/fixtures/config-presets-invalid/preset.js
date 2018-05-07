@@ -1,1 +1,1 @@
-throw new Error('invalid');
+throw new Error('invalid')
