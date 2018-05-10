@@ -46,7 +46,7 @@
     "remark-preset-wooorm": "^4.0.0",
     "strip-ansi": "^4.0.0",
     "tape": "^4.4.0",
-    "unified": "^6.0.0",
+    "unified": "^7.0.0",
     "vfile-reporter-json": "^1.0.1",
     "vfile-reporter-pretty": "^1.0.1",
     "xo": "^0.21.0"
