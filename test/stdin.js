@@ -35,9 +35,9 @@ test('stdin', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stdout(), stderr()],
+        [error, code, stdout(), stderr()],
         [
           null,
           0,
@@ -80,9 +80,9 @@ test('stdin', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stdout(), stderr()],
+        [error, code, stdout(), stderr()],
         [null, 0, '', '<stdin>: no issues found\n'],
         'should report'
       )
@@ -121,9 +121,9 @@ test('stdin', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stdout(), stderr()],
+        [error, code, stdout(), stderr()],
         [
           null,
           0,

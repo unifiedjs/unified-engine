@@ -18,17 +18,17 @@ test('engine', function(t) {
       'should throw w/o `callback`'
     )
 
-    engine(null, function(err) {
+    engine(null, function(error) {
       st.equal(
-        err.message,
+        error.message,
         'Missing `processor`',
         'should fail when w/o options'
       )
     })
 
-    engine({}, function(err) {
+    engine({}, function(error) {
       st.equal(
-        err.message,
+        error.message,
         'Missing `processor`',
         'should fail when w/o processor'
       )
@@ -38,9 +38,9 @@ test('engine', function(t) {
   t.test('should fail w/ `output` and w/ `out`', function(st) {
     st.plan(1)
 
-    engine({processor: unified, output: true, out: true}, function(err) {
+    engine({processor: unified, output: true, out: true}, function(error) {
       st.equal(
-        err.message,
+        error.message,
         'Cannot accept both `output` and `out`',
         'should fail'
       )
@@ -50,9 +50,9 @@ test('engine', function(t) {
   t.test('should fail w/ `detectConfig` w/o `rcName`', function(st) {
     st.plan(1)
 
-    engine({processor: unified, detectConfig: true}, function(err) {
+    engine({processor: unified, detectConfig: true}, function(error) {
       st.equal(
-        err.message,
+        error.message,
         'Missing `rcName` or `packageField` with `detectConfig`',
         'should fail'
       )
@@ -62,9 +62,9 @@ test('engine', function(t) {
   t.test('should fail w/ `detectIgnore` w/o `ignoreName`', function(st) {
     st.plan(1)
 
-    engine({processor: unified, detectIgnore: true}, function(err) {
+    engine({processor: unified, detectIgnore: true}, function(error) {
       st.equal(
-        err.message,
+        error.message,
         'Missing `ignoreName` with `detectIgnore`',
         'should fail'
       )

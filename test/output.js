@@ -36,9 +36,9 @@ test('output', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stdout(), stderr()],
+        [error, code, stdout(), stderr()],
         [null, 0, '', 'one.txt: no issues found\n'],
         'should report'
       )
@@ -72,9 +72,9 @@ test('output', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stdout(), stderr()],
+        [error, code, stdout(), stderr()],
         [null, 0, 'two', 'one.txt: no issues found\n'],
         'should report'
       )
@@ -109,9 +109,9 @@ test('output', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stdout(), stderr()],
+        [error, code, stdout(), stderr()],
         [null, 0, '', 'one.txt: no issues found\n'],
         'should report'
       )
@@ -146,9 +146,9 @@ test('output', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stdout(), stderr()],
+        [error, code, stdout(), stderr()],
         [null, 0, '', 'one.txt: no issues found\ntwo.txt: no issues found\n'],
         'should report'
       )
@@ -181,13 +181,13 @@ test('output', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var doc = read(join(cwd, 'one.txt'), 'utf8')
 
       fs.truncateSync(join(cwd, 'one.txt'))
 
       st.deepEqual(
-        [err, code, doc, stderr()],
+        [error, code, doc, stderr()],
         [null, 0, 'two', 'one.txt: written\n'],
         'should report'
       )
@@ -220,14 +220,14 @@ test('output', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var input = read(join(cwd, 'one.txt'), 'utf8')
       var output = read(join(cwd, 'four.txt'), 'utf8')
 
       unlink(join(cwd, 'four.txt'))
 
       st.deepEqual(
-        [err, code, input, output, stderr()],
+        [error, code, input, output, stderr()],
         [null, 0, '', 'two', 'one.txt > four.txt: written\n'],
         'should report'
       )
@@ -260,14 +260,14 @@ test('output', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var input = read(join(cwd, 'one.txt'), 'utf8')
       var output = read(join(cwd, 'nested', 'one.txt'), 'utf8')
 
       unlink(join(cwd, 'nested', 'one.txt'))
 
       st.deepEqual(
-        [err, code, input, output, stderr()],
+        [error, code, input, output, stderr()],
         [null, 0, '', 'two', 'one.txt > nested/one.txt: written\n'],
         'should report'
       )
@@ -300,7 +300,7 @@ test('output', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var actual = stderr()
         .split('\n')
         .slice(0, 3)
@@ -312,7 +312,7 @@ test('output', function(t) {
         "ENOENT: no such file or directory, stat '" + join(cwd, 'missing') + "'"
       ].join('\n')
 
-      st.deepEqual([err, code, actual], [null, 1, expected], 'should report')
+      st.deepEqual([error, code, actual], [null, 1, expected], 'should report')
     }
   })
 
@@ -333,13 +333,13 @@ test('output', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var doc = read(join(cwd, 'one.txt'), 'utf8')
 
       fs.truncateSync(join(cwd, 'one.txt'))
 
       st.deepEqual(
-        [err, code, doc, stderr()],
+        [error, code, doc, stderr()],
         [null, 0, 'two', 'one.txt: written\n'],
         'should report'
       )
@@ -372,7 +372,7 @@ test('output', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var doc = read(join(cwd, 'one.txt'), 'utf8')
 
       var actual = stderr()
@@ -382,11 +382,11 @@ test('output', function(t) {
 
       var expected = [
         '<stdin>',
-        '  1:1  error  Error: Cannot write file without an output path '
+        '  1:1  error  Error: Cannot write file without an output path'
       ].join('\n')
 
       st.deepEqual(
-        [err, code, doc, actual],
+        [error, code, doc, actual],
         [null, 1, '', expected],
         'should report'
       )
@@ -420,7 +420,7 @@ test('output', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var actual = stderr()
         .split('\n')
         .slice(0, 2)
@@ -434,7 +434,7 @@ test('output', function(t) {
         '  1:1  error  Error: Cannot write multiple files to single output'
       ].join('\n')
 
-      st.deepEqual([err, code, actual], [null, 1, expected], 'should report')
+      st.deepEqual([error, code, actual], [null, 1, expected], 'should report')
     }
   })
 
@@ -456,7 +456,7 @@ test('output', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var actual = stderr()
         .split('\n')
         .slice(0, 2)
@@ -467,7 +467,7 @@ test('output', function(t) {
         '  1:1  error  Error: Cannot read output directory. Error:'
       ].join('\n')
 
-      st.deepEqual([err, code, actual], [null, 1, expected], 'should report')
+      st.deepEqual([error, code, actual], [null, 1, expected], 'should report')
     }
   })
 })

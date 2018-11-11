@@ -28,8 +28,8 @@ test('input', function(t) {
 
     stream.end()
 
-    function onrun(err) {
-      st.equal(err.message, 'No input', 'should fail')
+    function onrun(error) {
+      st.equal(error.message, 'No input', 'should fail')
     }
   })
 
@@ -50,9 +50,9 @@ test('input', function(t) {
 
     stream.end('')
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, '<stdin>: no issues found\n'],
         'should report'
       )
@@ -74,8 +74,8 @@ test('input', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
-      st.deepEqual([err, code, stderr()], [null, 0, ''], 'should work')
+    function onrun(error, code) {
+      st.deepEqual([error, code, stderr()], [null, 0, ''], 'should work')
     }
   })
 
@@ -94,7 +94,7 @@ test('input', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var expected = [
         'readme.md',
         '  1:1  error  No such file or directory',
@@ -103,7 +103,11 @@ test('input', function(t) {
         ''
       ].join('\n')
 
-      st.deepEqual([err, code, stderr()], [null, 1, expected], 'should report')
+      st.deepEqual(
+        [error, code, stderr()],
+        [null, 1, expected],
+        'should report'
+      )
     }
   })
 
@@ -122,8 +126,8 @@ test('input', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
-      st.deepEqual([err, code, stderr()], [null, 0, ''])
+    function onrun(error, code) {
+      st.deepEqual([error, code, stderr()], [null, 0, ''])
     }
   })
 
@@ -143,7 +147,7 @@ test('input', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var expected = [
         'bar.text: no issues found',
         'foo.txt: no issues found',
@@ -152,7 +156,11 @@ test('input', function(t) {
         ''
       ].join('\n')
 
-      st.deepEqual([err, code, stderr()], [null, 0, expected], 'should report')
+      st.deepEqual(
+        [error, code, stderr()],
+        [null, 0, expected],
+        'should report'
+      )
     }
   })
 
@@ -172,14 +180,18 @@ test('input', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var expected = [
         'nested/quux.text: no issues found',
         'nested/qux.txt: no issues found',
         ''
       ].join('\n')
 
-      st.deepEqual([err, code, stderr()], [null, 0, expected], 'should report')
+      st.deepEqual(
+        [error, code, stderr()],
+        [null, 0, expected],
+        'should report'
+      )
     }
   })
 
@@ -199,14 +211,18 @@ test('input', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var expected = [
         'nested/no-3.txt: no issues found',
         'nested/no-4.text: no issues found',
         ''
       ].join('\n')
 
-      st.deepEqual([err, code, stderr()], [null, 0, expected], 'should report')
+      st.deepEqual(
+        [error, code, stderr()],
+        [null, 0, expected],
+        'should report'
+      )
     }
   })
 
@@ -226,14 +242,18 @@ test('input', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var expected = [
         'nested/no-3.txt: no issues found',
         'nested/no-4.text: no issues found',
         ''
       ].join('\n')
 
-      st.deepEqual([err, code, stderr()], [null, 0, expected], 'should report')
+      st.deepEqual(
+        [error, code, stderr()],
+        [null, 0, expected],
+        'should report'
+      )
     }
   })
 
@@ -253,14 +273,18 @@ test('input', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var expected = [
         'nested/no-3.txt: no issues found',
         'nested/no-4.text: no issues found',
         ''
       ].join('\n')
 
-      st.deepEqual([err, code, stderr()], [null, 0, expected], 'should report')
+      st.deepEqual(
+        [error, code, stderr()],
+        [null, 0, expected],
+        'should report'
+      )
     }
   })
 
@@ -281,9 +305,9 @@ test('input', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'nested/three.txt: no issues found\n'],
         'should report'
       )
@@ -306,7 +330,7 @@ test('input', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var expected = [
         'nested/node_modules/ignore-two.txt: no issues found',
         'nested/two.txt: no issues found',
@@ -315,7 +339,11 @@ test('input', function(t) {
         ''
       ].join('\n')
 
-      st.deepEqual([err, code, stderr()], [null, 0, expected], 'should report')
+      st.deepEqual(
+        [error, code, stderr()],
+        [null, 0, expected],
+        'should report'
+      )
     }
   })
 
@@ -340,7 +368,7 @@ test('input', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var expected = [
         'nested/three.txt: no issues found',
         'nested/two.txt',
@@ -352,7 +380,11 @@ test('input', function(t) {
         ''
       ].join('\n')
 
-      st.deepEqual([err, code, stderr()], [null, 1, expected], 'should report')
+      st.deepEqual(
+        [error, code, stderr()],
+        [null, 1, expected],
+        'should report'
+      )
     }
   })
 
@@ -374,7 +406,7 @@ test('input', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var expected = [
         'not-existing.txt',
         '  1:1  error  Cannot process specified file: it’s ignored',
@@ -383,7 +415,11 @@ test('input', function(t) {
         ''
       ].join('\n')
 
-      st.deepEqual([err, code, stderr()], [null, 1, expected], 'should report')
+      st.deepEqual(
+        [error, code, stderr()],
+        [null, 1, expected],
+        'should report'
+      )
     }
   })
 
@@ -405,9 +441,9 @@ test('input', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'not-existing-2.txt: no issues found\n'],
         'should report'
       )
@@ -430,7 +466,7 @@ test('input', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var expected = [
         'nested/three.txt: no issues found',
         'nested/two.txt',
@@ -442,7 +478,11 @@ test('input', function(t) {
         ''
       ].join('\n')
 
-      st.deepEqual([err, code, stderr()], [null, 1, expected], 'should report')
+      st.deepEqual(
+        [error, code, stderr()],
+        [null, 1, expected],
+        'should report'
+      )
     }
   })
 
@@ -468,14 +508,18 @@ test('input', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var expected = [
         'nested/three.txt: no issues found',
         'one.txt: no issues found',
         ''
       ].join('\n')
 
-      st.deepEqual([err, code, stderr()], [null, 0, expected], 'should report')
+      st.deepEqual(
+        [error, code, stderr()],
+        [null, 0, expected],
+        'should report'
+      )
     }
   })
 
@@ -496,14 +540,18 @@ test('input', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var expected = [
         'nested/three.txt: no issues found',
         'one.txt: no issues found',
         ''
       ].join('\n')
 
-      st.deepEqual([err, code, stderr()], [null, 0, expected], 'should report')
+      st.deepEqual(
+        [error, code, stderr()],
+        [null, 0, expected],
+        'should report'
+      )
     }
   })
 
@@ -524,7 +572,7 @@ test('input', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var expected = [
         'nested/three.txt: no issues found',
         'nested/two.txt: no issues found',
@@ -532,7 +580,11 @@ test('input', function(t) {
         ''
       ].join('\n')
 
-      st.deepEqual([err, code, stderr()], [null, 0, expected], 'should report')
+      st.deepEqual(
+        [error, code, stderr()],
+        [null, 0, expected],
+        'should report'
+      )
     }
   })
 })

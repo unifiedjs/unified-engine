@@ -26,7 +26,7 @@ test('color', function(t) {
     onrun
   )
 
-  function onrun(err, code) {
+  function onrun(error, code) {
     var expected = [
       '\u001B[4m\u001B[31mreadme.md\u001B[39m\u001B[24m',
       '  1:1  \u001B[31merror\u001B[39m  No such file or directory',
@@ -36,7 +36,7 @@ test('color', function(t) {
     ].join('\n')
 
     t.deepEqual(
-      [err, code, stderr()],
+      [error, code, stderr()],
       [null, 1, expected],
       'should support color'
     )

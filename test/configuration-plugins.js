@@ -32,9 +32,9 @@ test('configuration', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'nested/one.txt: no issues found\n'],
         'should work'
       )
@@ -62,7 +62,7 @@ test('configuration', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var actual = stderr()
         .split('\n')
         .slice(0, 4)
@@ -75,7 +75,7 @@ test('configuration', function(t) {
         'Error: Boom!'
       ].join('\n')
 
-      st.deepEqual([err, code, actual], [null, 1, expected], 'should work')
+      st.deepEqual([error, code, actual], [null, 1, expected], 'should work')
     }
   })
 
@@ -96,7 +96,7 @@ test('configuration', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var actual = stderr()
         .split('\n')
         .slice(0, 2)
@@ -107,7 +107,7 @@ test('configuration', function(t) {
         '  1:1  error  Error: Could not find module `missing`'
       ].join('\n')
 
-      st.deepEqual([err, code, actual], [null, 1, expected], 'should work')
+      st.deepEqual([error, code, actual], [null, 1, expected], 'should work')
     }
   })
 
@@ -128,7 +128,7 @@ test('configuration', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var actual = stderr()
         .split('\n')
         .slice(0, 3)
@@ -140,7 +140,7 @@ test('configuration', function(t) {
         'Error: Expected preset or plugin, not false, at `test.js`'
       ].join('\n')
 
-      st.deepEqual([err, code, actual], [null, 1, expected], 'should work')
+      st.deepEqual([error, code, actual], [null, 1, expected], 'should work')
     }
   })
 
@@ -161,7 +161,7 @@ test('configuration', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var actual = stderr()
         .split('\n')
         .slice(0, 2)
@@ -172,7 +172,7 @@ test('configuration', function(t) {
         '  1:1  error  Error: Missing `required`'
       ].join('\n')
 
-      st.deepEqual([err, code, actual], [null, 1, expected], 'should work')
+      st.deepEqual([error, code, actual], [null, 1, expected], 'should work')
     }
   })
 
@@ -194,9 +194,9 @@ test('configuration', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should work'
       )

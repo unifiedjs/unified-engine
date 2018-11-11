@@ -39,9 +39,9 @@ test('reporting', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 1, 'one.txt\n  1:1  warning  Warning\n\n⚠ 1 warning\n'],
         'should report'
       )
@@ -73,9 +73,9 @@ test('reporting', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'two.txt\n  1:1  warning  Warning\n\n⚠ 1 warning\n'],
         'should report'
       )
@@ -109,8 +109,8 @@ test('reporting', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
-      st.deepEqual([err, code, stderr()], [null, 0, ''], 'should not report')
+    function onrun(error, code) {
+      st.deepEqual([error, code, stderr()], [null, 0, ''], 'should not report')
     }
   })
 
@@ -131,9 +131,9 @@ test('reporting', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 1, 'two.txt\n  1:1  error  Error\n\n✖ 1 error\n'],
         'should report'
       )
@@ -173,7 +173,7 @@ test('reporting', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var report = JSON.stringify(
         [
           {
@@ -207,7 +207,7 @@ test('reporting', function(t) {
         2
       )
 
-      st.deepEqual([err, code, stderr()], [null, 1, report + '\n'])
+      st.deepEqual([error, code, stderr()], [null, 1, report + '\n'])
     }
 
     function warn() {
@@ -239,9 +239,9 @@ test('reporting', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, strip(stderr())],
+        [error, code, strip(stderr())],
         [null, 0, '\n  one.txt\n  ⚠  Info!  \n\n  1 warning\n']
       )
     }
@@ -273,8 +273,8 @@ test('reporting', function(t) {
       onrun
     )
 
-    function onrun(err) {
-      st.equal(err.message, 'Could not find reporter `missing`')
+    function onrun(error) {
+      st.equal(error.message, 'Could not find reporter `missing`')
     }
   })
 })

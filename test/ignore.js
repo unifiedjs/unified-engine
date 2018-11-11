@@ -32,7 +32,7 @@ test('ignore', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var actual = stderr()
         .split('\n')
         .slice(0, 2)
@@ -43,7 +43,7 @@ test('ignore', function(t) {
         '  1:1  error  Error: Cannot read given file `.missing-ignore`'
       ].join('\n')
 
-      st.deepEqual([err, code, actual], [null, 1, expected], 'should fail')
+      st.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
     }
   })
 
@@ -65,14 +65,18 @@ test('ignore', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var expected = [
         'nested/three.txt: no issues found',
         'one.txt: no issues found',
         ''
       ].join('\n')
 
-      st.deepEqual([err, code, stderr()], [null, 0, expected], 'should report')
+      st.deepEqual(
+        [error, code, stderr()],
+        [null, 0, expected],
+        'should report'
+      )
     }
   })
 
@@ -94,14 +98,18 @@ test('ignore', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var expected = [
         'nested/three.txt: no issues found',
         'one.txt: no issues found',
         ''
       ].join('\n')
 
-      st.deepEqual([err, code, stderr()], [null, 0, expected], 'should report')
+      st.deepEqual(
+        [error, code, stderr()],
+        [null, 0, expected],
+        'should report'
+      )
     }
   })
 
@@ -122,9 +130,9 @@ test('ignore', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should report'
       )
@@ -149,7 +157,7 @@ test('ignore', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var expected = [
         'nested/three.txt: no issues found',
         'nested/two.txt: no issues found',
@@ -157,7 +165,11 @@ test('ignore', function(t) {
         ''
       ].join('\n')
 
-      st.deepEqual([err, code, stderr()], [null, 0, expected], 'should report')
+      st.deepEqual(
+        [error, code, stderr()],
+        [null, 0, expected],
+        'should report'
+      )
     }
   })
 })

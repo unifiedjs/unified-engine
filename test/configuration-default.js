@@ -36,9 +36,9 @@ test('`defaultConfig`', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should work'
       )
@@ -67,9 +67,9 @@ test('`defaultConfig`', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should work'
       )

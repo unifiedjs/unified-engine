@@ -56,8 +56,8 @@ var remark = require('remark')
 
 engine({processor: remark}, done)
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -88,8 +88,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -125,8 +125,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -160,8 +160,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -204,8 +204,8 @@ function delayed() {
   streamIn.end('ument')
 }
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -254,8 +254,8 @@ setTimeout(function() {
   streamIn.end('ument')
 }, 100)
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -302,8 +302,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -336,8 +336,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -371,8 +371,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -417,8 +417,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -461,8 +461,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -527,8 +527,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -585,8 +585,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -642,8 +642,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -688,8 +688,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -720,8 +720,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -755,8 +755,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -790,8 +790,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -819,8 +819,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -851,8 +851,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -884,8 +884,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -915,8 +915,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -953,8 +953,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -990,8 +990,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -1021,8 +1021,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -1069,8 +1069,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 
 function configTransform(config) {
@@ -1132,8 +1132,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -1181,8 +1181,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -1222,8 +1222,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -1257,8 +1257,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -1288,8 +1288,8 @@ engine(
   done
 )
 
-function done(err, code) {
-  process.exit(err ? 1 : code)
+function done(error, code) {
+  process.exit(error ? 1 : code)
 }
 ```
 

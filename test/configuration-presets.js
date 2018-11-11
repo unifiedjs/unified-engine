@@ -31,7 +31,7 @@ test('configuration-presets', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var actual = stderr()
         .split('\n')
         .slice(0, 3)
@@ -43,7 +43,7 @@ test('configuration-presets', function(t) {
         'Expected a list or object of plugins, not `./preset`'
       ].join('\n')
 
-      st.deepEqual([err, code, actual], [null, 1, expected], 'should fail')
+      st.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
     }
   })
 
@@ -65,9 +65,9 @@ test('configuration-presets', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should succeed'
       )
@@ -95,7 +95,7 @@ test('configuration-presets', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var actual = stderr()
         .split('\n')
         .slice(0, 2)
@@ -106,7 +106,7 @@ test('configuration-presets', function(t) {
         '  1:1  error  Error: Could not find module `./plugin`'
       ].join('\n')
 
-      st.deepEqual([err, code, actual], [null, 1, expected], 'should succeed')
+      st.deepEqual([error, code, actual], [null, 1, expected], 'should succeed')
     }
   })
 
@@ -128,9 +128,9 @@ test('configuration-presets', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should succeed'
       )
@@ -159,9 +159,9 @@ test('configuration-presets', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should succeed'
       )
@@ -190,9 +190,9 @@ test('configuration-presets', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should succeed'
       )
@@ -216,9 +216,9 @@ test('configuration-presets', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should succeed'
       )
@@ -251,9 +251,9 @@ test('configuration-presets', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should succeed'
       )

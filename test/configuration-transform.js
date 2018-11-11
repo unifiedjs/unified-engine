@@ -32,7 +32,7 @@ test('`configTransform`', function(t) {
       onrun
     )
 
-    function onrun(err, code, result) {
+    function onrun(error, code, result) {
       var cache = result.configuration.findUp.cache
       var keys = Object.keys(cache)
 
@@ -51,7 +51,7 @@ test('`configTransform`', function(t) {
       )
 
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should succeed'
       )

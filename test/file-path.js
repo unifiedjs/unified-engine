@@ -28,8 +28,8 @@ test('file-path', function(t) {
       onrun
     )
 
-    function onrun(err) {
-      var actual = err.message
+    function onrun(error) {
+      var actual = error.message
         .split('\n')
         .slice(0, 2)
         .join('\n')
@@ -74,9 +74,9 @@ test('file-path', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stdout(), stderr()],
+        [error, code, stdout(), stderr()],
         [
           null,
           0,

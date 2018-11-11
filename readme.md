@@ -49,8 +49,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 ```
 
@@ -143,7 +143,7 @@ done.
 *   [`frail`][frail] (`boolean`, default: `false`)
     — Call back with an unsuccessful (`1`) code on warnings as well as errors
 
-#### `function callback(err[, code, context])`
+#### `function callback(error[, code, context])`
 
 Callback invoked when processing according to `options` is complete.
 Invoked with either a fatal error if processing went horribly wrong
@@ -152,7 +152,7 @@ processing context.
 
 ###### Parameters
 
-*   `err` (`Error`) — Fatal error
+*   `error` (`Error`) — Fatal error
 *   `code` (`number`) — Either `0` if successful, or `1` if
     unsuccessful.  The latter occurs if [fatal][] errors
     happen when processing individual files, or if [`frail`][frail]
@@ -218,7 +218,7 @@ repository, organisation, or community you agree to abide by its terms.
 
 [fatal]: https://github.com/vfile/vfile#vfilefailreason-position-ruleid
 
-[callback]: #function-callbackerr-code-context
+[callback]: #function-callbackerror-code-context
 
 [options]: doc/options.md#options
 

@@ -36,14 +36,14 @@ test('inspect', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var doc = read(join(cwd, 'formatted.txt'), 'utf8')
 
       /* Remove the file. */
       unlink(join(cwd, 'formatted.txt'))
 
       st.deepEqual(
-        [err, code, stderr(), doc],
+        [error, code, stderr(), doc],
         [null, 0, 'one.txt > formatted.txt: written\n', 'text: ""\n'],
         'should work'
       )
@@ -70,9 +70,9 @@ test('inspect', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr(), stdout()],
+        [error, code, stderr(), stdout()],
         [null, 0, '<stdin>: no issues found\n', 'text: "\\n"\n'],
         'should work'
       )
@@ -104,9 +104,9 @@ test('inspect', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr(), stdout()],
+        [error, code, stderr(), stdout()],
         [
           null,
           0,

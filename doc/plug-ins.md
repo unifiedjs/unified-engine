@@ -28,8 +28,8 @@ engine(
   done
 )
 
-function done(err) {
-  if (err) throw err
+function done(error) {
+  if (error) throw error
 }
 
 function plugin(processor, options, set) {
@@ -121,7 +121,7 @@ passed to [`next`][next]), no further completers run and all files fail.
     To ensure completers don’t get re-attached, specify a `pluginId`.  This
     will ensure only one completer per `pluginId` is added.
 
-##### `function next([err])`
+##### `function next([error])`
 
 If the signature of a completer includes `next` (second argument),
 the function **may** finish asynchronous, and **must** invoke
@@ -129,7 +129,7 @@ the function **may** finish asynchronous, and **must** invoke
 
 ###### Parameters
 
-*   `err` (`Error`, optional) — Fatal error
+*   `error` (`Error`, optional) — Fatal error
 
 <!-- Definitions -->
 
@@ -139,7 +139,7 @@ the function **may** finish asynchronous, and **must** invoke
 
 [completer]: #function-completerfileset-next
 
-[next]: #function-nexterr
+[next]: #function-nexterror
 
 [file-set]: #fileset
 

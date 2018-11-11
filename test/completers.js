@@ -37,9 +37,9 @@ test('completers', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should work'
       )
@@ -110,13 +110,13 @@ test('completers', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var doc = read(join(cwd, 'nested', 'foo.txt'), 'utf8')
 
       unlink(join(cwd, 'nested', 'foo.txt'))
 
       st.deepEqual(
-        [err, code, doc, stderr()],
+        [error, code, doc, stderr()],
         [null, 0, '', 'foo.txt > nested/foo.txt: written\n'],
         'should work'
       )

@@ -35,14 +35,14 @@ test('tree', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var actual = stderr()
         .split('\n')
         .slice(0, 2)
         .join('\n')
 
       st.deepEqual(
-        [err, code, actual],
+        [error, code, actual],
         [null, 1, 'doc.json\n  1:1  error  Error: Cannot read file as JSON'],
         'should report'
       )
@@ -67,13 +67,13 @@ test('tree', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var doc = read(join(cwd, 'doc.json'), 'utf8')
 
       unlink(join(cwd, 'doc.json'))
 
       st.deepEqual(
-        [err, code, doc, stderr()],
+        [error, code, doc, stderr()],
         [
           null,
           0,
@@ -112,13 +112,13 @@ test('tree', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var doc = read(join(cwd, 'doc.foo'), 'utf8')
 
       unlink(join(cwd, 'doc.foo'))
 
       st.deepEqual(
-        [err, code, doc, stderr()],
+        [error, code, doc, stderr()],
         [null, 0, 'two', 'doc > doc.foo: written\n'],
         'should report'
       )
@@ -152,13 +152,13 @@ test('tree', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var doc = read(join(cwd, 'one.json'), 'utf8')
 
       unlink(join(cwd, 'one.json'))
 
       st.deepEqual(
-        [err, code, doc, stderr()],
+        [error, code, doc, stderr()],
         [
           null,
           0,
@@ -198,9 +198,9 @@ test('tree', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stdout(), stderr()],
+        [error, code, stdout(), stderr()],
         [
           null,
           0,
@@ -236,9 +236,9 @@ test('tree', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stdout(), stderr()],
+        [error, code, stdout(), stderr()],
         [null, 0, '\n', '<stdin>: no issues found\n'],
         'should work'
       )
@@ -267,11 +267,11 @@ test('tree', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       unlink(join(cwd, 'bar.json'))
 
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'one.txt > bar.json: written\n'],
         'should work'
       )

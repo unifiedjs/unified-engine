@@ -30,7 +30,7 @@ test('configuration', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var actual = stderr()
         .split('\n')
         .slice(0, 2)
@@ -41,7 +41,7 @@ test('configuration', function(t) {
         '  1:1  error  Error: Cannot read given file `.foorc`'
       ].join('\n')
 
-      st.deepEqual([err, code, actual], [null, 1, expected], 'should fail')
+      st.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
     }
   })
 
@@ -62,7 +62,7 @@ test('configuration', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var actual = stderr()
         .split('\n')
         .slice(0, 2)
@@ -73,7 +73,7 @@ test('configuration', function(t) {
         '  1:1  error  Error: Cannot parse given file `.foorc`'
       ].join('\n')
 
-      st.deepEqual([err, code, actual], [null, 1, expected], 'should fail')
+      st.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
     }
   })
 
@@ -94,7 +94,7 @@ test('configuration', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var actual = stderr()
         .split('\n')
         .slice(0, 3)
@@ -106,7 +106,7 @@ test('configuration', function(t) {
         'Error: Expected preset, not `false`'
       ].join('\n')
 
-      st.deepEqual([err, code, actual], [null, 1, expected], 'should fail')
+      st.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
     }
   })
 
@@ -127,7 +127,7 @@ test('configuration', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var actual = stderr()
         .split('\n')
         .slice(0, 2)
@@ -138,7 +138,7 @@ test('configuration', function(t) {
         '  1:1  error  Error: Cannot parse file `.foorc.js`'
       ].join('\n')
 
-      st.deepEqual([err, code, actual], [null, 1, expected], 'should fail')
+      st.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
     }
   })
 
@@ -159,9 +159,9 @@ test('configuration', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should support valid .rc modules'
       )
@@ -187,9 +187,9 @@ test('configuration', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should use Node’s module caching (coverage)'
       )
@@ -213,7 +213,7 @@ test('configuration', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var actual = stderr()
         .split('\n')
         .slice(0, 2)
@@ -225,7 +225,7 @@ test('configuration', function(t) {
       ].join('\n')
 
       st.deepEqual(
-        [err, code, actual],
+        [error, code, actual],
         [null, 1, expected],
         'should fail fatally when custom .rc files are malformed'
       )
@@ -249,7 +249,7 @@ test('configuration', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var expected = [
         'nested/four.txt: no issues found',
         'nested/three.txt: no issues found',
@@ -258,7 +258,11 @@ test('configuration', function(t) {
         ''
       ].join('\n')
 
-      st.deepEqual([err, code, stderr()], [null, 0, expected], 'should report')
+      st.deepEqual(
+        [error, code, stderr()],
+        [null, 0, expected],
+        'should report'
+      )
     }
   })
 
@@ -280,7 +284,7 @@ test('configuration', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var actual = stderr()
         .split('\n')
         .slice(0, 2)
@@ -291,7 +295,7 @@ test('configuration', function(t) {
         '  1:1  error  Error: Cannot parse file `package.json`'
       ].join('\n')
 
-      st.deepEqual([err, code, actual], [null, 1, expected], 'should report')
+      st.deepEqual([error, code, actual], [null, 1, expected], 'should report')
     }
   })
 
@@ -312,7 +316,7 @@ test('configuration', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var expected = [
         'nested/four.txt: no issues found',
         'nested/three.txt: no issues found',
@@ -321,7 +325,11 @@ test('configuration', function(t) {
         ''
       ].join('\n')
 
-      st.deepEqual([err, code, stderr()], [null, 0, expected], 'should report')
+      st.deepEqual(
+        [error, code, stderr()],
+        [null, 0, expected],
+        'should report'
+      )
     }
   })
 
@@ -343,7 +351,7 @@ test('configuration', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       var expected = [
         'nested/three.txt: no issues found',
         'nested/two.txt: no issues found',
@@ -351,7 +359,11 @@ test('configuration', function(t) {
         ''
       ].join('\n')
 
-      st.deepEqual([err, code, stderr()], [null, 0, expected], 'should report')
+      st.deepEqual(
+        [error, code, stderr()],
+        [null, 0, expected],
+        'should report'
+      )
     }
   })
 
@@ -373,9 +385,9 @@ test('configuration', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should not search for config if `detectConfig` is set to `false`'
       )
@@ -400,9 +412,9 @@ test('configuration', function(t) {
       onrun
     )
 
-    function onrun(err, code) {
+    function onrun(error, code) {
       st.deepEqual(
-        [err, code, stderr()],
+        [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should report'
       )
