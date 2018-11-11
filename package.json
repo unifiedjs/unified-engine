@@ -10,9 +10,9 @@
   ],
   "repository": "unifiedjs/unified-engine",
   "bugs": "https://github.com/unifiedjs/unified-engine/issues",
-  "author": "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
+  "author": "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
   "contributors": [
-    "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)"
+    "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)"
   ],
   "main": "lib/index.js",
   "files": [
