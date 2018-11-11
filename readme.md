@@ -1,4 +1,9 @@
-# unified-engine [![Build Status][travis-badge]][travis] [![Coverage Status][codecov-badge]][codecov]
+# unified-engine
+
+[![Build][build-badge]][build]
+[![Coverage][coverage-badge]][coverage]
+[![Downloads][downloads-badge]][downloads]
+[![Chat][chat-badge]][chat]
 
 Engine to process multiple files with [**unified**][unified], allowing users
 to [configure][] from the file-system.
@@ -183,13 +188,21 @@ repository, organisation, or community you agree to abide by its terms.
 
 <!-- Definitions -->
 
-[travis-badge]: https://img.shields.io/travis/unifiedjs/unified-engine.svg
+[build-badge]: https://img.shields.io/travis/unifiedjs/unified-stream.svg
 
-[travis]: https://travis-ci.org/unifiedjs/unified-engine
+[build]: https://travis-ci.org/unifiedjs/unified-stream
 
-[codecov-badge]: https://img.shields.io/codecov/c/github/unifiedjs/unified-engine.svg
+[coverage-badge]: https://img.shields.io/codecov/c/github/unifiedjs/unified-stream.svg
 
-[codecov]: https://codecov.io/github/unifiedjs/unified-engine
+[coverage]: https://codecov.io/github/unifiedjs/unified-stream
+
+[downloads-badge]: https://img.shields.io/npm/dm/unified-stream.svg
+
+[downloads]: https://www.npmjs.com/package/unified-stream
+
+[chat-badge]: https://img.shields.io/badge/join%20the%20community-on%20spectrum-7b16ff.svg
+
+[chat]: https://spectrum.chat/unified
 
 [npm]: https://docs.npmjs.com/cli/install
 
