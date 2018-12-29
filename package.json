@@ -52,8 +52,8 @@
     "xo": "^0.21.0"
   },
   "scripts": {
-    "format": "remark . -qfo && prettier --write '**/*.js' && xo --fix",
-    "test-api": "node test",
+    "format": "remark . -qfo && prettier --write \"**/*.js\" && xo --fix",
+    "test-api": "node ./test/reporting.js",
     "test-coverage": "nyc --reporter lcov tape test/index.js",
     "test": "npm run format && npm run test-coverage"
   },

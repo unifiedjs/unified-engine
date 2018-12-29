@@ -11,6 +11,7 @@ var engine = require('..')
 var join = path.join
 var read = fs.readFileSync
 var unlink = fs.unlinkSync
+var sep = path.sep
 
 var fixtures = join(__dirname, 'fixtures')
 
@@ -268,7 +269,7 @@ test('output', function(t) {
 
       st.deepEqual(
         [err, code, input, output, stderr()],
-        [null, 0, '', 'two', 'one.txt > nested/one.txt: written\n'],
+        [null, 0, '', 'two', 'one.txt > nested' + sep + 'one.txt: written\n'],
         'should report'
       )
     }

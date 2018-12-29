@@ -8,6 +8,7 @@ var spy = require('./util/spy')
 var engine = require('..')
 
 var join = path.join
+var sep = path.sep
 var read = fs.readFileSync
 var unlink = fs.unlinkSync
 
@@ -117,7 +118,7 @@ test('completers', function(t) {
 
       st.deepEqual(
         [err, code, doc, stderr()],
-        [null, 0, '', 'foo.txt > nested/foo.txt: written\n'],
+        [null, 0, '', 'foo.txt > nested' + sep + 'foo.txt: written\n'],
         'should work'
       )
     }

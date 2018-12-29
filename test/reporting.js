@@ -5,20 +5,24 @@ var test = require('tape')
 var strip = require('strip-ansi')
 var noop = require('./util/noop-processor')
 var spy = require('./util/spy')
+var figures = require('./util/figures')
+var isWin = require('./util/isWin')
 var engine = require('..')
 
 var join = path.join
 
 var fixtures = join(__dirname, 'fixtures')
 
-/* https://github.com/sindresorhus/eslint-formatter-pretty/blob/159b30a/index.js#L90-L93 */
-var original = process.env.CI
+if (!isWin) {
+  /* https://github.com/sindresorhus/eslint-formatter-pretty/blob/159b30a/index.js#L90-L93 */
+  var original = process.env.CI
 
-process.env.CI = 'true'
+  process.env.CI = 'true'
 
-test.onFinish(function() {
-  process.env.CI = original
-})
+  test.onFinish(function() {
+    process.env.CI = original
+  })
+}
 
 test('reporting', function(t) {
   t.plan(7)
@@ -42,7 +46,7 @@ test('reporting', function(t) {
     function onrun(err, code) {
       st.deepEqual(
         [err, code, stderr()],
-        [null, 1, 'one.txt\n  1:1  warning  Warning\n\n⚠ 1 warning\n'],
+        [null, 1, 'one.txt\n  1:1  warning  Warning\n\n' + figures('warning') + ' 1 warning\n'],
         'should report'
       )
     }
@@ -76,7 +80,7 @@ test('reporting', function(t) {
     function onrun(err, code) {
       st.deepEqual(
         [err, code, stderr()],
-        [null, 0, 'two.txt\n  1:1  warning  Warning\n\n⚠ 1 warning\n'],
+        [null, 0, 'two.txt\n  1:1  warning  Warning\n\n' + figures('warning') + ' 1 warning\n'],
         'should report'
       )
     }
@@ -134,7 +138,7 @@ test('reporting', function(t) {
     function onrun(err, code) {
       st.deepEqual(
         [err, code, stderr()],
-        [null, 1, 'two.txt\n  1:1  error  Error\n\n✖ 1 error\n'],
+        [null, 1, 'two.txt\n  1:1  error  Error\n\n' + figures('cross') + ' 1 error\n'],
         'should report'
       )
     }
@@ -242,7 +246,7 @@ test('reporting', function(t) {
     function onrun(err, code) {
       st.deepEqual(
         [err, code, strip(stderr())],
-        [null, 0, '\n  one.txt\n  ⚠  Info!  \n\n  1 warning\n']
+        [null, 0, '\n  one.txt\n  ' + figures('warning') + ' Info!  \n\n  1 warning\n']
       )
     }
 
