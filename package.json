@@ -22,6 +22,7 @@
     "concat-stream": "^2.0.0",
     "debug": "^4.0.0",
     "fault": "^1.0.0",
+    "figures": "^2.0.0",
     "fn-name": "^2.0.1",
     "glob": "^7.0.3",
     "ignore": "^5.0.0",
@@ -52,8 +53,8 @@
     "xo": "^0.23.0"
   },
   "scripts": {
-    "format": "remark . -qfo && prettier --write '**/*.js' && xo --fix",
-    "test-api": "node test",
+    "format": "remark . -qfo && prettier --write \"**/*.js\" && xo --fix",
+    "test-api": "node ./test/reporting.js",
     "test-coverage": "nyc --reporter lcov tape test/index.js",
     "test": "npm run format && npm run test-coverage"
   },
