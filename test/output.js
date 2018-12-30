@@ -472,7 +472,7 @@ test('output', function(t) {
     }
   })
 
-  t.test('should not create a new file when file does not exist', { only: true }, function(st) {
+  t.test('should not create a new file when output file does not exist', function(st) {
     var cwd = join(fixtures, 'empty')
     var targetFile = join(cwd, 'one.txt')
     var stderr = spy()
