@@ -382,7 +382,7 @@ test('output', function(t) {
 
       var expected = [
         '<stdin>',
-        '  1:1  error  Error: Cannot write file without an output path '
+        '  1:1  error  Error: Cannot write file without an output path'
       ].join('\n')
 
       st.deepEqual(
