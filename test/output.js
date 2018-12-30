@@ -11,11 +11,12 @@ var engine = require('..')
 var join = path.join
 var read = fs.readFileSync
 var unlink = fs.unlinkSync
+var exists = fs.existsSync
 
 var fixtures = join(__dirname, 'fixtures')
 
 test('output', function(t) {
-  t.plan(12)
+  t.plan(13)
 
   t.test('should not write to stdout on dirs', function(st) {
     var cwd = join(fixtures, 'one-file')
@@ -470,4 +471,43 @@ test('output', function(t) {
       st.deepEqual([error, code, actual], [null, 1, expected], 'should report')
     }
   })
+
+  t.test(
+    'should not create a new file when input file does not exist',
+    function(st) {
+      var cwd = join(fixtures, 'empty')
+      var targetFile = join(cwd, 'one.txt')
+      var stderr = spy()
+
+      st.plan(2)
+
+      engine(
+        {
+          processor: noop(),
+          cwd: cwd,
+          streamError: stderr.stream,
+          output: true,
+          files: ['one.txt'],
+          extensions: ['txt']
+        },
+        onrun
+      )
+
+      function onrun(err, code) {
+        var actual = stderr()
+          .split('\n')
+          .slice(0, 2)
+          .join('\n')
+
+        var expected = [
+          'one.txt',
+          '  1:1  error  No such file or directory'
+        ].join('\n')
+
+        st.deepEqual([err, code, actual], [null, 1, expected], 'should report')
+
+        st.notOk(exists(targetFile))
+      }
+    }
+  )
 })
