@@ -454,7 +454,7 @@ test('output', function(t) {
         processor: noop,
         cwd: cwd,
         streamError: stderr.stream,
-        output: 'three/',
+        output: 'three' + path.sep,
         files: ['.'],
         extensions: ['txt']
       },
