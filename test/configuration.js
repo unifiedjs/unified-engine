@@ -251,8 +251,8 @@ test('configuration', function(t) {
 
     function onrun(error, code) {
       var expected = [
-        'nested/four.txt: no issues found',
-        'nested/three.txt: no issues found',
+        'nested' + path.sep + 'four.txt: no issues found',
+        'nested' + path.sep + 'three.txt: no issues found',
         'one.txt: no issues found',
         'two.txt: no issues found',
         ''
@@ -318,8 +318,8 @@ test('configuration', function(t) {
 
     function onrun(error, code) {
       var expected = [
-        'nested/four.txt: no issues found',
-        'nested/three.txt: no issues found',
+        'nested' + path.sep + 'four.txt: no issues found',
+        'nested' + path.sep + 'three.txt: no issues found',
         'one.txt: no issues found',
         'two.txt: no issues found',
         ''
@@ -353,8 +353,8 @@ test('configuration', function(t) {
 
     function onrun(error, code) {
       var expected = [
-        'nested/three.txt: no issues found',
-        'nested/two.txt: no issues found',
+        'nested' + path.sep + 'three.txt: no issues found',
+        'nested' + path.sep + 'two.txt: no issues found',
         'one.txt: no issues found',
         ''
       ].join('\n')

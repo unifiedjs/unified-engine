@@ -81,7 +81,7 @@ test('file-path', function(t) {
           null,
           0,
           '1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n',
-          'foo/bar.baz: no issues found\n'
+          'foo' + path.sep + 'bar.baz: no issues found\n'
         ],
         'should report'
       )
