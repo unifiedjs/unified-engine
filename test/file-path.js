@@ -69,7 +69,7 @@ test('file-path', function(t) {
         streamOut: stdout.stream,
         streamError: stderr.stream,
         streamIn: stream,
-        filePath: 'foo/bar.baz'
+        filePath: 'foo' + path.sep + 'bar.baz'
       },
       onrun
     )

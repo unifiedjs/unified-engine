@@ -427,7 +427,10 @@ test('output', function(t) {
         .split('\n')
         .slice(0, 2)
 
-      actual[1] = actual[1].slice(0, actual[1].lastIndexOf(':'))
+      actual[1] = actual[1]
+        .split(':')
+        .slice(0, 3)
+        .join(':')
 
       actual = actual.join('\n')
 

@@ -5,6 +5,7 @@ var PassThrough = require('stream').PassThrough
 var test = require('tape')
 var unified = require('unified')
 var vfile = require('to-vfile')
+var figures = require('figures')
 var noop = require('./util/noop-processor')
 var spy = require('./util/spy')
 var engine = require('..')
@@ -99,7 +100,7 @@ test('input', function(t) {
         'readme.md',
         '  1:1  error  No such file or directory',
         '',
-        '✖ 1 error',
+        figures.cross + ' 1 error',
         ''
       ].join('\n')
 
@@ -380,7 +381,7 @@ test('input', function(t) {
         '',
         'one.txt: no issues found',
         '',
-        '✖ 1 error',
+        figures.cross + ' 1 error',
         ''
       ].join('\n')
 
@@ -415,7 +416,7 @@ test('input', function(t) {
         'not-existing.txt',
         '  1:1  error  Cannot process specified file: it’s ignored',
         '',
-        '✖ 1 error',
+        figures.cross + ' 1 error',
         ''
       ].join('\n')
 
@@ -478,7 +479,7 @@ test('input', function(t) {
         '',
         'one.txt: no issues found',
         '',
-        '✖ 1 error',
+        figures.cross + ' 1 error',
         ''
       ].join('\n')
 

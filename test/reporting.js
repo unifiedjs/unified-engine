@@ -265,7 +265,8 @@ test('reporting', function(t) {
         [
           null,
           0,
-          '\n  one.txt\n  ' + figures.warning + '  Info!  \n\n  1 warning\n'
+          // Note: `vfile-reporter-pretty` returns `⚠` on Windows too.
+          '\n  one.txt\n  ⚠  Info!  \n\n  1 warning\n'
         ]
       )
     }
