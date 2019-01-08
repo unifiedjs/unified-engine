@@ -67,7 +67,7 @@ test('ignore', function(t) {
 
     function onrun(error, code) {
       var expected = [
-        'nested/three.txt: no issues found',
+        'nested' + path.sep + 'three.txt: no issues found',
         'one.txt: no issues found',
         ''
       ].join('\n')
@@ -100,7 +100,7 @@ test('ignore', function(t) {
 
     function onrun(error, code) {
       var expected = [
-        'nested/three.txt: no issues found',
+        'nested' + path.sep + 'three.txt: no issues found',
         'one.txt: no issues found',
         ''
       ].join('\n')
@@ -159,8 +159,8 @@ test('ignore', function(t) {
 
     function onrun(error, code) {
       var expected = [
-        'nested/three.txt: no issues found',
-        'nested/two.txt: no issues found',
+        'nested' + path.sep + 'three.txt: no issues found',
+        'nested' + path.sep + 'two.txt: no issues found',
         'one.txt: no issues found',
         ''
       ].join('\n')

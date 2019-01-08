@@ -35,7 +35,7 @@ test('configuration', function(t) {
     function onrun(error, code) {
       st.deepEqual(
         [error, code, stderr()],
-        [null, 0, 'nested/one.txt: no issues found\n'],
+        [null, 0, 'nested' + path.sep + 'one.txt: no issues found\n'],
         'should work'
       )
     }

@@ -4,6 +4,7 @@ var path = require('path')
 var test = require('tape')
 var noop = require('./util/noop-processor')
 var spy = require('./util/spy')
+var figures = require('figures')
 var engine = require('..')
 
 var join = path.join
@@ -31,7 +32,7 @@ test('color', function(t) {
       '\u001B[4m\u001B[31mreadme.md\u001B[39m\u001B[24m',
       '  1:1  \u001B[31merror\u001B[39m  No such file or directory',
       '',
-      '\u001B[31m✖\u001B[39m 1 error',
+      '\u001B[31m' + figures.cross + '\u001B[39m 1 error',
       ''
     ].join('\n')
 

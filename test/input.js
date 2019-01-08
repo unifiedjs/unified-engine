@@ -5,6 +5,7 @@ var PassThrough = require('stream').PassThrough
 var test = require('tape')
 var unified = require('unified')
 var vfile = require('to-vfile')
+var figures = require('figures')
 var noop = require('./util/noop-processor')
 var spy = require('./util/spy')
 var engine = require('..')
@@ -99,7 +100,7 @@ test('input', function(t) {
         'readme.md',
         '  1:1  error  No such file or directory',
         '',
-        '✖ 1 error',
+        figures.cross + ' 1 error',
         ''
       ].join('\n')
 
@@ -151,8 +152,8 @@ test('input', function(t) {
       var expected = [
         'bar.text: no issues found',
         'foo.txt: no issues found',
-        'nested/quux.text: no issues found',
-        'nested/qux.txt: no issues found',
+        'nested' + path.sep + 'quux.text: no issues found',
+        'nested' + path.sep + 'qux.txt: no issues found',
         ''
       ].join('\n')
 
@@ -182,8 +183,8 @@ test('input', function(t) {
 
     function onrun(error, code) {
       var expected = [
-        'nested/quux.text: no issues found',
-        'nested/qux.txt: no issues found',
+        'nested' + path.sep + 'quux.text: no issues found',
+        'nested' + path.sep + 'qux.txt: no issues found',
         ''
       ].join('\n')
 
@@ -213,8 +214,8 @@ test('input', function(t) {
 
     function onrun(error, code) {
       var expected = [
-        'nested/no-3.txt: no issues found',
-        'nested/no-4.text: no issues found',
+        'nested' + path.sep + 'no-3.txt: no issues found',
+        'nested' + path.sep + 'no-4.text: no issues found',
         ''
       ].join('\n')
 
@@ -244,8 +245,8 @@ test('input', function(t) {
 
     function onrun(error, code) {
       var expected = [
-        'nested/no-3.txt: no issues found',
-        'nested/no-4.text: no issues found',
+        'nested' + path.sep + 'no-3.txt: no issues found',
+        'nested' + path.sep + 'no-4.text: no issues found',
         ''
       ].join('\n')
 
@@ -275,8 +276,8 @@ test('input', function(t) {
 
     function onrun(error, code) {
       var expected = [
-        'nested/no-3.txt: no issues found',
-        'nested/no-4.text: no issues found',
+        'nested' + path.sep + 'no-3.txt: no issues found',
+        'nested' + path.sep + 'no-4.text: no issues found',
         ''
       ].join('\n')
 
@@ -308,7 +309,7 @@ test('input', function(t) {
     function onrun(error, code) {
       st.deepEqual(
         [error, code, stderr()],
-        [null, 0, 'nested/three.txt: no issues found\n'],
+        [null, 0, 'nested' + path.sep + 'three.txt: no issues found\n'],
         'should report'
       )
     }
@@ -332,9 +333,13 @@ test('input', function(t) {
 
     function onrun(error, code) {
       var expected = [
-        'nested/node_modules/ignore-two.txt: no issues found',
-        'nested/two.txt: no issues found',
-        'node_modules/ignore-one.txt: no issues found',
+        'nested' +
+          path.sep +
+          'node_modules' +
+          path.sep +
+          'ignore-two.txt: no issues found',
+        'nested' + path.sep + 'two.txt: no issues found',
+        'node_modules' + path.sep + 'ignore-one.txt: no issues found',
         'one.txt: no issues found',
         ''
       ].join('\n')
@@ -370,13 +375,13 @@ test('input', function(t) {
 
     function onrun(error, code) {
       var expected = [
-        'nested/three.txt: no issues found',
-        'nested/two.txt',
+        'nested' + path.sep + 'three.txt: no issues found',
+        'nested' + path.sep + 'two.txt',
         '  1:1  error  Cannot process specified file: it’s ignored',
         '',
         'one.txt: no issues found',
         '',
-        '✖ 1 error',
+        figures.cross + ' 1 error',
         ''
       ].join('\n')
 
@@ -411,7 +416,7 @@ test('input', function(t) {
         'not-existing.txt',
         '  1:1  error  Cannot process specified file: it’s ignored',
         '',
-        '✖ 1 error',
+        figures.cross + ' 1 error',
         ''
       ].join('\n')
 
@@ -468,13 +473,13 @@ test('input', function(t) {
 
     function onrun(error, code) {
       var expected = [
-        'nested/three.txt: no issues found',
-        'nested/two.txt',
+        'nested' + path.sep + 'three.txt: no issues found',
+        'nested' + path.sep + 'two.txt',
         '  1:1  error  Cannot process specified file: it’s ignored',
         '',
         'one.txt: no issues found',
         '',
-        '✖ 1 error',
+        figures.cross + ' 1 error',
         ''
       ].join('\n')
 
@@ -510,7 +515,7 @@ test('input', function(t) {
 
     function onrun(error, code) {
       var expected = [
-        'nested/three.txt: no issues found',
+        'nested' + path.sep + 'three.txt: no issues found',
         'one.txt: no issues found',
         ''
       ].join('\n')
@@ -542,7 +547,7 @@ test('input', function(t) {
 
     function onrun(error, code) {
       var expected = [
-        'nested/three.txt: no issues found',
+        'nested' + path.sep + 'three.txt: no issues found',
         'one.txt: no issues found',
         ''
       ].join('\n')
@@ -574,8 +579,8 @@ test('input', function(t) {
 
     function onrun(error, code) {
       var expected = [
-        'nested/three.txt: no issues found',
-        'nested/two.txt: no issues found',
+        'nested' + path.sep + 'three.txt: no issues found',
+        'nested' + path.sep + 'two.txt: no issues found',
         'one.txt: no issues found',
         ''
       ].join('\n')

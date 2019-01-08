@@ -12,6 +12,7 @@ var join = path.join
 var read = fs.readFileSync
 var unlink = fs.unlinkSync
 var exists = fs.existsSync
+var sep = path.sep
 
 var fixtures = join(__dirname, 'fixtures')
 
@@ -269,7 +270,7 @@ test('output', function(t) {
 
       st.deepEqual(
         [error, code, input, output, stderr()],
-        [null, 0, '', 'two', 'one.txt > nested/one.txt: written\n'],
+        [null, 0, '', 'two', 'one.txt > nested' + sep + 'one.txt: written\n'],
         'should report'
       )
     }
@@ -426,7 +427,10 @@ test('output', function(t) {
         .split('\n')
         .slice(0, 2)
 
-      actual[1] = actual[1].slice(0, actual[1].lastIndexOf(':'))
+      actual[1] = actual[1]
+        .split(':')
+        .slice(0, 3)
+        .join(':')
 
       actual = actual.join('\n')
 
@@ -450,7 +454,7 @@ test('output', function(t) {
         processor: noop,
         cwd: cwd,
         streamError: stderr.stream,
-        output: 'three/',
+        output: 'three' + path.sep,
         files: ['.'],
         extensions: ['txt']
       },
