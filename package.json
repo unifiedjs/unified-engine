@@ -22,7 +22,7 @@
     "concat-stream": "^2.0.0",
     "debug": "^4.0.0",
     "fault": "^1.0.0",
-    "figures": "^2.0.0",
+    "figures": "^3.0.0",
     "fn-name": "^2.0.1",
     "glob": "^7.0.3",
     "ignore": "^5.0.0",
