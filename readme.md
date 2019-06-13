@@ -13,7 +13,7 @@ to [configure][] from the file-system.
 The following projects wrap the engine:
 
 *   [`unified-args`][args] — Create CLIs for processors
-*   [`unified-engine-gulp`][gulp] — Create Gulp plug-ins
+*   [`unified-engine-gulp`][gulp] — Create Gulp plugins
 *   [`unified-engine-atom`][atom] — Create Atom Linters for processors
 
 ## Installation
@@ -58,7 +58,7 @@ function done(error) {
 
 *   [API](#api)
     *   [engine(options, callback)](#engineoptions-callback)
-*   [Plug-ins](#plug-ins)
+*   [Plugins](#plugins)
 *   [Configuration](#configuration)
 *   [Ignoring](#ignoring)
 *   [Contribute](#contribute)
@@ -76,7 +76,7 @@ done.
 *   [`processor`][processor] ([`Processor`][unified-processor])
     — Unified processor to transform files
 *   [`cwd`][cwd] (`string`, default: `process.cwd()`)
-    — Directory to search files in, load plug-ins from, and more
+    — Directory to search files in, load plugins from, and more
 *   [`files`][files] (`Array.<string|VFile>`, optional)
     — Paths or globs to files and directories, or virtual files, to process
 *   [`extensions`][extensions] (`Array.<string>`, optional)
@@ -123,10 +123,10 @@ done.
     — File-path to an ignore file to load
 *   [`silentlyIgnore`][silently-ignore] (`boolean`, default: `false`)
     — Skip given files if they are ignored
-*   [`plugins`][plugins] (`Array|Object`, optional)
-    — Plug-ins to use
+*   [`plugins`][options-plugins] (`Array|Object`, optional)
+    — Plugins to use
 *   [`pluginPrefix`][plugin-prefix] (`string`, optional)
-    — Optional prefix to use when searching for plug-ins
+    — Optional prefix to use when searching for plugins
 *   [`configTransform`][config-transform] (`Function`, optional)
     — Transform config files from a different schema
 *   [`reporter`][reporter] (`string` or `function`, default:
@@ -160,9 +160,9 @@ processing context.
 *   `context` (`Object`) — Processing context, containing internally
     used information and a `files` array with the processed files
 
-## Plug-ins
+## Plugins
 
-[`doc/plug-ins.md`][plug-ins] describes in detail how plug-ins
+[`doc/plugins.md`][plugins] describes in detail how plugins
 can add more files to be processed and handle all transformed files.
 
 ## Configuration
@@ -272,7 +272,7 @@ repository, organisation, or community you agree to abide by its terms.
 
 [config-transform]: doc/options.md#optionsconfigtransform
 
-[plugins]: doc/options.md#optionsplugins
+[options-plugins]: doc/options.md#optionsplugins
 
 [reporter]: doc/options.md#optionsreporter
 
@@ -292,7 +292,7 @@ repository, organisation, or community you agree to abide by its terms.
 
 [ignore]: doc/ignore.md
 
-[plug-ins]: doc/plug-ins.md
+[plugins]: doc/plugins.md
 
 [atom]: https://github.com/unifiedjs/unified-engine-atom
 

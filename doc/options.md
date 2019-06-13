@@ -63,7 +63,7 @@ function done(error) {
 
 ## `options.cwd`
 
-Directory to search files in, load plug-ins from, and more.
+Directory to search files in, load plugins from, and more.
 
 *   Type: `string`
 *   Default: [`process.cwd()`][cwd]
@@ -929,7 +929,7 @@ instead of warning about them.
 
 ## `options.plugins`
 
-Plug-ins to load and attach with options to the processor for every processed
+Plugins to load and attach with options to the processor for every processed
 file.
 
 *   Type: `Object`, `Array`, optional.  Same format as [`plugins` in config
@@ -938,7 +938,7 @@ file.
 ###### Example
 
 The following example processes `readme.md` and loads the
-`remark-preset-lint-recommended` plug-in.
+`remark-preset-lint-recommended` plugin.
 
 ```js
 var engine = require('unified-engine')
@@ -960,19 +960,19 @@ function done(error) {
 
 ## `options.pluginPrefix`
 
-Allow plug-ins to be specified without a prefix.  For example, if a plug-in is
+Allow plugins to be specified without a prefix.  For example, if a plugin is
 specified with a name of `foo`, and `pluginPrefix` is `bar`, both `bar-foo` and
 `foo` are checked in `node_modules/` directories.
 
-> **Note**: If a prefix is specified, plug-ins with that prefix are preferred
-> over plug-ins without that prefix.
+> **Note**: If a prefix is specified, plugins with that prefix are preferred
+> over plugins without that prefix.
 
 *   Type: `string`, optional
 
 ###### Example
 
 The following example processes `readme.md` and loads the
-`preset-lint-recommended` plug-in.  Because `pluginPrefix` is given, this
+`preset-lint-recommended` plugin.  Because `pluginPrefix` is given, this
 resolves to `remark-preset-lint-recommended` from `node_modules/` if
 available.
 

@@ -92,13 +92,13 @@ configures the parser and compiler of the processor.
 ###### `plugins`
 
 The `plugins` field, related to [`plugins`][plugins] in `options`, has either
-an array of plug-in names (or paths) or plugin–options tuples, or an object
-mapping plug-in’s to their options.
+an array of plugin names (or paths) or plugin–options tuples, or an object
+mapping plugin’s to their options.
 
-Plug-in options can be `false`, which specifies that a plug-in should not be
-used.  In all other cases, they are treated as an object, and merged by the
-cascade.  Thus, it’s possible to specify part of the options from one
-configuration file, and overwrite or extend it from another file.
+Plugin options can be `false`, which specifies that a plugin should not be used.
+In all other cases, they are treated as an object, and merged by the cascade.
+Thus, it’s possible to specify part of the options from one configuration file,
+and overwrite or extend it from another file.
 
 Accepts an array:
 

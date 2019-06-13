@@ -17,7 +17,7 @@ var fixtures = join(__dirname, 'fixtures')
 test('completers', function(t) {
   t.plan(2)
 
-  t.test('should pass `fileSet` to plug-ins', function(st) {
+  t.test('should pass `fileSet` to plugins', function(st) {
     var stderr = spy()
 
     otherCompleter.pluginId = 'foo'
@@ -88,7 +88,7 @@ test('completers', function(t) {
     }
   })
 
-  t.test('should pass `fileSet` to plug-ins', function(st) {
+  t.test('should pass `fileSet` to plugins', function(st) {
     var cwd = join(fixtures, 'extensions')
     var stderr = spy()
 

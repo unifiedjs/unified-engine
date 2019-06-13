@@ -1,15 +1,15 @@
-# Plug-ins
+# Plugins
 
-Normally, **unified** plug-ins receive upon attaching two arguments:
+Normally, **unified** plugins receive upon attaching two arguments:
 `processor` (the [`Processor`][unified-processor] it’s attached to) and
-`options` (an `Object` users can provide to configure the plug-in).
+`options` (an `Object` users can provide to configure the plugin).
 
-If a plug-in is attached by **unified-engine**, a third argument is
+If a plugin is attached by **unified-engine**, a third argument is
 given: [`fileSet`][file-set].
 
 ###### Example
 
-The following example processes `readme.md` and uses a plug-in that adds a
+The following example processes `readme.md` and uses a plugin that adds a
 “completer” and another file (`history.md`).
 
 ```js
@@ -67,7 +67,7 @@ are reported (or written).
 
 Internally, a `fileSet` is created to process multiple files through
 **unified** processors.  This set, containing all files, is exposed
-to plug-ins as an argument to the attacher.
+to plugins as an argument to the attacher.
 
 ### `fileSet.valueOf()`
 
@@ -115,7 +115,7 @@ passed to [`next`][next]), no further completers run and all files fail.
 
 ###### Properties
 
-*   `pluginId` (`string`) — Plug-ins specified through various mechanisms are
+*   `pluginId` (`string`) — Plugins specified through various mechanisms are
     attached to a new [`processor`][unified-processor] for each file.  If a
     `completer` is `use`d multiple times, it is invoked multiple times as well.
     To ensure completers don’t get re-attached, specify a `pluginId`.  This

@@ -203,11 +203,11 @@ test('configuration', function(t) {
     }
 
     function checkMissingOptions(options) {
-      st.equal(options, undefined, 'should support a plug-in')
+      st.equal(options, undefined, 'should support a plugin')
     }
 
     function checkTuple(options) {
-      st.equal(options, o, 'should support a plug-in--options tuple')
+      st.equal(options, o, 'should support a plugin--options tuple')
     }
   })
 })
