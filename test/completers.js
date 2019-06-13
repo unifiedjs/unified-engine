@@ -57,12 +57,12 @@ test('completers', function(t) {
       set.use(otherCompleter)
 
       // First, this plugin is attached for `one.txt`, where it adds `two.txt`.
-      // Then, this plugin is attached for `two.txt`, but it doesn’t re-add
+      // Then, this plugin is attached for `two.txt`, but it does not re-add
       // `two.txt` as it’s already added.
       st.equal(set.add('two.txt'), set, 'should be able to `add` a file')
     }
 
-    // Most often, completers cannot be detected to be the same because they’re
+    // Most often, completers cannot be detected to be the same because they are
     // created inside attachers.
     // `pluginId` can be used for those to ensure the completer runs once.
     function otherCompleter(set) {

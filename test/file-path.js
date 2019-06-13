@@ -14,7 +14,7 @@ var fixtures = join(__dirname, 'fixtures')
 test('file-path', function(t) {
   t.plan(2)
 
-  t.test('should throw on `file-path` with files', function(st) {
+  t.test('should throw on `filePath` with files', function(st) {
     st.plan(1)
 
     engine(
@@ -43,7 +43,7 @@ test('file-path', function(t) {
     }
   })
 
-  t.test('should support `file-path`', function(st) {
+  t.test('should support `filePath`', function(st) {
     var stdout = spy()
     var stderr = spy()
     var stream = new PassThrough()

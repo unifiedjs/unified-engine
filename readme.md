@@ -3,10 +3,12 @@
 [![Build][build-badge]][build]
 [![Coverage][coverage-badge]][coverage]
 [![Downloads][downloads-badge]][downloads]
+[![Sponsors][sponsors-badge]][collective]
+[![Backers][backers-badge]][collective]
 [![Chat][chat-badge]][chat]
 
-Engine to process multiple files with [**unified**][unified], allowing users
-to [configure][] from the file-system.
+Engine to process multiple files with [**unified**][unified], allowing users to
+[configure][] from the file system.
 
 ## Projects
 
@@ -16,18 +18,18 @@ The following projects wrap the engine:
 *   [`unified-engine-gulp`][gulp] — Create Gulp plugins
 *   [`unified-engine-atom`][atom] — Create Atom Linters for processors
 
-## Installation
+## Install
 
 [npm][]:
 
-```bash
+```sh
 npm install unified-engine
 ```
 
-## Usage
+## Use
 
 The following example processes all files in the current directory with a
-markdown extension with [**remark**][remark], allows [configuration][configure]
+Markdown extension with [**remark**][remark], allows [configuration][configure]
 from `.remarkrc` and `package.json` files, ignoring files from `.remarkignore`
 files, and more.
 
@@ -74,7 +76,7 @@ done.
 ###### [`options`][options]
 
 *   [`processor`][processor] ([`Processor`][unified-processor])
-    — Unified processor to transform files
+    — unified processor to transform files
 *   [`cwd`][cwd] (`string`, default: `process.cwd()`)
     — Directory to search files in, load plugins from, and more
 *   [`files`][files] (`Array.<string|VFile>`, optional)
@@ -111,7 +113,7 @@ done.
     `packageField` is given)
     — Whether to search for configuration files
 *   [`rcPath`][rc-path] (`string`, optional)
-    — File-path to a configuration file to load
+    — Filepath to a configuration file to load
 *   [`settings`][settings] (`Object`, optional)
     — Configuration for the parser and compiler of the processor
 *   [`ignoreName`][ignore-name] (`string`, optional)
@@ -120,7 +122,7 @@ done.
     is given)
     — Whether to search for ignore files
 *   [`ignorePath`][ignore-path] (`string`, optional)
-    — File-path to an ignore file to load
+    — Filepath to an ignore file to load
 *   [`silentlyIgnore`][silently-ignore] (`boolean`, default: `false`)
     — Skip given files if they are ignored
 *   [`plugins`][options-plugins] (`Array|Object`, optional)
@@ -146,29 +148,27 @@ done.
 #### `function callback(error[, code, context])`
 
 Callback invoked when processing according to `options` is complete.
-Invoked with either a fatal error if processing went horribly wrong
-(probably due to incorrect configuration), or a status code and the
-processing context.
+Invoked with either a fatal error if processing went horribly wrong (probably
+due to incorrect configuration), or a status code and the processing context.
 
 ###### Parameters
 
 *   `error` (`Error`) — Fatal error
-*   `code` (`number`) — Either `0` if successful, or `1` if
-    unsuccessful.  The latter occurs if [fatal][] errors
-    happen when processing individual files, or if [`frail`][frail]
-    is set and warnings occur
-*   `context` (`Object`) — Processing context, containing internally
-    used information and a `files` array with the processed files
+*   `code` (`number`) — Either `0` if successful, or `1` if unsuccessful.
+    The latter occurs if [fatal][] errors happen when processing individual
+    files, or if [`frail`][frail] is set and warnings occur
+*   `context` (`Object`) — Processing context, containing internally used
+    information and a `files` array with the processed files
 
 ## Plugins
 
-[`doc/plugins.md`][plugins] describes in detail how plugins
-can add more files to be processed and handle all transformed files.
+[`doc/plugins.md`][plugins] describes in detail how plugins can add more files
+to be processed and handle all transformed files.
 
 ## Configuration
 
-[`doc/configure.md`][configure] describes in detail how configuration
-files work.
+[`doc/configure.md`][configure] describes in detail how configuration files
+work.
 
 ## Ignoring
 
@@ -176,11 +176,13 @@ files work.
 
 ## Contribute
 
-See [`contributing.md` in `unifiedjs/unified`][contributing] for ways to get
-started.
+See [`contributing.md`][contributing] in [`unifiedjs/.github`][health] for ways
+to get started.
+See [`support.md`][support] for ways to get help.
 
-This organisation has a [Code of Conduct][coc].  By interacting with this
-repository, organisation, or community you agree to abide by its terms.
+This project has a [Code of Conduct][coc].
+By interacting with this repository, organisation, or community you agree to
+abide by its terms.
 
 ## License
 
@@ -188,23 +190,37 @@ repository, organisation, or community you agree to abide by its terms.
 
 <!-- Definitions -->
 
-[build-badge]: https://img.shields.io/travis/unifiedjs/unified-stream.svg
+[build-badge]: https://img.shields.io/travis/unifiedjs/unified-engine.svg
 
-[build]: https://travis-ci.org/unifiedjs/unified-stream
+[build]: https://travis-ci.org/unifiedjs/unified-engine
 
-[coverage-badge]: https://img.shields.io/codecov/c/github/unifiedjs/unified-stream.svg
+[coverage-badge]: https://img.shields.io/codecov/c/github/unifiedjs/unified-engine.svg
 
-[coverage]: https://codecov.io/github/unifiedjs/unified-stream
+[coverage]: https://codecov.io/github/unifiedjs/unified-engine
 
-[downloads-badge]: https://img.shields.io/npm/dm/unified-stream.svg
+[downloads-badge]: https://img.shields.io/npm/dm/unified-engine.svg
 
-[downloads]: https://www.npmjs.com/package/unified-stream
+[downloads]: https://www.npmjs.com/package/unified-engine
+
+[sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
+
+[backers-badge]: https://opencollective.com/unified/backers/badge.svg
+
+[collective]: https://opencollective.com/unified
 
 [chat-badge]: https://img.shields.io/badge/join%20the%20community-on%20spectrum-7b16ff.svg
 
 [chat]: https://spectrum.chat/unified
 
 [npm]: https://docs.npmjs.com/cli/install
+
+[health]: https://github.com/unifiedjs/.github
+
+[contributing]: https://github.com/unifiedjs/.github/blob/master/contributing.md
+
+[support]: https://github.com/unifiedjs/.github/blob/master/support.md
+
+[coc]: https://github.com/unifiedjs/.github/blob/master/code-of-conduct.md
 
 [license]: license
 
@@ -299,7 +315,3 @@ repository, organisation, or community you agree to abide by its terms.
 [gulp]: https://github.com/unifiedjs/unified-engine-gulp
 
 [args]: https://github.com/unifiedjs/unified-args
-
-[contributing]: https://github.com/unifiedjs/unified/blob/master/contributing.md
-
-[coc]: https://github.com/unifiedjs/unified/blob/master/code-of-conduct.md

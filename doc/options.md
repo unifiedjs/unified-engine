@@ -41,14 +41,14 @@
 
 ## `options.processor`
 
-Unified processor to transform files.
+unified processor to transform files.
 
 *   Type: [`Processor`][processor]
 
 ###### Example
 
-The following example reformats **stdin**(4) using [remark][], writes the
-report to **stderr**(4), and formatted document to **stdout**(4).
+The following example reformats **stdin**(4) using [remark][], writes the report
+to **stderr**(4), and formatted document to **stdout**(4).
 
 ```js
 var engine = require('unified-engine')
@@ -98,19 +98,19 @@ function done(error) {
 Paths or [globs][glob], or [vfile][]s to files and directories to process.
 Fileglobs (for example, `*.md`) can be given to add all matching files.
 Directories and globs to directories can be given alongside
-[`extensions`][extensions] to search directories for files matching an
-extension (for example, `dir` to add `dir/readme.txt` and `dir/sub/history.text`
-if `extensions` is `['txt', 'text']`).  This searching will not include
-`node_modules` or hidden directories (those starting with a dot, `.`, like
-`.git`).
+[`extensions`][extensions] to search directories for files matching an extension
+(for example, `dir` to add `dir/readme.txt` and `dir/sub/history.text` if
+`extensions` is `['txt', 'text']`).
+This searching will not include `node_modules` or hidden directories (those
+starting with a dot, `.`, like `.git`).
 
 *   Type: `Array.<string>`
 *   Default: `[]`
 
 ###### Example
 
-The following example processes `README` and all files with an `md` extension
-in `doc`.
+The following example processes `README` and all files with an `md` extension in
+`doc`.
 
 ```js
 var engine = require('unified-engine')
@@ -167,8 +167,9 @@ function done(error) {
 
 ## `options.streamIn`
 
-Stream to read from if no files are found or given.  If `streamIn` is the only
-possible source of input but it’s a [TTY][], an error is thrown.
+Stream to read from if no files are found or given.
+If `streamIn` is the only possible source of input but it’s a [TTY][], an error
+is thrown.
 
 *   Type: [`ReadableStream`][readable]
 *   Default: [`process.stdin`][stdin]
@@ -270,7 +271,8 @@ Yields:
 
 ## `options.streamOut`
 
-Stream to write processed files to.  This behaviour is suppressed if:
+Stream to write processed files to.
+This behaviour is suppressed if:
 
 *   [`out`][out] is `false`
 *   [`output`][output] is not `false`
@@ -285,8 +287,9 @@ Stream to write processed files to.  This behaviour is suppressed if:
 ###### Example
 
 The following example reads `readme.md` and writes the compiled document to
-`readme-two.md`.  Note that this can also be achieved by passing
-`output: 'readme-two.md'` instead of `streamOut`.
+`readme-two.md`.
+Note that this can also be achieved by passing `output: 'readme-two.md'` instead
+of `streamOut`.
 
 ```js
 var fs = require('fs')
@@ -343,10 +346,10 @@ function done(error) {
 
 ## `options.out`
 
-Whether to write the processed file to [`streamOut`][stream-out].  The default
-behaviour is to only write under some conditions, as specified in the section
-on [`streamOut`][stream-out], but if `out` is `false` nothing will be written
-to `streamOut`.
+Whether to write the processed file to [`streamOut`][stream-out].
+The default behaviour is to only write under some conditions, as specified in
+the section on [`streamOut`][stream-out], but if `out` is `false` nothing will
+be written to `streamOut`.
 
 *   Type: `boolean`
 *   Default: depends (see above)
@@ -381,7 +384,7 @@ function done(error) {
 Whether to write successfully processed files and where to.
 
 *   When `true`, overwrites the given files
-*   When `false`, does not write to the file-system
+*   When `false`, does not write to the file system
 *   When pointing to an existing directory, files are written to that directory
     and keep their original basenames
 *   When the parent directory of the given path exists and one file is
@@ -389,9 +392,11 @@ Whether to write successfully processed files and where to.
 *   Otherwise, a fatal error is thrown
 
 Note that if [`treeIn`][tree-in] is turned on, generated files get the first
-defined [`extensions`][extensions].  If [`treeOut`][tree-out] is turned on,
-generated files receive the `'json'` extension.  If [`inspect`][inspect] is
-turned on, generated files receive the `'txt'` extension.
+defined [`extensions`][extensions].
+If [`treeOut`][tree-out] is turned on, generated files receive the `'json'`
+extension.
+If [`inspect`][inspect] is turned on, generated files receive the `'txt'`
+extension.
 
 <!-- Info: -->
 
@@ -424,18 +429,20 @@ function done(error) {
 
 ## `options.alwaysStringify`
 
-Whether to always stringify successful documents.  By default, documents are
-stringified when it’s detected that a file is to be written to **stdout**(4)
-or the file system.  If files are handled and possibly written somewhere later,
-set this option to `true`.
+Whether to always stringify successful documents.
+By default, documents are stringified when it’s detected that a file is to be
+written to **stdout**(4) or the file system.
+If files are handled and possibly written somewhere later, set this option to
+`true`.
 
 *   Type: `boolean`
 *   Default: `false`
 
 ## `options.tree`
 
-Whether to treat both input and output as a syntax tree.  If given, specifies
-the default value for both [`treeIn`][tree-in] and [`treeOut`][tree-out].
+Whether to treat both input and output as a syntax tree.
+If given, specifies the default value for both [`treeIn`][tree-in] and
+[`treeOut`][tree-out].
 
 *   Type: `boolean`, optional
 *   Default: `false`
@@ -592,7 +599,7 @@ function done(error) {
 
 Where `doc.md` looks as follows:
 
-```md
+```markdown
 [foo](https://example.com)
 ```
 
@@ -649,7 +656,7 @@ function done(error) {
 
 Where `doc.md` looks as follows:
 
-```md
+```markdown
 [foo](https://example.com)
 ```
 
@@ -663,9 +670,9 @@ root[1] (1:1-2:1, 0-27)
 
 ## `options.rcName`
 
-Name of [configuration][configure] file to load.  If given and
-[`detectConfig`][detect-config] is not `false`, `$rcName` files are loaded and
-parsed as JSON, `$rcName.js` are `require`d, and `$rcName.yml` and
+Name of [configuration][configure] file to load.
+If given and [`detectConfig`][detect-config] is not `false`, `$rcName` files are
+loaded and parsed as JSON, `$rcName.js` are `require`d, and `$rcName.yml` and
 `$rcName.yaml` are loaded with `js-yaml` (`safeLoad`).
 
 *   Type: `string`, optional
@@ -762,13 +769,14 @@ function done(error) {
 
 ## `options.rcPath`
 
-File-path to a config file to load, regardless of
+File path to a config file to load, regardless of
 [`detectConfig`][detect-config] or [`rcName`][rc-name].
 
-If the file’s extension is `yml` or `yaml`, it’s loaded as YAML.  If the file’s
-extension is `js`, it’s `require`d.  If the file’s basename is `package.json`,
-the property at [`packageField`][package-field] is used.  Otherwise, the file
-is parsed as JSON.
+If the file’s extension is `yml` or `yaml`, it’s loaded as YAML.
+If the file’s extension is `js`, it’s `require`d.
+If the file’s basename is `package.json`, the property at
+[`packageField`][package-field] is used.
+Otherwise, the file is parsed as JSON.
 
 *   Type: `string`, optional
 
@@ -826,8 +834,9 @@ function done(error) {
 
 ## `options.ignoreName`
 
-Name of [ignore file][ignore] to load.  If given and
-[`detectIgnore`][detect-ignore] is not `false`, `$ignoreName` files are loaded.
+Name of [ignore file][ignore] to load.
+If given and [`detectIgnore`][detect-ignore] is not `false`, `$ignoreName` files
+are loaded.
 
 *   Type: `string`, optional
 
@@ -891,7 +900,7 @@ function done(error) {
 
 ## `options.ignorePath`
 
-File-path to [ignore file][ignore] to load, regardless of
+File path to [ignore file][ignore] to load, regardless of
 [`detectIgnore`][detect-ignore] or [`ignoreName`][ignore-name].
 
 *   Type: `string`, optional
@@ -922,8 +931,8 @@ function done(error) {
 
 ## `options.silentlyIgnore`
 
-Skip given [`files`][files] which are ignored by [ignore files][ignore],
-instead of warning about them.
+Skip given [`files`][files] which are ignored by [ignore files][ignore], instead
+of warning about them.
 
 *   Type: `boolean`, default: `false`
 
@@ -960,9 +969,9 @@ function done(error) {
 
 ## `options.pluginPrefix`
 
-Allow plugins to be specified without a prefix.  For example, if a plugin is
-specified with a name of `foo`, and `pluginPrefix` is `bar`, both `bar-foo` and
-`foo` are checked in `node_modules/` directories.
+Allow plugins to be specified without a prefix.
+For example, if a plugin is specified with a name of `foo`, and `pluginPrefix`
+is `bar`, both `bar-foo` and `foo` are checked in `node_modules/` directories.
 
 > **Note**: If a prefix is specified, plugins with that prefix are preferred
 > over plugins without that prefix.
@@ -972,9 +981,9 @@ specified with a name of `foo`, and `pluginPrefix` is `bar`, both `bar-foo` and
 ###### Example
 
 The following example processes `readme.md` and loads the
-`preset-lint-recommended` plugin.  Because `pluginPrefix` is given, this
-resolves to `remark-preset-lint-recommended` from `node_modules/` if
-available.
+`preset-lint-recommended` plugin.
+Because `pluginPrefix` is given, this resolves to
+`remark-preset-lint-recommended` from `node_modules/` if available.
 
 ```js
 var engine = require('unified-engine')
@@ -1043,17 +1052,19 @@ Where `package.json` contains:
 ## `options.configTransform`
 
 Want configuration files in a different format?  Pass a `configTransform`
-function.  It will be invoked with the parsed value from configuration files
-and the file-path to the found file, and should return a config object (with
-`plugins` and/or `settings`).
+function.
+It will be invoked with the parsed value from configuration files and the file
+path to the found file, and should return a config object (with `plugins` and/or
+`settings`).
 
 *   Type: `Function`, optional
 
 ###### Example
 
 The following example processes `readme.md` and loads options from `custom`
-(from a `package.json`).  `configTransform` is invoked with those options and
-transforms it to configuration `unified-engine` understands.
+(from a `package.json`).
+`configTransform` is invoked with those options and transforms it to
+configuration `unified-engine` understands.
 
 ```js
 var engine = require('unified-engine')
@@ -1094,16 +1105,17 @@ Where `package.json` contains:
 
 ## `options.reporter`
 
-Reporter to use.  Reporters must be loadable from the [`cwd`][root] (such as by
-installing them from that directory with npm).  Reporters must be [VFile
-reporters][reporters].
+Reporter to use.
+Reporters must be loadable from the [`cwd`][root] (such as by installing them
+from that directory with npm).
+Reporters must be [VFile reporters][reporters].
 
 *   Type: `string` or `function`, optional, default:
-    [`require('vfile-reporter')`][vfile-reporter].  If `string`, the reporter’s
-    prefix (`vfile-reporter-`) can be omitted, so if `json` is given,
-    `vfile-reporter-json` is loaded if it exists, and otherwise the `json`
-    module itself is loaded (which in this example won’t work as it’s not
-    a reporter)
+    [`require('vfile-reporter')`][vfile-reporter].
+    If `string`, the reporter’s prefix (`vfile-reporter-`) can be omitted, so if
+    `json` is given, `vfile-reporter-json` is loaded if it exists, and otherwise
+    the `json` module itself is loaded (which in this example will not work as
+    it’s not a reporter)
 
 ###### Note
 
@@ -1113,8 +1125,8 @@ work with the used reporter.
 ###### Example
 
 The following example processes all HTML files in the current directory with
-rehype, configures the processor with `.rehyperc` files, and prints a report
-in [json][], with [reporter options][reporteroptions].
+rehype, configures the processor with `.rehyperc` files, and prints a report in
+[json][], with [reporter options][reporteroptions].
 
 ```js
 var engine = require('unified-engine')
@@ -1164,8 +1176,7 @@ This option may not work with the used [reporter][].
 
 ###### Example
 
-The following example processes `readme.md` and uses colour in the
-report.
+The following example processes `readme.md` and uses colour in the report.
 
 ```js
 var engine = require('unified-engine')
@@ -1230,7 +1241,8 @@ function done(error) {
 ## `options.quiet`
 
 Whether to ignore processed files without any messages in the
-[report][reporter].  The default behaviour is to show a success message.
+[report][reporter].
+The default behaviour is to show a success message.
 
 *   Type: `boolean`, default: [`options.silent`][silent]
 
@@ -1271,8 +1283,9 @@ Count warnings as errors when calculating if the process succeeded.
 ###### Example
 
 The following example uses [`remark-lint`][remark-lint] to lint `readme.md` and
-logs the exit code.  Normally, only errors turn the `code` to `1`, but in
-`frail` mode lint warnings result in the same.
+logs the exit code.
+Normally, only errors turn the `code` to `1`, but in `frail` mode lint warnings
+result in the same.
 
 ```js
 var engine = require('unified-engine')

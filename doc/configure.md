@@ -18,9 +18,9 @@ is turned on, depending on the following options:
 *   If [`packageField`][package-field] is given, `package.json` (JSON) files
     are loaded and their `$packageField`s are used as configuration
 
-In this case, the first file that is searched for in a directory is used
-as the configuration.  If no file is found, the parent directory is searched,
-and so on.
+In this case, the first file that is searched for in a directory is used as the
+configuration.
+If no file is found, the parent directory is searched, and so on.
 
 ###### Example
 
@@ -76,8 +76,8 @@ The following properties are currently used in configuration files.
 
 ###### `settings`
 
-The `settings` field, related to [`settings`][settings] in `options`,
-configures the parser and compiler of the processor.
+The `settings` field, related to [`settings`][settings] in `options`, configures
+the parser and compiler of the processor.
 
 ```json
 {
@@ -91,9 +91,9 @@ configures the parser and compiler of the processor.
 
 ###### `plugins`
 
-The `plugins` field, related to [`plugins`][plugins] in `options`, has either
-an array of plugin names (or paths) or plugin–options tuples, or an object
-mapping plugin’s to their options.
+The `plugins` field, related to [`plugins`][plugins] in `options`, has either an
+array of plugin names (or paths) or plugin–options tuples, or an object mapping
+plugins to their options.
 
 Plugin options can be `false`, which specifies that a plugin should not be used.
 In all other cases, they are treated as an object, and merged by the cascade.

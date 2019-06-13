@@ -1,13 +1,12 @@
 # Ignoring
 
-[`unified-engine`][api] accepts patterns to ignore when searching for files
-to process through ignore files.
+[`unified-engine`][api] accepts patterns to ignore when searching for files to
+process through ignore files.
 
 ## Explicit ignoring
 
-One ignore file can be given through [`ignorePath`][ignore-path], this is
-loaded regardless of [`detectIgnore`][detect-ignore] and
-[`ignoreName`][ignore-name].
+One ignore file can be given through [`ignorePath`][ignore-path], this is loaded
+regardless of [`detectIgnore`][detect-ignore] and [`ignoreName`][ignore-name].
 
 ## Implicit ignoring
 
@@ -15,12 +14,14 @@ Otherwise, ignore files are detected if [`detectIgnore`][detect-ignore] is
 turned on and [`ignoreName`][ignore-name] is given.
 
 The first file named `ignoreName` in the parent directory of a checked path is
-used.  Or, if no file is found, the parent directory if searched, and so on.
+used.
+Or, if no file is found, the parent directory if searched, and so on.
 
 ## Ignoring
 
-Ignoring is used when searching for files in directories.  If paths (including
-those expanded from globs) are passed in that are ignored, an error is thrown.
+Ignoring is used when searching for files in directories.
+If paths (including those expanded from globs) are passed in that are ignored,
+an error is thrown.
 These files can be silently ignored by turning on
 [`silentlyIgnore`][silently-ignore].
 
@@ -29,12 +30,12 @@ inside it.
 
 If paths or globs to directories are given to the engine, they will be searched
 for matching files, but `node_modules` and hidden directories (those starting
-with a dot, `.`, such as `.git`) are normally not searched.  Pass paths or
-globs to files or those directories to include files inside `node_modules` and
-hidden directories.
+with a dot, `.`, such as `.git`) are normally not searched.
+Pass paths or globs to files or those directories to include files inside
+`node_modules` and hidden directories.
 
 The format for ignore files is the same as [`.gitignore`][gitignore], so it’s
-possible to pass a `.gitignore`s in as [`ignorePath`][ignore-path].
+possible to pass a `.gitignore` in as [`ignorePath`][ignore-path].
 
 [`node-ignore`][node-ignore] is used under the hood, see its documentation
 for more information.
