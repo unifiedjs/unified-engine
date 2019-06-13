@@ -39,7 +39,7 @@ test('inspect', function(t) {
     function onrun(error, code) {
       var doc = read(join(cwd, 'formatted.txt'), 'utf8')
 
-      /* Remove the file. */
+      // Remove the file.
       unlink(join(cwd, 'formatted.txt'))
 
       st.deepEqual(

@@ -16,7 +16,7 @@ The following example processes `readme.md` and uses a plug-in that adds a
 var engine = require('unified-engine')
 var remark = require('remark')
 
-/* Ensure the completer runs once per file-set. */
+// Ensure the completer runs once per file-set.
 completer.pluginId = 'some-plugin-id'
 
 engine(

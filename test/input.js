@@ -22,7 +22,7 @@ test('input', function(t) {
 
     st.plan(1)
 
-    /* Spoof stdin(4). */
+    // Spoof stdin(4).
     stream.isTTY = true
 
     engine({processor: unified, streamIn: stream}, onrun)

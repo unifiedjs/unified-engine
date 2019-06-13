@@ -22,9 +22,8 @@ test('completers', function(t) {
 
     otherCompleter.pluginId = 'foo'
 
-    /* 5 in the attacher, which is invoked 2 times,
-     * 1 in `checkSet`, which is invoked 2 times,
-     * 1 in the callback. */
+    // 5 in the attacher, which is invoked 2 times, 1 in `checkSet`, which is
+    // invoked 2 times, 1 in the callback.
     st.plan(13)
 
     engine(
@@ -51,21 +50,21 @@ test('completers', function(t) {
       st.equal(typeof set.use, 'function', 'should have a `use` method')
       st.equal(typeof set.add, 'function', 'should have an `add` method')
 
-      /* The completer is added multiple times, but it’s detected that
-       * its the same function so it runs once. */
+      // The completer is added multiple times, but it’s detected that its the
+      // same function so it runs once.
       st.equal(set.use(completer), set, 'should be able to `use` a completer')
 
       set.use(otherCompleter)
 
-      /* First, this plug-in is attached for `one.txt`, where it adds
-       * `two.txt`.  Then, this plug-in is attached for `two.txt`, but
-       * it doesn’t re-add `two.txt` as it’s already added. */
+      // First, this plugin is attached for `one.txt`, where it adds `two.txt`.
+      // Then, this plugin is attached for `two.txt`, but it doesn’t re-add
+      // `two.txt` as it’s already added.
       st.equal(set.add('two.txt'), set, 'should be able to `add` a file')
     }
 
-    /* Most often, completers cannot be detected to be the same
-     * because they’re created inside attachers.  `pluginId` can be
-     * used for those to ensure the completer runs once. */
+    // Most often, completers cannot be detected to be the same because they’re
+    // created inside attachers.
+    // `pluginId` can be used for those to ensure the completer runs once.
     function otherCompleter(set) {
       checkSet(set, 2)
     }

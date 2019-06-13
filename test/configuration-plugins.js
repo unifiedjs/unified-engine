@@ -16,7 +16,7 @@ test('configuration', function(t) {
   t.test('should cascade `plugins`', function(st) {
     var stderr = spy()
 
-    /* One more assertions is loaded in a plugin. */
+    // One more assertions is loaded in a plugin.
     st.plan(2)
 
     engine(

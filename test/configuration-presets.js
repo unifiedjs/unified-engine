@@ -50,7 +50,7 @@ test('configuration-presets', function(t) {
   t.test('should support plugins with the same name', function(st) {
     var stderr = spy()
 
-    /* More assertions are in loaded plugins. */
+    // More assertions are in loaded plugins.
     st.plan(3)
 
     engine(
@@ -113,7 +113,7 @@ test('configuration-presets', function(t) {
   t.test('should reconfigure plugins', function(st) {
     var stderr = spy()
 
-    /* One more assertion is loaded in the plugin. */
+    // One more assertion is loaded in the plugin.
     st.plan(2)
 
     engine(
@@ -144,7 +144,7 @@ test('configuration-presets', function(t) {
   t.test('should reconfigure required plugins', function(st) {
     var stderr = spy()
 
-    /* One more assertion is loaded in the plugin. */
+    // One more assertion is loaded in the plugin.
     st.plan(2)
 
     engine(
@@ -175,7 +175,7 @@ test('configuration-presets', function(t) {
   t.test('Should reconfigure: turn plugins off', function(st) {
     var stderr = spy()
 
-    /* More assertions are in loaded plugins. */
+    // More assertions are in loaded plugins.
     st.plan(1)
 
     engine(

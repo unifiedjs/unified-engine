@@ -16,7 +16,7 @@ test('`configTransform`', function(t) {
   t.test('should work', function(st) {
     var stderr = spy()
 
-    /* One more in fixture. */
+    // One more in fixture.
     st.plan(5)
 
     engine(

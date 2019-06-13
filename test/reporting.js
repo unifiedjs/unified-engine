@@ -14,7 +14,7 @@ var join = path.join
 var fixtures = join(__dirname, 'fixtures')
 
 if (!platform.isWin) {
-  /* https://github.com/sindresorhus/eslint-formatter-pretty/blob/159b30a/index.js#L90-L93 */
+  // See: <https://github.com/sindresorhus/eslint-formatter-pretty/blob/159b30a/index.js#L90-L93>.
   var original = process.env.CI
 
   process.env.CI = 'true'
