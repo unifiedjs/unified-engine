@@ -1,8 +1,8 @@
 language: node_js
 os:
-- windows
-- linux
+  - windows
+  - linux
 node_js:
-- lts/boron
-- node
+  - lts/dubnium
+  - node
 after_script: bash <(curl -s https://codecov.io/bash)
