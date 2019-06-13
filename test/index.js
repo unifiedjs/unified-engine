@@ -1,7 +1,6 @@
 'use strict'
 
 /* eslint-disable import/no-unassigned-import */
-
 require('./core')
 require('./input')
 require('./ignore')
@@ -19,3 +18,4 @@ require('./color')
 require('./reporting')
 require('./completers')
 require('./settings-and-plugins')
+/* eslint-enable import/no-unassigned-import */

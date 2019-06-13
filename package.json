@@ -41,16 +41,16 @@
     "xtend": "^4.0.1"
   },
   "devDependencies": {
-    "nyc": "^13.0.0",
-    "prettier": "^1.12.1",
+    "nyc": "^14.0.0",
+    "prettier": "^1.0.0",
     "remark-cli": "^6.0.0",
-    "remark-preset-wooorm": "^4.0.0",
+    "remark-preset-wooorm": "^5.0.0",
     "strip-ansi": "^5.0.0",
-    "tape": "^4.4.0",
+    "tape": "^4.0.0",
     "unified": "^7.0.0",
-    "vfile-reporter-json": "^1.0.1",
+    "vfile-reporter-json": "^2.0.0",
     "vfile-reporter-pretty": "^3.0.0",
-    "xo": "^0.23.0"
+    "xo": "^0.24.0"
   },
   "scripts": {
     "format": "remark . -qfo && prettier --write \"**/*.js\" && xo --fix",
