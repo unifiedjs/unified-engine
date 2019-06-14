@@ -17,6 +17,14 @@ The first file named `ignoreName` in the parent directory of a checked path is
 used.
 Or, if no file is found, the parent directory if searched, and so on.
 
+## Additional ignoring
+
+In addition to explicit and implicit ignore files, other patterns can be given
+with [`ignorePatterns`][ignore-patterns].
+The format of each pattern in `ignorePattern` is the same as a line in an ignore
+file.
+Patterns and files are resolved based on the current working directory.
+
 ## Ignoring
 
 Ignoring is used when searching for files in directories.
@@ -61,6 +69,8 @@ test/{input,tree}
 [ignore-name]: options.md#optionsignorename
 
 [ignore-path]: options.md#optionsignorepath
+
+[ignore-patterns]: options.md#optionsignorepatterns
 
 [silently-ignore]: options.md#optionssilentlyignore
 
