@@ -27,6 +27,7 @@
 *   [options.ignoreName](#optionsignorename)
 *   [options.detectIgnore](#optionsdetectignore)
 *   [options.ignorePath](#optionsignorepath)
+*   [options.ignorePatterns](#optionsignorepatterns)
 *   [options.silentlyIgnore](#optionssilentlyignore)
 *   [options.plugins](#optionsplugins)
 *   [options.pluginPrefix](#optionspluginprefix)
@@ -920,6 +921,36 @@ engine(
     files: ['.'],
     extensions: ['md'],
     ignorePath: '.gitignore'
+  },
+  done
+)
+
+function done(error) {
+  if (error) throw error
+}
+```
+
+## `options.ignorePatterns`
+
+Additional patterns to use to ignore files.
+
+*   Type: `Array.<string>`, optional
+
+###### Example
+
+The following example processes files in the current working directory with an
+`md` extension, except for `readme.md`:
+
+```js
+var engine = require('unified-engine')
+var remark = require('remark')
+
+engine(
+  {
+    processor: remark(),
+    files: ['.'],
+    extensions: ['md'],
+    ignorePatterns: ['readme.md']
   },
   done
 )
