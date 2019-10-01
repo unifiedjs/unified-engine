@@ -58,10 +58,10 @@ reported (or written).
 
 ## Table of Contents
 
-*   [FileSet](#fileset)
-    *   [fileSet.valueOf()](#filesetvalueof)
-    *   [fileSet.add(file|filePath)](#filesetaddfilefilepath)
-    *   [fileSet.use(completer)](#filesetusecompleter)
+*   [`FileSet`](#fileset)
+    *   [`fileSet.valueOf()`](#filesetvalueof)
+    *   [`fileSet.add(file|filePath)`](#filesetaddfilefilepath)
+    *   [`fileSet.use(completer)`](#filesetusecompleter)
 
 ## `FileSet`
 

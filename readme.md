@@ -59,7 +59,7 @@ function done(error) {
 ## Table of Contents
 
 *   [API](#api)
-    *   [engine(options, callback)](#engineoptions-callback)
+    *   [`engine(options, callback)`](#engineoptions-callback)
 *   [Plugins](#plugins)
 *   [Configuration](#configuration)
 *   [Ignoring](#ignoring)
