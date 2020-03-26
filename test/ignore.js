@@ -210,10 +210,10 @@ test('ignore', function (t) {
 
   t.test(
     '`ignorePath` should resolve from its directory, `ignorePatterns` from cwd',
-    function (st) {
+    function (t) {
       var stderr = spy()
 
-      st.plan(1)
+      t.plan(1)
 
       engine(
         {
@@ -235,7 +235,7 @@ test('ignore', function (t) {
           ''
         ].join('\n')
 
-        st.deepEqual(
+        t.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
           'should report'
@@ -244,10 +244,10 @@ test('ignore', function (t) {
     }
   )
 
-  t.test('`ignoreFrom`', function (st) {
+  t.test('`ignoreFrom`', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -270,11 +270,7 @@ test('ignore', function (t) {
         ''
       ].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 0, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
   })
 })
