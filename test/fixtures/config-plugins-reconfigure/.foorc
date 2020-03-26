@@ -1,6 +1,10 @@
 {
   "plugins": [
     "./preset",
-    ["./preset/plugin", {"two": false, "three": true}]
+    ["./preset/merge-object", {"two": false, "three": true}],
+    ["./preset/string-to-object", {"bravo": 1}],
+    ["./preset/array-to-object", {"delta": 1}],
+    ["./preset/string-to-array", [1]],
+    ["./preset/object-to-array", [2]]
   ]
 }
