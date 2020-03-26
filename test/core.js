@@ -7,10 +7,10 @@ var engine = require('..')
 test('engine', function (t) {
   t.plan(4)
 
-  t.test('engine', function (st) {
-    st.plan(3)
+  t.test('engine', function (t) {
+    t.plan(3)
 
-    st.throws(
+    t.throws(
       function () {
         engine()
       },
@@ -19,7 +19,7 @@ test('engine', function (t) {
     )
 
     engine(null, function (error) {
-      st.equal(
+      t.equal(
         error.message,
         'Missing `processor`',
         'should fail when w/o options'
@@ -27,7 +27,7 @@ test('engine', function (t) {
     })
 
     engine({}, function (error) {
-      st.equal(
+      t.equal(
         error.message,
         'Missing `processor`',
         'should fail when w/o processor'
@@ -35,11 +35,11 @@ test('engine', function (t) {
     })
   })
 
-  t.test('should fail w/ `output` and w/ `out`', function (st) {
-    st.plan(1)
+  t.test('should fail w/ `output` and w/ `out`', function (t) {
+    t.plan(1)
 
     engine({processor: unified, output: true, out: true}, function (error) {
-      st.equal(
+      t.equal(
         error.message,
         'Cannot accept both `output` and `out`',
         'should fail'
@@ -47,11 +47,11 @@ test('engine', function (t) {
     })
   })
 
-  t.test('should fail w/ `detectConfig` w/o `rcName`', function (st) {
-    st.plan(1)
+  t.test('should fail w/ `detectConfig` w/o `rcName`', function (t) {
+    t.plan(1)
 
     engine({processor: unified, detectConfig: true}, function (error) {
-      st.equal(
+      t.equal(
         error.message,
         'Missing `rcName` or `packageField` with `detectConfig`',
         'should fail'
@@ -59,11 +59,11 @@ test('engine', function (t) {
     })
   })
 
-  t.test('should fail w/ `detectIgnore` w/o `ignoreName`', function (st) {
-    st.plan(1)
+  t.test('should fail w/ `detectIgnore` w/o `ignoreName`', function (t) {
+    t.plan(1)
 
     engine({processor: unified, detectIgnore: true}, function (error) {
-      st.equal(
+      t.equal(
         error.message,
         'Missing `ignoreName` with `detectIgnore`',
         'should fail'

@@ -13,11 +13,11 @@ var fixtures = join(__dirname, 'fixtures')
 test('ignore', function (t) {
   t.plan(7)
 
-  t.test('should fail fatally when given ignores are not found', function (st) {
+  t.test('should fail fatally when given ignores are not found', function (t) {
     var cwd = join(fixtures, 'simple-structure')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -40,14 +40,14 @@ test('ignore', function (t) {
         '  1:1  error  Error: Cannot read given file `.missing-ignore`'
       ].join('\n')
 
-      st.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
+      t.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
     }
   })
 
-  t.test('should support custom ignore files', function (st) {
+  t.test('should support custom ignore files', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -69,18 +69,14 @@ test('ignore', function (t) {
         ''
       ].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 0, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
   })
 
-  t.test('should support searching ignore files', function (st) {
+  t.test('should support searching ignore files', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -102,18 +98,14 @@ test('ignore', function (t) {
         ''
       ].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 0, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
   })
 
-  t.test('should not look into hidden files', function (st) {
+  t.test('should not look into hidden files', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -128,7 +120,7 @@ test('ignore', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should report'
@@ -136,10 +128,10 @@ test('ignore', function (t) {
     }
   })
 
-  t.test('should support no ignore files', function (st) {
+  t.test('should support no ignore files', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -162,18 +154,14 @@ test('ignore', function (t) {
         ''
       ].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 0, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
   })
 
-  t.test('should support ignore patterns', function (st) {
+  t.test('should support ignore patterns', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -190,18 +178,14 @@ test('ignore', function (t) {
     function onrun(error, code) {
       var expected = ['one.txt: no issues found', ''].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 0, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
   })
 
-  t.test('should support ignore files and ignore patterns', function (st) {
+  t.test('should support ignore files and ignore patterns', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -220,11 +204,7 @@ test('ignore', function (t) {
     function onrun(error, code) {
       var expected = ['one.txt: no issues found', ''].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 0, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
   })
 })

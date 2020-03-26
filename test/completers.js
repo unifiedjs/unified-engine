@@ -17,14 +17,14 @@ var fixtures = join(__dirname, 'fixtures')
 test('completers', function (t) {
   t.plan(2)
 
-  t.test('should pass `fileSet` to plugins', function (st) {
+  t.test('should pass `fileSet` to plugins', function (t) {
     var stderr = spy()
 
     otherCompleter.pluginId = 'foo'
 
     // 5 in the attacher, which is invoked 2 times, 1 in `checkSet`, which is
     // invoked 2 times, 1 in the callback.
-    st.plan(13)
+    t.plan(13)
 
     engine(
       {
@@ -38,7 +38,7 @@ test('completers', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should work'
@@ -46,20 +46,20 @@ test('completers', function (t) {
     }
 
     function checkCompleter(settings, set) {
-      st.equal(typeof set, 'object', 'should pass a set')
-      st.equal(typeof set.use, 'function', 'should have a `use` method')
-      st.equal(typeof set.add, 'function', 'should have an `add` method')
+      t.equal(typeof set, 'object', 'should pass a set')
+      t.equal(typeof set.use, 'function', 'should have a `use` method')
+      t.equal(typeof set.add, 'function', 'should have an `add` method')
 
       // The completer is added multiple times, but it’s detected that its the
       // same function so it runs once.
-      st.equal(set.use(completer), set, 'should be able to `use` a completer')
+      t.equal(set.use(completer), set, 'should be able to `use` a completer')
 
       set.use(otherCompleter)
 
       // First, this plugin is attached for `one.txt`, where it adds `two.txt`.
       // Then, this plugin is attached for `two.txt`, but it does not re-add
       // `two.txt` as it’s already added.
-      st.equal(set.add('two.txt'), set, 'should be able to `add` a file')
+      t.equal(set.add('two.txt'), set, 'should be able to `add` a file')
     }
 
     // Most often, completers cannot be detected to be the same because they are
@@ -76,7 +76,7 @@ test('completers', function (t) {
     function checkSet(set, nr) {
       var paths = set.files.map(path)
 
-      st.deepEqual(
+      t.deepEqual(
         paths,
         ['one.txt', 'two.txt'],
         'should expose the files and set to `completer` (' + nr + ')'
@@ -88,11 +88,11 @@ test('completers', function (t) {
     }
   })
 
-  t.test('should pass `fileSet` to plugins', function (st) {
+  t.test('should pass `fileSet` to plugins', function (t) {
     var cwd = join(fixtures, 'extensions')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -115,7 +115,7 @@ test('completers', function (t) {
 
       unlink(join(cwd, 'nested', 'foo.txt'))
 
-      st.deepEqual(
+      t.deepEqual(
         [error, code, doc, stderr()],
         [null, 0, '', 'foo.txt > nested' + sep + 'foo.txt: written\n'],
         'should work'

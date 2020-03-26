@@ -13,11 +13,11 @@ var fixtures = join(__dirname, 'fixtures')
 test('configuration-presets', function (t) {
   t.plan(8)
 
-  t.test('should fail on invalid `presets`', function (st) {
+  t.test('should fail on invalid `presets`', function (t) {
     var root = join(fixtures, 'config-presets-invalid')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -40,15 +40,15 @@ test('configuration-presets', function (t) {
         'Expected a list or object of plugins, not `./preset`'
       ].join('\n')
 
-      st.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
+      t.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
     }
   })
 
-  t.test('should support plugins with the same name', function (st) {
+  t.test('should support plugins with the same name', function (t) {
     var stderr = spy()
 
     // More assertions are in loaded plugins.
-    st.plan(3)
+    t.plan(3)
 
     engine(
       {
@@ -63,7 +63,7 @@ test('configuration-presets', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should succeed'
@@ -71,14 +71,14 @@ test('configuration-presets', function (t) {
     }
 
     function addTest() {
-      this.t = st
+      this.t = t
     }
   })
 
-  t.test('should handle missing plugins in presets', function (st) {
+  t.test('should handle missing plugins in presets', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -100,15 +100,15 @@ test('configuration-presets', function (t) {
         '  1:1  error  Error: Could not find module `./plugin`'
       ].join('\n')
 
-      st.deepEqual([error, code, actual], [null, 1, expected], 'should succeed')
+      t.deepEqual([error, code, actual], [null, 1, expected], 'should succeed')
     }
   })
 
-  t.test('should reconfigure plugins', function (st) {
+  t.test('should reconfigure plugins', function (t) {
     var stderr = spy()
 
     // One more assertion is loaded in the plugin.
-    st.plan(2)
+    t.plan(2)
 
     engine(
       {
@@ -123,7 +123,7 @@ test('configuration-presets', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should succeed'
@@ -131,15 +131,15 @@ test('configuration-presets', function (t) {
     }
 
     function addTest() {
-      this.t = st
+      this.t = t
     }
   })
 
-  t.test('should reconfigure required plugins', function (st) {
+  t.test('should reconfigure required plugins', function (t) {
     var stderr = spy()
 
     // One more assertion is loaded in the plugin.
-    st.plan(2)
+    t.plan(2)
 
     engine(
       {
@@ -154,7 +154,7 @@ test('configuration-presets', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should succeed'
@@ -162,15 +162,15 @@ test('configuration-presets', function (t) {
     }
 
     function addTest() {
-      this.t = st
+      this.t = t
     }
   })
 
-  t.test('Should reconfigure: turn plugins off', function (st) {
+  t.test('Should reconfigure: turn plugins off', function (t) {
     var stderr = spy()
 
     // More assertions are in loaded plugins.
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -185,7 +185,7 @@ test('configuration-presets', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should succeed'
@@ -193,10 +193,10 @@ test('configuration-presets', function (t) {
     }
   })
 
-  t.test('should reconfigure settings', function (st) {
+  t.test('should reconfigure settings', function (t) {
     var stderr = spy()
 
-    st.plan(2)
+    t.plan(2)
 
     engine(
       {
@@ -211,7 +211,7 @@ test('configuration-presets', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should succeed'
@@ -220,7 +220,7 @@ test('configuration-presets', function (t) {
 
     function attacher() {
       this.Parser = parser
-      st.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
+      t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
     }
 
     function parser(doc) {
@@ -228,10 +228,10 @@ test('configuration-presets', function (t) {
     }
   })
 
-  t.test('should reconfigure settings (2)', function (st) {
+  t.test('should reconfigure settings (2)', function (t) {
     var stderr = spy()
 
-    st.plan(2)
+    t.plan(2)
 
     engine(
       {
@@ -246,7 +246,7 @@ test('configuration-presets', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should succeed'
@@ -254,7 +254,7 @@ test('configuration-presets', function (t) {
     }
 
     function attacher() {
-      st.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
+      t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
       this.Parser = parser
     }
 

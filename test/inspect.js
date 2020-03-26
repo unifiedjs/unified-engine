@@ -17,11 +17,11 @@ var fixtures = join(__dirname, 'fixtures')
 test('inspect', function (t) {
   t.plan(3)
 
-  t.test('should write text when `inspect` is given', function (st) {
+  t.test('should write text when `inspect` is given', function (t) {
     var cwd = join(fixtures, 'one-file')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -42,7 +42,7 @@ test('inspect', function (t) {
       // Remove the file.
       unlink(join(cwd, 'formatted.txt'))
 
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr(), doc],
         [null, 0, 'one.txt > formatted.txt: written\n', 'text: ""\n'],
         'should work'
@@ -50,14 +50,14 @@ test('inspect', function (t) {
     }
   })
 
-  t.test('should support `inspect` for stdin', function (st) {
+  t.test('should support `inspect` for stdin', function (t) {
     var stdin = new PassThrough()
     var stdout = spy()
     var stderr = spy()
 
     setTimeout(send, 50)
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -71,7 +71,7 @@ test('inspect', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr(), stdout()],
         [null, 0, '<stdin>: no issues found\n', 'text: "\\n"\n'],
         'should work'
@@ -83,14 +83,14 @@ test('inspect', function (t) {
     }
   })
 
-  t.test('should support `inspect` with color', function (st) {
+  t.test('should support `inspect` with color', function (t) {
     var stdin = new PassThrough()
     var stdout = spy()
     var stderr = spy()
 
     setTimeout(send, 50)
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -105,7 +105,7 @@ test('inspect', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr(), stdout()],
         [
           null,

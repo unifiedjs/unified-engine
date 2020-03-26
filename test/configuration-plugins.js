@@ -13,11 +13,11 @@ var fixtures = join(__dirname, 'fixtures')
 test('configuration', function (t) {
   t.plan(6)
 
-  t.test('should cascade `plugins`', function (st) {
+  t.test('should cascade `plugins`', function (t) {
     var stderr = spy()
 
     // One more assertions is loaded in a plugin.
-    st.plan(2)
+    t.plan(2)
 
     engine(
       {
@@ -33,7 +33,7 @@ test('configuration', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'nested' + path.sep + 'one.txt: no issues found\n'],
         'should work'
@@ -41,14 +41,14 @@ test('configuration', function (t) {
     }
 
     function addTest() {
-      this.t = st
+      this.t = t
     }
   })
 
-  t.test('should handle failing plugins', function (st) {
+  t.test('should handle failing plugins', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -72,14 +72,14 @@ test('configuration', function (t) {
         'Error: Boom!'
       ].join('\n')
 
-      st.deepEqual([error, code, actual], [null, 1, expected], 'should work')
+      t.deepEqual([error, code, actual], [null, 1, expected], 'should work')
     }
   })
 
-  t.test('should handle missing plugins', function (st) {
+  t.test('should handle missing plugins', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -101,14 +101,14 @@ test('configuration', function (t) {
         '  1:1  error  Error: Could not find module `missing`'
       ].join('\n')
 
-      st.deepEqual([error, code, actual], [null, 1, expected], 'should work')
+      t.deepEqual([error, code, actual], [null, 1, expected], 'should work')
     }
   })
 
-  t.test('should handle invalid plugins', function (st) {
+  t.test('should handle invalid plugins', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -131,14 +131,14 @@ test('configuration', function (t) {
         'Error: Expected preset or plugin, not false, at `test.js`'
       ].join('\n')
 
-      st.deepEqual([error, code, actual], [null, 1, expected], 'should work')
+      t.deepEqual([error, code, actual], [null, 1, expected], 'should work')
     }
   })
 
-  t.test('should handle throwing plugins', function (st) {
+  t.test('should handle throwing plugins', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -160,15 +160,15 @@ test('configuration', function (t) {
         '  1:1  error  Error: Missing `required`'
       ].join('\n')
 
-      st.deepEqual([error, code, actual], [null, 1, expected], 'should work')
+      t.deepEqual([error, code, actual], [null, 1, expected], 'should work')
     }
   })
 
-  t.test('should handle injected plugins', function (st) {
+  t.test('should handle injected plugins', function (t) {
     var stderr = spy()
     var o = {foo: 'bar'}
 
-    st.plan(3)
+    t.plan(3)
 
     engine(
       {
@@ -183,7 +183,7 @@ test('configuration', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should work'
@@ -191,11 +191,11 @@ test('configuration', function (t) {
     }
 
     function checkMissingOptions(options) {
-      st.equal(options, undefined, 'should support a plugin')
+      t.equal(options, undefined, 'should support a plugin')
     }
 
     function checkTuple(options) {
-      st.equal(options, o, 'should support a plugin--options tuple')
+      t.equal(options, o, 'should support a plugin--options tuple')
     }
   })
 })

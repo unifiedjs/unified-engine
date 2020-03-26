@@ -14,8 +14,8 @@ var fixtures = join(__dirname, 'fixtures')
 test('file-path', function (t) {
   t.plan(2)
 
-  t.test('should throw on `filePath` with files', function (st) {
-    st.plan(1)
+  t.test('should throw on `filePath` with files', function (t) {
+    t.plan(1)
 
     engine(
       {
@@ -36,17 +36,17 @@ test('file-path', function (t) {
         'Did you mean to pass stdin instead of files?'
       ].join('\n')
 
-      st.equal(actual, expected, 'should fail')
+      t.equal(actual, expected, 'should fail')
     }
   })
 
-  t.test('should support `filePath`', function (st) {
+  t.test('should support `filePath`', function (t) {
     var stdout = spy()
     var stderr = spy()
     var stream = new PassThrough()
     var index = 0
 
-    st.plan(1)
+    t.plan(1)
 
     function send() {
       if (++index > 10) {
@@ -72,7 +72,7 @@ test('file-path', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stdout(), stderr()],
         [
           null,

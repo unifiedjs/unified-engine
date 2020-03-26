@@ -17,10 +17,10 @@ var fixtures = join(__dirname, 'fixtures')
 test('input', function (t) {
   t.plan(19)
 
-  t.test('should fail without input', function (st) {
+  t.test('should fail without input', function (t) {
     var stream = new PassThrough()
 
-    st.plan(1)
+    t.plan(1)
 
     // Spoof stdin(4).
     stream.isTTY = true
@@ -30,15 +30,15 @@ test('input', function (t) {
     stream.end()
 
     function onrun(error) {
-      st.equal(error.message, 'No input', 'should fail')
+      t.equal(error.message, 'No input', 'should fail')
     }
   })
 
-  t.test('should not fail on empty input stream', function (st) {
+  t.test('should not fail on empty input stream', function (t) {
     var stderr = spy()
     var stream = new PassThrough()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -52,7 +52,7 @@ test('input', function (t) {
     stream.end('')
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, '<stdin>: no issues found\n'],
         'should report'
@@ -60,10 +60,10 @@ test('input', function (t) {
     }
   })
 
-  t.test('should not fail on unmatched given globs', function (st) {
+  t.test('should not fail on unmatched given globs', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -76,14 +76,14 @@ test('input', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual([error, code, stderr()], [null, 0, ''], 'should work')
+      t.deepEqual([error, code, stderr()], [null, 0, ''], 'should work')
     }
   })
 
-  t.test('should report unfound given files', function (st) {
+  t.test('should report unfound given files', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -104,18 +104,14 @@ test('input', function (t) {
         ''
       ].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 1, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 1, expected], 'should report')
     }
   })
 
-  t.test('should not report unfound given directories', function (st) {
+  t.test('should not report unfound given directories', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -128,14 +124,14 @@ test('input', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual([error, code, stderr()], [null, 0, ''])
+      t.deepEqual([error, code, stderr()], [null, 0, ''])
     }
   })
 
-  t.test('should search for extensions', function (st) {
+  t.test('should search for extensions', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -157,18 +153,14 @@ test('input', function (t) {
         ''
       ].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 0, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
   })
 
-  t.test('should search a directory for extensions', function (st) {
+  t.test('should search a directory for extensions', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -188,18 +180,14 @@ test('input', function (t) {
         ''
       ].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 0, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
   })
 
-  t.test('should search for globs matching files (#1)', function (st) {
+  t.test('should search for globs matching files (#1)', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -219,18 +207,14 @@ test('input', function (t) {
         ''
       ].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 0, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
   })
 
-  t.test('should search for globs matching files (#2)', function (st) {
+  t.test('should search for globs matching files (#2)', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -250,18 +234,14 @@ test('input', function (t) {
         ''
       ].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 0, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
   })
 
-  t.test('should search for globs matching dirs', function (st) {
+  t.test('should search for globs matching dirs', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -281,19 +261,15 @@ test('input', function (t) {
         ''
       ].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 0, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
   })
 
-  t.test('should search vfile’s pointing to directories', function (st) {
+  t.test('should search vfile’s pointing to directories', function (t) {
     var cwd = join(fixtures, 'ignore-file')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -307,7 +283,7 @@ test('input', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'nested' + path.sep + 'three.txt: no issues found\n'],
         'should report'
@@ -315,10 +291,10 @@ test('input', function (t) {
     }
   })
 
-  t.test('should not ignore implicitly ignored files in globs', function (st) {
+  t.test('should not ignore implicitly ignored files in globs', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -344,19 +320,15 @@ test('input', function (t) {
         ''
       ].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 0, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
   })
 
-  t.test('should include given ignored files (#1)', function (st) {
+  t.test('should include given ignored files (#1)', function (t) {
     var cwd = join(fixtures, 'ignore-file')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -385,20 +357,16 @@ test('input', function (t) {
         ''
       ].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 1, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 1, expected], 'should report')
     }
   })
 
-  t.test('should not atempt to read files with `contents` (1)', function (st) {
+  t.test('should not atempt to read files with `contents` (1)', function (t) {
     var stderr = spy()
     var cwd = join(fixtures, 'ignore-file')
     var file = vfile({path: join(cwd, 'not-existing.txt'), contents: 'foo'})
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -420,20 +388,16 @@ test('input', function (t) {
         ''
       ].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 1, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 1, expected], 'should report')
     }
   })
 
-  t.test('should not atempt to read files with `contents` (2)', function (st) {
+  t.test('should not atempt to read files with `contents` (2)', function (t) {
     var stderr = spy()
     var cwd = join(fixtures, 'ignore-file')
     var file = vfile({path: join(cwd, 'not-existing-2.txt'), contents: 'foo'})
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -447,7 +411,7 @@ test('input', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'not-existing-2.txt: no issues found\n'],
         'should report'
@@ -455,10 +419,10 @@ test('input', function (t) {
     }
   })
 
-  t.test('should include given ignored files (#2)', function (st) {
+  t.test('should include given ignored files (#2)', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -483,19 +447,15 @@ test('input', function (t) {
         ''
       ].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 1, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 1, expected], 'should report')
     }
   })
 
-  t.test('silentlyIgnore: skip detected ignored files (#1)', function (st) {
+  t.test('silentlyIgnore: skip detected ignored files (#1)', function (t) {
     var cwd = join(fixtures, 'ignore-file')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -520,18 +480,14 @@ test('input', function (t) {
         ''
       ].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 0, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
   })
 
-  t.test('silentlyIgnore: skip detected ignored files (#2)', function (st) {
+  t.test('silentlyIgnore: skip detected ignored files (#2)', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -552,19 +508,15 @@ test('input', function (t) {
         ''
       ].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 0, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
   })
 
-  t.test('should search if given files', function (st) {
+  t.test('should search if given files', function (t) {
     var cwd = join(fixtures, 'simple-structure')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -585,11 +537,7 @@ test('input', function (t) {
         ''
       ].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 0, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
   })
 })

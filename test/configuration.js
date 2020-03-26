@@ -13,10 +13,10 @@ var fixtures = join(__dirname, 'fixtures')
 test('configuration', function (t) {
   t.plan(13)
 
-  t.test('should fail fatally when custom rc files are missing', function (st) {
+  t.test('should fail fatally when custom rc files are missing', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -38,14 +38,14 @@ test('configuration', function (t) {
         '  1:1  error  Error: Cannot read given file `.foorc`'
       ].join('\n')
 
-      st.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
+      t.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
     }
   })
 
-  t.test('should fail fatally when custom rc files are empty', function (st) {
+  t.test('should fail fatally when custom rc files are empty', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -67,14 +67,14 @@ test('configuration', function (t) {
         '  1:1  error  Error: Cannot parse given file `.foorc`'
       ].join('\n')
 
-      st.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
+      t.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
     }
   })
 
-  t.test('should fail fatally when custom rc files are invalid', function (st) {
+  t.test('should fail fatally when custom rc files are invalid', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -97,14 +97,14 @@ test('configuration', function (t) {
         'Error: Expected preset, not `false`'
       ].join('\n')
 
-      st.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
+      t.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
     }
   })
 
-  t.test('should support `.rc.js` modules (1)', function (st) {
+  t.test('should support `.rc.js` modules (1)', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -126,14 +126,14 @@ test('configuration', function (t) {
         '  1:1  error  Error: Cannot parse file `.foorc.js`'
       ].join('\n')
 
-      st.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
+      t.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
     }
   })
 
-  t.test('should support `.rc.js` modules (2)', function (st) {
+  t.test('should support `.rc.js` modules (2)', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -148,7 +148,7 @@ test('configuration', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should support valid .rc modules'
@@ -156,10 +156,10 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should support `.rc.js` modules (3)', function (st) {
+  t.test('should support `.rc.js` modules (3)', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     require('./fixtures/rc-module/.foorc') // eslint-disable-line import/no-unassigned-import
 
@@ -176,7 +176,7 @@ test('configuration', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should use Node’s module caching (coverage)'
@@ -184,10 +184,10 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should support `.rc.yaml` modules', function (st) {
+  t.test('should support `.rc.yaml` modules', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -209,7 +209,7 @@ test('configuration', function (t) {
         '  1:1  error  Error: Cannot parse file `.foorc.yaml`'
       ].join('\n')
 
-      st.deepEqual(
+      t.deepEqual(
         [error, code, actual],
         [null, 1, expected],
         'should fail fatally when custom .rc files are malformed'
@@ -217,10 +217,10 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should support custom rc files', function (st) {
+  t.test('should support custom rc files', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -243,19 +243,15 @@ test('configuration', function (t) {
         ''
       ].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 0, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
   })
 
-  t.test('should support searching package files', function (st) {
+  t.test('should support searching package files', function (t) {
     var cwd = join(fixtures, 'malformed-package-file')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -277,14 +273,14 @@ test('configuration', function (t) {
         '  1:1  error  Error: Cannot parse file `package.json`'
       ].join('\n')
 
-      st.deepEqual([error, code, actual], [null, 1, expected], 'should report')
+      t.deepEqual([error, code, actual], [null, 1, expected], 'should report')
     }
   })
 
-  t.test('should support custom rc files', function (st) {
+  t.test('should support custom rc files', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -307,18 +303,14 @@ test('configuration', function (t) {
         ''
       ].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 0, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
   })
 
-  t.test('should support no config files', function (st) {
+  t.test('should support no config files', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -341,18 +333,14 @@ test('configuration', function (t) {
         ''
       ].join('\n')
 
-      st.deepEqual(
-        [error, code, stderr()],
-        [null, 0, expected],
-        'should report'
-      )
+      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
   })
 
-  t.test('should not search if `detectConfig` is `false`', function (st) {
+  t.test('should not search if `detectConfig` is `false`', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -368,7 +356,7 @@ test('configuration', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should not search for config if `detectConfig` is set to `false`'
@@ -376,10 +364,10 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should cascade `settings`', function (st) {
+  t.test('should cascade `settings`', function (t) {
     var stderr = spy()
 
-    st.plan(2)
+    t.plan(2)
 
     engine(
       {
@@ -395,7 +383,7 @@ test('configuration', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should report'
@@ -403,7 +391,7 @@ test('configuration', function (t) {
     }
 
     function plugin() {
-      st.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
+      t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
       this.Parser = parser
     }
 
