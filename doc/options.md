@@ -2,7 +2,7 @@
 
 [`unified-engine`][api] can be configured extensively by engine authors.
 
-## Table of Contents
+## Contents
 
 *   [`options.processor`](#optionsprocessor)
 *   [`options.cwd`](#optionscwd)
@@ -273,7 +273,7 @@ Yields:
 ## `options.streamOut`
 
 Stream to write processed files to.
-This behaviour is suppressed if:
+This behavior is suppressed if:
 
 *   [`out`][out] is `false`
 *   [`output`][output] is not `false`
@@ -287,7 +287,7 @@ This behaviour is suppressed if:
 
 ###### Example
 
-The following example reads `readme.md` and writes the compiled document to
+The following example reads `readme.md` and writes the serialized document to
 `readme-two.md`.
 Note that this can also be achieved by passing `output: 'readme-two.md'` instead
 of `streamOut`.
@@ -348,7 +348,7 @@ function done(error) {
 ## `options.out`
 
 Whether to write the processed file to [`streamOut`][stream-out].
-The default behaviour is to only write under some conditions, as specified in
+The default behavior is to only write under some conditions, as specified in
 the section on [`streamOut`][stream-out], but if `out` is `false` nothing will
 be written to `streamOut`.
 
@@ -358,7 +358,7 @@ be written to `streamOut`.
 ###### Example
 
 The following example uses [`remark-lint`][remark-lint] to lint `readme.md`,
-writes the report, and ignores the compiled document.
+writes the report, and ignores the serialized document.
 
 ```js
 var engine = require('unified-engine')
@@ -430,8 +430,8 @@ function done(error) {
 
 ## `options.alwaysStringify`
 
-Whether to always stringify successful documents.
-By default, documents are stringified when it’s detected that a file is to be
+Whether to always serialize successful documents.
+By default, documents are serialized when it’s detected that a file is to be
 written to **stdout**(4) or the file system.
 If files are handled and possibly written somewhere later, set this option to
 `true`.
@@ -517,8 +517,8 @@ to the first one.
 ###### Example
 
 The following example reads `tree.json`, then [`remark-unlink`][remark-unlink]
-transforms the syntax tree, the tree is compiled, and the resulting document is
-written to **stdout**(4).
+transforms the syntax tree, the tree is serialized, and the resulting document
+is written to **stdout**(4).
 
 ```js
 var engine = require('unified-engine')
@@ -564,7 +564,7 @@ foo
 
 ## `options.treeOut`
 
-Skip the [compilation phase][unified-description] and compile the transformed
+Skip the [compilation phase][unified-description] and serialize the transformed
 syntax tree to JSON.
 
 Sets the extension of processed files to `json`, if possible.
@@ -623,7 +623,7 @@ formatted with [`unist-util-inspect`][unist-util-inspect].
 
 Sets the extension of processed files to `txt` if possible.
 
-Uses ANSI colour sequences in the formatted syntax tree if `color` is turned on.
+Uses ANSI color sequences in the formatted syntax tree if `color` is turned on.
 
 *   Type: `boolean`, optional
 *   Default: `false`
@@ -1197,7 +1197,7 @@ See [`options.reporter`][reporter] for an example.
 
 ## `options.color`
 
-Whether to [report][reporter] or [inspect][] with ANSI colour sequences.
+Whether to [report][reporter] or [inspect][] with ANSI color sequences.
 
 *   Type: `boolean`, default: `false`
 
@@ -1207,7 +1207,7 @@ This option may not work with the used [reporter][].
 
 ###### Example
 
-The following example processes `readme.md` and uses colour in the report.
+The following example processes `readme.md` and uses color in the report.
 
 ```js
 var engine = require('unified-engine')
@@ -1273,7 +1273,7 @@ function done(error) {
 
 Whether to ignore processed files without any messages in the
 [report][reporter].
-The default behaviour is to show a success message.
+The default behavior is to show a success message.
 
 *   Type: `boolean`, default: [`options.silent`][silent]
 

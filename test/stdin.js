@@ -14,13 +14,13 @@ var fixtures = join(__dirname, 'fixtures')
 test('stdin', function (t) {
   t.plan(3)
 
-  t.test('should support stdin', function (st) {
+  t.test('should support stdin', function (t) {
     var stdout = spy()
     var stderr = spy()
     var stream = new PassThrough()
     var index = 0
 
-    st.plan(1)
+    t.plan(1)
 
     send()
 
@@ -36,7 +36,7 @@ test('stdin', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stdout(), stderr()],
         [
           null,
@@ -58,13 +58,13 @@ test('stdin', function (t) {
     }
   })
 
-  t.test('should not output if `out: false`', function (st) {
+  t.test('should not output if `out: false`', function (t) {
     var stdout = spy()
     var stderr = spy()
     var stream = new PassThrough()
     var index = 0
 
-    st.plan(1)
+    t.plan(1)
 
     send()
 
@@ -81,7 +81,7 @@ test('stdin', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stdout(), stderr()],
         [null, 0, '', '<stdin>: no issues found\n'],
         'should report'
@@ -98,13 +98,13 @@ test('stdin', function (t) {
     }
   })
 
-  t.test('should support config files on stdin', function (st) {
+  t.test('should support config files on stdin', function (t) {
     var stdout = spy()
     var stderr = spy()
     var stream = new PassThrough()
     var index = 0
 
-    st.plan(2)
+    t.plan(2)
 
     send()
 
@@ -122,7 +122,7 @@ test('stdin', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stdout(), stderr()],
         [
           null,
@@ -144,7 +144,7 @@ test('stdin', function (t) {
     }
 
     function plugin() {
-      st.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
+      t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
     }
   })
 })

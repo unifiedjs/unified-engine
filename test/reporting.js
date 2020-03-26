@@ -27,10 +27,10 @@ if (!platform.isWin) {
 test('reporting', function (t) {
   t.plan(7)
 
-  t.test('should fail for warnings with `frail`', function (st) {
+  t.test('should fail for warnings with `frail`', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -44,7 +44,7 @@ test('reporting', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [
           null,
@@ -66,10 +66,10 @@ test('reporting', function (t) {
     }
   })
 
-  t.test('should not report succesful files when `quiet` (#1)', function (st) {
+  t.test('should not report succesful files when `quiet` (#1)', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -84,7 +84,7 @@ test('reporting', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [
           null,
@@ -108,10 +108,10 @@ test('reporting', function (t) {
     }
   })
 
-  t.test('should not report succesful files when `quiet` (#2)', function (st) {
+  t.test('should not report succesful files when `quiet` (#2)', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -126,14 +126,14 @@ test('reporting', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual([error, code, stderr()], [null, 0, ''], 'should not report')
+      t.deepEqual([error, code, stderr()], [null, 0, ''], 'should not report')
     }
   })
 
-  t.test('should not report succesful files when `silent`', function (st) {
+  t.test('should not report succesful files when `silent`', function (t) {
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -148,7 +148,7 @@ test('reporting', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [
           null,
@@ -172,11 +172,11 @@ test('reporting', function (t) {
     }
   })
 
-  t.test('should support custom reporters (without prefix)', function (st) {
+  t.test('should support custom reporters (without prefix)', function (t) {
     var stderr = spy()
     var root = join(fixtures, 'two-files')
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -227,7 +227,7 @@ test('reporting', function (t) {
         2
       )
 
-      st.deepEqual([error, code, stderr()], [null, 1, report + '\n'])
+      t.deepEqual([error, code, stderr()], [null, 1, report + '\n'])
     }
 
     function warn() {
@@ -241,11 +241,11 @@ test('reporting', function (t) {
     }
   })
 
-  t.test('should support custom reporters (with prefix)', function (st) {
+  t.test('should support custom reporters (with prefix)', function (t) {
     var stderr = spy()
     var root = join(fixtures, 'two-files')
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -260,7 +260,7 @@ test('reporting', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, strip(stderr())],
         [
           null,
@@ -282,10 +282,10 @@ test('reporting', function (t) {
     }
   })
 
-  t.test('should fail on an unfound reporter', function (st) {
+  t.test('should fail on an unfound reporter', function (t) {
     var root = join(fixtures, 'one-file')
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -299,7 +299,7 @@ test('reporting', function (t) {
     )
 
     function onrun(error) {
-      st.equal(error.message, 'Could not find reporter `missing`')
+      t.equal(error.message, 'Could not find reporter `missing`')
     }
   })
 })

@@ -18,11 +18,11 @@ var fixtures = join(__dirname, 'fixtures')
 test('tree', function (t) {
   t.plan(7)
 
-  t.test('should fail on malformed input', function (st) {
+  t.test('should fail on malformed input', function (t) {
     var cwd = join(fixtures, 'malformed-tree')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -38,7 +38,7 @@ test('tree', function (t) {
     function onrun(error, code) {
       var actual = stderr().split('\n').slice(0, 2).join('\n')
 
-      st.deepEqual(
+      t.deepEqual(
         [error, code, actual],
         [null, 1, 'doc.json\n  1:1  error  Error: Cannot read file as JSON'],
         'should report'
@@ -46,11 +46,11 @@ test('tree', function (t) {
     }
   })
 
-  t.test('should read and write JSON when `tree` is given', function (st) {
+  t.test('should read and write JSON when `tree` is given', function (t) {
     var cwd = join(fixtures, 'tree')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -69,7 +69,7 @@ test('tree', function (t) {
 
       unlink(join(cwd, 'doc.json'))
 
-      st.deepEqual(
+      t.deepEqual(
         [error, code, doc, stderr()],
         [
           null,
@@ -90,11 +90,11 @@ test('tree', function (t) {
     }
   })
 
-  t.test('should read JSON when `treeIn` is given', function (st) {
+  t.test('should read JSON when `treeIn` is given', function (t) {
     var cwd = join(fixtures, 'tree')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -114,7 +114,7 @@ test('tree', function (t) {
 
       unlink(join(cwd, 'doc.foo'))
 
-      st.deepEqual(
+      t.deepEqual(
         [error, code, doc, stderr()],
         [null, 0, 'two', 'doc > doc.foo: written\n'],
         'should report'
@@ -130,11 +130,11 @@ test('tree', function (t) {
     }
   })
 
-  t.test('should write JSON when `treeOut` is given', function (st) {
+  t.test('should write JSON when `treeOut` is given', function (t) {
     var cwd = join(fixtures, 'one-file')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -154,7 +154,7 @@ test('tree', function (t) {
 
       unlink(join(cwd, 'one.json'))
 
-      st.deepEqual(
+      t.deepEqual(
         [error, code, doc, stderr()],
         [
           null,
@@ -175,14 +175,14 @@ test('tree', function (t) {
     }
   })
 
-  t.test('should support `treeOut` for stdin', function (st) {
+  t.test('should support `treeOut` for stdin', function (t) {
     var stdin = new PassThrough()
     var stdout = spy()
     var stderr = spy()
 
     setTimeout(send, 50)
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -196,7 +196,7 @@ test('tree', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stdout(), stderr()],
         [
           null,
@@ -213,14 +213,14 @@ test('tree', function (t) {
     }
   })
 
-  t.test('should support `treeIn` for stdin', function (st) {
+  t.test('should support `treeIn` for stdin', function (t) {
     var stdin = new PassThrough()
     var stdout = spy()
     var stderr = spy()
 
     setTimeout(send, 50)
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -234,7 +234,7 @@ test('tree', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stdout(), stderr()],
         [null, 0, '\n', '<stdin>: no issues found\n'],
         'should work'
@@ -246,11 +246,11 @@ test('tree', function (t) {
     }
   })
 
-  t.test('should write injected files', function (st) {
+  t.test('should write injected files', function (t) {
     var cwd = join(fixtures, 'one-file')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -267,7 +267,7 @@ test('tree', function (t) {
     function onrun(error, code) {
       unlink(join(cwd, 'bar.json'))
 
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt > bar.json: written\n'],
         'should work'

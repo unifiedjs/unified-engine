@@ -18,10 +18,10 @@ test('`defaultConfig`', function (t) {
     plugins: {'./test-defaults': {bravo: false}}
   }
 
-  t.test('should use default config if no config file is found', function (st) {
+  t.test('should use default config if no config file is found', function (t) {
     var stderr = spy()
 
-    st.plan(3)
+    t.plan(3)
 
     engine(
       {
@@ -37,7 +37,7 @@ test('`defaultConfig`', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should work'
@@ -45,14 +45,14 @@ test('`defaultConfig`', function (t) {
     }
 
     function addTest() {
-      this.t = st
+      this.t = t
     }
   })
 
-  t.test('should use found otherwise', function (st) {
+  t.test('should use found otherwise', function (t) {
     var stderr = spy()
 
-    st.plan(3)
+    t.plan(3)
 
     engine(
       {
@@ -68,7 +68,7 @@ test('`defaultConfig`', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should work'
@@ -76,7 +76,7 @@ test('`defaultConfig`', function (t) {
     }
 
     function addTest() {
-      this.t = st
+      this.t = t
     }
   })
 })

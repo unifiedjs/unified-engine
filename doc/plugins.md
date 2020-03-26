@@ -56,7 +56,7 @@ readme.md: no issues found
 Note that `history.md` is not reported: only files given by the user are
 reported (or written).
 
-## Table of Contents
+## Contents
 
 *   [`FileSet`](#fileset)
     *   [`fileSet.valueOf()`](#filesetvalueof)

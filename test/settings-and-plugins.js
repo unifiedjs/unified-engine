@@ -13,10 +13,10 @@ var fixtures = join(__dirname, 'fixtures')
 test('settings', function (t) {
   t.plan(2)
 
-  t.test('should use `settings`', function (st) {
+  t.test('should use `settings`', function (t) {
     var stderr = spy()
 
-    st.plan(2)
+    t.plan(2)
 
     engine(
       {
@@ -31,7 +31,7 @@ test('settings', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should report'
@@ -39,7 +39,7 @@ test('settings', function (t) {
     }
 
     function attacher() {
-      st.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
+      t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
 
       this.Parser = parser
     }
@@ -49,10 +49,10 @@ test('settings', function (t) {
     }
   })
 
-  t.test('should cascade `settings`', function (st) {
+  t.test('should cascade `settings`', function (t) {
     var stderr = spy()
 
-    st.plan(2)
+    t.plan(2)
 
     engine(
       {
@@ -68,7 +68,7 @@ test('settings', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should report'
@@ -76,7 +76,7 @@ test('settings', function (t) {
     }
 
     function attacher() {
-      st.deepEqual(
+      t.deepEqual(
         this.data('settings'),
         {alpha: false, bravo: 'charlie', delta: 1},
         'should configure'
@@ -94,10 +94,10 @@ test('settings', function (t) {
 test('plugins', function (t) {
   t.plan(3)
 
-  t.test('should use `plugins` as list of functions', function (st) {
+  t.test('should use `plugins` as list of functions', function (t) {
     var stderr = spy()
 
-    st.plan(3)
+    t.plan(3)
 
     engine(
       {
@@ -112,7 +112,7 @@ test('plugins', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should report'
@@ -124,22 +124,22 @@ test('plugins', function (t) {
     }
 
     function transformerOne() {
-      st.pass('transformer')
+      t.pass('transformer')
     }
 
     function two(options) {
       return transformerTwo
 
       function transformerTwo() {
-        st.deepEqual(options, {alpha: true}, 'transformer')
+        t.deepEqual(options, {alpha: true}, 'transformer')
       }
     }
   })
 
-  t.test('should use `plugins` as list of strings', function (st) {
+  t.test('should use `plugins` as list of strings', function (t) {
     var stderr = spy()
 
-    st.plan(2)
+    t.plan(2)
 
     engine(
       {
@@ -154,7 +154,7 @@ test('plugins', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should report'
@@ -162,14 +162,14 @@ test('plugins', function (t) {
     }
 
     function addTest() {
-      this.t = st
+      this.t = t
     }
   })
 
-  t.test('should use `plugins` as list of objects', function (st) {
+  t.test('should use `plugins` as list of objects', function (t) {
     var stderr = spy()
 
-    st.plan(2)
+    t.plan(2)
 
     engine(
       {
@@ -187,7 +187,7 @@ test('plugins', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
         'should report'
@@ -195,7 +195,7 @@ test('plugins', function (t) {
     }
 
     function addTest() {
-      this.t = st
+      this.t = t
     }
   })
 })

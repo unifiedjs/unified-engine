@@ -19,12 +19,12 @@ var fixtures = join(__dirname, 'fixtures')
 test('output', function (t) {
   t.plan(13)
 
-  t.test('should not write to stdout on dirs', function (st) {
+  t.test('should not write to stdout on dirs', function (t) {
     var cwd = join(fixtures, 'one-file')
     var stdout = spy()
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -39,7 +39,7 @@ test('output', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stdout(), stderr()],
         [null, 0, '', 'one.txt: no issues found\n'],
         'should report'
@@ -55,12 +55,12 @@ test('output', function (t) {
     }
   })
 
-  t.test('should write to stdout on one file', function (st) {
+  t.test('should write to stdout on one file', function (t) {
     var cwd = join(fixtures, 'one-file')
     var stdout = spy()
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -75,7 +75,7 @@ test('output', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stdout(), stderr()],
         [null, 0, 'two', 'one.txt: no issues found\n'],
         'should report'
@@ -91,12 +91,12 @@ test('output', function (t) {
     }
   })
 
-  t.test('should not write to stdout without `out`', function (st) {
+  t.test('should not write to stdout without `out`', function (t) {
     var cwd = join(fixtures, 'one-file')
     var stdout = spy()
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -112,7 +112,7 @@ test('output', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stdout(), stderr()],
         [null, 0, '', 'one.txt: no issues found\n'],
         'should report'
@@ -128,12 +128,12 @@ test('output', function (t) {
     }
   })
 
-  t.test('should not write multiple files to stdout', function (st) {
+  t.test('should not write multiple files to stdout', function (t) {
     var cwd = join(fixtures, 'two-files')
     var stdout = spy()
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -149,7 +149,7 @@ test('output', function (t) {
     )
 
     function onrun(error, code) {
-      st.deepEqual(
+      t.deepEqual(
         [error, code, stdout(), stderr()],
         [null, 0, '', 'one.txt: no issues found\ntwo.txt: no issues found\n'],
         'should report'
@@ -165,11 +165,11 @@ test('output', function (t) {
     }
   })
 
-  t.test('should output files', function (st) {
+  t.test('should output files', function (t) {
     var cwd = join(fixtures, 'one-file')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -188,7 +188,7 @@ test('output', function (t) {
 
       fs.truncateSync(join(cwd, 'one.txt'))
 
-      st.deepEqual(
+      t.deepEqual(
         [error, code, doc, stderr()],
         [null, 0, 'two', 'one.txt: written\n'],
         'should report'
@@ -204,11 +204,11 @@ test('output', function (t) {
     }
   })
 
-  t.test('should write to a path', function (st) {
+  t.test('should write to a path', function (t) {
     var cwd = join(fixtures, 'simple-structure')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -228,7 +228,7 @@ test('output', function (t) {
 
       unlink(join(cwd, 'four.txt'))
 
-      st.deepEqual(
+      t.deepEqual(
         [error, code, input, output, stderr()],
         [null, 0, '', 'two', 'one.txt > four.txt: written\n'],
         'should report'
@@ -244,11 +244,11 @@ test('output', function (t) {
     }
   })
 
-  t.test('should write to directories', function (st) {
+  t.test('should write to directories', function (t) {
     var cwd = join(fixtures, 'simple-structure')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -268,7 +268,7 @@ test('output', function (t) {
 
       unlink(join(cwd, 'nested', 'one.txt'))
 
-      st.deepEqual(
+      t.deepEqual(
         [error, code, input, output, stderr()],
         [null, 0, '', 'two', 'one.txt > nested' + sep + 'one.txt: written\n'],
         'should report'
@@ -284,11 +284,11 @@ test('output', function (t) {
     }
   })
 
-  t.test('should not create intermediate directories', function (st) {
+  t.test('should not create intermediate directories', function (t) {
     var cwd = join(fixtures, 'simple-structure')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -311,15 +311,15 @@ test('output', function (t) {
         "ENOENT: no such file or directory, stat '" + join(cwd, 'missing') + "'"
       ].join('\n')
 
-      st.deepEqual([error, code, actual], [null, 1, expected], 'should report')
+      t.deepEqual([error, code, actual], [null, 1, expected], 'should report')
     }
   })
 
-  t.test('should write injected files', function (st) {
+  t.test('should write injected files', function (t) {
     var cwd = join(fixtures, 'one-file')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -337,7 +337,7 @@ test('output', function (t) {
 
       fs.truncateSync(join(cwd, 'one.txt'))
 
-      st.deepEqual(
+      t.deepEqual(
         [error, code, doc, stderr()],
         [null, 0, 'two', 'one.txt: written\n'],
         'should report'
@@ -353,11 +353,11 @@ test('output', function (t) {
     }
   })
 
-  t.test('should not write without file-path', function (st) {
+  t.test('should not write without file-path', function (t) {
     var cwd = join(fixtures, 'one-file')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -381,7 +381,7 @@ test('output', function (t) {
         '  1:1  error  Error: Cannot write file without an output path'
       ].join('\n')
 
-      st.deepEqual(
+      t.deepEqual(
         [error, code, doc, actual],
         [null, 1, '', expected],
         'should report'
@@ -398,11 +398,11 @@ test('output', function (t) {
     }
   })
 
-  t.test('should fail when writing files to one path', function (st) {
+  t.test('should fail when writing files to one path', function (t) {
     var cwd = join(fixtures, 'two-files')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -428,15 +428,15 @@ test('output', function (t) {
         '  1:1  error  Error: Cannot write multiple files to single output'
       ].join('\n')
 
-      st.deepEqual([error, code, actual], [null, 1, expected], 'should report')
+      t.deepEqual([error, code, actual], [null, 1, expected], 'should report')
     }
   })
 
-  t.test('should fail when writing to non-existent dirs', function (st) {
+  t.test('should fail when writing to non-existent dirs', function (t) {
     var cwd = join(fixtures, 'two-files')
     var stderr = spy()
 
-    st.plan(1)
+    t.plan(1)
 
     engine(
       {
@@ -458,18 +458,18 @@ test('output', function (t) {
         '  1:1  error  Error: Cannot read output directory. Error:'
       ].join('\n')
 
-      st.deepEqual([error, code, actual], [null, 1, expected], 'should report')
+      t.deepEqual([error, code, actual], [null, 1, expected], 'should report')
     }
   })
 
   t.test(
     'should not create a new file when input file does not exist',
-    function (st) {
+    function (t) {
       var cwd = join(fixtures, 'empty')
       var targetFile = join(cwd, 'one.txt')
       var stderr = spy()
 
-      st.plan(2)
+      t.plan(2)
 
       engine(
         {
@@ -491,9 +491,9 @@ test('output', function (t) {
           '  1:1  error  No such file or directory'
         ].join('\n')
 
-        st.deepEqual([err, code, actual], [null, 1, expected], 'should report')
+        t.deepEqual([err, code, actual], [null, 1, expected], 'should report')
 
-        st.notOk(exists(targetFile))
+        t.notOk(exists(targetFile))
       }
     }
   )
