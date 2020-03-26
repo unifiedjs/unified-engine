@@ -56,7 +56,7 @@ function done(error) {
 }
 ```
 
-## Table of Contents
+## Contents
 
 *   [API](#api)
     *   [`engine(options, callback)`](#engineoptions-callback)
@@ -96,7 +96,7 @@ done.
 *   [`output`][output] (`boolean` or `string`, default: `false`)
     — Whether to write successfully processed files, and where to
 *   [`alwaysStringify`][always-stringify] (`boolean`, default: `false`)
-    — Whether to always compile successfully processed files
+    — Whether to always serialize successfully processed files
 *   [`tree`][tree] (`boolean`, default: `false`)
     — Whether to treat both input and output as a syntax tree
 *   [`treeIn`][tree-in] (`boolean`, default: `tree`)
@@ -139,7 +139,7 @@ done.
 *   [`reporterOptions`][reporteroptions] (`Object?`, optional)
     — Config to pass to the used reporter
 *   [`color`][color] (`boolean`, default: `false`)
-    — Whether to report with ANSI colour sequences
+    — Whether to report with ANSI color sequences
 *   [`silent`][silent] (`boolean`, default: `false`)
     — Report only fatal errors
 *   [`quiet`][quiet] (`boolean`, default: `silent`)
@@ -182,8 +182,8 @@ See [`contributing.md`][contributing] in [`unifiedjs/.github`][health] for ways
 to get started.
 See [`support.md`][support] for ways to get help.
 
-This project has a [Code of Conduct][coc].
-By interacting with this repository, organisation, or community you agree to
+This project has a [code of conduct][coc].
+By interacting with this repository, organization, or community you agree to
 abide by its terms.
 
 ## License
@@ -210,7 +210,7 @@ abide by its terms.
 
 [collective]: https://opencollective.com/unified
 
-[chat-badge]: https://img.shields.io/badge/join%20the%20community-on%20spectrum-7b16ff.svg
+[chat-badge]: https://img.shields.io/badge/chat-spectrum-7b16ff.svg
 
 [chat]: https://spectrum.chat/unified
 

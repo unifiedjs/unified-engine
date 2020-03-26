@@ -83,7 +83,7 @@ test('inspect', function (t) {
     }
   })
 
-  t.test('should support `inspect` with colour', function (st) {
+  t.test('should support `inspect` with color', function (st) {
     var stdin = new PassThrough()
     var stdout = spy()
     var stderr = spy()
