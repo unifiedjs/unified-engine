@@ -555,8 +555,8 @@ test('output', function (t) {
 
     function onrun(error, code) {
       t.deepEqual(
-        [error, code, stdout(), stderr()],
-        [null, 0, 'alpha\n', 'one.txt: no issues found\n'],
+        [error, code, stdout().trim(), stderr()],
+        [null, 0, 'alpha', 'one.txt: no issues found\n'],
         'should report'
       )
     }
@@ -591,8 +591,8 @@ test('output', function (t) {
 
     function onrun(error, code) {
       t.deepEqual(
-        [error, code, stdout(), stderr()],
-        [null, 0, 'alpha\n', 'one.txt: no issues found\n'],
+        [error, code, stdout().trim(), stderr()],
+        [null, 0, 'alpha', 'one.txt: no issues found\n'],
         'should report'
       )
     }
