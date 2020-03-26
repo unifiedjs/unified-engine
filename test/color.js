@@ -11,7 +11,7 @@ var join = path.join
 
 var fixtures = join(__dirname, 'fixtures')
 
-test('color', function(t) {
+test('color', function (t) {
   var stderr = spy()
 
   t.plan(1)

@@ -16,10 +16,10 @@ var sep = path.sep
 
 var fixtures = join(__dirname, 'fixtures')
 
-test('output', function(t) {
+test('output', function (t) {
   t.plan(13)
 
-  t.test('should not write to stdout on dirs', function(st) {
+  t.test('should not write to stdout on dirs', function (st) {
     var cwd = join(fixtures, 'one-file')
     var stdout = spy()
     var stderr = spy()
@@ -55,7 +55,7 @@ test('output', function(t) {
     }
   })
 
-  t.test('should write to stdout on one file', function(st) {
+  t.test('should write to stdout on one file', function (st) {
     var cwd = join(fixtures, 'one-file')
     var stdout = spy()
     var stderr = spy()
@@ -91,7 +91,7 @@ test('output', function(t) {
     }
   })
 
-  t.test('should not write to stdout without `out`', function(st) {
+  t.test('should not write to stdout without `out`', function (st) {
     var cwd = join(fixtures, 'one-file')
     var stdout = spy()
     var stderr = spy()
@@ -128,7 +128,7 @@ test('output', function(t) {
     }
   })
 
-  t.test('should not write multiple files to stdout', function(st) {
+  t.test('should not write multiple files to stdout', function (st) {
     var cwd = join(fixtures, 'two-files')
     var stdout = spy()
     var stderr = spy()
@@ -165,7 +165,7 @@ test('output', function(t) {
     }
   })
 
-  t.test('should output files', function(st) {
+  t.test('should output files', function (st) {
     var cwd = join(fixtures, 'one-file')
     var stderr = spy()
 
@@ -204,7 +204,7 @@ test('output', function(t) {
     }
   })
 
-  t.test('should write to a path', function(st) {
+  t.test('should write to a path', function (st) {
     var cwd = join(fixtures, 'simple-structure')
     var stderr = spy()
 
@@ -244,7 +244,7 @@ test('output', function(t) {
     }
   })
 
-  t.test('should write to directories', function(st) {
+  t.test('should write to directories', function (st) {
     var cwd = join(fixtures, 'simple-structure')
     var stderr = spy()
 
@@ -284,7 +284,7 @@ test('output', function(t) {
     }
   })
 
-  t.test('should not create intermediate directories', function(st) {
+  t.test('should not create intermediate directories', function (st) {
     var cwd = join(fixtures, 'simple-structure')
     var stderr = spy()
 
@@ -303,10 +303,7 @@ test('output', function(t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr()
-        .split('\n')
-        .slice(0, 3)
-        .join('\n')
+      var actual = stderr().split('\n').slice(0, 3).join('\n')
 
       var expected = [
         'one.txt',
@@ -318,7 +315,7 @@ test('output', function(t) {
     }
   })
 
-  t.test('should write injected files', function(st) {
+  t.test('should write injected files', function (st) {
     var cwd = join(fixtures, 'one-file')
     var stderr = spy()
 
@@ -356,7 +353,7 @@ test('output', function(t) {
     }
   })
 
-  t.test('should not write without file-path', function(st) {
+  t.test('should not write without file-path', function (st) {
     var cwd = join(fixtures, 'one-file')
     var stderr = spy()
 
@@ -377,10 +374,7 @@ test('output', function(t) {
     function onrun(error, code) {
       var doc = read(join(cwd, 'one.txt'), 'utf8')
 
-      var actual = stderr()
-        .split('\n')
-        .slice(0, 2)
-        .join('\n')
+      var actual = stderr().split('\n').slice(0, 2).join('\n')
 
       var expected = [
         '<stdin>',
@@ -404,7 +398,7 @@ test('output', function(t) {
     }
   })
 
-  t.test('should fail when writing files to one path', function(st) {
+  t.test('should fail when writing files to one path', function (st) {
     var cwd = join(fixtures, 'two-files')
     var stderr = spy()
 
@@ -423,14 +417,9 @@ test('output', function(t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr()
-        .split('\n')
-        .slice(0, 2)
+      var actual = stderr().split('\n').slice(0, 2)
 
-      actual[1] = actual[1]
-        .split(':')
-        .slice(0, 3)
-        .join(':')
+      actual[1] = actual[1].split(':').slice(0, 3).join(':')
 
       actual = actual.join('\n')
 
@@ -443,7 +432,7 @@ test('output', function(t) {
     }
   })
 
-  t.test('should fail when writing to non-existent dirs', function(st) {
+  t.test('should fail when writing to non-existent dirs', function (st) {
     var cwd = join(fixtures, 'two-files')
     var stderr = spy()
 
@@ -462,10 +451,7 @@ test('output', function(t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr()
-        .split('\n')
-        .slice(0, 2)
-        .join('\n')
+      var actual = stderr().split('\n').slice(0, 2).join('\n')
 
       var expected = [
         'one.txt',
@@ -478,7 +464,7 @@ test('output', function(t) {
 
   t.test(
     'should not create a new file when input file does not exist',
-    function(st) {
+    function (st) {
       var cwd = join(fixtures, 'empty')
       var targetFile = join(cwd, 'one.txt')
       var stderr = spy()
@@ -498,10 +484,7 @@ test('output', function(t) {
       )
 
       function onrun(err, code) {
-        var actual = stderr()
-          .split('\n')
-          .slice(0, 2)
-          .join('\n')
+        var actual = stderr().split('\n').slice(0, 2).join('\n')
 
         var expected = [
           'one.txt',

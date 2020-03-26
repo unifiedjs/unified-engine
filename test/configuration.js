@@ -10,10 +10,10 @@ var join = path.join
 
 var fixtures = join(__dirname, 'fixtures')
 
-test('configuration', function(t) {
+test('configuration', function (t) {
   t.plan(13)
 
-  t.test('should fail fatally when custom rc files are missing', function(st) {
+  t.test('should fail fatally when custom rc files are missing', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -31,10 +31,7 @@ test('configuration', function(t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr()
-        .split('\n')
-        .slice(0, 2)
-        .join('\n')
+      var actual = stderr().split('\n').slice(0, 2).join('\n')
 
       var expected = [
         'one.txt',
@@ -45,7 +42,7 @@ test('configuration', function(t) {
     }
   })
 
-  t.test('should fail fatally when custom rc files are empty', function(st) {
+  t.test('should fail fatally when custom rc files are empty', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -63,10 +60,7 @@ test('configuration', function(t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr()
-        .split('\n')
-        .slice(0, 2)
-        .join('\n')
+      var actual = stderr().split('\n').slice(0, 2).join('\n')
 
       var expected = [
         'one.txt',
@@ -77,7 +71,7 @@ test('configuration', function(t) {
     }
   })
 
-  t.test('should fail fatally when custom rc files are invalid', function(st) {
+  t.test('should fail fatally when custom rc files are invalid', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -95,10 +89,7 @@ test('configuration', function(t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr()
-        .split('\n')
-        .slice(0, 3)
-        .join('\n')
+      var actual = stderr().split('\n').slice(0, 3).join('\n')
 
       var expected = [
         'one.txt',
@@ -110,7 +101,7 @@ test('configuration', function(t) {
     }
   })
 
-  t.test('should support `.rc.js` modules (1)', function(st) {
+  t.test('should support `.rc.js` modules (1)', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -128,10 +119,7 @@ test('configuration', function(t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr()
-        .split('\n')
-        .slice(0, 2)
-        .join('\n')
+      var actual = stderr().split('\n').slice(0, 2).join('\n')
 
       var expected = [
         'one.txt',
@@ -142,7 +130,7 @@ test('configuration', function(t) {
     }
   })
 
-  t.test('should support `.rc.js` modules (2)', function(st) {
+  t.test('should support `.rc.js` modules (2)', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -168,7 +156,7 @@ test('configuration', function(t) {
     }
   })
 
-  t.test('should support `.rc.js` modules (3)', function(st) {
+  t.test('should support `.rc.js` modules (3)', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -196,7 +184,7 @@ test('configuration', function(t) {
     }
   })
 
-  t.test('should support `.rc.yaml` modules', function(st) {
+  t.test('should support `.rc.yaml` modules', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -214,10 +202,7 @@ test('configuration', function(t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr()
-        .split('\n')
-        .slice(0, 2)
-        .join('\n')
+      var actual = stderr().split('\n').slice(0, 2).join('\n')
 
       var expected = [
         'one.txt',
@@ -232,7 +217,7 @@ test('configuration', function(t) {
     }
   })
 
-  t.test('should support custom rc files', function(st) {
+  t.test('should support custom rc files', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -266,7 +251,7 @@ test('configuration', function(t) {
     }
   })
 
-  t.test('should support searching package files', function(st) {
+  t.test('should support searching package files', function (st) {
     var cwd = join(fixtures, 'malformed-package-file')
     var stderr = spy()
 
@@ -285,10 +270,7 @@ test('configuration', function(t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr()
-        .split('\n')
-        .slice(0, 2)
-        .join('\n')
+      var actual = stderr().split('\n').slice(0, 2).join('\n')
 
       var expected = [
         'one.txt',
@@ -299,7 +281,7 @@ test('configuration', function(t) {
     }
   })
 
-  t.test('should support custom rc files', function(st) {
+  t.test('should support custom rc files', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -333,7 +315,7 @@ test('configuration', function(t) {
     }
   })
 
-  t.test('should support no config files', function(st) {
+  t.test('should support no config files', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -367,7 +349,7 @@ test('configuration', function(t) {
     }
   })
 
-  t.test('should not search if `detectConfig` is `false`', function(st) {
+  t.test('should not search if `detectConfig` is `false`', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -394,7 +376,7 @@ test('configuration', function(t) {
     }
   })
 
-  t.test('should cascade `settings`', function(st) {
+  t.test('should cascade `settings`', function (st) {
     var stderr = spy()
 
     st.plan(2)

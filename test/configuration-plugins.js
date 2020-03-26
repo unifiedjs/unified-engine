@@ -10,10 +10,10 @@ var join = path.join
 
 var fixtures = join(__dirname, 'fixtures')
 
-test('configuration', function(t) {
+test('configuration', function (t) {
   t.plan(6)
 
-  t.test('should cascade `plugins`', function(st) {
+  t.test('should cascade `plugins`', function (st) {
     var stderr = spy()
 
     // One more assertions is loaded in a plugin.
@@ -45,7 +45,7 @@ test('configuration', function(t) {
     }
   })
 
-  t.test('should handle failing plugins', function(st) {
+  t.test('should handle failing plugins', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -63,10 +63,7 @@ test('configuration', function(t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr()
-        .split('\n')
-        .slice(0, 4)
-        .join('\n')
+      var actual = stderr().split('\n').slice(0, 4).join('\n')
 
       var expected = [
         'one.txt',
@@ -79,7 +76,7 @@ test('configuration', function(t) {
     }
   })
 
-  t.test('should handle missing plugins', function(st) {
+  t.test('should handle missing plugins', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -97,10 +94,7 @@ test('configuration', function(t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr()
-        .split('\n')
-        .slice(0, 2)
-        .join('\n')
+      var actual = stderr().split('\n').slice(0, 2).join('\n')
 
       var expected = [
         'one.txt',
@@ -111,7 +105,7 @@ test('configuration', function(t) {
     }
   })
 
-  t.test('should handle invalid plugins', function(st) {
+  t.test('should handle invalid plugins', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -129,10 +123,7 @@ test('configuration', function(t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr()
-        .split('\n')
-        .slice(0, 3)
-        .join('\n')
+      var actual = stderr().split('\n').slice(0, 3).join('\n')
 
       var expected = [
         'one.txt',
@@ -144,7 +135,7 @@ test('configuration', function(t) {
     }
   })
 
-  t.test('should handle throwing plugins', function(st) {
+  t.test('should handle throwing plugins', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -162,10 +153,7 @@ test('configuration', function(t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr()
-        .split('\n')
-        .slice(0, 2)
-        .join('\n')
+      var actual = stderr().split('\n').slice(0, 2).join('\n')
 
       var expected = [
         'one.txt',
@@ -176,7 +164,7 @@ test('configuration', function(t) {
     }
   })
 
-  t.test('should handle injected plugins', function(st) {
+  t.test('should handle injected plugins', function (st) {
     var stderr = spy()
     var o = {foo: 'bar'}
 

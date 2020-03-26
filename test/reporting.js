@@ -19,15 +19,15 @@ if (!platform.isWin) {
 
   process.env.CI = 'true'
 
-  test.onFinish(function() {
+  test.onFinish(function () {
     process.env.CI = original
   })
 }
 
-test('reporting', function(t) {
+test('reporting', function (t) {
   t.plan(7)
 
-  t.test('should fail for warnings with `frail`', function(st) {
+  t.test('should fail for warnings with `frail`', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -66,7 +66,7 @@ test('reporting', function(t) {
     }
   })
 
-  t.test('should not report succesful files when `quiet` (#1)', function(st) {
+  t.test('should not report succesful files when `quiet` (#1)', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -108,7 +108,7 @@ test('reporting', function(t) {
     }
   })
 
-  t.test('should not report succesful files when `quiet` (#2)', function(st) {
+  t.test('should not report succesful files when `quiet` (#2)', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -130,7 +130,7 @@ test('reporting', function(t) {
     }
   })
 
-  t.test('should not report succesful files when `silent`', function(st) {
+  t.test('should not report succesful files when `silent`', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -172,7 +172,7 @@ test('reporting', function(t) {
     }
   })
 
-  t.test('should support custom reporters (without prefix)', function(st) {
+  t.test('should support custom reporters (without prefix)', function (st) {
     var stderr = spy()
     var root = join(fixtures, 'two-files')
 
@@ -241,7 +241,7 @@ test('reporting', function(t) {
     }
   })
 
-  t.test('should support custom reporters (with prefix)', function(st) {
+  t.test('should support custom reporters (with prefix)', function (st) {
     var stderr = spy()
     var root = join(fixtures, 'two-files')
 
@@ -282,7 +282,7 @@ test('reporting', function(t) {
     }
   })
 
-  t.test('should fail on an unfound reporter', function(st) {
+  t.test('should fail on an unfound reporter', function (st) {
     var root = join(fixtures, 'one-file')
 
     st.plan(1)

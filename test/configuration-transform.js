@@ -10,10 +10,10 @@ var join = path.join
 
 var fixtures = join(__dirname, 'fixtures')
 
-test('`configTransform`', function(t) {
+test('`configTransform`', function (t) {
   t.plan(1)
 
-  t.test('should work', function(st) {
+  t.test('should work', function (st) {
     var stderr = spy()
 
     // One more in fixture.

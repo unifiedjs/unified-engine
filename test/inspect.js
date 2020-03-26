@@ -14,10 +14,10 @@ var unlink = fs.unlinkSync
 
 var fixtures = join(__dirname, 'fixtures')
 
-test('inspect', function(t) {
+test('inspect', function (t) {
   t.plan(3)
 
-  t.test('should write text when `inspect` is given', function(st) {
+  t.test('should write text when `inspect` is given', function (st) {
     var cwd = join(fixtures, 'one-file')
     var stderr = spy()
 
@@ -50,7 +50,7 @@ test('inspect', function(t) {
     }
   })
 
-  t.test('should support `inspect` for stdin', function(st) {
+  t.test('should support `inspect` for stdin', function (st) {
     var stdin = new PassThrough()
     var stdout = spy()
     var stderr = spy()
@@ -83,7 +83,7 @@ test('inspect', function(t) {
     }
   })
 
-  t.test('should support `inspect` with colour', function(st) {
+  t.test('should support `inspect` with colour', function (st) {
     var stdin = new PassThrough()
     var stdout = spy()
     var stderr = spy()

@@ -1,4 +1,4 @@
-module.exports = function(options) {
+module.exports = function (options) {
   this.t.deepEqual(
     this.data('settings'),
     {charlie: true},

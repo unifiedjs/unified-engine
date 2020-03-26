@@ -15,10 +15,10 @@ var unlink = fs.unlinkSync
 
 var fixtures = join(__dirname, 'fixtures')
 
-test('tree', function(t) {
+test('tree', function (t) {
   t.plan(7)
 
-  t.test('should fail on malformed input', function(st) {
+  t.test('should fail on malformed input', function (st) {
     var cwd = join(fixtures, 'malformed-tree')
     var stderr = spy()
 
@@ -36,10 +36,7 @@ test('tree', function(t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr()
-        .split('\n')
-        .slice(0, 2)
-        .join('\n')
+      var actual = stderr().split('\n').slice(0, 2).join('\n')
 
       st.deepEqual(
         [error, code, actual],
@@ -49,7 +46,7 @@ test('tree', function(t) {
     }
   })
 
-  t.test('should read and write JSON when `tree` is given', function(st) {
+  t.test('should read and write JSON when `tree` is given', function (st) {
     var cwd = join(fixtures, 'tree')
     var stderr = spy()
 
@@ -93,7 +90,7 @@ test('tree', function(t) {
     }
   })
 
-  t.test('should read JSON when `treeIn` is given', function(st) {
+  t.test('should read JSON when `treeIn` is given', function (st) {
     var cwd = join(fixtures, 'tree')
     var stderr = spy()
 
@@ -133,7 +130,7 @@ test('tree', function(t) {
     }
   })
 
-  t.test('should write JSON when `treeOut` is given', function(st) {
+  t.test('should write JSON when `treeOut` is given', function (st) {
     var cwd = join(fixtures, 'one-file')
     var stderr = spy()
 
@@ -178,7 +175,7 @@ test('tree', function(t) {
     }
   })
 
-  t.test('should support `treeOut` for stdin', function(st) {
+  t.test('should support `treeOut` for stdin', function (st) {
     var stdin = new PassThrough()
     var stdout = spy()
     var stderr = spy()
@@ -216,7 +213,7 @@ test('tree', function(t) {
     }
   })
 
-  t.test('should support `treeIn` for stdin', function(st) {
+  t.test('should support `treeIn` for stdin', function (st) {
     var stdin = new PassThrough()
     var stdout = spy()
     var stderr = spy()
@@ -249,7 +246,7 @@ test('tree', function(t) {
     }
   })
 
-  t.test('should write injected files', function(st) {
+  t.test('should write injected files', function (st) {
     var cwd = join(fixtures, 'one-file')
     var stderr = spy()
 

@@ -45,11 +45,7 @@ An example **rc** file could look as follows:
 An example **rc.js** file could look as follows:
 
 ```js
-exports.plugins = [
-  './script/natural-language',
-  'lint-recommended',
-  'license'
-]
+exports.plugins = ['./script/natural-language', 'lint-recommended', 'license']
 
 exports.settings = {bullet: '*'}
 ```

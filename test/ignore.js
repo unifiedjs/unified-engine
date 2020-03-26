@@ -10,10 +10,10 @@ var join = path.join
 
 var fixtures = join(__dirname, 'fixtures')
 
-test('ignore', function(t) {
+test('ignore', function (t) {
   t.plan(7)
 
-  t.test('should fail fatally when given ignores are not found', function(st) {
+  t.test('should fail fatally when given ignores are not found', function (st) {
     var cwd = join(fixtures, 'simple-structure')
     var stderr = spy()
 
@@ -33,10 +33,7 @@ test('ignore', function(t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr()
-        .split('\n')
-        .slice(0, 2)
-        .join('\n')
+      var actual = stderr().split('\n').slice(0, 2).join('\n')
 
       var expected = [
         'one.txt',
@@ -47,7 +44,7 @@ test('ignore', function(t) {
     }
   })
 
-  t.test('should support custom ignore files', function(st) {
+  t.test('should support custom ignore files', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -80,7 +77,7 @@ test('ignore', function(t) {
     }
   })
 
-  t.test('should support searching ignore files', function(st) {
+  t.test('should support searching ignore files', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -113,7 +110,7 @@ test('ignore', function(t) {
     }
   })
 
-  t.test('should not look into hidden files', function(st) {
+  t.test('should not look into hidden files', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -139,7 +136,7 @@ test('ignore', function(t) {
     }
   })
 
-  t.test('should support no ignore files', function(st) {
+  t.test('should support no ignore files', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -173,7 +170,7 @@ test('ignore', function(t) {
     }
   })
 
-  t.test('should support ignore patterns', function(st) {
+  t.test('should support ignore patterns', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -201,7 +198,7 @@ test('ignore', function(t) {
     }
   })
 
-  t.test('should support ignore files and ignore patterns', function(st) {
+  t.test('should support ignore files and ignore patterns', function (st) {
     var stderr = spy()
 
     st.plan(1)

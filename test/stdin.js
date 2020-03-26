@@ -11,10 +11,10 @@ var join = path.join
 
 var fixtures = join(__dirname, 'fixtures')
 
-test('stdin', function(t) {
+test('stdin', function (t) {
   t.plan(3)
 
-  t.test('should support stdin', function(st) {
+  t.test('should support stdin', function (st) {
     var stdout = spy()
     var stderr = spy()
     var stream = new PassThrough()
@@ -58,7 +58,7 @@ test('stdin', function(t) {
     }
   })
 
-  t.test('should not output if `out: false`', function(st) {
+  t.test('should not output if `out: false`', function (st) {
     var stdout = spy()
     var stderr = spy()
     var stream = new PassThrough()
@@ -98,7 +98,7 @@ test('stdin', function(t) {
     }
   })
 
-  t.test('should support config files on stdin', function(st) {
+  t.test('should support config files on stdin', function (st) {
     var stdout = spy()
     var stderr = spy()
     var stream = new PassThrough()

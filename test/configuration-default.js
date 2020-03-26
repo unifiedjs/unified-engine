@@ -10,7 +10,7 @@ var join = path.join
 
 var fixtures = join(__dirname, 'fixtures')
 
-test('`defaultConfig`', function(t) {
+test('`defaultConfig`', function (t) {
   t.plan(2)
 
   var defaultConfig = {
@@ -18,7 +18,7 @@ test('`defaultConfig`', function(t) {
     plugins: {'./test-defaults': {bravo: false}}
   }
 
-  t.test('should use default config if no config file is found', function(st) {
+  t.test('should use default config if no config file is found', function (st) {
     var stderr = spy()
 
     st.plan(3)
@@ -49,7 +49,7 @@ test('`defaultConfig`', function(t) {
     }
   })
 
-  t.test('should use found otherwise', function(st) {
+  t.test('should use found otherwise', function (st) {
     var stderr = spy()
 
     st.plan(3)

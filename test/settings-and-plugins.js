@@ -10,10 +10,10 @@ var join = path.join
 
 var fixtures = join(__dirname, 'fixtures')
 
-test('settings', function(t) {
+test('settings', function (t) {
   t.plan(2)
 
-  t.test('should use `settings`', function(st) {
+  t.test('should use `settings`', function (st) {
     var stderr = spy()
 
     st.plan(2)
@@ -49,7 +49,7 @@ test('settings', function(t) {
     }
   })
 
-  t.test('should cascade `settings`', function(st) {
+  t.test('should cascade `settings`', function (st) {
     var stderr = spy()
 
     st.plan(2)
@@ -91,10 +91,10 @@ test('settings', function(t) {
   })
 })
 
-test('plugins', function(t) {
+test('plugins', function (t) {
   t.plan(3)
 
-  t.test('should use `plugins` as list of functions', function(st) {
+  t.test('should use `plugins` as list of functions', function (st) {
     var stderr = spy()
 
     st.plan(3)
@@ -136,7 +136,7 @@ test('plugins', function(t) {
     }
   })
 
-  t.test('should use `plugins` as list of strings', function(st) {
+  t.test('should use `plugins` as list of strings', function (st) {
     var stderr = spy()
 
     st.plan(2)
@@ -166,7 +166,7 @@ test('plugins', function(t) {
     }
   })
 
-  t.test('should use `plugins` as list of objects', function(st) {
+  t.test('should use `plugins` as list of objects', function (st) {
     var stderr = spy()
 
     st.plan(2)

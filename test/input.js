@@ -14,10 +14,10 @@ var join = path.join
 
 var fixtures = join(__dirname, 'fixtures')
 
-test('input', function(t) {
+test('input', function (t) {
   t.plan(19)
 
-  t.test('should fail without input', function(st) {
+  t.test('should fail without input', function (st) {
     var stream = new PassThrough()
 
     st.plan(1)
@@ -34,7 +34,7 @@ test('input', function(t) {
     }
   })
 
-  t.test('should not fail on empty input stream', function(st) {
+  t.test('should not fail on empty input stream', function (st) {
     var stderr = spy()
     var stream = new PassThrough()
 
@@ -60,7 +60,7 @@ test('input', function(t) {
     }
   })
 
-  t.test('should not fail on unmatched given globs', function(st) {
+  t.test('should not fail on unmatched given globs', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -80,7 +80,7 @@ test('input', function(t) {
     }
   })
 
-  t.test('should report unfound given files', function(st) {
+  t.test('should report unfound given files', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -112,7 +112,7 @@ test('input', function(t) {
     }
   })
 
-  t.test('should not report unfound given directories', function(st) {
+  t.test('should not report unfound given directories', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -132,7 +132,7 @@ test('input', function(t) {
     }
   })
 
-  t.test('should search for extensions', function(st) {
+  t.test('should search for extensions', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -165,7 +165,7 @@ test('input', function(t) {
     }
   })
 
-  t.test('should search a directory for extensions', function(st) {
+  t.test('should search a directory for extensions', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -196,7 +196,7 @@ test('input', function(t) {
     }
   })
 
-  t.test('should search for globs matching files (#1)', function(st) {
+  t.test('should search for globs matching files (#1)', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -227,7 +227,7 @@ test('input', function(t) {
     }
   })
 
-  t.test('should search for globs matching files (#2)', function(st) {
+  t.test('should search for globs matching files (#2)', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -258,7 +258,7 @@ test('input', function(t) {
     }
   })
 
-  t.test('should search for globs matching dirs', function(st) {
+  t.test('should search for globs matching dirs', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -289,7 +289,7 @@ test('input', function(t) {
     }
   })
 
-  t.test('should search vfile’s pointing to directories', function(st) {
+  t.test('should search vfile’s pointing to directories', function (st) {
     var cwd = join(fixtures, 'ignore-file')
     var stderr = spy()
 
@@ -315,7 +315,7 @@ test('input', function(t) {
     }
   })
 
-  t.test('should not ignore implicitly ignored files in globs', function(st) {
+  t.test('should not ignore implicitly ignored files in globs', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -352,7 +352,7 @@ test('input', function(t) {
     }
   })
 
-  t.test('should include given ignored files (#1)', function(st) {
+  t.test('should include given ignored files (#1)', function (st) {
     var cwd = join(fixtures, 'ignore-file')
     var stderr = spy()
 
@@ -393,7 +393,7 @@ test('input', function(t) {
     }
   })
 
-  t.test('should not atempt to read files with `contents` (1)', function(st) {
+  t.test('should not atempt to read files with `contents` (1)', function (st) {
     var stderr = spy()
     var cwd = join(fixtures, 'ignore-file')
     var file = vfile({path: join(cwd, 'not-existing.txt'), contents: 'foo'})
@@ -428,7 +428,7 @@ test('input', function(t) {
     }
   })
 
-  t.test('should not atempt to read files with `contents` (2)', function(st) {
+  t.test('should not atempt to read files with `contents` (2)', function (st) {
     var stderr = spy()
     var cwd = join(fixtures, 'ignore-file')
     var file = vfile({path: join(cwd, 'not-existing-2.txt'), contents: 'foo'})
@@ -455,7 +455,7 @@ test('input', function(t) {
     }
   })
 
-  t.test('should include given ignored files (#2)', function(st) {
+  t.test('should include given ignored files (#2)', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -491,7 +491,7 @@ test('input', function(t) {
     }
   })
 
-  t.test('silentlyIgnore: skip detected ignored files (#1)', function(st) {
+  t.test('silentlyIgnore: skip detected ignored files (#1)', function (st) {
     var cwd = join(fixtures, 'ignore-file')
     var stderr = spy()
 
@@ -528,7 +528,7 @@ test('input', function(t) {
     }
   })
 
-  t.test('silentlyIgnore: skip detected ignored files (#2)', function(st) {
+  t.test('silentlyIgnore: skip detected ignored files (#2)', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -560,7 +560,7 @@ test('input', function(t) {
     }
   })
 
-  t.test('should search if given files', function(st) {
+  t.test('should search if given files', function (st) {
     var cwd = join(fixtures, 'simple-structure')
     var stderr = spy()
 

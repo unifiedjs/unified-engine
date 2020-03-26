@@ -10,10 +10,10 @@ var join = path.join
 
 var fixtures = join(__dirname, 'fixtures')
 
-test('configuration-presets', function(t) {
+test('configuration-presets', function (t) {
   t.plan(8)
 
-  t.test('should fail on invalid `presets`', function(st) {
+  t.test('should fail on invalid `presets`', function (st) {
     var root = join(fixtures, 'config-presets-invalid')
     var stderr = spy()
 
@@ -32,10 +32,7 @@ test('configuration-presets', function(t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr()
-        .split('\n')
-        .slice(0, 3)
-        .join('\n')
+      var actual = stderr().split('\n').slice(0, 3).join('\n')
 
       var expected = [
         'one.txt',
@@ -47,7 +44,7 @@ test('configuration-presets', function(t) {
     }
   })
 
-  t.test('should support plugins with the same name', function(st) {
+  t.test('should support plugins with the same name', function (st) {
     var stderr = spy()
 
     // More assertions are in loaded plugins.
@@ -78,7 +75,7 @@ test('configuration-presets', function(t) {
     }
   })
 
-  t.test('should handle missing plugins in presets', function(st) {
+  t.test('should handle missing plugins in presets', function (st) {
     var stderr = spy()
 
     st.plan(1)
@@ -96,10 +93,7 @@ test('configuration-presets', function(t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr()
-        .split('\n')
-        .slice(0, 2)
-        .join('\n')
+      var actual = stderr().split('\n').slice(0, 2).join('\n')
 
       var expected = [
         'one.txt',
@@ -110,7 +104,7 @@ test('configuration-presets', function(t) {
     }
   })
 
-  t.test('should reconfigure plugins', function(st) {
+  t.test('should reconfigure plugins', function (st) {
     var stderr = spy()
 
     // One more assertion is loaded in the plugin.
@@ -141,7 +135,7 @@ test('configuration-presets', function(t) {
     }
   })
 
-  t.test('should reconfigure required plugins', function(st) {
+  t.test('should reconfigure required plugins', function (st) {
     var stderr = spy()
 
     // One more assertion is loaded in the plugin.
@@ -172,7 +166,7 @@ test('configuration-presets', function(t) {
     }
   })
 
-  t.test('Should reconfigure: turn plugins off', function(st) {
+  t.test('Should reconfigure: turn plugins off', function (st) {
     var stderr = spy()
 
     // More assertions are in loaded plugins.
@@ -199,7 +193,7 @@ test('configuration-presets', function(t) {
     }
   })
 
-  t.test('should reconfigure settings', function(st) {
+  t.test('should reconfigure settings', function (st) {
     var stderr = spy()
 
     st.plan(2)
@@ -234,7 +228,7 @@ test('configuration-presets', function(t) {
     }
   })
 
-  t.test('should reconfigure settings (2)', function(st) {
+  t.test('should reconfigure settings (2)', function (st) {
     var stderr = spy()
 
     st.plan(2)

@@ -11,10 +11,10 @@ var join = path.join
 
 var fixtures = join(__dirname, 'fixtures')
 
-test('file-path', function(t) {
+test('file-path', function (t) {
   t.plan(2)
 
-  t.test('should throw on `filePath` with files', function(st) {
+  t.test('should throw on `filePath` with files', function (st) {
     st.plan(1)
 
     engine(
@@ -29,10 +29,7 @@ test('file-path', function(t) {
     )
 
     function onrun(error) {
-      var actual = error.message
-        .split('\n')
-        .slice(0, 2)
-        .join('\n')
+      var actual = error.message.split('\n').slice(0, 2).join('\n')
 
       var expected = [
         'Do not pass both `--file-path` and real files.',
@@ -43,7 +40,7 @@ test('file-path', function(t) {
     }
   })
 
-  t.test('should support `filePath`', function(st) {
+  t.test('should support `filePath`', function (st) {
     var stdout = spy()
     var stderr = spy()
     var stream = new PassThrough()

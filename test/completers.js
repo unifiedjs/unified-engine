@@ -14,10 +14,10 @@ var unlink = fs.unlinkSync
 
 var fixtures = join(__dirname, 'fixtures')
 
-test('completers', function(t) {
+test('completers', function (t) {
   t.plan(2)
 
-  t.test('should pass `fileSet` to plugins', function(st) {
+  t.test('should pass `fileSet` to plugins', function (st) {
     var stderr = spy()
 
     otherCompleter.pluginId = 'foo'
@@ -88,7 +88,7 @@ test('completers', function(t) {
     }
   })
 
-  t.test('should pass `fileSet` to plugins', function(st) {
+  t.test('should pass `fileSet` to plugins', function (st) {
     var cwd = join(fixtures, 'extensions')
     var stderr = spy()
 
@@ -99,7 +99,7 @@ test('completers', function(t) {
         processor: noop,
         streamError: stderr.stream,
         plugins: [
-          function(settings, set) {
+          function (settings, set) {
             set.add('bar.text')
           }
         ],
