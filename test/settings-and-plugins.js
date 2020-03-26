@@ -144,7 +144,7 @@ test('plugins', function (t) {
     engine(
       {
         processor: noop().use(addTest),
-        cwd: join(fixtures, 'config-plugins-reconfigure'),
+        cwd: join(fixtures, 'config-plugins-basic-reconfigure'),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -174,7 +174,7 @@ test('plugins', function (t) {
     engine(
       {
         processor: noop().use(addTest),
-        cwd: join(fixtures, 'config-plugins-reconfigure'),
+        cwd: join(fixtures, 'config-plugins-basic-reconfigure'),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],

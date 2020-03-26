@@ -26,6 +26,7 @@
     "glob": "^7.0.3",
     "ignore": "^5.0.0",
     "is-empty": "^1.0.0",
+    "is-plain-obj": "^2.0.0",
     "js-yaml": "^3.6.1",
     "load-plugin": "^3.0.0",
     "parse-json": "^5.0.0",

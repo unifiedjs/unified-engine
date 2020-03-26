@@ -107,8 +107,8 @@ test('configuration-presets', function (t) {
   t.test('should reconfigure plugins', function (t) {
     var stderr = spy()
 
-    // One more assertion is loaded in the plugin.
-    t.plan(2)
+    // Five more assertions are loaded in the plugin.
+    t.plan(6)
 
     engine(
       {
