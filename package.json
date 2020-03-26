@@ -36,8 +36,7 @@
     "trough": "^1.0.0",
     "unist-util-inspect": "^4.1.2",
     "vfile-reporter": "^6.0.0",
-    "vfile-statistics": "^1.1.0",
-    "x-is-string": "^0.1.0"
+    "vfile-statistics": "^1.1.0"
   },
   "devDependencies": {
     "nyc": "^15.0.0",
