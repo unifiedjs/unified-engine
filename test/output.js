@@ -17,7 +17,7 @@ var sep = path.sep
 var fixtures = join(__dirname, 'fixtures')
 
 test('output', function (t) {
-  t.plan(13)
+  t.plan(16)
 
   t.test('should not write to stdout on dirs', function (t) {
     var cwd = join(fixtures, 'one-file')
@@ -497,4 +497,112 @@ test('output', function (t) {
       }
     }
   )
+
+  t.test('should write buffers', function (t) {
+    var cwd = join(fixtures, 'filled-file')
+    var stdout = spy()
+    var stderr = spy()
+
+    t.plan(1)
+
+    engine(
+      {
+        processor: noop().use(buffer),
+        cwd: cwd,
+        streamOut: stdout.stream,
+        streamError: stderr.stream,
+        files: ['one.txt'],
+        extensions: ['txt']
+      },
+      onrun
+    )
+
+    function onrun(error, code) {
+      t.deepEqual(
+        [error, code, stdout(), stderr()],
+        [null, 0, 'bravo', 'one.txt: no issues found\n'],
+        'should report'
+      )
+    }
+
+    function buffer() {
+      this.Compiler = compile
+    }
+
+    function compile() {
+      return Buffer.from('bravo')
+    }
+  })
+
+  t.test('should ignore nully compilers', function (t) {
+    var cwd = join(fixtures, 'filled-file')
+    var stdout = spy()
+    var stderr = spy()
+
+    t.plan(1)
+
+    engine(
+      {
+        processor: noop().use(nully),
+        cwd: cwd,
+        streamOut: stdout.stream,
+        streamError: stderr.stream,
+        files: ['one.txt'],
+        extensions: ['txt']
+      },
+      onrun
+    )
+
+    function onrun(error, code) {
+      t.deepEqual(
+        [error, code, stdout().trim(), stderr()],
+        [null, 0, 'alpha', 'one.txt: no issues found\n'],
+        'should report'
+      )
+    }
+
+    function nully() {
+      this.Compiler = compile
+    }
+
+    function compile() {
+      return null
+    }
+  })
+
+  t.test('should ignore non-text compilers', function (t) {
+    var cwd = join(fixtures, 'filled-file')
+    var stdout = spy()
+    var stderr = spy()
+
+    t.plan(1)
+
+    engine(
+      {
+        processor: noop().use(vdom),
+        cwd: cwd,
+        streamOut: stdout.stream,
+        streamError: stderr.stream,
+        files: ['one.txt'],
+        extensions: ['txt']
+      },
+      onrun
+    )
+
+    function onrun(error, code) {
+      t.deepEqual(
+        [error, code, stdout().trim(), stderr()],
+        [null, 0, 'alpha', 'one.txt: no issues found\n'],
+        'should report'
+      )
+    }
+
+    function vdom() {
+      this.Compiler = compile
+    }
+
+    function compile() {
+      return {type: 'some-virtual-dom'}
+    }
+  })
 })
