@@ -28,7 +28,6 @@
     "ignore": "^5.0.0",
     "is-empty": "^1.0.0",
     "is-hidden": "^1.0.1",
-    "is-object": "^1.0.1",
     "js-yaml": "^3.6.1",
     "load-plugin": "^2.0.0",
     "parse-json": "^4.0.0",
