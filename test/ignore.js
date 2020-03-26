@@ -230,8 +230,8 @@ test('ignore', function (t) {
 
       function onrun(error, code) {
         var expected = [
-          'deep/files/two.txt: no issues found',
-          'files/one.txt: no issues found',
+          join('deep', 'files', 'two.txt') + ': no issues found',
+          join('files', 'one.txt') + ': no issues found',
           ''
         ].join('\n')
 
