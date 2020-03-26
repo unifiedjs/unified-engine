@@ -11,7 +11,7 @@ var join = path.join
 var fixtures = join(__dirname, 'fixtures')
 
 test('ignore', function (t) {
-  t.plan(8)
+  t.plan(9)
 
   t.test('should fail fatally when given ignores are not found', function (t) {
     var cwd = join(fixtures, 'simple-structure')
@@ -223,7 +223,6 @@ test('ignore', function (t) {
           files: ['.'],
           ignorePath: join('deep', 'ignore'),
           ignorePatterns: ['files/two.txt'],
-          ignoreFrom: '.',
           extensions: ['txt']
         },
         onrun
@@ -244,4 +243,38 @@ test('ignore', function (t) {
       }
     }
   )
+
+  t.test('`ignoreFrom`', function (st) {
+    var stderr = spy()
+
+    st.plan(1)
+
+    engine(
+      {
+        processor: noop,
+        cwd: join(fixtures, 'sibling-ignore'),
+        streamError: stderr.stream,
+        files: ['.'],
+        ignorePath: join('deep', 'ignore'),
+        ignorePatterns: ['files/two.txt'],
+        ignoreFrom: '.',
+        extensions: ['txt']
+      },
+      onrun
+    )
+
+    function onrun(error, code) {
+      var expected = [
+        'deep/files/one.txt: no issues found',
+        'deep/files/two.txt: no issues found',
+        ''
+      ].join('\n')
+
+      st.deepEqual(
+        [error, code, stderr()],
+        [null, 0, expected],
+        'should report'
+      )
+    }
+  })
 })

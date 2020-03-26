@@ -33,8 +33,13 @@ an error is thrown.
 These files can be silently ignored by turning on
 [`silentlyIgnore`][silently-ignore].
 
-Files are ignored based on the path of the found ignore file and the patterns
-inside it.
+Normally, files are ignored based on the path of the found ignore file and the
+patterns inside it.
+Patterns passed with [`ignorePatterns`][ignore-patterns] are resolved based on
+the current working directory.
+
+Patterns in [`ignorePath`][ignore-path] and [`ignorePatterns`][ignore-patterns]
+can be resolved from somewhere else by passing [`ignoreFrom`][ignore-from].
 
 If paths or globs to directories are given to the engine, they will be searched
 for matching files, but `node_modules` and hidden directories (those starting
@@ -71,6 +76,8 @@ test/{input,tree}
 [ignore-path]: options.md#optionsignorepath
 
 [ignore-patterns]: options.md#optionsignorepatterns
+
+[ignore-from]: options.md#optionsignorefrom
 
 [silently-ignore]: options.md#optionssilentlyignore
 
