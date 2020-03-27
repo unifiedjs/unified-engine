@@ -11,12 +11,19 @@
   "repository": "unifiedjs/unified-engine",
   "bugs": "https://github.com/unifiedjs/unified-engine/issues",
   "author": "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/unified"
+  },
   "contributors": [
-    "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)"
+    "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
+    "Christian Murphy <christian.murphy.42@gmail.com>"
   ],
   "main": "lib/index.js",
+  "types": "types/index.d.ts",
   "files": [
-    "lib/"
+    "lib/",
+    "types/index.d.ts"
   ],
   "dependencies": {
     "concat-stream": "^2.0.0",
@@ -38,13 +45,18 @@
     "vfile-statistics": "^1.1.0"
   },
   "devDependencies": {
+    "@types/node": "^12.0.0",
+    "@types/unist": "^2.0.0",
+    "dtslint": "^3.0.0",
     "nyc": "^15.0.0",
     "prettier": "^2.0.0",
+    "remark": "^11.0.0",
     "remark-cli": "^7.0.0",
     "remark-preset-wooorm": "^6.0.0",
     "strip-ansi": "^6.0.0",
     "tape": "^4.0.0",
     "unified": "^8.0.0",
+    "vfile": "^4.0.0",
     "vfile-reporter-json": "^2.0.0",
     "vfile-reporter-pretty": "^4.0.0",
     "xo": "^0.28.0"
@@ -53,7 +65,8 @@
     "format": "remark . -qfo && prettier --write \"**/*.js\" && xo --fix",
     "test-api": "node test",
     "test-coverage": "nyc --reporter lcov tape test/index.js",
-    "test": "npm run format && npm run test-coverage"
+    "test-types": "dtslint types",
+    "test": "npm run format && npm run test-coverage && npm run test-types"
   },
   "nyc": {
     "check-coverage": true,
