@@ -2,7 +2,6 @@
 
 import {Plugin, Pluggable, PluggableList, Processor, Settings} from 'unified'
 import {VFile} from 'vfile'
-import {ReadStream, WriteStream} from 'fs'
 
 declare namespace unifiedEngine {
   type VFileReporter<T = Settings> = (files: VFile[], options: T) => string
@@ -41,7 +40,7 @@ declare namespace unifiedEngine {
      *
      * @defaultValue `process.stdin`
      */
-    streamIn?: ReadStream
+    streamIn?: NodeJS.ReadableStream
 
     /**
      * File path to process the given file on `streamIn` as
@@ -53,14 +52,14 @@ declare namespace unifiedEngine {
      *
      * @defaultValue `process.stdout`
      */
-    streamOut?: WriteStream
+    streamOut?: NodeJS.WritableStream
 
     /**
      * Stream to write the report (if any) to
      *
      * @defaultValue `process.stderr`
      */
-    streamError?: WriteStream
+    streamError?: NodeJS.WritableStream
 
     /**
      * Whether to write the processed file to `streamOut`
@@ -245,17 +244,21 @@ declare namespace unifiedEngine {
     files: VFile[]
 
     /**
-     * Internally used information 
+     * Internally used information
      */
     fileset: FileSet
   }
 
   /**
-   * Callback invoked when processing according to options is complete. Invoked with either a fatal error if processing went horribly wrong (probably due to incorrect configuration), or a status code and the processing context.
+   * Callback invoked when processing according to options is complete.
+   * Invoked with either a fatal error if processing went horribly wrong (probably due to incorrect configuration),
+   * or a status code and the processing context.
    */
   interface Callback {
     /**
-     * Callback invoked when processing according to options is complete. Invoked with either a fatal error if processing went horribly wrong (probably due to incorrect configuration), or a status code and the processing context.
+     * Callback invoked when processing according to options is complete.
+     * Invoked with either a fatal error if processing went horribly wrong (probably due to incorrect configuration),
+     * or a status code and the processing context.
      *
      * @param error Fatal error
      * @param failed Either 0 if successful, or 1 if unsuccessful. The latter occurs if fatal errors happen when processing individual files, or if frail is set and warnings occur
