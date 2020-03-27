@@ -258,7 +258,7 @@ declare namespace unifiedEngine {
      * To prevent completers from attaching multiple times, specify a `pluginId`.
      * This will ensure only one completer per `pluginId` is added.
      */
-    pluginId: string
+    pluginId?: string
   }
 
   /**
