@@ -28,7 +28,7 @@ declare namespace unifiedEngine {
     /**
      * Paths or globs to files and directories, or virtual files, to process
      */
-    files?: string[] | VFile[]
+    files?: Array<string | VFile>
 
     /**
      * If `files` matches directories, include `files` with `extensions`
@@ -182,7 +182,7 @@ declare namespace unifiedEngine {
     /**
      * Transform config files from a different schema
      */
-    configTransform?: (config: unknown) => Options<P>
+    configTransform?: (config: unknown) => Partial<Options<P, V>>
 
     /**
      * Reporter to use
