@@ -254,18 +254,11 @@ declare namespace unifiedEngine {
    * Invoked with either a fatal error if processing went horribly wrong (probably due to incorrect configuration),
    * or a status code and the processing context.
    */
-  interface Callback {
-    /**
-     * Callback invoked when processing according to options is complete.
-     * Invoked with either a fatal error if processing went horribly wrong (probably due to incorrect configuration),
-     * or a status code and the processing context.
-     *
-     * @param error Fatal error
-     * @param failed Either 0 if successful, or 1 if unsuccessful. The latter occurs if fatal errors happen when processing individual files, or if frail is set and warnings occur
-     * @param context Processing context, containing internally used information and a `files` array with the processed files
-     */
-    (error: Error | null, failed: 0 | 1, context: CallbackContext): void
-  }
+  type Callback = (
+    error: Error | null,
+    failed: 0 | 1,
+    context: CallbackContext
+  ) => void
 }
 
 /**
