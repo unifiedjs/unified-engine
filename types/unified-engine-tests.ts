@@ -152,5 +152,6 @@ engine(
     }
 
     context.files.forEach((file) => console.log(file.name))
+    context.fileset.valueOf().forEach((file) => console.log(file.name))
   }
 )

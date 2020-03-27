@@ -232,13 +232,57 @@ declare namespace unifiedEngine {
     frail?: boolean
   }
 
+  /**
+   * Callback for Completer
+   */
+  interface CompleterNext {
+    /**
+     * @param error Fatal error
+     */
+    (error: Error): void
+  }
+
+  /**
+   * Function invoked when all files are processed
+   *
+   * @param fileSet Processed file set
+   * @param next If the signature of a completer includes `next`, the function may finish asynchronous, and must invoke `next()`.
+   * @returns If a promise is returned, the function is asynchronous, and must be resolved (with nothing) or rejected
+   */
+  interface Completer {
+    (fileSet: FileSet, next?: CompleterNext): Error | Promise<void>
+
+    /**
+     * Plugins specified through various mechanisms are attached to a new processor for each file.
+     * If a completer is used multiple times, it is invoked multiple times as well.
+     * To prevent completers from attaching multiple times, specify a `pluginId`.
+     * This will ensure only one completer per `pluginId` is added.
+     */
+    pluginId: string
+  }
+
+  /**
+   * A FileSet is created to process multiple files through unified processors.
+   * This set, containing all files, is exposed to plugins as an argument to the attacher.
+   */
   interface FileSet {
-    files: VFile[]
-    origins: string[]
-    expected: number
-    actual: number
-    pipeline: unknown
-    plugins: Plugin[]
+    /**
+     * Access the files in a set
+     */
+    valueOf(): VFile[]
+
+    /**
+     * Add a file to be processed. The given file is processed like other files with a few differences
+     * * Ignored when their file path is already added
+     * * Never written to the file system or streamOut
+     * * Not reported for
+     */
+    add(file: VFile | string): FileSet
+
+    /**
+     * Attach a completer to a middleware pipeline which runs when all files are transformed (before compilation)
+     */
+    completer(completer: Completer): FileSet
   }
 
   /**
