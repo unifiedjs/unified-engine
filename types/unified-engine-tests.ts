@@ -64,6 +64,16 @@ engine(
 engine(
   {
     processor: remark(),
+    reporter: 'vfile-reporter-pretty',
+    // settings cannot be inferred
+    reporterOptions: {notARealSetting: true}
+  },
+  () => {}
+)
+
+engine(
+  {
+    processor: remark(),
     output: true
   },
   () => {}
@@ -119,7 +129,7 @@ engine(
     ignorePatterns: ['.hidden'],
     silentlyIgnore: false,
     plugins: toc,
-    pluginsPrefix: 'example',
+    pluginPrefix: 'example',
     configTransform: () => ({plugins: []}),
     reporter: customReporter,
     reporterOptions: {example: true},
@@ -129,4 +139,18 @@ engine(
     frail: false
   },
   () => {}
+)
+
+engine(
+  {
+    processor: remark()
+  },
+  (err, status, context) => {
+    if (err || status === 1) {
+      console.error('failed with error ', err)
+      return
+    }
+
+    context.files.forEach((file) => console.log(file.name))
+  }
 )

@@ -1,6 +1,13 @@
 // TypeScript Version: 3.0
 
-import {Plugin, Pluggable, PluggableList, Processor, Settings} from 'unified'
+import {
+  Plugin,
+  Pluggable,
+  PluggableList,
+  Processor,
+  Settings,
+  Preset
+} from 'unified'
 import {VFile} from 'vfile'
 
 declare namespace unifiedEngine {
@@ -177,19 +184,19 @@ declare namespace unifiedEngine {
     /**
      * Optional prefix to use when searching for plugins
      */
-    pluginsPrefix?: string
+    pluginPrefix?: string
 
     /**
      * Transform config files from a different schema
      */
-    configTransform?: (config: unknown) => Partial<Options<P, V>>
+    configTransform?: (config: unknown) => Partial<Preset<Settings, P>>
 
     /**
      * Reporter to use
      *
      * @defaultValue `require('vfile-reporter')`
      */
-    reporter?: VFileReporter<V>
+    reporter?: VFileReporter<V> | string
 
     /**
      * Config to pass to the used reporter
