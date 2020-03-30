@@ -244,7 +244,7 @@ test('ignore', function (t) {
     }
   )
 
-  t.test('`ignoreFrom`', function (t) {
+  t.test('`ignorePathResolveFrom`', function (t) {
     var stderr = spy()
 
     t.plan(1)
@@ -256,8 +256,7 @@ test('ignore', function (t) {
         streamError: stderr.stream,
         files: ['.'],
         ignorePath: join('deep', 'ignore'),
-        ignorePatterns: ['files/two.txt'],
-        ignoreFrom: '.',
+        ignorePathResolveFrom: 'cwd',
         extensions: ['txt']
       },
       onrun
@@ -267,6 +266,7 @@ test('ignore', function (t) {
       var expected = [
         join('deep', 'files', 'one.txt') + ': no issues found',
         join('deep', 'files', 'two.txt') + ': no issues found',
+        join('files', 'two.txt') + ': no issues found',
         ''
       ].join('\n')
 

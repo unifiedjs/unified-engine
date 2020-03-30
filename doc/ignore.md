@@ -38,8 +38,10 @@ patterns inside it.
 Patterns passed with [`ignorePatterns`][ignore-patterns] are resolved based on
 the current working directory.
 
-Patterns in [`ignorePath`][ignore-path] and [`ignorePatterns`][ignore-patterns]
-can be resolved from somewhere else by passing [`ignoreFrom`][ignore-from].
+Patterns in [`ignorePath`][ignore-path] can be resolved from the current working
+directory instead, by setting
+[`ignorePathResolveFrom`][ignore-path-resolve-from] to `cwd` instead of `dir`
+(default).
 
 If paths or globs to directories are given to the engine, they will be searched
 for matching files, but `node_modules` and hidden directories (those starting
@@ -77,7 +79,7 @@ test/{input,tree}
 
 [ignore-patterns]: options.md#optionsignorepatterns
 
-[ignore-from]: options.md#optionsignorefrom
+[ignore-path-resolve-from]: options.md#optionsignorepathresolvefrom
 
 [silently-ignore]: options.md#optionssilentlyignore
 
