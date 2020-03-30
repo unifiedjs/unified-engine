@@ -11,7 +11,7 @@ var join = path.join
 var fixtures = join(__dirname, 'fixtures')
 
 test('ignore', function (t) {
-  t.plan(7)
+  t.plan(9)
 
   t.test('should fail fatally when given ignores are not found', function (t) {
     var cwd = join(fixtures, 'simple-structure')
@@ -203,6 +203,72 @@ test('ignore', function (t) {
 
     function onrun(error, code) {
       var expected = ['one.txt: no issues found', ''].join('\n')
+
+      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
+    }
+  })
+
+  t.test(
+    '`ignorePath` should resolve from its directory, `ignorePatterns` from cwd',
+    function (t) {
+      var stderr = spy()
+
+      t.plan(1)
+
+      engine(
+        {
+          processor: noop,
+          cwd: join(fixtures, 'sibling-ignore'),
+          streamError: stderr.stream,
+          files: ['.'],
+          ignorePath: join('deep', 'ignore'),
+          ignorePatterns: ['files/two.txt'],
+          extensions: ['txt']
+        },
+        onrun
+      )
+
+      function onrun(error, code) {
+        var expected = [
+          join('deep', 'files', 'two.txt') + ': no issues found',
+          join('files', 'one.txt') + ': no issues found',
+          ''
+        ].join('\n')
+
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, expected],
+          'should report'
+        )
+      }
+    }
+  )
+
+  t.test('`ignorePathResolveFrom`', function (t) {
+    var stderr = spy()
+
+    t.plan(1)
+
+    engine(
+      {
+        processor: noop,
+        cwd: join(fixtures, 'sibling-ignore'),
+        streamError: stderr.stream,
+        files: ['.'],
+        ignorePath: join('deep', 'ignore'),
+        ignorePathResolveFrom: 'cwd',
+        extensions: ['txt']
+      },
+      onrun
+    )
+
+    function onrun(error, code) {
+      var expected = [
+        join('deep', 'files', 'one.txt') + ': no issues found',
+        join('deep', 'files', 'two.txt') + ': no issues found',
+        join('files', 'two.txt') + ': no issues found',
+        ''
+      ].join('\n')
 
       t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }

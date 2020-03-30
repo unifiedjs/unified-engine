@@ -27,6 +27,7 @@
 *   [`options.ignoreName`](#optionsignorename)
 *   [`options.detectIgnore`](#optionsdetectignore)
 *   [`options.ignorePath`](#optionsignorepath)
+*   [`options.ignorePathResolveFrom`](#optionsignorepathresolvefrom)
 *   [`options.ignorePatterns`](#optionsignorepatterns)
 *   [`options.silentlyIgnore`](#optionssilentlyignore)
 *   [`options.plugins`](#optionsplugins)
@@ -839,6 +840,18 @@ Name of [ignore file][ignore] to load.
 If given and [`detectIgnore`][detect-ignore] is not `false`, `$ignoreName` files
 are loaded.
 
+The patterns in found ignore file are resolved based on the file’s directory.
+If we had an ignore file `folder/.remarkignore`, with the value: `index.txt`,
+and our file system looked as follows:
+
+```txt
+folder/.remarkignore
+folder/index.txt
+index.txt
+```
+
+Then `folder/index.txt` would be ignored but `index.txt` would not be.
+
 *   Type: `string`, optional
 
 ###### Example
@@ -904,6 +917,21 @@ function done(error) {
 File path to [ignore file][ignore] to load, regardless of
 [`detectIgnore`][detect-ignore] or [`ignoreName`][ignore-name].
 
+The patterns in the ignore file are resolved based the setting of
+`ignorePathResolveFrom`, which when `'dir'` (default) means to resolve from the
+ignore file’s directory, or when `'cwd'` means to resolve from the current
+working directory.
+If we had an ignore file `folder/ignore`, with the value: `index.txt`, and our
+file system looked as follows:
+
+```txt
+folder/ignore
+folder/index.txt
+index.txt
+```
+
+Then `folder/index.txt` would be ignored but `index.txt` would not be.
+
 *   Type: `string`, optional
 
 ###### Example
@@ -921,6 +949,51 @@ engine(
     files: ['.'],
     extensions: ['md'],
     ignorePath: '.gitignore'
+  },
+  done
+)
+
+function done(error) {
+  if (error) throw error
+}
+```
+
+## `options.ignorePathResolveFrom`
+
+Enum of either `dir` (default) or `cwd`, which defines whether the patterns
+found in the ignore file at [`ignorePath`][ignore-path] are resolved from that
+file’s directory or the current working directory.
+
+If we had an ignore file `config/ignore`, with the value: `index.txt`, and our
+file system looked as follows:
+
+```txt
+config/ignore
+folder/index.txt
+index.txt
+```
+
+Normally, no `index.txt` files would be ignored, but when given
+`ignorePathResolveFrom: 'cwd'`, both would be.
+
+*   Type: `string`, optional
+
+###### Example
+
+The following example processes files in the current working directory with an
+`md` extension and takes a reusable configuration file from a dependency.
+
+```js
+var engine = require('unified-engine')
+var remark = require('remark')
+
+engine(
+  {
+    processor: remark(),
+    files: ['.'],
+    extensions: ['md'],
+    ignorePath: 'node_modules/my-config/my-ignore',
+    ignorePathResolveFrom: 'cwd'
   },
   done
 )
@@ -1406,6 +1479,8 @@ function done(error, code) {
 [detect-ignore]: #optionsdetectignore
 
 [ignore-name]: #optionsignorename
+
+[ignore-path]: #optionsignorepath
 
 [quiet]: #optionsquiet
 

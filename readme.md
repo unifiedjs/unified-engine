@@ -123,6 +123,10 @@ done.
     — Whether to search for ignore files
 *   [`ignorePath`][ignore-path] (`string`, optional)
     — Filepath to an ignore file to load
+*   [`ignorePathResolveFrom`][ignore-path-resolve-from] (`'dir'` or `'cwd'`,
+    default: `'dir'`)
+    — Resolve patterns in `ignorePath` from the current working directory or the
+    file’s directory
 *   [`ignorePatterns`][ignore-patterns] (`Array.<string>`, optional)
     — Patterns to ignore in addition to ignore files, if any
 *   [`silentlyIgnore`][silently-ignore] (`boolean`, default: `false`)
@@ -283,6 +287,8 @@ abide by its terms.
 [ignore-name]: doc/options.md#optionsignorename
 
 [ignore-path]: doc/options.md#optionsignorepath
+
+[ignore-path-resolve-from]: doc/options.md#optionsignorepathresolvefrom
 
 [ignore-patterns]: doc/options.md#optionsignorepatterns
 

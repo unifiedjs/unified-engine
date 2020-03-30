@@ -1,13 +1,6 @@
 // TypeScript Version: 3.0
 
-import {
-  Plugin,
-  Pluggable,
-  PluggableList,
-  Processor,
-  Settings,
-  Preset
-} from 'unified'
+import {Pluggable, PluggableList, Processor, Settings, Preset} from 'unified'
 import {VFile} from 'vfile'
 
 declare namespace unifiedEngine {
@@ -165,6 +158,14 @@ declare namespace unifiedEngine {
     ignorePath?: string
 
     /**
+     * Resolve patterns in `ignorePath` from the current working directory
+     * (`'cwd'`) or the ignore file’s directory (`'dir'`, default)
+     *
+     * @defaultValue `'dir'`
+     */
+    ignorePathResolveFrom?: 'cwd' | 'dir'
+
+    /**
      * Patterns to ignore in addition to ignore files
      */
     ignorePatterns?: string[]
@@ -235,12 +236,7 @@ declare namespace unifiedEngine {
   /**
    * Callback for Completer
    */
-  interface CompleterNext {
-    /**
-     * @param error Fatal error
-     */
-    (error: Error): void
-  }
+  type CompleterNext = (error: Error) => void
 
   /**
    * Function invoked when all files are processed

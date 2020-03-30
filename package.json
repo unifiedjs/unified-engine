@@ -81,7 +81,9 @@
       [
         "toc",
         {
-          "heading": "contents"
+          "heading": "contents",
+          "maxDepth": 3,
+          "tight": true
         }
       ]
     ]
