@@ -534,7 +534,7 @@ test('output', function (t) {
     }
   })
 
-  t.test('should ignore nully compilers', function (t) {
+  t.test('should ignore nullish compilers', function (t) {
     var cwd = join(fixtures, 'filled-file')
     var stdout = spy()
     var stderr = spy()
@@ -543,7 +543,7 @@ test('output', function (t) {
 
     engine(
       {
-        processor: noop().use(nully),
+        processor: noop().use(nullish),
         cwd: cwd,
         streamOut: stdout.stream,
         streamError: stderr.stream,
@@ -561,7 +561,7 @@ test('output', function (t) {
       )
     }
 
-    function nully() {
+    function nullish() {
       this.Compiler = compile
     }
 
