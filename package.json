@@ -55,15 +55,15 @@
     "remark-preset-wooorm": "^7.0.0",
     "remark-toc": "^7.0.0",
     "strip-ansi": "^6.0.0",
-    "tape": "^4.0.0",
+    "tape": "^5.0.0",
     "unified": "^9.0.0",
     "vfile": "^4.0.0",
     "vfile-reporter-json": "^2.0.0",
-    "vfile-reporter-pretty": "^4.0.0",
-    "xo": "^0.29.0"
+    "vfile-reporter-pretty": "^5.0.0",
+    "xo": "^0.32.0"
   },
   "scripts": {
-    "format": "remark . -qfo && prettier --write \"**/*.{js,ts}\" && xo --fix",
+    "format": "remark . -qfo && prettier . --write && xo --fix",
     "test-api": "node test",
     "test-coverage": "nyc --reporter lcov tape test/index.js",
     "test-types": "dtslint types",
@@ -103,6 +103,8 @@
       "types"
     ],
     "rules": {
+      "unicorn/no-fn-reference-in-iterator": "off",
+      "unicorn/prefer-optional-catch-binding": "off",
       "unicorn/prefer-includes": "off",
       "unicorn/string-content": "off",
       "complexity": "off",
