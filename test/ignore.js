@@ -1,5 +1,6 @@
 'use strict'
 
+var fs = require('fs')
 var path = require('path')
 var test = require('tape')
 var noop = require('./util/noop-processor')
@@ -11,7 +12,7 @@ var join = path.join
 var fixtures = join(__dirname, 'fixtures')
 
 test('ignore', function (t) {
-  t.plan(9)
+  t.plan(10)
 
   t.test('should fail fatally when given ignores are not found', function (t) {
     var cwd = join(fixtures, 'simple-structure')
@@ -269,6 +270,34 @@ test('ignore', function (t) {
         join('files', 'two.txt') + ': no issues found',
         ''
       ].join('\n')
+
+      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
+    }
+  })
+
+  t.test('should support higher positioned files', function (t) {
+    var cwd = join(fixtures, 'empty')
+    var filePath = path.resolve(process.cwd(), '../..', 'example.txt')
+    var stderr = spy()
+
+    fs.writeFileSync(filePath, '')
+
+    t.plan(1)
+
+    engine(
+      {
+        processor: noop,
+        cwd: cwd,
+        streamError: stderr.stream,
+        files: [filePath]
+      },
+      onrun
+    )
+
+    function onrun(error, code) {
+      fs.unlinkSync(filePath)
+
+      var expected = path.relative(cwd, filePath) + ': no issues found\n'
 
       t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
