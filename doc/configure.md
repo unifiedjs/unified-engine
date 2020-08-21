@@ -50,9 +50,7 @@ exports.plugins = ['./script/natural-language', 'lint-recommended', 'license']
 exports.settings = {bullet: '*'}
 ```
 
-###### Example
-
-An example **rc.yaml** file could look as follows:
+Another example, **rc.yaml**, could look as follows:
 
 ```js
 plugins:
