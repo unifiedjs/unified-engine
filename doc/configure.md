@@ -40,9 +40,7 @@ An example **rc** file could look as follows:
 }
 ```
 
-###### Example
-
-An example **rc.js** file could look as follows:
+Another example, **rc.js**, could look as follows:
 
 ```js
 exports.plugins = ['./script/natural-language', 'lint-recommended', 'license']
