@@ -196,9 +196,9 @@ abide by its terms.
 
 <!-- Definitions -->
 
-[build-badge]: https://img.shields.io/travis/unifiedjs/unified-engine.svg
+[build-badge]: https://github.com/unifiedjs/unified-engine/workflows/main/badge.svg
 
-[build]: https://travis-ci.org/unifiedjs/unified-engine
+[build]: https://github.com/unifiedjs/unified-engine/actions
 
 [coverage-badge]: https://img.shields.io/codecov/c/github/unifiedjs/unified-engine.svg
 
