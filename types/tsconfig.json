@@ -4,7 +4,7 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "unified-engine": ["index.d.ts"]
+      "unified-engine": ["."]
     }
   }
 }

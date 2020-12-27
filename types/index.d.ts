@@ -246,8 +246,6 @@ declare namespace unifiedEngine {
    * @returns If a promise is returned, the function is asynchronous, and must be resolved (with nothing) or rejected
    */
   interface Completer {
-    (fileSet: FileSet, next?: CompleterNext): Error | Promise<void>
-
     /**
      * Plugins specified through various mechanisms are attached to a new processor for each file.
      * If a completer is used multiple times, it is invoked multiple times as well.
@@ -255,6 +253,8 @@ declare namespace unifiedEngine {
      * This will ensure only one completer per `pluginId` is added.
      */
     pluginId?: string
+
+    (fileSet: FileSet, next?: CompleterNext): Error | Promise<void>
   }
 
   /**

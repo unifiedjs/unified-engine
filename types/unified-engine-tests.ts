@@ -1,3 +1,4 @@
+/* eslint-disable-next-line import/no-extraneous-dependencies */
 import * as engine from 'unified-engine'
 import * as remark from 'remark'
 import {VFile} from 'vfile'
@@ -8,15 +9,15 @@ engine(
   {
     processor: remark()
   },
-  () => {}
+  done
 )
 
 engine(
   {
     processor: remark(),
-    settings: {gfm: true}
+    settings: {strong: '*'}
   },
-  () => {}
+  done
 )
 
 engine(
@@ -25,7 +26,7 @@ engine(
     // $ExpectError
     settings: {notARealSetting: true}
   },
-  () => {}
+  done
 )
 
 interface CustomReporterOptions {
@@ -39,7 +40,7 @@ engine(
     processor: remark(),
     reporter: customReporter
   },
-  () => {}
+  done
 )
 
 engine(
@@ -48,7 +49,7 @@ engine(
     reporter: customReporter,
     reporterOptions: {example: true}
   },
-  () => {}
+  done
 )
 
 engine(
@@ -58,17 +59,17 @@ engine(
     // $ExpectError
     reporterOptions: {notARealSetting: true}
   },
-  () => {}
+  done
 )
 
 engine(
   {
     processor: remark(),
     reporter: 'vfile-reporter-pretty',
-    // settings cannot be inferred
+    // Settings cannot be inferred
     reporterOptions: {notARealSetting: true}
   },
-  () => {}
+  done
 )
 
 engine(
@@ -76,7 +77,7 @@ engine(
     processor: remark(),
     output: true
   },
-  () => {}
+  done
 )
 
 engine(
@@ -84,7 +85,7 @@ engine(
     processor: remark(),
     output: false
   },
-  () => {}
+  done
 )
 
 engine(
@@ -92,7 +93,7 @@ engine(
     processor: remark(),
     output: '.'
   },
-  () => {}
+  done
 )
 
 engine(
@@ -100,7 +101,7 @@ engine(
     processor: remark(),
     configTransform: (content: unknown) => ({settings: {commonmark: true}})
   },
-  () => {}
+  done
 )
 
 engine(
@@ -124,7 +125,7 @@ engine(
     packageField: 'exampleConfig',
     detectConfig: true,
     rcPath: '.',
-    settings: {gfm: true},
+    settings: {strong: '*'},
     ignoreName: '.exampleignore',
     ignorePatterns: ['.hidden'],
     silentlyIgnore: false,
@@ -138,7 +139,7 @@ engine(
     quiet: false,
     frail: false
   },
-  () => {}
+  done
 )
 
 engine(
@@ -147,7 +148,7 @@ engine(
   },
   (err, status, context) => {
     if (err || status === 1) {
-      console.error('failed with error ', err)
+      console.error('failed with error', err)
       return
     }
 
@@ -155,3 +156,7 @@ engine(
     context.fileset.valueOf().forEach((file) => console.log(file.name))
   }
 )
+
+function done() {
+  // Empty.
+}
