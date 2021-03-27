@@ -11,7 +11,7 @@ var join = path.join
 var fixtures = join(__dirname, 'fixtures')
 
 test('configuration', function (t) {
-  t.plan(6)
+  t.plan(9)
 
   t.test('should cascade `plugins`', function (t) {
     var stderr = spy()
@@ -36,6 +36,96 @@ test('configuration', function (t) {
       t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'nested' + path.sep + 'one.txt: no issues found\n'],
+        'should work'
+      )
+    }
+
+    function addTest() {
+      this.t = t
+    }
+  })
+
+  t.test('should support an ESM plugin w/ an `.mjs` extname', function (t) {
+    var stderr = spy()
+
+    // One more assertions is loaded in a plugin.
+    t.plan(2)
+
+    engine(
+      {
+        processor: noop().use(addTest),
+        cwd: join(fixtures, 'config-plugins-esm-mjs'),
+        streamError: stderr.stream,
+        files: ['one.txt'],
+        rcName: '.foorc'
+      },
+      onrun
+    )
+
+    function onrun(error, code) {
+      t.deepEqual(
+        [error, code, stderr()],
+        [null, 0, 'one.txt: no issues found\n'],
+        'should work'
+      )
+    }
+
+    function addTest() {
+      this.t = t
+    }
+  })
+
+  t.test('should support an ESM plugin w/ a `.js` extname', function (t) {
+    var stderr = spy()
+
+    // One more assertions is loaded in a plugin.
+    t.plan(2)
+
+    engine(
+      {
+        processor: noop().use(addTest),
+        cwd: join(fixtures, 'config-plugins-esm-js'),
+        streamError: stderr.stream,
+        files: ['one.txt'],
+        rcName: '.foorc'
+      },
+      onrun
+    )
+
+    function onrun(error, code) {
+      t.deepEqual(
+        [error, code, stderr()],
+        [null, 0, 'one.txt: no issues found\n'],
+        'should work'
+      )
+    }
+
+    function addTest() {
+      this.t = t
+    }
+  })
+
+  t.test('should support a CJS plugin w/ interop flags', function (t) {
+    var stderr = spy()
+
+    // One more assertions is loaded in a plugin.
+    t.plan(2)
+
+    engine(
+      {
+        processor: noop().use(addTest),
+        cwd: join(fixtures, 'config-plugins-esm-interop'),
+        streamError: stderr.stream,
+        files: ['one.txt'],
+        rcName: '.foorc'
+      },
+      onrun
+    )
+
+    function onrun(error, code) {
+      t.deepEqual(
+        [error, code, stderr()],
+        [null, 0, 'one.txt: no issues found\n'],
         'should work'
       )
     }
