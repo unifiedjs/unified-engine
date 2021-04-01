@@ -2,6 +2,7 @@
 
 var path = require('path')
 var test = require('tape')
+var semver = require('semver')
 var noop = require('./util/noop-processor')
 var spy = require('./util/spy')
 var engine = require('..')
@@ -11,7 +12,9 @@ var join = path.join
 var fixtures = join(__dirname, 'fixtures')
 
 test('configuration', function (t) {
-  t.plan(6)
+  var esm = semver.gte(process.versions.node, '12.0.0')
+
+  t.plan(esm ? 9 : 6)
 
   t.test('should cascade `plugins`', function (t) {
     var stderr = spy()
@@ -44,6 +47,98 @@ test('configuration', function (t) {
       this.t = t
     }
   })
+
+  if (esm) {
+    t.test('should support an ESM plugin w/ an `.mjs` extname', function (t) {
+      var stderr = spy()
+
+      // One more assertions is loaded in a plugin.
+      t.plan(2)
+
+      engine(
+        {
+          processor: noop().use(addTest),
+          cwd: join(fixtures, 'config-plugins-esm-mjs'),
+          streamError: stderr.stream,
+          files: ['one.txt'],
+          rcName: '.foorc'
+        },
+        onrun
+      )
+
+      function onrun(error, code) {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should work'
+        )
+      }
+
+      function addTest() {
+        this.t = t
+      }
+    })
+
+    t.test('should support an ESM plugin w/ a `.js` extname', function (t) {
+      var stderr = spy()
+
+      // One more assertions is loaded in a plugin.
+      t.plan(2)
+
+      engine(
+        {
+          processor: noop().use(addTest),
+          cwd: join(fixtures, 'config-plugins-esm-js'),
+          streamError: stderr.stream,
+          files: ['one.txt'],
+          rcName: '.foorc'
+        },
+        onrun
+      )
+
+      function onrun(error, code) {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should work'
+        )
+      }
+
+      function addTest() {
+        this.t = t
+      }
+    })
+
+    t.test('should support a CJS plugin w/ interop flags', function (t) {
+      var stderr = spy()
+
+      // One more assertions is loaded in a plugin.
+      t.plan(2)
+
+      engine(
+        {
+          processor: noop().use(addTest),
+          cwd: join(fixtures, 'config-plugins-esm-interop'),
+          streamError: stderr.stream,
+          files: ['one.txt'],
+          rcName: '.foorc'
+        },
+        onrun
+      )
+
+      function onrun(error, code) {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should work'
+        )
+      }
+
+      function addTest() {
+        this.t = t
+      }
+    })
+  }
 
   t.test('should handle failing plugins', function (t) {
     var stderr = spy()

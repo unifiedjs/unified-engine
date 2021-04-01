@@ -54,6 +54,7 @@
     "remark-cli": "^9.0.0",
     "remark-preset-wooorm": "^8.0.0",
     "remark-toc": "^7.0.0",
+    "semver": "^6.0.0",
     "strip-ansi": "^6.0.0",
     "tape": "^5.0.0",
     "unified": "^9.0.0",
