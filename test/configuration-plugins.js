@@ -2,6 +2,7 @@
 
 var path = require('path')
 var test = require('tape')
+var semver = require('semver')
 var noop = require('./util/noop-processor')
 var spy = require('./util/spy')
 var engine = require('..')
@@ -11,9 +12,9 @@ var join = path.join
 var fixtures = join(__dirname, 'fixtures')
 
 test('configuration', function (t) {
-  var node = Number.parseInt(process.versions.node.split('.')[0], 10)
+  var esm = semver.gte(process.versions.node, '12.0.0')
 
-  t.plan(node < 12 ? 6 : 9)
+  t.plan(esm ? 9 : 6)
 
   t.test('should cascade `plugins`', function (t) {
     var stderr = spy()
@@ -47,7 +48,7 @@ test('configuration', function (t) {
     }
   })
 
-  if (node >= 12) {
+  if (esm) {
     t.test('should support an ESM plugin w/ an `.mjs` extname', function (t) {
       var stderr = spy()
 
