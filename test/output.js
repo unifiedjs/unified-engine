@@ -483,7 +483,7 @@ test('output', function (t) {
         onrun
       )
 
-      function onrun(err, code) {
+      function onrun(error, code) {
         var actual = stderr().split('\n').slice(0, 2).join('\n')
 
         var expected = [
@@ -491,7 +491,7 @@ test('output', function (t) {
           '  1:1  error  No such file or directory'
         ].join('\n')
 
-        t.deepEqual([err, code, actual], [null, 1, expected], 'should report')
+        t.deepEqual([error, code, actual], [null, 1, expected], 'should report')
 
         t.notOk(exists(targetFile))
       }

@@ -54,14 +54,14 @@
     "remark-cli": "^9.0.0",
     "remark-preset-wooorm": "^8.0.0",
     "remark-toc": "^7.0.0",
-    "semver": "^6.0.0",
+    "semver": "^7.0.0",
     "strip-ansi": "^6.0.0",
     "tape": "^5.0.0",
     "unified": "^9.0.0",
     "vfile": "^4.0.0",
     "vfile-reporter-json": "^2.0.0",
     "vfile-reporter-pretty": "^5.0.0",
-    "xo": "^0.36.0"
+    "xo": "^0.38.0"
   },
   "scripts": {
     "format": "remark . -qfo && prettier . -w --loglevel warn && xo --fix",
@@ -104,11 +104,13 @@
       "types"
     ],
     "rules": {
-      "unicorn/no-fn-reference-in-iterator": "off",
-      "unicorn/prefer-optional-catch-binding": "off",
-      "unicorn/prefer-includes": "off",
       "complexity": "off",
-      "guard-for-in": "off"
+      "guard-for-in": "off",
+      "unicorn/no-array-callback-reference": "off",
+      "unicorn/no-array-for-each": "off",
+      "unicorn/no-this-assignment": "off",
+      "unicorn/prefer-optional-catch-binding": "off",
+      "unicorn/prefer-includes": "off"
     }
   }
 }
