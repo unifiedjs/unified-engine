@@ -11,7 +11,7 @@ var join = path.join
 var fixtures = join(__dirname, 'fixtures')
 
 test('configuration', function (t) {
-  t.plan(13)
+  t.plan(14)
 
   t.test('should fail fatally when custom rc files are missing', function (t) {
     var stderr = spy()
@@ -101,7 +101,7 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should support `.rc.js` modules (1)', function (t) {
+  t.test('should support `.rc.js` scripts (1)', function (t) {
     var stderr = spy()
 
     t.plan(1)
@@ -109,7 +109,7 @@ test('configuration', function (t) {
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'malformed-rc-module'),
+        cwd: join(fixtures, 'malformed-rc-script'),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -130,7 +130,7 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should support `.rc.js` modules (2)', function (t) {
+  t.test('should support `.rc.js` scripts (2)', function (t) {
     var stderr = spy()
 
     t.plan(1)
@@ -138,7 +138,7 @@ test('configuration', function (t) {
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'rc-module'),
+        cwd: join(fixtures, 'rc-script'),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -151,22 +151,20 @@ test('configuration', function (t) {
       t.deepEqual(
         [error, code, stderr()],
         [null, 0, 'one.txt: no issues found\n'],
-        'should support valid .rc modules'
+        'should support valid .rc scripts'
       )
     }
   })
 
-  t.test('should support `.rc.js` modules (3)', function (t) {
+  t.test('should support `.rc.js` scripts (3)', function (t) {
     var stderr = spy()
 
     t.plan(1)
 
-    require('./fixtures/rc-module/.foorc.js') // eslint-disable-line import/no-unassigned-import
-
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'rc-module'),
+        cwd: join(fixtures, 'rc-script'),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -184,7 +182,33 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should support `.rc.yaml` modules', function (t) {
+  t.test('should support `.rc.mjs` module', function (t) {
+    var stderr = spy()
+
+    t.plan(1)
+
+    engine(
+      {
+        processor: noop,
+        cwd: join(fixtures, 'rc-module-mjs'),
+        streamError: stderr.stream,
+        files: ['.'],
+        rcName: '.foorc',
+        extensions: ['txt']
+      },
+      onrun
+    )
+
+    function onrun(error, code) {
+      t.deepEqual(
+        [error, code, stderr()],
+        [null, 0, 'one.txt: no issues found\n'],
+        'should use Node’s module caching (coverage)'
+      )
+    }
+  })
+
+  t.test('should support `.rc.yaml` cpmfog files', function (t) {
     var stderr = spy()
 
     t.plan(1)
@@ -345,7 +369,7 @@ test('configuration', function (t) {
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'malformed-rc-module'),
+        cwd: join(fixtures, 'malformed-rc-script'),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
