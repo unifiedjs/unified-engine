@@ -673,16 +673,23 @@ root[1] (1:1-2:1, 0-27)
 ## `options.rcName`
 
 Name of [configuration][configure] file to load.
-If given and [`detectConfig`][detect-config] is not `false`, `$rcName` files are
-loaded and parsed as JSON, `$rcName.js` are `require`d, and `$rcName.yml` and
-`$rcName.yaml` are loaded with `js-yaml` (`safeLoad`).
+If given and [`detectConfig`][detect-config] is not `false`, then:
+
+*   `$rcName` and `$rcName.json` are loaded and parsed as JSON
+*   `$rcName.yml` and `$rcName.yaml` are loaded with `js-yaml`
+*   `$rcName.js` are either `require`d or `import`ed
+*   `$rcName.cjs` are `require`d
+*   `$rcName.mjs` are `import`ed
+
+<!---->
 
 *   Type: `string`, optional
 
 ###### Example
 
-The following example processes `readme.md`, and allows configuration from
-`.remarkrc`, `.remarkrc.js`, and `.remarkrc.yaml` files.
+The following example processes `readme.md` and allows configuration from
+`.remarkrc`, `.remarkrc.yml`, `.remarkrc.yaml`, `.remarkrc.js`, `.remarkrc.cjs`,
+and `.remarkrc.mjs` files.
 
 ```js
 var engine = require('unified-engine')
@@ -775,7 +782,9 @@ File path to a config file to load, regardless of
 [`detectConfig`][detect-config] or [`rcName`][rc-name].
 
 If the file’s extension is `yml` or `yaml`, it’s loaded as YAML.
-If the file’s extension is `js`, it’s `require`d.
+If it’s `js`, it’s either `require`d or `import`ed.
+If it’s `cjs`, it’s `require`d.
+If it’s `mjs`, it’s `import`ed.
 If the file’s basename is `package.json`, the property at
 [`packageField`][package-field] is used.
 Otherwise, the file is parsed as JSON.

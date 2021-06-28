@@ -13,8 +13,9 @@ regardless of `detectConfig` and `rcName`.
 Otherwise, configuration files are detected if [`detectConfig`][detect-config]
 is turned on, depending on the following options:
 
-*   If [`rcName`][rc-name] is given, `$rcName` (JSON), `$rcName.js` (CommonJS),
-    `$rcName.yml` (YAML), and `$rcName.yaml` (YAML) are loaded
+*   If [`rcName`][rc-name] is given, `$rcName` (JSON), `$rcName.js` (CommonJS or
+    ESM), `$rcName.cjs` (CommonJS), `$rcName.mjs` (ESM), `$rcName.yml` (YAML),
+    and `$rcName.yaml` (YAML) are loaded
 *   If [`packageField`][package-field] is given, `package.json` (JSON) files
     are loaded and their `$packageField`s are used as configuration
 
