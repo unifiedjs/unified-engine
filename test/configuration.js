@@ -2,8 +2,8 @@
 
 var path = require('path')
 var test = require('tape')
-var noop = require('./util/noop-processor')
-var spy = require('./util/spy')
+var noop = require('./util/noop-processor.js')
+var spy = require('./util/spy.js')
 var engine = require('..')
 
 var join = path.join
@@ -161,7 +161,7 @@ test('configuration', function (t) {
 
     t.plan(1)
 
-    require('./fixtures/rc-module/.foorc') // eslint-disable-line import/no-unassigned-import
+    require('./fixtures/rc-module/.foorc.js') // eslint-disable-line import/no-unassigned-import
 
     engine(
       {

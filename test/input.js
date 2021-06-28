@@ -6,8 +6,8 @@ var test = require('tape')
 var unified = require('unified')
 var vfile = require('to-vfile')
 var figures = require('figures')
-var noop = require('./util/noop-processor')
-var spy = require('./util/spy')
+var noop = require('./util/noop-processor.js')
+var spy = require('./util/spy.js')
 var engine = require('..')
 
 var join = path.join

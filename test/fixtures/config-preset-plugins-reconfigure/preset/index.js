@@ -1,1 +1,1 @@
-exports.plugins = [[require('./plugin'), {one: true, two: true}]]
+exports.plugins = [[require('./plugin.js'), {one: true, two: true}]]

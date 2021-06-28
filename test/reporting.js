@@ -4,9 +4,9 @@ var path = require('path')
 var test = require('tape')
 var strip = require('strip-ansi')
 var figures = require('figures')
-var noop = require('./util/noop-processor')
-var spy = require('./util/spy')
-var platform = require('./util/platform')
+var noop = require('./util/noop-processor.js')
+var spy = require('./util/spy.js')
+var platform = require('./util/platform.js')
 var engine = require('..')
 
 var join = path.join

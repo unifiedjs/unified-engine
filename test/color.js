@@ -3,8 +3,8 @@
 var path = require('path')
 var test = require('tape')
 var figures = require('figures')
-var noop = require('./util/noop-processor')
-var spy = require('./util/spy')
+var noop = require('./util/noop-processor.js')
+var spy = require('./util/spy.js')
 var engine = require('..')
 
 var join = path.join

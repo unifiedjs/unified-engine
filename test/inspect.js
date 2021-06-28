@@ -4,8 +4,8 @@ var fs = require('fs')
 var path = require('path')
 var PassThrough = require('stream').PassThrough
 var test = require('tape')
-var noop = require('./util/noop-processor')
-var spy = require('./util/spy')
+var noop = require('./util/noop-processor.js')
+var spy = require('./util/spy.js')
 var engine = require('..')
 
 var join = path.join
