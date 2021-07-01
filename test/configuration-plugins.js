@@ -1,18 +1,16 @@
 import path from 'path'
 import test from 'tape'
-import noop from './util/noop-processor.js'
-import spy from './util/spy.js'
+import {noop} from './util/noop-processor.js'
+import {spy} from './util/spy.js'
 import {engine} from '../index.js'
 
-var join = path.join
+const fixtures = path.join('test', 'fixtures')
 
-var fixtures = join('test', 'fixtures')
-
-test('configuration', function (t) {
+test('configuration', (t) => {
   t.plan(9)
 
-  t.test('should cascade `plugins`', function (t) {
-    var stderr = spy()
+  t.test('should cascade `plugins`', (t) => {
+    const stderr = spy()
 
     // One more assertions is loaded in a plugin.
     t.plan(2)
@@ -20,7 +18,7 @@ test('configuration', function (t) {
     engine(
       {
         processor: noop().use(addTest),
-        cwd: join(fixtures, 'config-plugins-cascade'),
+        cwd: path.join(fixtures, 'config-plugins-cascade'),
         streamError: stderr.stream,
         files: ['.'],
         packageField: 'fooConfig',
@@ -43,8 +41,8 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should support an ESM plugin w/ an `.mjs` extname', function (t) {
-    var stderr = spy()
+  t.test('should support an ESM plugin w/ an `.mjs` extname', (t) => {
+    const stderr = spy()
 
     // One more assertions is loaded in a plugin.
     t.plan(2)
@@ -52,7 +50,7 @@ test('configuration', function (t) {
     engine(
       {
         processor: noop().use(addTest),
-        cwd: join(fixtures, 'config-plugins-esm-mjs'),
+        cwd: path.join(fixtures, 'config-plugins-esm-mjs'),
         streamError: stderr.stream,
         files: ['one.txt'],
         rcName: '.foorc'
@@ -73,8 +71,8 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should support an ESM plugin w/ a `.js` extname', function (t) {
-    var stderr = spy()
+  t.test('should support an ESM plugin w/ a `.js` extname', (t) => {
+    const stderr = spy()
 
     // One more assertions is loaded in a plugin.
     t.plan(2)
@@ -82,7 +80,7 @@ test('configuration', function (t) {
     engine(
       {
         processor: noop().use(addTest),
-        cwd: join(fixtures, 'config-plugins-esm-js'),
+        cwd: path.join(fixtures, 'config-plugins-esm-js'),
         streamError: stderr.stream,
         files: ['one.txt'],
         rcName: '.foorc'
@@ -103,8 +101,8 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should support a CJS plugin w/ interop flags', function (t) {
-    var stderr = spy()
+  t.test('should support a CJS plugin w/ interop flags', (t) => {
+    const stderr = spy()
 
     // One more assertions is loaded in a plugin.
     t.plan(2)
@@ -112,7 +110,7 @@ test('configuration', function (t) {
     engine(
       {
         processor: noop().use(addTest),
-        cwd: join(fixtures, 'config-plugins-esm-interop'),
+        cwd: path.join(fixtures, 'config-plugins-esm-interop'),
         streamError: stderr.stream,
         files: ['one.txt'],
         rcName: '.foorc'
@@ -133,15 +131,15 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should handle failing plugins', function (t) {
-    var stderr = spy()
+  t.test('should handle failing plugins', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'malformed-plugin'),
+        cwd: path.join(fixtures, 'malformed-plugin'),
         streamError: stderr.stream,
         files: ['.'],
         packageField: 'fooConfig',
@@ -151,9 +149,9 @@ test('configuration', function (t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr().split('\n').slice(0, 4).join('\n')
+      const actual = stderr().split('\n').slice(0, 4).join('\n')
 
-      var expected = [
+      const expected = [
         'one.txt',
         '  1:1  error  Error: Cannot parse file `package.json`',
         'Cannot parse script `test.js`',
@@ -164,15 +162,15 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should handle missing plugins', function (t) {
-    var stderr = spy()
+  t.test('should handle missing plugins', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'missing-plugin'),
+        cwd: path.join(fixtures, 'missing-plugin'),
         streamError: stderr.stream,
         files: ['.'],
         packageField: 'fooConfig',
@@ -182,9 +180,9 @@ test('configuration', function (t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr().split('\n').slice(0, 2).join('\n')
+      const actual = stderr().split('\n').slice(0, 2).join('\n')
 
-      var expected = [
+      const expected = [
         'one.txt',
         '  1:1  error  Error: Could not find module `missing`'
       ].join('\n')
@@ -193,15 +191,15 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should handle invalid plugins', function (t) {
-    var stderr = spy()
+  t.test('should handle invalid plugins', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'not-a-plugin'),
+        cwd: path.join(fixtures, 'not-a-plugin'),
         streamError: stderr.stream,
         files: ['.'],
         packageField: 'fooConfig',
@@ -211,9 +209,9 @@ test('configuration', function (t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr().split('\n').slice(0, 3).join('\n')
+      const actual = stderr().split('\n').slice(0, 3).join('\n')
 
-      var expected = [
+      const expected = [
         'one.txt',
         '  1:1  error  Error: Cannot parse file `package.json`',
         'Error: Expected preset or plugin, not false, at `test.js`'
@@ -223,15 +221,15 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should handle throwing plugins', function (t) {
-    var stderr = spy()
+  t.test('should handle throwing plugins', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'throwing-plugin'),
+        cwd: path.join(fixtures, 'throwing-plugin'),
         streamError: stderr.stream,
         files: ['.'],
         packageField: 'fooConfig',
@@ -241,9 +239,9 @@ test('configuration', function (t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr().split('\n').slice(0, 2).join('\n')
+      const actual = stderr().split('\n').slice(0, 2).join('\n')
 
-      var expected = [
+      const expected = [
         'one.txt',
         '  1:1  error  Error: Missing `required`'
       ].join('\n')
@@ -252,16 +250,16 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should handle injected plugins', function (t) {
-    var stderr = spy()
-    var o = {foo: 'bar'}
+  t.test('should handle injected plugins', (t) => {
+    const stderr = spy()
+    const o = {foo: 'bar'}
 
     t.plan(3)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'one-file'),
+        cwd: path.join(fixtures, 'one-file'),
         streamError: stderr.stream,
         files: ['.'],
         plugins: [checkMissingOptions, [checkTuple, o]],

@@ -4,19 +4,17 @@ import test from 'tape'
 import unified from 'unified'
 import vfile from 'to-vfile'
 import figures from 'figures'
-import noop from './util/noop-processor.js'
-import spy from './util/spy.js'
+import {noop} from './util/noop-processor.js'
+import {spy} from './util/spy.js'
 import {engine} from '../index.js'
 
-var join = path.join
+const fixtures = path.join('test', 'fixtures')
 
-var fixtures = join('test', 'fixtures')
-
-test('input', function (t) {
+test('input', (t) => {
   t.plan(19)
 
-  t.test('should fail without input', function (t) {
-    var stream = new PassThrough()
+  t.test('should fail without input', (t) => {
+    const stream = new PassThrough()
 
     t.plan(1)
 
@@ -32,9 +30,9 @@ test('input', function (t) {
     }
   })
 
-  t.test('should not fail on empty input stream', function (t) {
-    var stderr = spy()
-    var stream = new PassThrough()
+  t.test('should not fail on empty input stream', (t) => {
+    const stderr = spy()
+    const stream = new PassThrough()
 
     t.plan(1)
 
@@ -58,15 +56,15 @@ test('input', function (t) {
     }
   })
 
-  t.test('should not fail on unmatched given globs', function (t) {
-    var stderr = spy()
+  t.test('should not fail on unmatched given globs', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: unified,
-        cwd: join(fixtures, 'empty'),
+        cwd: path.join(fixtures, 'empty'),
         streamError: stderr.stream,
         files: ['.']
       },
@@ -78,15 +76,15 @@ test('input', function (t) {
     }
   })
 
-  t.test('should report unfound given files', function (t) {
-    var stderr = spy()
+  t.test('should report unfound given files', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: unified,
-        cwd: join(fixtures, 'empty'),
+        cwd: path.join(fixtures, 'empty'),
         streamError: stderr.stream,
         files: ['readme.md']
       },
@@ -94,7 +92,7 @@ test('input', function (t) {
     )
 
     function onrun(error, code) {
-      var expected = [
+      const expected = [
         'readme.md',
         '  1:1  error  No such file or directory',
         '',
@@ -106,15 +104,15 @@ test('input', function (t) {
     }
   })
 
-  t.test('should not report unfound given directories', function (t) {
-    var stderr = spy()
+  t.test('should not report unfound given directories', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: unified,
-        cwd: join(fixtures, 'directory'),
+        cwd: path.join(fixtures, 'directory'),
         streamError: stderr.stream,
         files: ['empty/']
       },
@@ -126,15 +124,15 @@ test('input', function (t) {
     }
   })
 
-  t.test('should search for extensions', function (t) {
-    var stderr = spy()
+  t.test('should search for extensions', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'extensions'),
+        cwd: path.join(fixtures, 'extensions'),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt', '.text']
@@ -143,7 +141,7 @@ test('input', function (t) {
     )
 
     function onrun(error, code) {
-      var expected = [
+      const expected = [
         'bar.text: no issues found',
         'foo.txt: no issues found',
         'nested' + path.sep + 'quux.text: no issues found',
@@ -155,15 +153,15 @@ test('input', function (t) {
     }
   })
 
-  t.test('should search a directory for extensions', function (t) {
-    var stderr = spy()
+  t.test('should search a directory for extensions', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'extensions'),
+        cwd: path.join(fixtures, 'extensions'),
         streamError: stderr.stream,
         files: ['nested'],
         extensions: ['txt', 'text']
@@ -172,7 +170,7 @@ test('input', function (t) {
     )
 
     function onrun(error, code) {
-      var expected = [
+      const expected = [
         'nested' + path.sep + 'quux.text: no issues found',
         'nested' + path.sep + 'qux.txt: no issues found',
         ''
@@ -182,15 +180,15 @@ test('input', function (t) {
     }
   })
 
-  t.test('should search for globs matching files (#1)', function (t) {
-    var stderr = spy()
+  t.test('should search for globs matching files (#1)', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'globs'),
+        cwd: path.join(fixtures, 'globs'),
         streamError: stderr.stream,
         files: ['*/*.+(txt|text)'],
         extensions: []
@@ -199,7 +197,7 @@ test('input', function (t) {
     )
 
     function onrun(error, code) {
-      var expected = [
+      const expected = [
         'nested' + path.sep + 'no-3.txt: no issues found',
         'nested' + path.sep + 'no-4.text: no issues found',
         ''
@@ -209,15 +207,15 @@ test('input', function (t) {
     }
   })
 
-  t.test('should search for globs matching files (#2)', function (t) {
-    var stderr = spy()
+  t.test('should search for globs matching files (#2)', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'globs'),
+        cwd: path.join(fixtures, 'globs'),
         streamError: stderr.stream,
         files: ['*/*.txt', '*/*.text'],
         extensions: []
@@ -226,7 +224,7 @@ test('input', function (t) {
     )
 
     function onrun(error, code) {
-      var expected = [
+      const expected = [
         'nested' + path.sep + 'no-3.txt: no issues found',
         'nested' + path.sep + 'no-4.text: no issues found',
         ''
@@ -236,15 +234,15 @@ test('input', function (t) {
     }
   })
 
-  t.test('should search for globs matching dirs', function (t) {
-    var stderr = spy()
+  t.test('should search for globs matching dirs', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'globs'),
+        cwd: path.join(fixtures, 'globs'),
         streamError: stderr.stream,
         files: ['**/nested'],
         extensions: []
@@ -253,7 +251,7 @@ test('input', function (t) {
     )
 
     function onrun(error, code) {
-      var expected = [
+      const expected = [
         'nested' + path.sep + 'no-3.txt: no issues found',
         'nested' + path.sep + 'no-4.text: no issues found',
         ''
@@ -263,19 +261,19 @@ test('input', function (t) {
     }
   })
 
-  t.test('should search vfile’s pointing to directories', function (t) {
-    var cwd = join(fixtures, 'ignore-file')
-    var stderr = spy()
+  t.test('should search vfile’s pointing to directories', (t) => {
+    const cwd = path.join(fixtures, 'ignore-file')
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         ignoreName: '.fooignore',
-        files: [vfile(join(cwd, 'nested'))]
+        files: [vfile(path.join(cwd, 'nested'))]
       },
       onrun
     )
@@ -289,15 +287,15 @@ test('input', function (t) {
     }
   })
 
-  t.test('should not ignore implicitly ignored files in globs', function (t) {
-    var stderr = spy()
+  t.test('should not ignore implicitly ignored files in globs', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'globs-ignore'),
+        cwd: path.join(fixtures, 'globs-ignore'),
         streamError: stderr.stream,
         files: ['**/*.txt'],
         extensions: []
@@ -306,7 +304,7 @@ test('input', function (t) {
     )
 
     function onrun(error, code) {
-      var expected = [
+      const expected = [
         'nested' +
           path.sep +
           'node_modules' +
@@ -322,29 +320,29 @@ test('input', function (t) {
     }
   })
 
-  t.test('should include given ignored files (#1)', function (t) {
-    var cwd = join(fixtures, 'ignore-file')
-    var stderr = spy()
+  t.test('should include given ignored files (#1)', (t) => {
+    const cwd = path.join(fixtures, 'ignore-file')
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         ignoreName: '.fooignore',
         files: [
-          vfile(join(cwd, 'one.txt')),
-          vfile(join(cwd, 'nested', 'two.txt')),
-          vfile(join(cwd, 'nested', 'three.txt'))
+          vfile(path.join(cwd, 'one.txt')),
+          vfile(path.join(cwd, 'nested', 'two.txt')),
+          vfile(path.join(cwd, 'nested', 'three.txt'))
         ]
       },
       onrun
     )
 
     function onrun(error, code) {
-      var expected = [
+      const expected = [
         'nested' + path.sep + 'three.txt: no issues found',
         'nested' + path.sep + 'two.txt',
         '  1:1  error  Cannot process specified file: it’s ignored',
@@ -359,17 +357,20 @@ test('input', function (t) {
     }
   })
 
-  t.test('should not atempt to read files with `contents` (1)', function (t) {
-    var stderr = spy()
-    var cwd = join(fixtures, 'ignore-file')
-    var file = vfile({path: join(cwd, 'not-existing.txt'), contents: 'foo'})
+  t.test('should not atempt to read files with `contents` (1)', (t) => {
+    const stderr = spy()
+    const cwd = path.join(fixtures, 'ignore-file')
+    const file = vfile({
+      path: path.join(cwd, 'not-existing.txt'),
+      contents: 'foo'
+    })
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         ignoreName: '.fooignore',
         files: [file]
@@ -378,7 +379,7 @@ test('input', function (t) {
     )
 
     function onrun(error, code) {
-      var expected = [
+      const expected = [
         'not-existing.txt',
         '  1:1  error  Cannot process specified file: it’s ignored',
         '',
@@ -390,17 +391,20 @@ test('input', function (t) {
     }
   })
 
-  t.test('should not atempt to read files with `contents` (2)', function (t) {
-    var stderr = spy()
-    var cwd = join(fixtures, 'ignore-file')
-    var file = vfile({path: join(cwd, 'not-existing-2.txt'), contents: 'foo'})
+  t.test('should not atempt to read files with `contents` (2)', (t) => {
+    const stderr = spy()
+    const cwd = path.join(fixtures, 'ignore-file')
+    const file = vfile({
+      path: path.join(cwd, 'not-existing-2.txt'),
+      contents: 'foo'
+    })
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         ignoreName: '.fooignore',
         files: [file]
@@ -417,15 +421,15 @@ test('input', function (t) {
     }
   })
 
-  t.test('should include given ignored files (#2)', function (t) {
-    var stderr = spy()
+  t.test('should include given ignored files (#2)', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'ignore-file'),
+        cwd: path.join(fixtures, 'ignore-file'),
         streamError: stderr.stream,
         ignoreName: '.fooignore',
         files: ['**/*.txt']
@@ -434,7 +438,7 @@ test('input', function (t) {
     )
 
     function onrun(error, code) {
-      var expected = [
+      const expected = [
         'nested' + path.sep + 'three.txt: no issues found',
         'nested' + path.sep + 'two.txt',
         '  1:1  error  Cannot process specified file: it’s ignored',
@@ -449,30 +453,30 @@ test('input', function (t) {
     }
   })
 
-  t.test('silentlyIgnore: skip detected ignored files (#1)', function (t) {
-    var cwd = join(fixtures, 'ignore-file')
-    var stderr = spy()
+  t.test('silentlyIgnore: skip detected ignored files (#1)', (t) => {
+    const cwd = path.join(fixtures, 'ignore-file')
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         ignoreName: '.fooignore',
         silentlyIgnore: true,
         files: [
-          vfile(join(cwd, 'one.txt')),
-          vfile(join(cwd, 'nested', 'two.txt')),
-          vfile(join(cwd, 'nested', 'three.txt'))
+          vfile(path.join(cwd, 'one.txt')),
+          vfile(path.join(cwd, 'nested', 'two.txt')),
+          vfile(path.join(cwd, 'nested', 'three.txt'))
         ]
       },
       onrun
     )
 
     function onrun(error, code) {
-      var expected = [
+      const expected = [
         'nested' + path.sep + 'three.txt: no issues found',
         'one.txt: no issues found',
         ''
@@ -482,15 +486,15 @@ test('input', function (t) {
     }
   })
 
-  t.test('silentlyIgnore: skip detected ignored files (#2)', function (t) {
-    var stderr = spy()
+  t.test('silentlyIgnore: skip detected ignored files (#2)', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'ignore-file'),
+        cwd: path.join(fixtures, 'ignore-file'),
         silentlyIgnore: true,
         streamError: stderr.stream,
         ignoreName: '.fooignore',
@@ -500,7 +504,7 @@ test('input', function (t) {
     )
 
     function onrun(error, code) {
-      var expected = [
+      const expected = [
         'nested' + path.sep + 'three.txt: no issues found',
         'one.txt: no issues found',
         ''
@@ -510,25 +514,25 @@ test('input', function (t) {
     }
   })
 
-  t.test('should search if given files', function (t) {
-    var cwd = join(fixtures, 'simple-structure')
-    var stderr = spy()
+  t.test('should search if given files', (t) => {
+    const cwd = path.join(fixtures, 'simple-structure')
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         extensions: ['txt'],
-        files: ['nested', vfile(join(cwd, 'one.txt'))]
+        files: ['nested', vfile(path.join(cwd, 'one.txt'))]
       },
       onrun
     )
 
     function onrun(error, code) {
-      var expected = [
+      const expected = [
         'nested' + path.sep + 'three.txt: no issues found',
         'nested' + path.sep + 'two.txt: no issues found',
         'one.txt: no issues found',

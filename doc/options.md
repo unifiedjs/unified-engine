@@ -187,7 +187,7 @@ import {engine} from 'unified-engine'
 import {remark} from 'remark'
 import remarkPresetLintRecommended from 'remark-preset-lint-recommended'
 
-var streamIn = new PassThrough()
+const streamIn = new PassThrough()
 
 engine(
   {
@@ -238,7 +238,7 @@ import {engine} from 'unified-engine'
 import {remark} from 'remark'
 import remarkPresetLintRecommended from 'remark-preset-lint-recommended'
 
-var streamIn = new PassThrough()
+const streamIn = new PassThrough()
 
 engine(
   {

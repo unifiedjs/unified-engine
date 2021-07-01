@@ -1,23 +1,21 @@
 import path from 'path'
 import test from 'tape'
-import noop from './util/noop-processor.js'
-import spy from './util/spy.js'
+import {noop} from './util/noop-processor.js'
+import {spy} from './util/spy.js'
 import {engine} from '../index.js'
 
-var join = path.join
+const fixtures = path.join('test', 'fixtures')
 
-var fixtures = join('test', 'fixtures')
-
-test('`defaultConfig`', function (t) {
+test('`defaultConfig`', (t) => {
   t.plan(2)
 
-  var defaultConfig = {
+  const defaultConfig = {
     settings: {alpha: true},
     plugins: {'./test-defaults': {bravo: false}}
   }
 
-  t.test('should use default config if no config file is found', function (t) {
-    var stderr = spy()
+  t.test('should use default config if no config file is found', (t) => {
+    const stderr = spy()
 
     t.plan(3)
 
@@ -25,11 +23,11 @@ test('`defaultConfig`', function (t) {
       {
         processor: noop().use(addTest),
         streamError: stderr.stream,
-        cwd: join(fixtures, 'config-default'),
+        cwd: path.join(fixtures, 'config-default'),
         files: ['.'],
         packageField: 'bar',
         extensions: ['txt'],
-        defaultConfig: defaultConfig
+        defaultConfig
       },
       onrun
     )
@@ -47,8 +45,8 @@ test('`defaultConfig`', function (t) {
     }
   })
 
-  t.test('should use found otherwise', function (t) {
-    var stderr = spy()
+  t.test('should use found otherwise', (t) => {
+    const stderr = spy()
 
     t.plan(3)
 
@@ -56,11 +54,11 @@ test('`defaultConfig`', function (t) {
       {
         processor: noop().use(addTest),
         streamError: stderr.stream,
-        cwd: join(fixtures, 'config-default'),
+        cwd: path.join(fixtures, 'config-default'),
         files: ['.'],
         packageField: 'foo',
         extensions: ['txt'],
-        defaultConfig: defaultConfig
+        defaultConfig
       },
       onrun
     )

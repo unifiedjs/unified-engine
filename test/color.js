@@ -1,23 +1,21 @@
 import path from 'path'
 import test from 'tape'
 import figures from 'figures'
-import noop from './util/noop-processor.js'
-import spy from './util/spy.js'
+import {noop} from './util/noop-processor.js'
+import {spy} from './util/spy.js'
 import {engine} from '../index.js'
 
-var join = path.join
+const fixtures = path.join('test', 'fixtures')
 
-var fixtures = join('test', 'fixtures')
-
-test('color', function (t) {
-  var stderr = spy()
+test('color', (t) => {
+  const stderr = spy()
 
   t.plan(1)
 
   engine(
     {
       processor: noop,
-      cwd: join(fixtures, 'empty'),
+      cwd: path.join(fixtures, 'empty'),
       streamError: stderr.stream,
       files: ['readme.md'],
       color: true
@@ -26,7 +24,7 @@ test('color', function (t) {
   )
 
   function onrun(error, code) {
-    var expected = [
+    const expected = [
       '\u001B[4m\u001B[31mreadme.md\u001B[39m\u001B[24m',
       '  1:1  \u001B[31merror\u001B[39m  No such file or directory',
       '',

@@ -1,24 +1,22 @@
 import path from 'path'
 import {PassThrough} from 'stream'
 import test from 'tape'
-import noop from './util/noop-processor.js'
-import spy from './util/spy.js'
+import {noop} from './util/noop-processor.js'
+import {spy} from './util/spy.js'
 import {engine} from '../index.js'
 
-var join = path.join
+const fixtures = path.join('test', 'fixtures')
 
-var fixtures = join('test', 'fixtures')
-
-test('file-path', function (t) {
+test('file-path', (t) => {
   t.plan(2)
 
-  t.test('should throw on `filePath` with files', function (t) {
+  t.test('should throw on `filePath` with files', (t) => {
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'simple-structure'),
+        cwd: path.join(fixtures, 'simple-structure'),
         files: ['.'],
         filePath: 'qux/quux.foo',
         extensions: ['txt']
@@ -27,9 +25,9 @@ test('file-path', function (t) {
     )
 
     function onrun(error) {
-      var actual = error.message.split('\n').slice(0, 2).join('\n')
+      const actual = error.message.split('\n').slice(0, 2).join('\n')
 
-      var expected = [
+      const expected = [
         'Do not pass both `--file-path` and real files.',
         'Did you mean to pass stdin instead of files?'
       ].join('\n')
@@ -38,11 +36,11 @@ test('file-path', function (t) {
     }
   })
 
-  t.test('should support `filePath`', function (t) {
-    var stdout = spy()
-    var stderr = spy()
-    var stream = new PassThrough()
-    var index = 0
+  t.test('should support `filePath`', (t) => {
+    const stdout = spy()
+    const stderr = spy()
+    const stream = new PassThrough()
+    let index = 0
 
     t.plan(1)
 
@@ -60,7 +58,7 @@ test('file-path', function (t) {
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'empty'),
+        cwd: path.join(fixtures, 'empty'),
         streamOut: stdout.stream,
         streamError: stderr.stream,
         streamIn: stream,

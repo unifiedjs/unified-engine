@@ -1,18 +1,16 @@
 import path from 'path'
 import test from 'tape'
-import noop from './util/noop-processor.js'
-import spy from './util/spy.js'
+import {noop} from './util/noop-processor.js'
+import {spy} from './util/spy.js'
 import {engine} from '../index.js'
 
-var join = path.join
+const fixtures = path.join('test', 'fixtures')
 
-var fixtures = join('test', 'fixtures')
-
-test('configuration', function (t) {
+test('configuration', (t) => {
   t.plan(14)
 
-  t.test('should fail fatally when custom rc files are missing', function (t) {
-    var stderr = spy()
+  t.test('should fail fatally when custom rc files are missing', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
@@ -20,7 +18,7 @@ test('configuration', function (t) {
       {
         processor: noop,
         streamError: stderr.stream,
-        cwd: join(fixtures, 'one-file'),
+        cwd: path.join(fixtures, 'one-file'),
         files: ['.'],
         rcPath: '.foorc',
         extensions: ['txt']
@@ -29,9 +27,9 @@ test('configuration', function (t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr().split('\n').slice(0, 2).join('\n')
+      const actual = stderr().split('\n').slice(0, 2).join('\n')
 
-      var expected = [
+      const expected = [
         'one.txt',
         '  1:1  error  Error: Cannot read given file `.foorc`'
       ].join('\n')
@@ -40,8 +38,8 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should fail fatally when custom rc files are empty', function (t) {
-    var stderr = spy()
+  t.test('should fail fatally when custom rc files are empty', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
@@ -49,7 +47,7 @@ test('configuration', function (t) {
       {
         processor: noop,
         streamError: stderr.stream,
-        cwd: join(fixtures, 'malformed-rc-empty'),
+        cwd: path.join(fixtures, 'malformed-rc-empty'),
         files: ['.'],
         rcPath: '.foorc',
         extensions: ['txt']
@@ -58,9 +56,9 @@ test('configuration', function (t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr().split('\n').slice(0, 2).join('\n')
+      const actual = stderr().split('\n').slice(0, 2).join('\n')
 
-      var expected = [
+      const expected = [
         'one.txt',
         '  1:1  error  Error: Cannot parse given file `.foorc`'
       ].join('\n')
@@ -69,8 +67,8 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should fail fatally when custom rc files are invalid', function (t) {
-    var stderr = spy()
+  t.test('should fail fatally when custom rc files are invalid', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
@@ -78,7 +76,7 @@ test('configuration', function (t) {
       {
         processor: noop,
         streamError: stderr.stream,
-        cwd: join(fixtures, 'malformed-rc-invalid'),
+        cwd: path.join(fixtures, 'malformed-rc-invalid'),
         files: ['.'],
         rcPath: '.foorc.js',
         extensions: ['txt']
@@ -87,9 +85,9 @@ test('configuration', function (t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr().split('\n').slice(0, 3).join('\n')
+      const actual = stderr().split('\n').slice(0, 3).join('\n')
 
-      var expected = [
+      const expected = [
         'one.txt',
         '  1:1  error  Error: Cannot parse given file `.foorc.js`',
         'Error: Expected preset, not `false`'
@@ -99,15 +97,15 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should support `.rc.js` scripts (1)', function (t) {
-    var stderr = spy()
+  t.test('should support `.rc.js` scripts (1)', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'malformed-rc-script'),
+        cwd: path.join(fixtures, 'malformed-rc-script'),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -117,9 +115,9 @@ test('configuration', function (t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr().split('\n').slice(0, 2).join('\n')
+      const actual = stderr().split('\n').slice(0, 2).join('\n')
 
-      var expected = [
+      const expected = [
         'one.txt',
         '  1:1  error  Error: Cannot parse file `.foorc.js`'
       ].join('\n')
@@ -128,15 +126,15 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should support `.rc.js` scripts (2)', function (t) {
-    var stderr = spy()
+  t.test('should support `.rc.js` scripts (2)', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'rc-script'),
+        cwd: path.join(fixtures, 'rc-script'),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -154,15 +152,15 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should support `.rc.js` scripts (3)', function (t) {
-    var stderr = spy()
+  t.test('should support `.rc.js` scripts (3)', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'rc-script'),
+        cwd: path.join(fixtures, 'rc-script'),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -180,15 +178,15 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should support `.rc.mjs` module', function (t) {
-    var stderr = spy()
+  t.test('should support `.rc.mjs` module', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'rc-module-mjs'),
+        cwd: path.join(fixtures, 'rc-module-mjs'),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -206,15 +204,15 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should support `.rc.yaml` cpmfog files', function (t) {
-    var stderr = spy()
+  t.test('should support `.rc.yaml` cpmfog files', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'malformed-rc-yaml'),
+        cwd: path.join(fixtures, 'malformed-rc-yaml'),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -224,9 +222,9 @@ test('configuration', function (t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr().split('\n').slice(0, 2).join('\n')
+      const actual = stderr().split('\n').slice(0, 2).join('\n')
 
-      var expected = [
+      const expected = [
         'one.txt',
         '  1:1  error  Error: Cannot parse file `.foorc.yaml`'
       ].join('\n')
@@ -239,15 +237,15 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should support custom rc files', function (t) {
-    var stderr = spy()
+  t.test('should support custom rc files', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'rc-file'),
+        cwd: path.join(fixtures, 'rc-file'),
         streamError: stderr.stream,
         files: ['.'],
         rcPath: '.foorc',
@@ -257,7 +255,7 @@ test('configuration', function (t) {
     )
 
     function onrun(error, code) {
-      var expected = [
+      const expected = [
         'nested' + path.sep + 'four.txt: no issues found',
         'nested' + path.sep + 'three.txt: no issues found',
         'one.txt: no issues found',
@@ -269,16 +267,16 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should support searching package files', function (t) {
-    var cwd = join(fixtures, 'malformed-package-file')
-    var stderr = spy()
+  t.test('should support searching package files', (t) => {
+    const cwd = path.join(fixtures, 'malformed-package-file')
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         files: ['.'],
         packageField: 'fooConfig',
@@ -288,9 +286,9 @@ test('configuration', function (t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr().split('\n').slice(0, 2).join('\n')
+      const actual = stderr().split('\n').slice(0, 2).join('\n')
 
-      var expected = [
+      const expected = [
         'one.txt',
         '  1:1  error  Error: Cannot parse file `package.json`'
       ].join('\n')
@@ -299,15 +297,15 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should support custom rc files', function (t) {
-    var stderr = spy()
+  t.test('should support custom rc files', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'rc-file'),
+        cwd: path.join(fixtures, 'rc-file'),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -317,7 +315,7 @@ test('configuration', function (t) {
     )
 
     function onrun(error, code) {
-      var expected = [
+      const expected = [
         'nested' + path.sep + 'four.txt: no issues found',
         'nested' + path.sep + 'three.txt: no issues found',
         'one.txt: no issues found',
@@ -329,15 +327,15 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should support no config files', function (t) {
-    var stderr = spy()
+  t.test('should support no config files', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'simple-structure'),
+        cwd: path.join(fixtures, 'simple-structure'),
         streamError: stderr.stream,
         files: ['.'],
         packageField: 'fooConfig',
@@ -348,7 +346,7 @@ test('configuration', function (t) {
     )
 
     function onrun(error, code) {
-      var expected = [
+      const expected = [
         'nested' + path.sep + 'three.txt: no issues found',
         'nested' + path.sep + 'two.txt: no issues found',
         'one.txt: no issues found',
@@ -359,15 +357,15 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should not search if `detectConfig` is `false`', function (t) {
-    var stderr = spy()
+  t.test('should not search if `detectConfig` is `false`', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'malformed-rc-script'),
+        cwd: path.join(fixtures, 'malformed-rc-script'),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -386,15 +384,15 @@ test('configuration', function (t) {
     }
   })
 
-  t.test('should cascade `settings`', function (t) {
-    var stderr = spy()
+  t.test('should cascade `settings`', (t) => {
+    const stderr = spy()
 
     t.plan(2)
 
     engine(
       {
         processor: noop().use(plugin),
-        cwd: join(fixtures, 'config-settings'),
+        cwd: path.join(fixtures, 'config-settings'),
         streamError: stderr.stream,
         files: ['.'],
         packageField: 'fooConfig',

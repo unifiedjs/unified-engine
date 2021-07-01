@@ -1,8 +1,6 @@
 import unified from 'unified'
 
-const noop = unified().use(add)
-
-export default noop
+export const noop = unified().use(add)
 
 function add() {
   this.Parser = parser

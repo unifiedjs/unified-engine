@@ -1,22 +1,20 @@
 import path from 'path'
 import {PassThrough} from 'stream'
 import test from 'tape'
-import noop from './util/noop-processor.js'
-import spy from './util/spy.js'
+import {noop} from './util/noop-processor.js'
+import {spy} from './util/spy.js'
 import {engine} from '../index.js'
 
-var join = path.join
+const fixtures = path.join('test', 'fixtures')
 
-var fixtures = join('test', 'fixtures')
-
-test('stdin', function (t) {
+test('stdin', (t) => {
   t.plan(3)
 
-  t.test('should support stdin', function (t) {
-    var stdout = spy()
-    var stderr = spy()
-    var stream = new PassThrough()
-    var index = 0
+  t.test('should support stdin', (t) => {
+    const stdout = spy()
+    const stderr = spy()
+    const stream = new PassThrough()
+    let index = 0
 
     t.plan(1)
 
@@ -25,7 +23,7 @@ test('stdin', function (t) {
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'empty'),
+        cwd: path.join(fixtures, 'empty'),
         streamIn: stream,
         streamOut: stdout.stream,
         streamError: stderr.stream
@@ -56,11 +54,11 @@ test('stdin', function (t) {
     }
   })
 
-  t.test('should not output if `out: false`', function (t) {
-    var stdout = spy()
-    var stderr = spy()
-    var stream = new PassThrough()
-    var index = 0
+  t.test('should not output if `out: false`', (t) => {
+    const stdout = spy()
+    const stderr = spy()
+    const stream = new PassThrough()
+    let index = 0
 
     t.plan(1)
 
@@ -69,7 +67,7 @@ test('stdin', function (t) {
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'empty'),
+        cwd: path.join(fixtures, 'empty'),
         streamIn: stream,
         streamOut: stdout.stream,
         streamError: stderr.stream,
@@ -96,11 +94,11 @@ test('stdin', function (t) {
     }
   })
 
-  t.test('should support config files on stdin', function (t) {
-    var stdout = spy()
-    var stderr = spy()
-    var stream = new PassThrough()
-    var index = 0
+  t.test('should support config files on stdin', (t) => {
+    const stdout = spy()
+    const stderr = spy()
+    const stream = new PassThrough()
+    let index = 0
 
     t.plan(2)
 
@@ -109,7 +107,7 @@ test('stdin', function (t) {
     engine(
       {
         processor: noop().use(plugin),
-        cwd: join(fixtures, 'config-settings'),
+        cwd: path.join(fixtures, 'config-settings'),
         streamIn: stream,
         streamOut: stdout.stream,
         streamError: stderr.stream,

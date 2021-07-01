@@ -1,39 +1,37 @@
 import path from 'path'
 import test from 'tape'
-import strip from 'strip-ansi'
+import stripAnsi from 'strip-ansi'
 import figures from 'figures'
-import noop from './util/noop-processor.js'
-import spy from './util/spy.js'
-import platform from './util/platform.js'
+import {noop} from './util/noop-processor.js'
+import {spy} from './util/spy.js'
+import {windows} from './util/platform.js'
 import {engine} from '../index.js'
 
-var join = path.join
+const fixtures = path.join('test', 'fixtures')
 
-var fixtures = join('test', 'fixtures')
-
-if (!platform.isWin) {
+if (!windows) {
   // See: <https://github.com/sindresorhus/eslint-formatter-pretty/blob/159b30a/index.js#L90-L93>.
-  var original = process.env.CI
+  const original = process.env.CI
 
   process.env.CI = 'true'
 
-  test.onFinish(function () {
+  test.onFinish(() => {
     process.env.CI = original
   })
 }
 
-test('reporting', function (t) {
+test('reporting', (t) => {
   t.plan(7)
 
-  t.test('should fail for warnings with `frail`', function (t) {
-    var stderr = spy()
+  t.test('should fail for warnings with `frail`', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop().use(warn),
-        cwd: join(fixtures, 'one-file'),
+        cwd: path.join(fixtures, 'one-file'),
         streamError: stderr.stream,
         files: ['one.txt'],
         frail: true
@@ -59,20 +57,20 @@ test('reporting', function (t) {
       return transformer
     }
 
-    function transformer(tree, file) {
+    function transformer(_, file) {
       file.message('Warning')
     }
   })
 
-  t.test('should not report succesful files when `quiet` (#1)', function (t) {
-    var stderr = spy()
+  t.test('should not report succesful files when `quiet` (#1)', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop().use(warn),
-        cwd: join(fixtures, 'two-files'),
+        cwd: path.join(fixtures, 'two-files'),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -99,22 +97,22 @@ test('reporting', function (t) {
       return transformer
     }
 
-    function transformer(tree, file) {
+    function transformer(_, file) {
       if (file.stem === 'two') {
         file.message('Warning')
       }
     }
   })
 
-  t.test('should not report succesful files when `quiet` (#2)', function (t) {
-    var stderr = spy()
+  t.test('should not report succesful files when `quiet` (#2)', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop(),
-        cwd: join(fixtures, 'one-file'),
+        cwd: path.join(fixtures, 'one-file'),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -128,15 +126,15 @@ test('reporting', function (t) {
     }
   })
 
-  t.test('should not report succesful files when `silent`', function (t) {
-    var stderr = spy()
+  t.test('should not report succesful files when `silent`', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop().use(warn),
-        cwd: join(fixtures, 'two-files'),
+        cwd: path.join(fixtures, 'two-files'),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -161,7 +159,7 @@ test('reporting', function (t) {
       return transformer
     }
 
-    function transformer(tree, file) {
+    function transformer(_, file) {
       file.message('Warning')
 
       if (file.stem === 'two') {
@@ -170,9 +168,9 @@ test('reporting', function (t) {
     }
   })
 
-  t.test('should support custom reporters (without prefix)', function (t) {
-    var stderr = spy()
-    var root = join(fixtures, 'two-files')
+  t.test('should support custom reporters (without prefix)', (t) => {
+    const stderr = spy()
+    const root = path.join(fixtures, 'two-files')
 
     t.plan(1)
 
@@ -192,7 +190,7 @@ test('reporting', function (t) {
     )
 
     function onrun(error, code) {
-      var report = JSON.stringify(
+      const report = JSON.stringify(
         [
           {
             path: 'one.txt',
@@ -232,16 +230,16 @@ test('reporting', function (t) {
       return transformer
     }
 
-    function transformer(tree, file) {
+    function transformer(_, file) {
       if (file.stem === 'two') {
         file.fail('Error')
       }
     }
   })
 
-  t.test('should support custom reporters (with prefix)', function (t) {
-    var stderr = spy()
-    var root = join(fixtures, 'two-files')
+  t.test('should support custom reporters (with prefix)', (t) => {
+    const stderr = spy()
+    const root = path.join(fixtures, 'two-files')
 
     t.plan(1)
 
@@ -259,7 +257,7 @@ test('reporting', function (t) {
 
     function onrun(error, code) {
       t.deepEqual(
-        [error, code, strip(stderr())],
+        [error, code, stripAnsi(stderr())],
         [
           null,
           0,
@@ -273,15 +271,15 @@ test('reporting', function (t) {
       return transformer
     }
 
-    function transformer(tree, file) {
+    function transformer(_, file) {
       if (file.stem === 'one') {
         file.info('Info!')
       }
     }
   })
 
-  t.test('should fail on an unfound reporter', function (t) {
-    var root = join(fixtures, 'one-file')
+  t.test('should fail on an unfound reporter', (t) => {
+    const root = path.join(fixtures, 'one-file')
 
     t.plan(1)
 

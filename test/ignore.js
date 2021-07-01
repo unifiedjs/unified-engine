@@ -1,27 +1,25 @@
 import fs from 'fs'
 import path from 'path'
 import test from 'tape'
-import noop from './util/noop-processor.js'
-import spy from './util/spy.js'
+import {noop} from './util/noop-processor.js'
+import {spy} from './util/spy.js'
 import {engine} from '../index.js'
 
-var join = path.join
+const fixtures = path.join('test', 'fixtures')
 
-var fixtures = join('test', 'fixtures')
-
-test('ignore', function (t) {
+test('ignore', (t) => {
   t.plan(10)
 
-  t.test('should fail fatally when given ignores are not found', function (t) {
-    var cwd = join(fixtures, 'simple-structure')
-    var stderr = spy()
+  t.test('should fail fatally when given ignores are not found', (t) => {
+    const cwd = path.join(fixtures, 'simple-structure')
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         files: ['one.txt'],
         detectIgnore: false,
@@ -32,9 +30,9 @@ test('ignore', function (t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr().split('\n').slice(0, 2).join('\n')
+      const actual = stderr().split('\n').slice(0, 2).join('\n')
 
-      var expected = [
+      const expected = [
         'one.txt',
         '  1:1  error  Error: Cannot read given file `.missing-ignore`'
       ].join('\n')
@@ -43,15 +41,15 @@ test('ignore', function (t) {
     }
   })
 
-  t.test('should support custom ignore files', function (t) {
-    var stderr = spy()
+  t.test('should support custom ignore files', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'ignore-file'),
+        cwd: path.join(fixtures, 'ignore-file'),
         streamError: stderr.stream,
         files: ['.'],
         detectIgnore: false,
@@ -62,7 +60,7 @@ test('ignore', function (t) {
     )
 
     function onrun(error, code) {
-      var expected = [
+      const expected = [
         'nested' + path.sep + 'three.txt: no issues found',
         'one.txt: no issues found',
         ''
@@ -72,15 +70,15 @@ test('ignore', function (t) {
     }
   })
 
-  t.test('should support searching ignore files', function (t) {
-    var stderr = spy()
+  t.test('should support searching ignore files', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'ignore-file'),
+        cwd: path.join(fixtures, 'ignore-file'),
         streamError: stderr.stream,
         files: ['.'],
         detectIgnore: true,
@@ -91,7 +89,7 @@ test('ignore', function (t) {
     )
 
     function onrun(error, code) {
-      var expected = [
+      const expected = [
         'nested' + path.sep + 'three.txt: no issues found',
         'one.txt: no issues found',
         ''
@@ -101,15 +99,15 @@ test('ignore', function (t) {
     }
   })
 
-  t.test('should not look into hidden files', function (t) {
-    var stderr = spy()
+  t.test('should not look into hidden files', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'hidden-directory'),
+        cwd: path.join(fixtures, 'hidden-directory'),
         streamError: stderr.stream,
         files: ['.'],
         // No `ignoreName`.
@@ -127,15 +125,15 @@ test('ignore', function (t) {
     }
   })
 
-  t.test('should support no ignore files', function (t) {
-    var stderr = spy()
+  t.test('should support no ignore files', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'simple-structure'),
+        cwd: path.join(fixtures, 'simple-structure'),
         streamError: stderr.stream,
         files: ['.'],
         detectIgnore: true,
@@ -146,7 +144,7 @@ test('ignore', function (t) {
     )
 
     function onrun(error, code) {
-      var expected = [
+      const expected = [
         'nested' + path.sep + 'three.txt: no issues found',
         'nested' + path.sep + 'two.txt: no issues found',
         'one.txt: no issues found',
@@ -157,15 +155,15 @@ test('ignore', function (t) {
     }
   })
 
-  t.test('should support ignore patterns', function (t) {
-    var stderr = spy()
+  t.test('should support ignore patterns', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'simple-structure'),
+        cwd: path.join(fixtures, 'simple-structure'),
         streamError: stderr.stream,
         files: ['.'],
         ignorePatterns: ['**/t*.*'],
@@ -175,21 +173,21 @@ test('ignore', function (t) {
     )
 
     function onrun(error, code) {
-      var expected = ['one.txt: no issues found', ''].join('\n')
+      const expected = ['one.txt: no issues found', ''].join('\n')
 
       t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
   })
 
-  t.test('should support ignore files and ignore patterns', function (t) {
-    var stderr = spy()
+  t.test('should support ignore files and ignore patterns', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'ignore-file'),
+        cwd: path.join(fixtures, 'ignore-file'),
         streamError: stderr.stream,
         files: ['.'],
         detectIgnore: true,
@@ -201,7 +199,7 @@ test('ignore', function (t) {
     )
 
     function onrun(error, code) {
-      var expected = ['one.txt: no issues found', ''].join('\n')
+      const expected = ['one.txt: no issues found', ''].join('\n')
 
       t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }
@@ -209,18 +207,18 @@ test('ignore', function (t) {
 
   t.test(
     '`ignorePath` should resolve from its directory, `ignorePatterns` from cwd',
-    function (t) {
-      var stderr = spy()
+    (t) => {
+      const stderr = spy()
 
       t.plan(1)
 
       engine(
         {
           processor: noop,
-          cwd: join(fixtures, 'sibling-ignore'),
+          cwd: path.join(fixtures, 'sibling-ignore'),
           streamError: stderr.stream,
           files: ['.'],
-          ignorePath: join('deep', 'ignore'),
+          ignorePath: path.join('deep', 'ignore'),
           ignorePatterns: ['files/two.txt'],
           extensions: ['txt']
         },
@@ -228,9 +226,9 @@ test('ignore', function (t) {
       )
 
       function onrun(error, code) {
-        var expected = [
-          join('deep', 'files', 'two.txt') + ': no issues found',
-          join('files', 'one.txt') + ': no issues found',
+        const expected = [
+          path.join('deep', 'files', 'two.txt') + ': no issues found',
+          path.join('files', 'one.txt') + ': no issues found',
           ''
         ].join('\n')
 
@@ -243,18 +241,18 @@ test('ignore', function (t) {
     }
   )
 
-  t.test('`ignorePathResolveFrom`', function (t) {
-    var stderr = spy()
+  t.test('`ignorePathResolveFrom`', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'sibling-ignore'),
+        cwd: path.join(fixtures, 'sibling-ignore'),
         streamError: stderr.stream,
         files: ['.'],
-        ignorePath: join('deep', 'ignore'),
+        ignorePath: path.join('deep', 'ignore'),
         ignorePathResolveFrom: 'cwd',
         extensions: ['txt']
       },
@@ -262,10 +260,10 @@ test('ignore', function (t) {
     )
 
     function onrun(error, code) {
-      var expected = [
-        join('deep', 'files', 'one.txt') + ': no issues found',
-        join('deep', 'files', 'two.txt') + ': no issues found',
-        join('files', 'two.txt') + ': no issues found',
+      const expected = [
+        path.join('deep', 'files', 'one.txt') + ': no issues found',
+        path.join('deep', 'files', 'two.txt') + ': no issues found',
+        path.join('files', 'two.txt') + ': no issues found',
         ''
       ].join('\n')
 
@@ -273,10 +271,10 @@ test('ignore', function (t) {
     }
   })
 
-  t.test('should support higher positioned files', function (t) {
-    var cwd = join(fixtures, 'empty')
-    var filePath = path.resolve(process.cwd(), '../..', 'example.txt')
-    var stderr = spy()
+  t.test('should support higher positioned files', (t) => {
+    const cwd = path.join(fixtures, 'empty')
+    const filePath = path.resolve(process.cwd(), '../..', 'example.txt')
+    const stderr = spy()
 
     fs.writeFileSync(filePath, '')
 
@@ -285,7 +283,7 @@ test('ignore', function (t) {
     engine(
       {
         processor: noop,
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         files: [filePath]
       },
@@ -295,7 +293,7 @@ test('ignore', function (t) {
     function onrun(error, code) {
       fs.unlinkSync(filePath)
 
-      var expected = path.relative(cwd, filePath) + ': no issues found\n'
+      const expected = path.relative(cwd, filePath) + ': no issues found\n'
 
       t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
     }

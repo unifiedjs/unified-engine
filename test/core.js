@@ -2,21 +2,21 @@ import test from 'tape'
 import unified from 'unified'
 import {engine} from '../index.js'
 
-test('engine', function (t) {
+test('engine', (t) => {
   t.plan(4)
 
-  t.test('engine', function (t) {
+  t.test('engine', (t) => {
     t.plan(3)
 
     t.throws(
-      function () {
+      () => {
         engine()
       },
       /Missing `callback`/,
       'should throw w/o `callback`'
     )
 
-    engine(null, function (error) {
+    engine(null, (error) => {
       t.equal(
         error.message,
         'Missing `processor`',
@@ -24,7 +24,7 @@ test('engine', function (t) {
       )
     })
 
-    engine({}, function (error) {
+    engine({}, (error) => {
       t.equal(
         error.message,
         'Missing `processor`',
@@ -33,10 +33,10 @@ test('engine', function (t) {
     })
   })
 
-  t.test('should fail w/ `output` and w/ `out`', function (t) {
+  t.test('should fail w/ `output` and w/ `out`', (t) => {
     t.plan(1)
 
-    engine({processor: unified, output: true, out: true}, function (error) {
+    engine({processor: unified, output: true, out: true}, (error) => {
       t.equal(
         error.message,
         'Cannot accept both `output` and `out`',
@@ -45,10 +45,10 @@ test('engine', function (t) {
     })
   })
 
-  t.test('should fail w/ `detectConfig` w/o `rcName`', function (t) {
+  t.test('should fail w/ `detectConfig` w/o `rcName`', (t) => {
     t.plan(1)
 
-    engine({processor: unified, detectConfig: true}, function (error) {
+    engine({processor: unified, detectConfig: true}, (error) => {
       t.equal(
         error.message,
         'Missing `rcName` or `packageField` with `detectConfig`',
@@ -57,10 +57,10 @@ test('engine', function (t) {
     })
   })
 
-  t.test('should fail w/ `detectIgnore` w/o `ignoreName`', function (t) {
+  t.test('should fail w/ `detectIgnore` w/o `ignoreName`', (t) => {
     t.plan(1)
 
-    engine({processor: unified, detectIgnore: true}, function (error) {
+    engine({processor: unified, detectIgnore: true}, (error) => {
       t.equal(
         error.message,
         'Missing `ignoreName` with `detectIgnore`',

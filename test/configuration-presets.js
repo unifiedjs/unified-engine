@@ -1,19 +1,17 @@
 import path from 'path'
 import test from 'tape'
-import noop from './util/noop-processor.js'
-import spy from './util/spy.js'
+import {noop} from './util/noop-processor.js'
+import {spy} from './util/spy.js'
 import {engine} from '../index.js'
 
-var join = path.join
+const fixtures = path.join('test', 'fixtures')
 
-var fixtures = join('test', 'fixtures')
-
-test('configuration-presets', function (t) {
+test('configuration-presets', (t) => {
   t.plan(8)
 
-  t.test('should fail on invalid `presets`', function (t) {
-    var root = join(fixtures, 'config-presets-invalid')
-    var stderr = spy()
+  t.test('should fail on invalid `presets`', (t) => {
+    const root = path.join(fixtures, 'config-presets-invalid')
+    const stderr = spy()
 
     t.plan(1)
 
@@ -30,9 +28,9 @@ test('configuration-presets', function (t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr().split('\n').slice(0, 3).join('\n')
+      const actual = stderr().split('\n').slice(0, 3).join('\n')
 
-      var expected = [
+      const expected = [
         'one.txt',
         '  1:1  error  Error: Cannot parse file `.foorc`',
         'Expected a list or object of plugins, not `./preset`'
@@ -42,8 +40,8 @@ test('configuration-presets', function (t) {
     }
   })
 
-  t.test('should support plugins with the same name', function (t) {
-    var stderr = spy()
+  t.test('should support plugins with the same name', (t) => {
+    const stderr = spy()
 
     // More assertions are in loaded plugins.
     t.plan(3)
@@ -51,7 +49,7 @@ test('configuration-presets', function (t) {
     engine(
       {
         processor: noop().use(addTest),
-        cwd: join(fixtures, 'config-presets-local'),
+        cwd: path.join(fixtures, 'config-presets-local'),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -73,15 +71,15 @@ test('configuration-presets', function (t) {
     }
   })
 
-  t.test('should handle missing plugins in presets', function (t) {
-    var stderr = spy()
+  t.test('should handle missing plugins in presets', (t) => {
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'config-presets-missing-plugin'),
+        cwd: path.join(fixtures, 'config-presets-missing-plugin'),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -91,9 +89,9 @@ test('configuration-presets', function (t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr().split('\n').slice(0, 2).join('\n')
+      const actual = stderr().split('\n').slice(0, 2).join('\n')
 
-      var expected = [
+      const expected = [
         'one.txt',
         '  1:1  error  Error: Could not find module `./plugin`'
       ].join('\n')
@@ -102,8 +100,8 @@ test('configuration-presets', function (t) {
     }
   })
 
-  t.test('should reconfigure plugins', function (t) {
-    var stderr = spy()
+  t.test('should reconfigure plugins', (t) => {
+    const stderr = spy()
 
     // Five more assertions are loaded in the plugin.
     t.plan(6)
@@ -111,7 +109,7 @@ test('configuration-presets', function (t) {
     engine(
       {
         processor: noop().use(addTest),
-        cwd: join(fixtures, 'config-plugins-reconfigure'),
+        cwd: path.join(fixtures, 'config-plugins-reconfigure'),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -133,8 +131,8 @@ test('configuration-presets', function (t) {
     }
   })
 
-  t.test('should reconfigure imported plugins', function (t) {
-    var stderr = spy()
+  t.test('should reconfigure imported plugins', (t) => {
+    const stderr = spy()
 
     // One more assertion is loaded in the plugin.
     t.plan(2)
@@ -142,7 +140,7 @@ test('configuration-presets', function (t) {
     engine(
       {
         processor: noop().use(addTest),
-        cwd: join(fixtures, 'config-preset-plugins-reconfigure'),
+        cwd: path.join(fixtures, 'config-preset-plugins-reconfigure'),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -164,8 +162,8 @@ test('configuration-presets', function (t) {
     }
   })
 
-  t.test('Should reconfigure: turn plugins off', function (t) {
-    var stderr = spy()
+  t.test('Should reconfigure: turn plugins off', (t) => {
+    const stderr = spy()
 
     // More assertions are in loaded plugins.
     t.plan(1)
@@ -173,7 +171,7 @@ test('configuration-presets', function (t) {
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'config-plugins-reconfigure-off'),
+        cwd: path.join(fixtures, 'config-plugins-reconfigure-off'),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -191,15 +189,15 @@ test('configuration-presets', function (t) {
     }
   })
 
-  t.test('should reconfigure settings', function (t) {
-    var stderr = spy()
+  t.test('should reconfigure settings', (t) => {
+    const stderr = spy()
 
     t.plan(2)
 
     engine(
       {
         processor: noop().use(attacher),
-        cwd: join(fixtures, 'config-settings-reconfigure-a'),
+        cwd: path.join(fixtures, 'config-settings-reconfigure-a'),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -226,15 +224,15 @@ test('configuration-presets', function (t) {
     }
   })
 
-  t.test('should reconfigure settings (2)', function (t) {
-    var stderr = spy()
+  t.test('should reconfigure settings (2)', (t) => {
+    const stderr = spy()
 
     t.plan(2)
 
     engine(
       {
         processor: noop().use(attacher),
-        cwd: join(fixtures, 'config-settings-reconfigure-b'),
+        cwd: path.join(fixtures, 'config-settings-reconfigure-b'),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',

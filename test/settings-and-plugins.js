@@ -1,25 +1,23 @@
 import path from 'path'
 import test from 'tape'
-import noop from './util/noop-processor.js'
-import spy from './util/spy.js'
+import {noop} from './util/noop-processor.js'
+import {spy} from './util/spy.js'
 import {engine} from '../index.js'
 
-var join = path.join
+const fixtures = path.join('test', 'fixtures')
 
-var fixtures = join('test', 'fixtures')
-
-test('settings', function (t) {
+test('settings', (t) => {
   t.plan(2)
 
-  t.test('should use `settings`', function (t) {
-    var stderr = spy()
+  t.test('should use `settings`', (t) => {
+    const stderr = spy()
 
     t.plan(2)
 
     engine(
       {
         processor: noop().use(attacher),
-        cwd: join(fixtures, 'one-file'),
+        cwd: path.join(fixtures, 'one-file'),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -47,15 +45,15 @@ test('settings', function (t) {
     }
   })
 
-  t.test('should cascade `settings`', function (t) {
-    var stderr = spy()
+  t.test('should cascade `settings`', (t) => {
+    const stderr = spy()
 
     t.plan(2)
 
     engine(
       {
         processor: noop().use(attacher),
-        cwd: join(fixtures, 'config-settings-cascade'),
+        cwd: path.join(fixtures, 'config-settings-cascade'),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -89,18 +87,18 @@ test('settings', function (t) {
   })
 })
 
-test('plugins', function (t) {
+test('plugins', (t) => {
   t.plan(3)
 
-  t.test('should use `plugins` as list of functions', function (t) {
-    var stderr = spy()
+  t.test('should use `plugins` as list of functions', (t) => {
+    const stderr = spy()
 
     t.plan(3)
 
     engine(
       {
         processor: noop,
-        cwd: join(fixtures, 'one-file'),
+        cwd: path.join(fixtures, 'one-file'),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -134,15 +132,15 @@ test('plugins', function (t) {
     }
   })
 
-  t.test('should use `plugins` as list of strings', function (t) {
-    var stderr = spy()
+  t.test('should use `plugins` as list of strings', (t) => {
+    const stderr = spy()
 
     t.plan(2)
 
     engine(
       {
         processor: noop().use(addTest),
-        cwd: join(fixtures, 'config-plugins-basic-reconfigure'),
+        cwd: path.join(fixtures, 'config-plugins-basic-reconfigure'),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -164,15 +162,15 @@ test('plugins', function (t) {
     }
   })
 
-  t.test('should use `plugins` as list of objects', function (t) {
-    var stderr = spy()
+  t.test('should use `plugins` as list of objects', (t) => {
+    const stderr = spy()
 
     t.plan(2)
 
     engine(
       {
         processor: noop().use(addTest),
-        cwd: join(fixtures, 'config-plugins-basic-reconfigure'),
+        cwd: path.join(fixtures, 'config-plugins-basic-reconfigure'),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],

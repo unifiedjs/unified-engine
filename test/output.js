@@ -1,33 +1,27 @@
 import fs from 'fs'
 import path from 'path'
 import test from 'tape'
-import vfile from 'to-vfile'
-import noop from './util/noop-processor.js'
-import spy from './util/spy.js'
+import toVFile from 'to-vfile'
+import {noop} from './util/noop-processor.js'
+import {spy} from './util/spy.js'
 import {engine} from '../index.js'
 
-var join = path.join
-var read = fs.readFileSync
-var unlink = fs.unlinkSync
-var exists = fs.existsSync
-var sep = path.sep
+const fixtures = path.join(process.cwd(), 'test', 'fixtures')
 
-var fixtures = join(process.cwd(), 'test', 'fixtures')
-
-test('output', function (t) {
+test('output', (t) => {
   t.plan(16)
 
-  t.test('should not write to stdout on dirs', function (t) {
-    var cwd = join(fixtures, 'one-file')
-    var stdout = spy()
-    var stderr = spy()
+  t.test('should not write to stdout on dirs', (t) => {
+    const cwd = path.join(fixtures, 'one-file')
+    const stdout = spy()
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop().use(change),
-        cwd: cwd,
+        cwd,
         streamOut: stdout.stream,
         streamError: stderr.stream,
         files: ['.'],
@@ -53,17 +47,17 @@ test('output', function (t) {
     }
   })
 
-  t.test('should write to stdout on one file', function (t) {
-    var cwd = join(fixtures, 'one-file')
-    var stdout = spy()
-    var stderr = spy()
+  t.test('should write to stdout on one file', (t) => {
+    const cwd = path.join(fixtures, 'one-file')
+    const stdout = spy()
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop().use(change),
-        cwd: cwd,
+        cwd,
         streamOut: stdout.stream,
         streamError: stderr.stream,
         files: ['one.txt'],
@@ -89,17 +83,17 @@ test('output', function (t) {
     }
   })
 
-  t.test('should not write to stdout without `out`', function (t) {
-    var cwd = join(fixtures, 'one-file')
-    var stdout = spy()
-    var stderr = spy()
+  t.test('should not write to stdout without `out`', (t) => {
+    const cwd = path.join(fixtures, 'one-file')
+    const stdout = spy()
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop().use(change),
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         streamOut: stdout.stream,
         out: false,
@@ -126,10 +120,10 @@ test('output', function (t) {
     }
   })
 
-  t.test('should not write multiple files to stdout', function (t) {
-    var cwd = join(fixtures, 'two-files')
-    var stdout = spy()
-    var stderr = spy()
+  t.test('should not write multiple files to stdout', (t) => {
+    const cwd = path.join(fixtures, 'two-files')
+    const stdout = spy()
+    const stderr = spy()
 
     t.plan(1)
 
@@ -138,7 +132,7 @@ test('output', function (t) {
         processor: noop().use(change),
         streamOut: stdout.stream,
         streamError: stderr.stream,
-        cwd: cwd,
+        cwd,
         out: false,
         files: ['.'],
         extensions: ['txt']
@@ -163,16 +157,16 @@ test('output', function (t) {
     }
   })
 
-  t.test('should output files', function (t) {
-    var cwd = join(fixtures, 'one-file')
-    var stderr = spy()
+  t.test('should output files', (t) => {
+    const cwd = path.join(fixtures, 'one-file')
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop().use(change),
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         output: true,
         files: ['.'],
@@ -182,9 +176,9 @@ test('output', function (t) {
     )
 
     function onrun(error, code) {
-      var doc = read(join(cwd, 'one.txt'), 'utf8')
+      const doc = fs.readFileSync(path.join(cwd, 'one.txt'), 'utf8')
 
-      fs.truncateSync(join(cwd, 'one.txt'))
+      fs.truncateSync(path.join(cwd, 'one.txt'))
 
       t.deepEqual(
         [error, code, doc, stderr()],
@@ -202,16 +196,16 @@ test('output', function (t) {
     }
   })
 
-  t.test('should write to a path', function (t) {
-    var cwd = join(fixtures, 'simple-structure')
-    var stderr = spy()
+  t.test('should write to a path', (t) => {
+    const cwd = path.join(fixtures, 'simple-structure')
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop().use(change),
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         output: 'four.txt',
         files: ['one.txt'],
@@ -221,10 +215,10 @@ test('output', function (t) {
     )
 
     function onrun(error, code) {
-      var input = read(join(cwd, 'one.txt'), 'utf8')
-      var output = read(join(cwd, 'four.txt'), 'utf8')
+      const input = fs.readFileSync(path.join(cwd, 'one.txt'), 'utf8')
+      const output = fs.readFileSync(path.join(cwd, 'four.txt'), 'utf8')
 
-      unlink(join(cwd, 'four.txt'))
+      fs.unlinkSync(path.join(cwd, 'four.txt'))
 
       t.deepEqual(
         [error, code, input, output, stderr()],
@@ -242,16 +236,16 @@ test('output', function (t) {
     }
   })
 
-  t.test('should write to directories', function (t) {
-    var cwd = join(fixtures, 'simple-structure')
-    var stderr = spy()
+  t.test('should write to directories', (t) => {
+    const cwd = path.join(fixtures, 'simple-structure')
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop().use(change),
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         output: 'nested/',
         files: ['one.txt'],
@@ -261,14 +255,23 @@ test('output', function (t) {
     )
 
     function onrun(error, code) {
-      var input = read(join(cwd, 'one.txt'), 'utf8')
-      var output = read(join(cwd, 'nested', 'one.txt'), 'utf8')
+      const input = fs.readFileSync(path.join(cwd, 'one.txt'), 'utf8')
+      const output = fs.readFileSync(
+        path.join(cwd, 'nested', 'one.txt'),
+        'utf8'
+      )
 
-      unlink(join(cwd, 'nested', 'one.txt'))
+      fs.unlinkSync(path.join(cwd, 'nested', 'one.txt'))
 
       t.deepEqual(
         [error, code, input, output, stderr()],
-        [null, 0, '', 'two', 'one.txt > nested' + sep + 'one.txt: written\n'],
+        [
+          null,
+          0,
+          '',
+          'two',
+          'one.txt > nested' + path.sep + 'one.txt: written\n'
+        ],
         'should report'
       )
     }
@@ -282,16 +285,16 @@ test('output', function (t) {
     }
   })
 
-  t.test('should not create intermediate directories', function (t) {
-    var cwd = join(fixtures, 'simple-structure')
-    var stderr = spy()
+  t.test('should not create intermediate directories', (t) => {
+    const cwd = path.join(fixtures, 'simple-structure')
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop(),
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         output: 'missing/bar',
         files: ['one.txt'],
@@ -301,39 +304,41 @@ test('output', function (t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr().split('\n').slice(0, 3).join('\n')
+      const actual = stderr().split('\n').slice(0, 3).join('\n')
 
-      var expected = [
+      const expected = [
         'one.txt',
         '  1:1  error  Error: Cannot read parent directory. Error:',
-        "ENOENT: no such file or directory, stat '" + join(cwd, 'missing') + "'"
+        "ENOENT: no such file or directory, stat '" +
+          path.join(cwd, 'missing') +
+          "'"
       ].join('\n')
 
       t.deepEqual([error, code, actual], [null, 1, expected], 'should report')
     }
   })
 
-  t.test('should write injected files', function (t) {
-    var cwd = join(fixtures, 'one-file')
-    var stderr = spy()
+  t.test('should write injected files', (t) => {
+    const cwd = path.join(fixtures, 'one-file')
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop().use(change),
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         output: true,
-        files: [vfile(join(cwd, 'one.txt'))]
+        files: [toVFile(path.join(cwd, 'one.txt'))]
       },
       onrun
     )
 
     function onrun(error, code) {
-      var doc = read(join(cwd, 'one.txt'), 'utf8')
+      const doc = fs.readFileSync(path.join(cwd, 'one.txt'), 'utf8')
 
-      fs.truncateSync(join(cwd, 'one.txt'))
+      fs.truncateSync(path.join(cwd, 'one.txt'))
 
       t.deepEqual(
         [error, code, doc, stderr()],
@@ -351,16 +356,16 @@ test('output', function (t) {
     }
   })
 
-  t.test('should not write without file-path', function (t) {
-    var cwd = join(fixtures, 'one-file')
-    var stderr = spy()
+  t.test('should not write without file-path', (t) => {
+    const cwd = path.join(fixtures, 'one-file')
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop().use(change),
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         output: true,
         files: ['one.txt'],
@@ -370,11 +375,11 @@ test('output', function (t) {
     )
 
     function onrun(error, code) {
-      var doc = read(join(cwd, 'one.txt'), 'utf8')
+      const doc = fs.readFileSync(path.join(cwd, 'one.txt'), 'utf8')
 
-      var actual = stderr().split('\n').slice(0, 2).join('\n')
+      const actual = stderr().split('\n').slice(0, 2).join('\n')
 
-      var expected = [
+      const expected = [
         '<stdin>',
         '  1:1  error  Error: Cannot write file without an output path'
       ].join('\n')
@@ -396,16 +401,16 @@ test('output', function (t) {
     }
   })
 
-  t.test('should fail when writing files to one path', function (t) {
-    var cwd = join(fixtures, 'two-files')
-    var stderr = spy()
+  t.test('should fail when writing files to one path', (t) => {
+    const cwd = path.join(fixtures, 'two-files')
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         output: 'three.txt',
         files: ['.'],
@@ -415,13 +420,13 @@ test('output', function (t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr().split('\n').slice(0, 2)
+      let actual = stderr().split('\n').slice(0, 2)
 
       actual[1] = actual[1].split(':').slice(0, 3).join(':')
 
       actual = actual.join('\n')
 
-      var expected = [
+      const expected = [
         'one.txt',
         '  1:1  error  Error: Cannot write multiple files to single output'
       ].join('\n')
@@ -430,16 +435,16 @@ test('output', function (t) {
     }
   })
 
-  t.test('should fail when writing to non-existent dirs', function (t) {
-    var cwd = join(fixtures, 'two-files')
-    var stderr = spy()
+  t.test('should fail when writing to non-existent dirs', (t) => {
+    const cwd = path.join(fixtures, 'two-files')
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         output: 'three' + path.sep,
         files: ['.'],
@@ -449,9 +454,9 @@ test('output', function (t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr().split('\n').slice(0, 2).join('\n')
+      const actual = stderr().split('\n').slice(0, 2).join('\n')
 
-      var expected = [
+      const expected = [
         'one.txt',
         '  1:1  error  Error: Cannot read output directory. Error:'
       ].join('\n')
@@ -460,53 +465,50 @@ test('output', function (t) {
     }
   })
 
-  t.test(
-    'should not create a new file when input file does not exist',
-    function (t) {
-      var cwd = join(fixtures, 'empty')
-      var targetFile = join(cwd, 'one.txt')
-      var stderr = spy()
+  t.test('should not create a new file when input file does not exist', (t) => {
+    const cwd = path.join(fixtures, 'empty')
+    const targetFile = path.join(cwd, 'one.txt')
+    const stderr = spy()
 
-      t.plan(2)
+    t.plan(2)
 
-      engine(
-        {
-          processor: noop(),
-          cwd: cwd,
-          streamError: stderr.stream,
-          output: true,
-          files: ['one.txt'],
-          extensions: ['txt']
-        },
-        onrun
-      )
+    engine(
+      {
+        processor: noop(),
+        cwd,
+        streamError: stderr.stream,
+        output: true,
+        files: ['one.txt'],
+        extensions: ['txt']
+      },
+      onrun
+    )
 
-      function onrun(error, code) {
-        var actual = stderr().split('\n').slice(0, 2).join('\n')
+    function onrun(error, code) {
+      const actual = stderr().split('\n').slice(0, 2).join('\n')
 
-        var expected = [
-          'one.txt',
-          '  1:1  error  No such file or directory'
-        ].join('\n')
+      const expected = [
+        'one.txt',
+        '  1:1  error  No such file or directory'
+      ].join('\n')
 
-        t.deepEqual([error, code, actual], [null, 1, expected], 'should report')
+      t.deepEqual([error, code, actual], [null, 1, expected], 'should report')
 
-        t.notOk(exists(targetFile))
-      }
+      t.notOk(fs.existsSync(targetFile))
     }
-  )
+  })
 
-  t.test('should write buffers', function (t) {
-    var cwd = join(fixtures, 'filled-file')
-    var stdout = spy()
-    var stderr = spy()
+  t.test('should write buffers', (t) => {
+    const cwd = path.join(fixtures, 'filled-file')
+    const stdout = spy()
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop().use(buffer),
-        cwd: cwd,
+        cwd,
         streamOut: stdout.stream,
         streamError: stderr.stream,
         files: ['one.txt'],
@@ -532,17 +534,17 @@ test('output', function (t) {
     }
   })
 
-  t.test('should ignore nullish compilers', function (t) {
-    var cwd = join(fixtures, 'filled-file')
-    var stdout = spy()
-    var stderr = spy()
+  t.test('should ignore nullish compilers', (t) => {
+    const cwd = path.join(fixtures, 'filled-file')
+    const stdout = spy()
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop().use(nullish),
-        cwd: cwd,
+        cwd,
         streamOut: stdout.stream,
         streamError: stderr.stream,
         files: ['one.txt'],
@@ -568,17 +570,17 @@ test('output', function (t) {
     }
   })
 
-  t.test('should ignore non-text compilers', function (t) {
-    var cwd = join(fixtures, 'filled-file')
-    var stdout = spy()
-    var stderr = spy()
+  t.test('should ignore non-text compilers', (t) => {
+    const cwd = path.join(fixtures, 'filled-file')
+    const stdout = spy()
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop().use(vdom),
-        cwd: cwd,
+        cwd,
         streamOut: stdout.stream,
         streamError: stderr.stream,
         files: ['one.txt'],

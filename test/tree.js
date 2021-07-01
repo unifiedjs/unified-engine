@@ -2,30 +2,26 @@ import fs from 'fs'
 import path from 'path'
 import {PassThrough} from 'stream'
 import test from 'tape'
-import vfile from 'to-vfile'
-import noop from './util/noop-processor.js'
-import spy from './util/spy.js'
+import toVFile from 'to-vfile'
+import {noop} from './util/noop-processor.js'
+import {spy} from './util/spy.js'
 import {engine} from '../index.js'
 
-var join = path.join
-var read = fs.readFileSync
-var unlink = fs.unlinkSync
+const fixtures = path.join('test', 'fixtures')
 
-var fixtures = join('test', 'fixtures')
-
-test('tree', function (t) {
+test('tree', (t) => {
   t.plan(7)
 
-  t.test('should fail on malformed input', function (t) {
-    var cwd = join(fixtures, 'malformed-tree')
-    var stderr = spy()
+  t.test('should fail on malformed input', (t) => {
+    const cwd = path.join(fixtures, 'malformed-tree')
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         treeIn: true,
         files: ['doc.json']
@@ -34,7 +30,7 @@ test('tree', function (t) {
     )
 
     function onrun(error, code) {
-      var actual = stderr().split('\n').slice(0, 2).join('\n')
+      const actual = stderr().split('\n').slice(0, 2).join('\n')
 
       t.deepEqual(
         [error, code, actual],
@@ -44,16 +40,16 @@ test('tree', function (t) {
     }
   })
 
-  t.test('should read and write JSON when `tree` is given', function (t) {
-    var cwd = join(fixtures, 'tree')
-    var stderr = spy()
+  t.test('should read and write JSON when `tree` is given', (t) => {
+    const cwd = path.join(fixtures, 'tree')
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop().use(plugin),
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         output: true,
         tree: true,
@@ -63,9 +59,9 @@ test('tree', function (t) {
     )
 
     function onrun(error, code) {
-      var doc = read(join(cwd, 'doc.json'), 'utf8')
+      const doc = fs.readFileSync(path.join(cwd, 'doc.json'), 'utf8')
 
-      unlink(join(cwd, 'doc.json'))
+      fs.unlinkSync(path.join(cwd, 'doc.json'))
 
       t.deepEqual(
         [error, code, doc, stderr()],
@@ -88,16 +84,16 @@ test('tree', function (t) {
     }
   })
 
-  t.test('should read JSON when `treeIn` is given', function (t) {
-    var cwd = join(fixtures, 'tree')
-    var stderr = spy()
+  t.test('should read JSON when `treeIn` is given', (t) => {
+    const cwd = path.join(fixtures, 'tree')
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop().use(plugin),
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         output: true,
         treeIn: true,
@@ -108,9 +104,9 @@ test('tree', function (t) {
     )
 
     function onrun(error, code) {
-      var doc = read(join(cwd, 'doc.foo'), 'utf8')
+      const doc = fs.readFileSync(path.join(cwd, 'doc.foo'), 'utf8')
 
-      unlink(join(cwd, 'doc.foo'))
+      fs.unlinkSync(path.join(cwd, 'doc.foo'))
 
       t.deepEqual(
         [error, code, doc, stderr()],
@@ -128,16 +124,16 @@ test('tree', function (t) {
     }
   })
 
-  t.test('should write JSON when `treeOut` is given', function (t) {
-    var cwd = join(fixtures, 'one-file')
-    var stderr = spy()
+  t.test('should write JSON when `treeOut` is given', (t) => {
+    const cwd = path.join(fixtures, 'one-file')
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop().use(plugin),
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         output: true,
         treeOut: true,
@@ -148,9 +144,9 @@ test('tree', function (t) {
     )
 
     function onrun(error, code) {
-      var doc = read(join(cwd, 'one.json'), 'utf8')
+      const doc = fs.readFileSync(path.join(cwd, 'one.json'), 'utf8')
 
-      unlink(join(cwd, 'one.json'))
+      fs.unlinkSync(path.join(cwd, 'one.json'))
 
       t.deepEqual(
         [error, code, doc, stderr()],
@@ -173,10 +169,10 @@ test('tree', function (t) {
     }
   })
 
-  t.test('should support `treeOut` for stdin', function (t) {
-    var stdin = new PassThrough()
-    var stdout = spy()
-    var stderr = spy()
+  t.test('should support `treeOut` for stdin', (t) => {
+    const stdin = new PassThrough()
+    const stdout = spy()
+    const stderr = spy()
 
     setTimeout(send, 50)
 
@@ -211,10 +207,10 @@ test('tree', function (t) {
     }
   })
 
-  t.test('should support `treeIn` for stdin', function (t) {
-    var stdin = new PassThrough()
-    var stdout = spy()
-    var stderr = spy()
+  t.test('should support `treeIn` for stdin', (t) => {
+    const stdin = new PassThrough()
+    const stdout = spy()
+    const stderr = spy()
 
     setTimeout(send, 50)
 
@@ -244,26 +240,26 @@ test('tree', function (t) {
     }
   })
 
-  t.test('should write injected files', function (t) {
-    var cwd = join(fixtures, 'one-file')
-    var stderr = spy()
+  t.test('should write injected files', (t) => {
+    const cwd = path.join(fixtures, 'one-file')
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         output: 'bar.json',
         treeOut: true,
-        files: [vfile(join(cwd, 'one.txt'))]
+        files: [toVFile(path.join(cwd, 'one.txt'))]
       },
       onrun
     )
 
     function onrun(error, code) {
-      unlink(join(cwd, 'bar.json'))
+      fs.unlinkSync(path.join(cwd, 'bar.json'))
 
       t.deepEqual(
         [error, code, stderr()],

@@ -2,29 +2,25 @@ import fs from 'fs'
 import path from 'path'
 import {PassThrough} from 'stream'
 import test from 'tape'
-import noop from './util/noop-processor.js'
-import spy from './util/spy.js'
+import {noop} from './util/noop-processor.js'
+import {spy} from './util/spy.js'
 import {engine} from '../index.js'
 
-var join = path.join
-var read = fs.readFileSync
-var unlink = fs.unlinkSync
+const fixtures = path.join('test', 'fixtures')
 
-var fixtures = join('test', 'fixtures')
-
-test('inspect', function (t) {
+test('inspect', (t) => {
   t.plan(3)
 
-  t.test('should write text when `inspect` is given', function (t) {
-    var cwd = join(fixtures, 'one-file')
-    var stderr = spy()
+  t.test('should write text when `inspect` is given', (t) => {
+    const cwd = path.join(fixtures, 'one-file')
+    const stderr = spy()
 
     t.plan(1)
 
     engine(
       {
         processor: noop(),
-        cwd: cwd,
+        cwd,
         streamError: stderr.stream,
         output: 'formatted.txt',
         inspect: true,
@@ -35,10 +31,10 @@ test('inspect', function (t) {
     )
 
     function onrun(error, code) {
-      var doc = read(join(cwd, 'formatted.txt'), 'utf8')
+      const doc = fs.readFileSync(path.join(cwd, 'formatted.txt'), 'utf8')
 
       // Remove the file.
-      unlink(join(cwd, 'formatted.txt'))
+      fs.unlinkSync(path.join(cwd, 'formatted.txt'))
 
       t.deepEqual(
         [error, code, stderr(), doc],
@@ -48,10 +44,10 @@ test('inspect', function (t) {
     }
   })
 
-  t.test('should support `inspect` for stdin', function (t) {
-    var stdin = new PassThrough()
-    var stdout = spy()
-    var stderr = spy()
+  t.test('should support `inspect` for stdin', (t) => {
+    const stdin = new PassThrough()
+    const stdout = spy()
+    const stderr = spy()
 
     setTimeout(send, 50)
 
@@ -81,10 +77,10 @@ test('inspect', function (t) {
     }
   })
 
-  t.test('should support `inspect` with color', function (t) {
-    var stdin = new PassThrough()
-    var stdout = spy()
-    var stderr = spy()
+  t.test('should support `inspect` with color', (t) => {
+    const stdin = new PassThrough()
+    const stdout = spy()
+    const stderr = spy()
 
     setTimeout(send, 50)
 

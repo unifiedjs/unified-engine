@@ -1,22 +1,17 @@
 import fs from 'fs'
 import path from 'path'
 import test from 'tape'
-import noop from './util/noop-processor.js'
-import spy from './util/spy.js'
+import {noop} from './util/noop-processor.js'
+import {spy} from './util/spy.js'
 import {engine} from '../index.js'
 
-var join = path.join
-var sep = path.sep
-var read = fs.readFileSync
-var unlink = fs.unlinkSync
+const fixtures = path.join('test', 'fixtures')
 
-var fixtures = join('test', 'fixtures')
-
-test('completers', function (t) {
+test('completers', (t) => {
   t.plan(2)
 
-  t.test('should pass `fileSet` to plugins', function (t) {
-    var stderr = spy()
+  t.test('should pass `fileSet` to plugins', (t) => {
+    const stderr = spy()
 
     otherCompleter.pluginId = 'foo'
 
@@ -29,7 +24,7 @@ test('completers', function (t) {
         processor: noop,
         streamError: stderr.stream,
         plugins: [checkCompleter],
-        cwd: join(fixtures, 'two-files'),
+        cwd: path.join(fixtures, 'two-files'),
         files: ['one.txt']
       },
       onrun
@@ -43,7 +38,7 @@ test('completers', function (t) {
       )
     }
 
-    function checkCompleter(settings, set) {
+    function checkCompleter(_, set) {
       t.equal(typeof set, 'object', 'should pass a set')
       t.equal(typeof set.use, 'function', 'should have a `use` method')
       t.equal(typeof set.add, 'function', 'should have an `add` method')
@@ -72,7 +67,7 @@ test('completers', function (t) {
     }
 
     function checkSet(set, nr) {
-      var paths = set.files.map(path)
+      const paths = set.files.map((file) => file.path)
 
       t.deepEqual(
         paths,
@@ -80,15 +75,11 @@ test('completers', function (t) {
         'should expose the files and set to `completer` (' + nr + ')'
       )
     }
-
-    function path(file) {
-      return file.path
-    }
   })
 
-  t.test('should pass `fileSet` to plugins', function (t) {
-    var cwd = join(fixtures, 'extensions')
-    var stderr = spy()
+  t.test('should pass `fileSet` to plugins', (t) => {
+    const cwd = path.join(fixtures, 'extensions')
+    const stderr = spy()
 
     t.plan(1)
 
@@ -97,11 +88,11 @@ test('completers', function (t) {
         processor: noop,
         streamError: stderr.stream,
         plugins: [
-          function (settings, set) {
+          function (_, set) {
             set.add('bar.text')
           }
         ],
-        cwd: cwd,
+        cwd,
         files: ['foo.txt'],
         output: 'nested/'
       },
@@ -109,13 +100,13 @@ test('completers', function (t) {
     )
 
     function onrun(error, code) {
-      var doc = read(join(cwd, 'nested', 'foo.txt'), 'utf8')
+      const doc = fs.readFileSync(path.join(cwd, 'nested', 'foo.txt'), 'utf8')
 
-      unlink(join(cwd, 'nested', 'foo.txt'))
+      fs.unlinkSync(path.join(cwd, 'nested', 'foo.txt'))
 
       t.deepEqual(
         [error, code, doc, stderr()],
-        [null, 0, '', 'foo.txt > nested' + sep + 'foo.txt: written\n'],
+        [null, 0, '', 'foo.txt > nested' + path.sep + 'foo.txt: written\n'],
         'should work'
       )
     }

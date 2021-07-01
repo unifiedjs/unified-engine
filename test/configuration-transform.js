@@ -1,18 +1,16 @@
 import path from 'path'
 import test from 'tape'
-import noop from './util/noop-processor.js'
-import spy from './util/spy.js'
+import {noop} from './util/noop-processor.js'
+import {spy} from './util/spy.js'
 import {engine} from '../index.js'
 
-var join = path.join
+const fixtures = path.join('test', 'fixtures')
 
-var fixtures = join('test', 'fixtures')
-
-test('`configTransform`', function (t) {
+test('`configTransform`', (t) => {
   t.plan(1)
 
-  t.test('should work', function (t) {
-    var stderr = spy()
+  t.test('should work', (t) => {
+    const stderr = spy()
 
     // One more in fixture.
     t.plan(5)
@@ -21,18 +19,18 @@ test('`configTransform`', function (t) {
       {
         processor: noop().use(addTest),
         streamError: stderr.stream,
-        cwd: join(fixtures, 'config-transform'),
+        cwd: path.join(fixtures, 'config-transform'),
         files: ['.'],
         packageField: 'foo',
-        configTransform: configTransform,
+        configTransform,
         extensions: ['txt']
       },
       onrun
     )
 
     function onrun(error, code, result) {
-      var cache = result.configuration.findUp.cache
-      var keys = Object.keys(cache)
+      const cache = result.configuration.findUp.cache
+      const keys = Object.keys(cache)
 
       t.equal(keys.length, 1, 'should have one cache entry')
 
