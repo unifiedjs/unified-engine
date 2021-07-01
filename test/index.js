@@ -1,21 +1,19 @@
-'use strict'
-
 /* eslint-disable import/no-unassigned-import */
-require('./core.js')
-require('./input.js')
-require('./ignore.js')
-require('./configuration.js')
-require('./configuration-plugins.js')
-require('./configuration-presets.js')
-require('./configuration-transform.js')
-require('./configuration-default.js')
-require('./stdin.js')
-require('./output.js')
-require('./tree.js')
-require('./inspect.js')
-require('./file-path.js')
-require('./color.js')
-require('./reporting.js')
-require('./completers.js')
-require('./settings-and-plugins.js')
+import './core.js'
+import './input.js'
+import './ignore.js'
+import './configuration.js'
+import './configuration-plugins.js'
+import './configuration-presets.js'
+import './configuration-transform.js'
+import './configuration-default.js'
+import './stdin.js'
+import './output.js'
+import './tree.js'
+import './inspect.js'
+import './file-path.js'
+import './color.js'
+import './reporting.js'
+import './completers.js'
+import './settings-and-plugins.js'
 /* eslint-enable import/no-unassigned-import */

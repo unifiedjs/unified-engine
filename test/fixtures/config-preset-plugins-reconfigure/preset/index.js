@@ -1,1 +1,5 @@
-exports.plugins = [[require('./plugin.js'), {one: true, two: true}]]
+import plugin from './plugin.js'
+
+const config = {plugins: [[plugin, {one: true, two: true}]]}
+
+export default config

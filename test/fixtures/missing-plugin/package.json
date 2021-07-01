@@ -1,5 +1,7 @@
 {
   "fooConfig": {
-    "plugins": ["missing"]
+    "plugins": [
+      "missing"
+    ]
   }
 }

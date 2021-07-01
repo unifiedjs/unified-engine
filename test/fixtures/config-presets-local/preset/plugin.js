@@ -1,4 +1,4 @@
-module.exports = function (options) {
+export default function plugin(options) {
   this.t.deepEqual(
     options,
     {one: true, two: true},

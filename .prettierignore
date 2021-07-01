@@ -1,4 +1,3 @@
 coverage/
 test/fixtures/malformed-rc-yaml/.foorc.yaml
-*.json
 *.md

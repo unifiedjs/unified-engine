@@ -1,8 +1,8 @@
-'use strict'
+import unified from 'unified'
 
-var unified = require('unified')
+const noop = unified().use(add)
 
-module.exports = unified().use(add)
+export default noop
 
 function add() {
   this.Parser = parser

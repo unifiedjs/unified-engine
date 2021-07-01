@@ -1,17 +1,15 @@
-'use strict'
-
-var path = require('path')
-var test = require('tape')
-var strip = require('strip-ansi')
-var figures = require('figures')
-var noop = require('./util/noop-processor.js')
-var spy = require('./util/spy.js')
-var platform = require('./util/platform.js')
-var engine = require('..')
+import path from 'path'
+import test from 'tape'
+import strip from 'strip-ansi'
+import figures from 'figures'
+import noop from './util/noop-processor.js'
+import spy from './util/spy.js'
+import platform from './util/platform.js'
+import {engine} from '../index.js'
 
 var join = path.join
 
-var fixtures = join(__dirname, 'fixtures')
+var fixtures = join('test', 'fixtures')
 
 if (!platform.isWin) {
   // See: <https://github.com/sindresorhus/eslint-formatter-pretty/blob/159b30a/index.js#L90-L93>.

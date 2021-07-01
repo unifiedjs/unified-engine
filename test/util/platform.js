@@ -1,5 +1,3 @@
-'use strict'
+const platform = {isWin: process.platform === 'win32'}
 
-module.exports = {
-  isWin: process.platform === 'win32'
-}
+export default platform

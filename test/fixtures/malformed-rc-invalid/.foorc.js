@@ -1,1 +1,3 @@
-module.exports = false
+const preset = false
+
+export default preset

@@ -1,12 +1,10 @@
-'use strict'
-
-var fs = require('fs')
-var path = require('path')
-var test = require('tape')
-var vfile = require('to-vfile')
-var noop = require('./util/noop-processor.js')
-var spy = require('./util/spy.js')
-var engine = require('..')
+import fs from 'fs'
+import path from 'path'
+import test from 'tape'
+import vfile from 'to-vfile'
+import noop from './util/noop-processor.js'
+import spy from './util/spy.js'
+import {engine} from '../index.js'
 
 var join = path.join
 var read = fs.readFileSync
@@ -14,7 +12,7 @@ var unlink = fs.unlinkSync
 var exists = fs.existsSync
 var sep = path.sep
 
-var fixtures = join(__dirname, 'fixtures')
+var fixtures = join(process.cwd(), 'test', 'fixtures')
 
 test('output', function (t) {
   t.plan(16)

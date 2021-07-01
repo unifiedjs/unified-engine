@@ -1,18 +1,16 @@
-'use strict'
-
-var path = require('path')
-var PassThrough = require('stream').PassThrough
-var test = require('tape')
-var unified = require('unified')
-var vfile = require('to-vfile')
-var figures = require('figures')
-var noop = require('./util/noop-processor.js')
-var spy = require('./util/spy.js')
-var engine = require('..')
+import path from 'path'
+import {PassThrough} from 'stream'
+import test from 'tape'
+import unified from 'unified'
+import vfile from 'to-vfile'
+import figures from 'figures'
+import noop from './util/noop-processor.js'
+import spy from './util/spy.js'
+import {engine} from '../index.js'
 
 var join = path.join
 
-var fixtures = join(__dirname, 'fixtures')
+var fixtures = join('test', 'fixtures')
 
 test('input', function (t) {
   t.plan(19)

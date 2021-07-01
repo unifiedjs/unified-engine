@@ -1,4 +1,4 @@
-module.exports = {
+const config = {
   plugins: {
     './plugin': {
       one: true,
@@ -6,3 +6,5 @@ module.exports = {
     }
   }
 }
+
+export default config

@@ -1,8 +1,6 @@
-'use strict'
-
-var test = require('tape')
-var unified = require('unified')
-var engine = require('..')
+import test from 'tape'
+import unified from 'unified'
+import {engine} from '../index.js'
 
 test('engine', function (t) {
   t.plan(4)

@@ -1,14 +1,12 @@
-'use strict'
-
-var path = require('path')
-var test = require('tape')
-var noop = require('./util/noop-processor.js')
-var spy = require('./util/spy.js')
-var engine = require('..')
+import path from 'path'
+import test from 'tape'
+import noop from './util/noop-processor.js'
+import spy from './util/spy.js'
+import {engine} from '../index.js'
 
 var join = path.join
 
-var fixtures = join(__dirname, 'fixtures')
+var fixtures = join('test', 'fixtures')
 
 test('configuration', function (t) {
   t.plan(14)

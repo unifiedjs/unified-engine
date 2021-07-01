@@ -1,10 +1,6 @@
-'use strict'
+import {PassThrough} from 'stream'
 
-var PassThrough = require('stream').PassThrough
-
-module.exports = spy
-
-function spy() {
+export default function spy() {
   var stream = new PassThrough()
   var output = []
   var originalWrite = stream.write

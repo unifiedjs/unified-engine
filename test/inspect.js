@@ -1,18 +1,16 @@
-'use strict'
-
-var fs = require('fs')
-var path = require('path')
-var PassThrough = require('stream').PassThrough
-var test = require('tape')
-var noop = require('./util/noop-processor.js')
-var spy = require('./util/spy.js')
-var engine = require('..')
+import fs from 'fs'
+import path from 'path'
+import {PassThrough} from 'stream'
+import test from 'tape'
+import noop from './util/noop-processor.js'
+import spy from './util/spy.js'
+import {engine} from '../index.js'
 
 var join = path.join
 var read = fs.readFileSync
 var unlink = fs.unlinkSync
 
-var fixtures = join(__dirname, 'fixtures')
+var fixtures = join('test', 'fixtures')
 
 test('inspect', function (t) {
   t.plan(3)

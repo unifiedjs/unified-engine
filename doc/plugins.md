@@ -13,8 +13,8 @@ The following example processes `readme.md` and uses a plugin that adds a
 “completer” and another file (`history.md`).
 
 ```js
-var engine = require('unified-engine')
-var remark = require('remark')
+import {engine} from 'unified-engine'
+import {remark} from 'remark'
 
 // Ensure the completer runs once per file-set.
 completer.pluginId = 'some-plugin-id'

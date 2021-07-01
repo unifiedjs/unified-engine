@@ -195,7 +195,7 @@ declare namespace unifiedEngine {
     /**
      * Reporter to use
      *
-     * @defaultValue `require('vfile-reporter')`
+     * @defaultValue `import {reporter} from 'vfile-reporter'`
      */
     reporter?: VFileReporter<V> | string
 

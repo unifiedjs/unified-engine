@@ -34,8 +34,8 @@ from `.remarkrc` and `package.json` files, ignoring files from `.remarkignore`
 files, and more.
 
 ```js
-var engine = require('unified-engine')
-var remark = require('remark')
+import {engine} from 'unified-engine'
+import {remark} from 'remark'
 
 engine(
   {
@@ -138,7 +138,7 @@ done.
 *   [`configTransform`][config-transform] (`Function`, optional)
     — Transform config files from a different schema
 *   [`reporter`][reporter] (`string` or `function`, default:
-    `require('vfile-reporter')`)
+    `import {reporter} from 'vfile-reporter'`)
     — Reporter to use
 *   [`reporterOptions`][reporteroptions] (`Object?`, optional)
     — Config to pass to the used reporter

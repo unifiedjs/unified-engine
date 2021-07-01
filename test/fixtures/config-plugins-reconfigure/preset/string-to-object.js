@@ -1,4 +1,4 @@
-module.exports = function (options) {
+export default function stringToObject(options) {
   this.t.deepEqual(
     options,
     {bravo: 1},

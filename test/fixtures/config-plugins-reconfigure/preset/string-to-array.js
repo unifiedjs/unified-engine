@@ -1,4 +1,4 @@
-module.exports = function (options) {
+export default function stringToArray(options) {
   this.t.deepEqual(
     options,
     [1],

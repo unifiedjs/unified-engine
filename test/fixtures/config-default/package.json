@@ -1,4 +1,5 @@
 {
+  "type": "commonjs",
   "foo": {
     "settings": {
       "charlie": true
