@@ -7,7 +7,7 @@ import {engine} from '../index.js'
 const fixtures = path.join('test', 'fixtures')
 
 test('configuration', (t) => {
-  t.plan(9)
+  t.plan(8)
 
   t.test('should cascade `plugins`', (t) => {
     const stderr = spy()
@@ -81,36 +81,6 @@ test('configuration', (t) => {
       {
         processor: noop().use(addTest),
         cwd: path.join(fixtures, 'config-plugins-esm-js'),
-        streamError: stderr.stream,
-        files: ['one.txt'],
-        rcName: '.foorc'
-      },
-      onrun
-    )
-
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'one.txt: no issues found\n'],
-        'should work'
-      )
-    }
-
-    function addTest() {
-      this.t = t
-    }
-  })
-
-  t.test('should support a CJS plugin w/ interop flags', (t) => {
-    const stderr = spy()
-
-    // One more assertions is loaded in a plugin.
-    t.plan(2)
-
-    engine(
-      {
-        processor: noop().use(addTest),
-        cwd: path.join(fixtures, 'config-plugins-esm-interop'),
         streamError: stderr.stream,
         files: ['one.txt'],
         rcName: '.foorc'
