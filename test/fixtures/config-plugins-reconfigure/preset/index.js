@@ -1,10 +1,10 @@
 const config = {
   plugins: [
-    ['./merge-object', {one: true, two: true}],
-    ['./string-to-object', 'alpha'],
-    ['./array-to-object', ['charlie']],
-    ['./string-to-array', 'echo'],
-    ['./object-to-array', {golf: 'hotel'}]
+    ['./merge-object.js', {one: true, two: true}],
+    ['./string-to-object.js', 'alpha'],
+    ['./array-to-object.js', ['charlie']],
+    ['./string-to-array.js', 'echo'],
+    ['./object-to-array.js', {golf: 'hotel'}]
   ]
 }
 

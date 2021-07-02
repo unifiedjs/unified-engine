@@ -154,7 +154,7 @@ test('configuration', (t) => {
       const expected = [
         'one.txt',
         '  1:1  error  Error: Cannot parse file `package.json`',
-        'Cannot parse script `test.js`',
+        'Cannot import `test.js`',
         'Error: Boom!'
       ].join('\n')
 

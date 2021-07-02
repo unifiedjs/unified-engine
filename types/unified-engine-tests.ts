@@ -2,7 +2,6 @@
 import * as engine from 'unified-engine'
 import * as remark from 'remark'
 import {VFile} from 'vfile'
-import vfile = require('vfile')
 import * as toc from 'remark-toc'
 
 engine(

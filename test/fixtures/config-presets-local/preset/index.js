@@ -1,6 +1,6 @@
 const config = {
   plugins: {
-    './plugin': {
+    './plugin.js': {
       one: true,
       two: true
     }

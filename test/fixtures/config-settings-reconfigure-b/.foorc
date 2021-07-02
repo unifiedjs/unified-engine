@@ -1,4 +1,4 @@
 {
-  "plugins": ["./preset"],
+  "plugins": ["./preset/index.js"],
   "settings": {"alpha": true}
 }

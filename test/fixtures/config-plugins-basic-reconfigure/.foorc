@@ -1,6 +1,6 @@
 {
   "plugins": [
-    "./preset",
-    ["./preset/plugin", {"two": false, "three": true}]
+    "./preset/index.js",
+    ["./preset/plugin.js", {"two": false, "three": true}]
   ]
 }

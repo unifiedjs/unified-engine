@@ -11,7 +11,7 @@ test('`defaultConfig`', (t) => {
 
   const defaultConfig = {
     settings: {alpha: true},
-    plugins: {'./test-defaults': {bravo: false}}
+    plugins: {'./test-defaults.js': {bravo: false}}
   }
 
   t.test('should use default config if no config file is found', (t) => {

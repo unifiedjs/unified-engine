@@ -207,7 +207,7 @@ test('reporting', (t) => {
                 reason: 'Error',
                 line: null,
                 column: null,
-                location: {
+                position: {
                   start: {line: null, column: null},
                   end: {line: null, column: null}
                 },

@@ -38,7 +38,7 @@ test('inspect', (t) => {
 
       t.deepEqual(
         [error, code, stderr(), doc],
-        [null, 0, 'one.txt > formatted.txt: written\n', 'text: ""\n'],
+        [null, 0, 'one.txt > formatted.txt: written\n', 'text ""\n'],
         'should work'
       )
     }
@@ -67,7 +67,7 @@ test('inspect', (t) => {
     function onrun(error, code) {
       t.deepEqual(
         [error, code, stderr(), stdout()],
-        [null, 0, '<stdin>: no issues found\n', 'text: "\\n"\n'],
+        [null, 0, '<stdin>: no issues found\n', 'text "\\n"\n'],
         'should work'
       )
     }
@@ -105,7 +105,7 @@ test('inspect', (t) => {
           null,
           0,
           '\u001B[4m\u001B[32m<stdin>\u001B[39m\u001B[24m: no issues found\n',
-          'text\u001B[2m: \u001B[22m\u001B[32m"\\n"\u001B[39m\n'
+          '\u001B[1mtext\u001B[22m \u001B[32m"\\n"\u001B[39m\n'
         ],
         'should work'
       )

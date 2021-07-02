@@ -1,6 +1,6 @@
 const config = {
   plugins: {
-    './plugin': null
+    './plugin.js': null
   }
 }
 

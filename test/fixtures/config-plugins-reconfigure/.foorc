@@ -1,10 +1,10 @@
 {
   "plugins": [
-    "./preset",
-    ["./preset/merge-object", {"two": false, "three": true}],
-    ["./preset/string-to-object", {"bravo": 1}],
-    ["./preset/array-to-object", {"delta": 1}],
-    ["./preset/string-to-array", [1]],
-    ["./preset/object-to-array", [2]]
+    "./preset/index.js",
+    ["./preset/merge-object.js", {"two": false, "three": true}],
+    ["./preset/string-to-object.js", {"bravo": 1}],
+    ["./preset/array-to-object.js", {"delta": 1}],
+    ["./preset/string-to-array.js", [1]],
+    ["./preset/object-to-array.js", [2]]
   ]
 }

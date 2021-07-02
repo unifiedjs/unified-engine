@@ -144,7 +144,10 @@ test('plugins', (t) => {
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
-        plugins: ['./preset', ['./preset/plugin', {two: false, three: true}]]
+        plugins: [
+          './preset/index.js',
+          ['./preset/plugin.js', {two: false, three: true}]
+        ]
       },
       onrun
     )
@@ -175,8 +178,8 @@ test('plugins', (t) => {
         files: ['.'],
         extensions: ['txt'],
         plugins: {
-          './preset': null,
-          './preset/plugin': {two: false, three: true}
+          './preset/index.js': null,
+          './preset/plugin.js': {two: false, three: true}
         }
       },
       onrun

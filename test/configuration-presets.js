@@ -93,7 +93,7 @@ test('configuration-presets', (t) => {
 
       const expected = [
         'one.txt',
-        '  1:1  error  Error: Could not find module `./plugin`'
+        '  1:1  error  Error: Could not find module `./plugin.js`'
       ].join('\n')
 
       t.deepEqual([error, code, actual], [null, 1, expected], 'should succeed')

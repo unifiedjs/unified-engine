@@ -1,3 +1,3 @@
-const config = {plugins: {'./plugin': null}}
+const config = {plugins: {'./plugin.js': null}}
 
 export default config

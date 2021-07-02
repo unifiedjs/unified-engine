@@ -4,7 +4,7 @@
       "foxtrot": true
     },
     "plugs": {
-      "./test": {
+      "./test.js": {
         "golf": false
       }
     }

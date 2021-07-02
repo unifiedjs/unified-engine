@@ -2,7 +2,7 @@ import path from 'path'
 import {PassThrough} from 'stream'
 import test from 'tape'
 import unified from 'unified'
-import vfile from 'to-vfile'
+import {toVFile} from 'to-vfile'
 import figures from 'figures'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
@@ -273,7 +273,7 @@ test('input', (t) => {
         cwd,
         streamError: stderr.stream,
         ignoreName: '.fooignore',
-        files: [vfile(path.join(cwd, 'nested'))]
+        files: [toVFile(path.join(cwd, 'nested'))]
       },
       onrun
     )
@@ -333,9 +333,9 @@ test('input', (t) => {
         streamError: stderr.stream,
         ignoreName: '.fooignore',
         files: [
-          vfile(path.join(cwd, 'one.txt')),
-          vfile(path.join(cwd, 'nested', 'two.txt')),
-          vfile(path.join(cwd, 'nested', 'three.txt'))
+          toVFile(path.join(cwd, 'one.txt')),
+          toVFile(path.join(cwd, 'nested', 'two.txt')),
+          toVFile(path.join(cwd, 'nested', 'three.txt'))
         ]
       },
       onrun
@@ -357,12 +357,12 @@ test('input', (t) => {
     }
   })
 
-  t.test('should not atempt to read files with `contents` (1)', (t) => {
+  t.test('should not atempt to read files with `value` (1)', (t) => {
     const stderr = spy()
     const cwd = path.join(fixtures, 'ignore-file')
-    const file = vfile({
+    const file = toVFile({
       path: path.join(cwd, 'not-existing.txt'),
-      contents: 'foo'
+      value: 'foo'
     })
 
     t.plan(1)
@@ -391,12 +391,12 @@ test('input', (t) => {
     }
   })
 
-  t.test('should not atempt to read files with `contents` (2)', (t) => {
+  t.test('should not atempt to read files with `value` (2)', (t) => {
     const stderr = spy()
     const cwd = path.join(fixtures, 'ignore-file')
-    const file = vfile({
+    const file = toVFile({
       path: path.join(cwd, 'not-existing-2.txt'),
-      contents: 'foo'
+      value: 'foo'
     })
 
     t.plan(1)
@@ -467,9 +467,9 @@ test('input', (t) => {
         ignoreName: '.fooignore',
         silentlyIgnore: true,
         files: [
-          vfile(path.join(cwd, 'one.txt')),
-          vfile(path.join(cwd, 'nested', 'two.txt')),
-          vfile(path.join(cwd, 'nested', 'three.txt'))
+          toVFile(path.join(cwd, 'one.txt')),
+          toVFile(path.join(cwd, 'nested', 'two.txt')),
+          toVFile(path.join(cwd, 'nested', 'three.txt'))
         ]
       },
       onrun
@@ -526,7 +526,7 @@ test('input', (t) => {
         cwd,
         streamError: stderr.stream,
         extensions: ['txt'],
-        files: ['nested', vfile(path.join(cwd, 'one.txt'))]
+        files: ['nested', toVFile(path.join(cwd, 'one.txt'))]
       },
       onrun
     )
