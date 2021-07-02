@@ -20,6 +20,9 @@ The following projects wrap the engine:
 
 ## Install
 
+This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
+Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
+
 [npm][]:
 
 ```sh
@@ -68,9 +71,12 @@ function done(error) {
 
 ## API
 
+This package exports the following identifiers: `engine`.
+There is no default export.
+
 ### `engine(options, callback)`
 
-Process files according to `options` and invoke [`callback`][callback] when
+Process files according to `options` and call [`callback`][callback] when
 done.
 
 ###### [`options`][options]
@@ -153,9 +159,9 @@ done.
 
 #### `function callback(error[, code, context])`
 
-Callback invoked when processing according to `options` is complete.
-Invoked with either a fatal error if processing went horribly wrong (probably
-due to incorrect configuration), or a status code and the processing context.
+Called when processing is complete, either with a fatal error if processing went
+horribly wrong (probably due to incorrect configuration), or a status code and
+the processing context.
 
 ###### Parameters
 

@@ -44,7 +44,7 @@ An example **rc** file could look as follows:
 Another example, **rc.js**, could look as follows:
 
 ```js
-exports.plugins = ['./script/natural-language', 'lint-recommended', 'license']
+exports.plugins = ['./script/natural-language.js', 'lint-recommended', 'license']
 
 exports.settings = {bullet: '*'}
 ```
@@ -75,7 +75,7 @@ the parser and compiler of the processor.
 ```json
 {
   "settings": {
-    "position": "false"
+    "emitParseErrors": true
   }
 }
 ```

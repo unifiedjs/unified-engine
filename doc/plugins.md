@@ -100,7 +100,7 @@ Returns self.
 
 #### `function completer(fileSet[, next])`
 
-Function invoked when all files are processed.
+Function called when all files are processed.
 
 If an error occurs (either because it’s thrown, returned, rejected, or passed to
 [`next`][next]), no further completers run and all files fail.
@@ -120,7 +120,7 @@ If an error occurs (either because it’s thrown, returned, rejected, or passed 
 
 *   `pluginId` (`string`) — Plugins specified through various mechanisms are
     attached to a new [`processor`][unified-processor] for each file.
-    If a `completer` is `use`d multiple times, it is invoked multiple times as
+    If a `completer` is `use`d multiple times, it is called multiple times as
     well.
     To prevent completers from attaching multiple times, specify a `pluginId`.
     This will ensure only one completer per `pluginId` is added.
@@ -128,7 +128,7 @@ If an error occurs (either because it’s thrown, returned, rejected, or passed 
 ##### `function next([error])`
 
 If the signature of a completer includes `next` (second argument), the function
-**may** finish asynchronous, and **must** invoke `next()`.
+**may** finish asynchronous, and **must** call `next()`.
 
 ###### Parameters
 

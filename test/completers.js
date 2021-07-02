@@ -15,8 +15,8 @@ test('completers', (t) => {
 
     otherCompleter.pluginId = 'foo'
 
-    // 5 in the attacher, which is invoked 2 times, 1 in `checkSet`, which is
-    // invoked 2 times, 1 in the callback.
+    // 5 in the attacher, which is called 2 times, 1 in `checkSet`, which is
+    // called 2 times, 1 in the callback.
     t.plan(13)
 
     engine(

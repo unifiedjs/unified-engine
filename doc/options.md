@@ -575,7 +575,7 @@ Sets the extension of processed files to `json`, if possible.
 
 ###### Example
 
-The following example shows a script which reads and parses `doc.md`, then
+The following example shows a module which reads and parses `doc.md`, then
 [`remark-unlink`][remark-unlink] transforms the syntax tree, and the tree is
 written to **stdout**(4).
 
@@ -631,7 +631,7 @@ Uses ANSI color sequences in the formatted syntax tree if `color` is turned on.
 
 ###### Example
 
-The following example shows a script which reads and parses `doc.md`, then
+The following example shows a module which reads and parses `doc.md`, then
 [`remark-unlink`][remark-unlink] transforms the syntax tree, the tree is
 formatted with [`unist-util-inspect`][unist-util-inspect], and finally written
 to **stdout**(4).
@@ -1166,7 +1166,7 @@ Where `package.json` contains:
 
 Want configuration files in a different format?  Pass a `configTransform`
 function.
-It will be invoked with the parsed value from configuration files and the file
+It will be called with the parsed value from configuration files and the file
 path to the found file, and should return a config object (with `plugins` and/or
 `settings`).
 
@@ -1176,7 +1176,7 @@ path to the found file, and should return a config object (with `plugins` and/or
 
 The following example processes `readme.md` and loads options from `custom`
 (from a `package.json`).
-`configTransform` is invoked with those options and transforms it to
+`configTransform` is called with those options and transforms it to
 configuration `unified-engine` understands.
 
 ```js

@@ -239,16 +239,16 @@ declare namespace unifiedEngine {
   type CompleterNext = (error: Error) => void
 
   /**
-   * Function invoked when all files are processed
+   * Function called when all files are processed
    *
    * @param fileSet Processed file set
-   * @param next If the signature of a completer includes `next`, the function may finish asynchronous, and must invoke `next()`.
+   * @param next If the signature of a completer includes `next`, the function may finish asynchronous, and must call `next()`.
    * @returns If a promise is returned, the function is asynchronous, and must be resolved (with nothing) or rejected
    */
   interface Completer {
     /**
      * Plugins specified through various mechanisms are attached to a new processor for each file.
-     * If a completer is used multiple times, it is invoked multiple times as well.
+     * If a completer is used multiple times, it is called multiple times as well.
      * To prevent completers from attaching multiple times, specify a `pluginId`.
      * This will ensure only one completer per `pluginId` is added.
      */
@@ -297,7 +297,7 @@ declare namespace unifiedEngine {
   }
 
   /**
-   * Callback invoked when processing according to options is complete.
+   * Callback called when processing according to options is complete.
    * Invoked with either a fatal error if processing went horribly wrong (probably due to incorrect configuration),
    * or a status code and the processing context.
    */
@@ -309,7 +309,7 @@ declare namespace unifiedEngine {
 }
 
 /**
- * Process files according to options and invoke callback when done
+ * Process files according to options and call callback when done
  *
  * @typeParam P Unified Processor settings
  * @typeParam V VFile reporter settings
