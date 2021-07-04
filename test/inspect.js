@@ -27,21 +27,19 @@ test('inspect', (t) => {
         files: ['.'],
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        const doc = fs.readFileSync(path.join(cwd, 'formatted.txt'), 'utf8')
+
+        // Remove the file.
+        fs.unlinkSync(path.join(cwd, 'formatted.txt'))
+
+        t.deepEqual(
+          [error, code, stderr(), doc],
+          [null, 0, 'one.txt > formatted.txt: written\n', 'text ""\n'],
+          'should work'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      const doc = fs.readFileSync(path.join(cwd, 'formatted.txt'), 'utf8')
-
-      // Remove the file.
-      fs.unlinkSync(path.join(cwd, 'formatted.txt'))
-
-      t.deepEqual(
-        [error, code, stderr(), doc],
-        [null, 0, 'one.txt > formatted.txt: written\n', 'text ""\n'],
-        'should work'
-      )
-    }
   })
 
   t.test('should support `inspect` for stdin', (t) => {
@@ -61,16 +59,14 @@ test('inspect', (t) => {
         streamError: stderr.stream,
         inspect: true
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr(), stdout()],
+          [null, 0, '<stdin>: no issues found\n', 'text "\\n"\n'],
+          'should work'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr(), stdout()],
-        [null, 0, '<stdin>: no issues found\n', 'text "\\n"\n'],
-        'should work'
-      )
-    }
 
     function send() {
       stdin.end('\n')
@@ -95,21 +91,19 @@ test('inspect', (t) => {
         inspect: true,
         color: true
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr(), stdout()],
+          [
+            null,
+            0,
+            '\u001B[4m\u001B[32m<stdin>\u001B[39m\u001B[24m: no issues found\n',
+            '\u001B[1mtext\u001B[22m \u001B[32m"\\n"\u001B[39m\n'
+          ],
+          'should work'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr(), stdout()],
-        [
-          null,
-          0,
-          '\u001B[4m\u001B[32m<stdin>\u001B[39m\u001B[24m: no issues found\n',
-          '\u001B[1mtext\u001B[22m \u001B[32m"\\n"\u001B[39m\n'
-        ],
-        'should work'
-      )
-    }
 
     function send() {
       stdin.end('\n')

@@ -26,18 +26,16 @@ test('tree', (t) => {
         treeIn: true,
         files: ['doc.json']
       },
-      onrun
+      (error, code) => {
+        const actual = stderr().split('\n').slice(0, 2).join('\n')
+
+        t.deepEqual(
+          [error, code, actual],
+          [null, 1, 'doc.json\n  1:1  error  Error: Cannot read file as JSON'],
+          'should report'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      const actual = stderr().split('\n').slice(0, 2).join('\n')
-
-      t.deepEqual(
-        [error, code, actual],
-        [null, 1, 'doc.json\n  1:1  error  Error: Cannot read file as JSON'],
-        'should report'
-      )
-    }
   })
 
   t.test('should read and write JSON when `tree` is given', (t) => {
@@ -48,40 +46,34 @@ test('tree', (t) => {
 
     engine(
       {
-        processor: noop().use(plugin),
+        processor: noop().use(() => {
+          return function (tree) {
+            tree.value = 'two'
+          }
+        }),
         cwd,
         streamError: stderr.stream,
         output: true,
         tree: true,
         files: ['doc']
       },
-      onrun
+      (error, code) => {
+        const doc = fs.readFileSync(path.join(cwd, 'doc.json'), 'utf8')
+
+        fs.unlinkSync(path.join(cwd, 'doc.json'))
+
+        t.deepEqual(
+          [error, code, doc, stderr()],
+          [
+            null,
+            0,
+            '{\n  "type": "text",\n  "value": "two"\n}\n',
+            'doc > doc.json: written\n'
+          ],
+          'should report'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      const doc = fs.readFileSync(path.join(cwd, 'doc.json'), 'utf8')
-
-      fs.unlinkSync(path.join(cwd, 'doc.json'))
-
-      t.deepEqual(
-        [error, code, doc, stderr()],
-        [
-          null,
-          0,
-          '{\n  "type": "text",\n  "value": "two"\n}\n',
-          'doc > doc.json: written\n'
-        ],
-        'should report'
-      )
-    }
-
-    function plugin() {
-      return transformer
-    }
-
-    function transformer(tree) {
-      tree.value = 'two'
-    }
   })
 
   t.test('should read JSON when `treeIn` is given', (t) => {
@@ -92,7 +84,11 @@ test('tree', (t) => {
 
     engine(
       {
-        processor: noop().use(plugin),
+        processor: noop().use(() => {
+          return function (tree) {
+            tree.value = 'two'
+          }
+        }),
         cwd,
         streamError: stderr.stream,
         output: true,
@@ -100,28 +96,18 @@ test('tree', (t) => {
         files: ['doc'],
         extensions: ['foo']
       },
-      onrun
+      (error, code) => {
+        const doc = fs.readFileSync(path.join(cwd, 'doc.foo'), 'utf8')
+
+        fs.unlinkSync(path.join(cwd, 'doc.foo'))
+
+        t.deepEqual(
+          [error, code, doc, stderr()],
+          [null, 0, 'two', 'doc > doc.foo: written\n'],
+          'should report'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      const doc = fs.readFileSync(path.join(cwd, 'doc.foo'), 'utf8')
-
-      fs.unlinkSync(path.join(cwd, 'doc.foo'))
-
-      t.deepEqual(
-        [error, code, doc, stderr()],
-        [null, 0, 'two', 'doc > doc.foo: written\n'],
-        'should report'
-      )
-    }
-
-    function plugin() {
-      return transformer
-    }
-
-    function transformer(tree) {
-      tree.value = 'two'
-    }
   })
 
   t.test('should write JSON when `treeOut` is given', (t) => {
@@ -132,7 +118,11 @@ test('tree', (t) => {
 
     engine(
       {
-        processor: noop().use(plugin),
+        processor: noop().use(() => {
+          return function (tree) {
+            tree.value = 'two'
+          }
+        }),
         cwd,
         streamError: stderr.stream,
         output: true,
@@ -140,33 +130,23 @@ test('tree', (t) => {
         files: ['.'],
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        const doc = fs.readFileSync(path.join(cwd, 'one.json'), 'utf8')
+
+        fs.unlinkSync(path.join(cwd, 'one.json'))
+
+        t.deepEqual(
+          [error, code, doc, stderr()],
+          [
+            null,
+            0,
+            '{\n  "type": "text",\n  "value": "two"\n}\n',
+            'one.txt > one.json: written\n'
+          ],
+          'should report'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      const doc = fs.readFileSync(path.join(cwd, 'one.json'), 'utf8')
-
-      fs.unlinkSync(path.join(cwd, 'one.json'))
-
-      t.deepEqual(
-        [error, code, doc, stderr()],
-        [
-          null,
-          0,
-          '{\n  "type": "text",\n  "value": "two"\n}\n',
-          'one.txt > one.json: written\n'
-        ],
-        'should report'
-      )
-    }
-
-    function plugin() {
-      return transformer
-    }
-
-    function transformer(tree) {
-      tree.value = 'two'
-    }
   })
 
   t.test('should support `treeOut` for stdin', (t) => {
@@ -186,21 +166,19 @@ test('tree', (t) => {
         streamError: stderr.stream,
         treeOut: true
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stdout(), stderr()],
+          [
+            null,
+            0,
+            '{\n  "type": "text",\n  "value": "\\n"\n}\n',
+            '<stdin>: no issues found\n'
+          ],
+          'should work'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stdout(), stderr()],
-        [
-          null,
-          0,
-          '{\n  "type": "text",\n  "value": "\\n"\n}\n',
-          '<stdin>: no issues found\n'
-        ],
-        'should work'
-      )
-    }
 
     function send() {
       stdin.end('\n')
@@ -224,16 +202,14 @@ test('tree', (t) => {
         streamError: stderr.stream,
         treeIn: true
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stdout(), stderr()],
+          [null, 0, '\n', '<stdin>: no issues found\n'],
+          'should work'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stdout(), stderr()],
-        [null, 0, '\n', '<stdin>: no issues found\n'],
-        'should work'
-      )
-    }
 
     function send() {
       stdin.end('{"type":"text","value":"\\n"}')
@@ -255,17 +231,15 @@ test('tree', (t) => {
         treeOut: true,
         files: [toVFile(path.join(cwd, 'one.txt'))]
       },
-      onrun
+      (error, code) => {
+        fs.unlinkSync(path.join(cwd, 'bar.json'))
+
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt > bar.json: written\n'],
+          'should work'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      fs.unlinkSync(path.join(cwd, 'bar.json'))
-
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'one.txt > bar.json: written\n'],
-        'should work'
-      )
-    }
   })
 })

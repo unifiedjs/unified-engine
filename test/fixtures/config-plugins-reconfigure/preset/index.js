@@ -1,3 +1,4 @@
+/** @type {import('../../../../index.js').Preset} */
 const config = {
   plugins: [
     ['./merge-object.js', {one: true, two: true}],

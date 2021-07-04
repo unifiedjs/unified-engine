@@ -1,3 +1,8 @@
+/**
+ * @typedef {import('../index.js').Preset['settings']} Settings
+ * @typedef {import('../index.js').Preset['plugins']} Plugins
+ */
+
 import path from 'path'
 import test from 'tape'
 import {noop} from './util/noop-processor.js'
@@ -17,48 +22,50 @@ test('`configTransform`', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(addTest),
         streamError: stderr.stream,
         cwd: path.join(fixtures, 'config-transform'),
         files: ['.'],
         packageField: 'foo',
-        configTransform,
+        configTransform(
+          /** @type {{options: Settings, plugs: Plugins}} */ raw
+        ) {
+          return {settings: raw.options, plugins: raw.plugs}
+        },
         extensions: ['txt']
       },
-      onrun
+      (error, code, result) => {
+        // @ts-expect-error: internals
+        const cache = result.configuration.findUp.cache
+        const keys = Object.keys(cache)
+
+        t.equal(keys.length, 1, 'should have one cache entry')
+
+        t.deepEqual(
+          cache[keys[0]].settings,
+          {foxtrot: true},
+          'should set the correct settings'
+        )
+
+        t.deepEqual(
+          cache[keys[0]].plugins[0][1],
+          {golf: false},
+          'should pass the correct options to plugins'
+        )
+
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should succeed'
+        )
+      }
     )
 
-    function onrun(error, code, result) {
-      const cache = result.configuration.findUp.cache
-      const keys = Object.keys(cache)
-
-      t.equal(keys.length, 1, 'should have one cache entry')
-
-      t.deepEqual(
-        cache[keys[0]].settings,
-        {foxtrot: true},
-        'should set the correct settings'
-      )
-
-      t.deepEqual(
-        cache[keys[0]].plugins[0][1],
-        {golf: false},
-        'should pass the correct options to plugins'
-      )
-
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'one.txt: no issues found\n'],
-        'should succeed'
-      )
-    }
-
     function addTest() {
+      // Used in test.
+      // type-coverage:ignore-next-line
       this.t = t
-    }
-
-    function configTransform(raw) {
-      return {settings: raw.options, plugins: raw.plugs}
     }
   })
 })

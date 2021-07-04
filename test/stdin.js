@@ -28,21 +28,19 @@ test('stdin', (t) => {
         streamOut: stdout.stream,
         streamError: stderr.stream
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stdout(), stderr()],
+          [
+            null,
+            0,
+            '1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n',
+            '<stdin>: no issues found\n'
+          ],
+          'should report'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stdout(), stderr()],
-        [
-          null,
-          0,
-          '1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n',
-          '<stdin>: no issues found\n'
-        ],
-        'should report'
-      )
-    }
 
     function send() {
       if (++index > 10) {
@@ -73,16 +71,14 @@ test('stdin', (t) => {
         streamError: stderr.stream,
         out: false
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stdout(), stderr()],
+          [null, 0, '', '<stdin>: no issues found\n'],
+          'should report'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stdout(), stderr()],
-        [null, 0, '', '<stdin>: no issues found\n'],
-        'should report'
-      )
-    }
 
     function send() {
       if (++index > 10) {
@@ -106,7 +102,9 @@ test('stdin', (t) => {
 
     engine(
       {
-        processor: noop().use(plugin),
+        processor: noop().use(function () {
+          t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
+        }),
         cwd: path.join(fixtures, 'config-settings'),
         streamIn: stream,
         streamOut: stdout.stream,
@@ -114,21 +112,19 @@ test('stdin', (t) => {
         packageField: 'fooConfig',
         rcName: '.foorc'
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stdout(), stderr()],
+          [
+            null,
+            0,
+            '1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n',
+            '<stdin>: no issues found\n'
+          ],
+          'should work'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stdout(), stderr()],
-        [
-          null,
-          0,
-          '1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n',
-          '<stdin>: no issues found\n'
-        ],
-        'should work'
-      )
-    }
 
     function send() {
       if (++index > 10) {
@@ -137,10 +133,6 @@ test('stdin', (t) => {
         stream.write(index + '\n')
         setTimeout(send, 10)
       }
-    }
-
-    function plugin() {
-      t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
     }
   })
 })

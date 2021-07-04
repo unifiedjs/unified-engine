@@ -1,3 +1,7 @@
+/**
+ * @typedef {import('unified').ParserFunction} ParserFunction
+ */
+
 import path from 'path'
 import test from 'tape'
 import {noop} from './util/noop-processor.js'
@@ -24,20 +28,18 @@ test('configuration-presets', (t) => {
         rcName: '.foorc',
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        const actual = stderr().split('\n').slice(0, 3).join('\n')
+
+        const expected = [
+          'one.txt',
+          '  1:1  error  Error: Cannot parse file `.foorc`',
+          'Expected a list or object of plugins, not `./preset`'
+        ].join('\n')
+
+        t.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
+      }
     )
-
-    function onrun(error, code) {
-      const actual = stderr().split('\n').slice(0, 3).join('\n')
-
-      const expected = [
-        'one.txt',
-        '  1:1  error  Error: Cannot parse file `.foorc`',
-        'Expected a list or object of plugins, not `./preset`'
-      ].join('\n')
-
-      t.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
-    }
   })
 
   t.test('should support plugins with the same name', (t) => {
@@ -48,6 +50,7 @@ test('configuration-presets', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(addTest),
         cwd: path.join(fixtures, 'config-presets-local'),
         streamError: stderr.stream,
@@ -55,18 +58,18 @@ test('configuration-presets', (t) => {
         rcName: '.foorc',
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should succeed'
+        )
+      }
     )
 
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'one.txt: no issues found\n'],
-        'should succeed'
-      )
-    }
-
     function addTest() {
+      // Used in test.
+      // type-coverage:ignore-next-line
       this.t = t
     }
   })
@@ -85,19 +88,21 @@ test('configuration-presets', (t) => {
         rcName: '.foorc',
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        const actual = stderr().split('\n').slice(0, 2).join('\n')
+
+        const expected = [
+          'one.txt',
+          '  1:1  error  Error: Could not find module `./plugin.js`'
+        ].join('\n')
+
+        t.deepEqual(
+          [error, code, actual],
+          [null, 1, expected],
+          'should succeed'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      const actual = stderr().split('\n').slice(0, 2).join('\n')
-
-      const expected = [
-        'one.txt',
-        '  1:1  error  Error: Could not find module `./plugin.js`'
-      ].join('\n')
-
-      t.deepEqual([error, code, actual], [null, 1, expected], 'should succeed')
-    }
   })
 
   t.test('should reconfigure plugins', (t) => {
@@ -108,6 +113,7 @@ test('configuration-presets', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(addTest),
         cwd: path.join(fixtures, 'config-plugins-reconfigure'),
         streamError: stderr.stream,
@@ -115,18 +121,18 @@ test('configuration-presets', (t) => {
         rcName: '.foorc',
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should succeed'
+        )
+      }
     )
 
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'one.txt: no issues found\n'],
-        'should succeed'
-      )
-    }
-
     function addTest() {
+      // Used in test.
+      // type-coverage:ignore-next-line
       this.t = t
     }
   })
@@ -139,6 +145,7 @@ test('configuration-presets', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(addTest),
         cwd: path.join(fixtures, 'config-preset-plugins-reconfigure'),
         streamError: stderr.stream,
@@ -146,18 +153,18 @@ test('configuration-presets', (t) => {
         rcName: '.foorc',
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should succeed'
+        )
+      }
     )
 
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'one.txt: no issues found\n'],
-        'should succeed'
-      )
-    }
-
     function addTest() {
+      // Used in test.
+      // type-coverage:ignore-next-line
       this.t = t
     }
   })
@@ -177,16 +184,14 @@ test('configuration-presets', (t) => {
         rcName: '.foorc',
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should succeed'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'one.txt: no issues found\n'],
-        'should succeed'
-      )
-    }
   })
 
   t.test('should reconfigure settings', (t) => {
@@ -196,32 +201,29 @@ test('configuration-presets', (t) => {
 
     engine(
       {
-        processor: noop().use(attacher),
+        // @ts-expect-error: unified types are wrong.
+        processor: noop().use(function () {
+          /** @type {ParserFunction} */
+          this.Parser = function (doc) {
+            return {type: 'text', value: doc}
+          }
+
+          t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
+        }),
         cwd: path.join(fixtures, 'config-settings-reconfigure-a'),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should succeed'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'one.txt: no issues found\n'],
-        'should succeed'
-      )
-    }
-
-    function attacher() {
-      this.Parser = parser
-      t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
-    }
-
-    function parser(doc) {
-      return {type: 'text', value: doc}
-    }
   })
 
   t.test('should reconfigure settings (2)', (t) => {
@@ -231,31 +233,27 @@ test('configuration-presets', (t) => {
 
     engine(
       {
-        processor: noop().use(attacher),
+        // @ts-expect-error: unified types are wrong.
+        processor: noop().use(function () {
+          t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
+          /** @type {ParserFunction} */
+          this.Parser = function (doc) {
+            return {type: 'text', value: doc}
+          }
+        }),
         cwd: path.join(fixtures, 'config-settings-reconfigure-b'),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should succeed'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'one.txt: no issues found\n'],
-        'should succeed'
-      )
-    }
-
-    function attacher() {
-      t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
-      this.Parser = parser
-    }
-
-    function parser(doc) {
-      return {type: 'text', value: doc}
-    }
   })
 })

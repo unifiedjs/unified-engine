@@ -21,19 +21,17 @@ test('file-path', (t) => {
         filePath: 'qux/quux.foo',
         extensions: ['txt']
       },
-      onrun
+      (error) => {
+        const actual = error && error.message.split('\n').slice(0, 2).join('\n')
+
+        const expected = [
+          'Do not pass both `--file-path` and real files.',
+          'Did you mean to pass stdin instead of files?'
+        ].join('\n')
+
+        t.equal(actual, expected, 'should fail')
+      }
     )
-
-    function onrun(error) {
-      const actual = error.message.split('\n').slice(0, 2).join('\n')
-
-      const expected = [
-        'Do not pass both `--file-path` and real files.',
-        'Did you mean to pass stdin instead of files?'
-      ].join('\n')
-
-      t.equal(actual, expected, 'should fail')
-    }
   })
 
   t.test('should support `filePath`', (t) => {
@@ -64,20 +62,18 @@ test('file-path', (t) => {
         streamIn: stream,
         filePath: 'foo' + path.sep + 'bar.baz'
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stdout(), stderr()],
+          [
+            null,
+            0,
+            '1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n',
+            'foo' + path.sep + 'bar.baz: no issues found\n'
+          ],
+          'should report'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stdout(), stderr()],
-        [
-          null,
-          0,
-          '1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n',
-          'foo' + path.sep + 'bar.baz: no issues found\n'
-        ],
-        'should report'
-      )
-    }
   })
 })

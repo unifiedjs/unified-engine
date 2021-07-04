@@ -17,6 +17,7 @@ test('configuration', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(addTest),
         cwd: path.join(fixtures, 'config-plugins-cascade'),
         streamError: stderr.stream,
@@ -25,18 +26,18 @@ test('configuration', (t) => {
         rcName: '.foorc',
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'nested' + path.sep + 'one.txt: no issues found\n'],
+          'should work'
+        )
+      }
     )
 
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'nested' + path.sep + 'one.txt: no issues found\n'],
-        'should work'
-      )
-    }
-
     function addTest() {
+      // Used in test.
+      // type-coverage:ignore-next-line
       this.t = t
     }
   })
@@ -49,24 +50,25 @@ test('configuration', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(addTest),
         cwd: path.join(fixtures, 'config-plugins-esm-mjs'),
         streamError: stderr.stream,
         files: ['one.txt'],
         rcName: '.foorc'
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should work'
+        )
+      }
     )
 
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'one.txt: no issues found\n'],
-        'should work'
-      )
-    }
-
     function addTest() {
+      // Used in test.
+      // type-coverage:ignore-next-line
       this.t = t
     }
   })
@@ -79,24 +81,25 @@ test('configuration', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(addTest),
         cwd: path.join(fixtures, 'config-plugins-esm-js'),
         streamError: stderr.stream,
         files: ['one.txt'],
         rcName: '.foorc'
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should work'
+        )
+      }
     )
 
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'one.txt: no issues found\n'],
-        'should work'
-      )
-    }
-
     function addTest() {
+      // Used in test.
+      // type-coverage:ignore-next-line
       this.t = t
     }
   })
@@ -115,21 +118,19 @@ test('configuration', (t) => {
         packageField: 'fooConfig',
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        const actual = stderr().split('\n').slice(0, 4).join('\n')
+
+        const expected = [
+          'one.txt',
+          '  1:1  error  Error: Cannot parse file `package.json`',
+          'Cannot import `test.js`',
+          'Error: Boom!'
+        ].join('\n')
+
+        t.deepEqual([error, code, actual], [null, 1, expected], 'should work')
+      }
     )
-
-    function onrun(error, code) {
-      const actual = stderr().split('\n').slice(0, 4).join('\n')
-
-      const expected = [
-        'one.txt',
-        '  1:1  error  Error: Cannot parse file `package.json`',
-        'Cannot import `test.js`',
-        'Error: Boom!'
-      ].join('\n')
-
-      t.deepEqual([error, code, actual], [null, 1, expected], 'should work')
-    }
   })
 
   t.test('should handle missing plugins', (t) => {
@@ -146,19 +147,17 @@ test('configuration', (t) => {
         packageField: 'fooConfig',
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        const actual = stderr().split('\n').slice(0, 2).join('\n')
+
+        const expected = [
+          'one.txt',
+          '  1:1  error  Error: Could not find module `missing`'
+        ].join('\n')
+
+        t.deepEqual([error, code, actual], [null, 1, expected], 'should work')
+      }
     )
-
-    function onrun(error, code) {
-      const actual = stderr().split('\n').slice(0, 2).join('\n')
-
-      const expected = [
-        'one.txt',
-        '  1:1  error  Error: Could not find module `missing`'
-      ].join('\n')
-
-      t.deepEqual([error, code, actual], [null, 1, expected], 'should work')
-    }
   })
 
   t.test('should handle invalid plugins', (t) => {
@@ -175,20 +174,18 @@ test('configuration', (t) => {
         packageField: 'fooConfig',
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        const actual = stderr().split('\n').slice(0, 3).join('\n')
+
+        const expected = [
+          'one.txt',
+          '  1:1  error  Error: Cannot parse file `package.json`',
+          'Error: Expected preset or plugin, not false, at `test.js`'
+        ].join('\n')
+
+        t.deepEqual([error, code, actual], [null, 1, expected], 'should work')
+      }
     )
-
-    function onrun(error, code) {
-      const actual = stderr().split('\n').slice(0, 3).join('\n')
-
-      const expected = [
-        'one.txt',
-        '  1:1  error  Error: Cannot parse file `package.json`',
-        'Error: Expected preset or plugin, not false, at `test.js`'
-      ].join('\n')
-
-      t.deepEqual([error, code, actual], [null, 1, expected], 'should work')
-    }
   })
 
   t.test('should handle throwing plugins', (t) => {
@@ -205,19 +202,17 @@ test('configuration', (t) => {
         packageField: 'fooConfig',
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        const actual = stderr().split('\n').slice(0, 2).join('\n')
+
+        const expected = [
+          'one.txt',
+          '  1:1  error  Error: Missing `required`'
+        ].join('\n')
+
+        t.deepEqual([error, code, actual], [null, 1, expected], 'should work')
+      }
     )
-
-    function onrun(error, code) {
-      const actual = stderr().split('\n').slice(0, 2).join('\n')
-
-      const expected = [
-        'one.txt',
-        '  1:1  error  Error: Missing `required`'
-      ].join('\n')
-
-      t.deepEqual([error, code, actual], [null, 1, expected], 'should work')
-    }
   })
 
   t.test('should handle injected plugins', (t) => {
@@ -232,26 +227,26 @@ test('configuration', (t) => {
         cwd: path.join(fixtures, 'one-file'),
         streamError: stderr.stream,
         files: ['.'],
-        plugins: [checkMissingOptions, [checkTuple, o]],
+        plugins: [
+          function (/** @type {unknown} */ options) {
+            t.equal(options, undefined, 'should support a plugin')
+          },
+          [
+            function (/** @type {unknown} */ options) {
+              t.equal(options, o, 'should support a plugin--options tuple')
+            },
+            o
+          ]
+        ],
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should work'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'one.txt: no issues found\n'],
-        'should work'
-      )
-    }
-
-    function checkMissingOptions(options) {
-      t.equal(options, undefined, 'should support a plugin')
-    }
-
-    function checkTuple(options) {
-      t.equal(options, o, 'should support a plugin--options tuple')
-    }
   })
 })

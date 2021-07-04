@@ -1,16 +1,20 @@
+/**
+ * @typedef {import('unified').ParserFunction} ParserFunction
+ * @typedef {import('unified').CompilerFunction} CompilerFunction
+ */
+
 import unified from 'unified'
 
-export const noop = unified().use(add)
-
-function add() {
-  this.Parser = parser
-  this.Compiler = compiler
-
-  function parser(doc) {
+// @ts-expect-error: unified types are wrong.
+export const noop = unified().use(function () {
+  /** @type {ParserFunction} */
+  this.Parser = (doc) => {
     return {type: 'text', value: doc}
   }
 
-  function compiler(tree) {
+  /** @type {CompilerFunction} */
+  this.Compiler = (tree) => {
+    // @ts-expect-error: fine.
     return tree.value
   }
-}
+})

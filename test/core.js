@@ -10,23 +10,26 @@ test('engine', (t) => {
 
     t.throws(
       () => {
+        // @ts-expect-error: runtime.
         engine()
       },
       /Missing `callback`/,
       'should throw w/o `callback`'
     )
 
+    // @ts-expect-error: runtime.
     engine(null, (error) => {
       t.equal(
-        error.message,
+        error && error.message,
         'Missing `processor`',
         'should fail when w/o options'
       )
     })
 
+    // @ts-expect-error: runtime.
     engine({}, (error) => {
       t.equal(
-        error.message,
+        error && error.message,
         'Missing `processor`',
         'should fail when w/o processor'
       )
@@ -36,9 +39,9 @@ test('engine', (t) => {
   t.test('should fail w/ `output` and w/ `out`', (t) => {
     t.plan(1)
 
-    engine({processor: unified, output: true, out: true}, (error) => {
+    engine({processor: unified(), output: true, out: true}, (error) => {
       t.equal(
-        error.message,
+        error && error.message,
         'Cannot accept both `output` and `out`',
         'should fail'
       )
@@ -48,9 +51,9 @@ test('engine', (t) => {
   t.test('should fail w/ `detectConfig` w/o `rcName`', (t) => {
     t.plan(1)
 
-    engine({processor: unified, detectConfig: true}, (error) => {
+    engine({processor: unified(), detectConfig: true}, (error) => {
       t.equal(
-        error.message,
+        error && error.message,
         'Missing `rcName` or `packageField` with `detectConfig`',
         'should fail'
       )
@@ -60,9 +63,9 @@ test('engine', (t) => {
   t.test('should fail w/ `detectIgnore` w/o `ignoreName`', (t) => {
     t.plan(1)
 
-    engine({processor: unified, detectIgnore: true}, (error) => {
+    engine({processor: unified(), detectIgnore: true}, (error) => {
       t.equal(
-        error.message,
+        error && error.message,
         'Missing `ignoreName` with `detectIgnore`',
         'should fail'
       )

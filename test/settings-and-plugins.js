@@ -1,3 +1,8 @@
+/**
+ * @typedef {import('unified').ParserFunction} ParserFunction
+ * @typedef {import('unified').CompilerFunction} CompilerFunction
+ */
+
 import path from 'path'
 import test from 'tape'
 import {noop} from './util/noop-processor.js'
@@ -16,33 +21,29 @@ test('settings', (t) => {
 
     engine(
       {
-        processor: noop().use(attacher),
+        // @ts-expect-error: unified types wrong.
+        processor: noop().use(function () {
+          t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
+
+          /** @type {ParserFunction} */
+          this.Parser = function (doc) {
+            return {type: 'text', value: doc}
+          }
+        }),
         cwd: path.join(fixtures, 'one-file'),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
         settings: {alpha: true}
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should report'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'one.txt: no issues found\n'],
-        'should report'
-      )
-    }
-
-    function attacher() {
-      t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
-
-      this.Parser = parser
-    }
-
-    function parser(doc) {
-      return {type: 'text', value: doc}
-    }
   })
 
   t.test('should cascade `settings`', (t) => {
@@ -52,7 +53,19 @@ test('settings', (t) => {
 
     engine(
       {
-        processor: noop().use(attacher),
+        // @ts-expect-error: unified types wrong.
+        processor: noop().use(function () {
+          t.deepEqual(
+            this.data('settings'),
+            {alpha: false, bravo: 'charlie', delta: 1},
+            'should configure'
+          )
+
+          /** @type {ParserFunction} */
+          this.Parser = function (doc) {
+            return {type: 'text', value: doc}
+          }
+        }),
         cwd: path.join(fixtures, 'config-settings-cascade'),
         streamError: stderr.stream,
         files: ['.'],
@@ -60,30 +73,14 @@ test('settings', (t) => {
         rcName: '.foorc',
         settings: {alpha: false, bravo: 'charlie'}
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should report'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'one.txt: no issues found\n'],
-        'should report'
-      )
-    }
-
-    function attacher() {
-      t.deepEqual(
-        this.data('settings'),
-        {alpha: false, bravo: 'charlie', delta: 1},
-        'should configure'
-      )
-
-      this.Parser = parser
-    }
-
-    function parser(doc) {
-      return {type: 'text', value: doc}
-    }
   })
 })
 
@@ -102,34 +99,31 @@ test('plugins', (t) => {
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
-        plugins: [one, [two, {alpha: true}]]
+        plugins: [
+          function () {
+            return function () {
+              t.pass('transformer')
+            }
+          },
+          [
+            /** @param {unknown} options */
+            function (options) {
+              return function () {
+                t.deepEqual(options, {alpha: true}, 'transformer')
+              }
+            },
+            {alpha: true}
+          ]
+        ]
       },
-      onrun
-    )
-
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'one.txt: no issues found\n'],
-        'should report'
-      )
-    }
-
-    function one() {
-      return transformerOne
-    }
-
-    function transformerOne() {
-      t.pass('transformer')
-    }
-
-    function two(options) {
-      return transformerTwo
-
-      function transformerTwo() {
-        t.deepEqual(options, {alpha: true}, 'transformer')
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should report'
+        )
       }
-    }
+    )
   })
 
   t.test('should use `plugins` as list of strings', (t) => {
@@ -139,7 +133,11 @@ test('plugins', (t) => {
 
     engine(
       {
-        processor: noop().use(addTest),
+        // @ts-expect-error: unified types wrong.
+        processor: noop().use(function () {
+          // @ts-expect-error: tests.
+          this.t = t
+        }),
         cwd: path.join(fixtures, 'config-plugins-basic-reconfigure'),
         streamError: stderr.stream,
         files: ['.'],
@@ -149,20 +147,14 @@ test('plugins', (t) => {
           ['./preset/plugin.js', {two: false, three: true}]
         ]
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should report'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'one.txt: no issues found\n'],
-        'should report'
-      )
-    }
-
-    function addTest() {
-      this.t = t
-    }
   })
 
   t.test('should use `plugins` as list of objects', (t) => {
@@ -172,7 +164,11 @@ test('plugins', (t) => {
 
     engine(
       {
-        processor: noop().use(addTest),
+        // @ts-expect-error: unified types wrong.
+        processor: noop().use(function () {
+          // @ts-expect-error: tests.
+          this.t = t
+        }),
         cwd: path.join(fixtures, 'config-plugins-basic-reconfigure'),
         streamError: stderr.stream,
         files: ['.'],
@@ -182,19 +178,13 @@ test('plugins', (t) => {
           './preset/plugin.js': {two: false, three: true}
         }
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should report'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'one.txt: no issues found\n'],
-        'should report'
-      )
-    }
-
-    function addTest() {
-      this.t = t
-    }
   })
 })

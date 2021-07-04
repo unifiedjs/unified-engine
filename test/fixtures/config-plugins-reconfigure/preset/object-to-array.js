@@ -1,5 +1,10 @@
+/** @type {import('unified').Plugin} */
 export default function objectToArray(options) {
-  this.t.deepEqual(
+  /** @type {import('tape').Test} */
+  // @ts-expect-error: hush.
+  const t = this.t
+
+  t.deepEqual(
     options,
     [2],
     'object-to-array: should pass the reconfigured array'

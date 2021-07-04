@@ -26,19 +26,17 @@ test('ignore', (t) => {
         ignorePath: '.missing-ignore',
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        const actual = stderr().split('\n').slice(0, 2).join('\n')
+
+        const expected = [
+          'one.txt',
+          '  1:1  error  Error: Cannot read given file `.missing-ignore`'
+        ].join('\n')
+
+        t.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
+      }
     )
-
-    function onrun(error, code) {
-      const actual = stderr().split('\n').slice(0, 2).join('\n')
-
-      const expected = [
-        'one.txt',
-        '  1:1  error  Error: Cannot read given file `.missing-ignore`'
-      ].join('\n')
-
-      t.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
-    }
   })
 
   t.test('should support custom ignore files', (t) => {
@@ -56,18 +54,20 @@ test('ignore', (t) => {
         ignorePath: '.fooignore',
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        const expected = [
+          'nested' + path.sep + 'three.txt: no issues found',
+          'one.txt: no issues found',
+          ''
+        ].join('\n')
+
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, expected],
+          'should report'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      const expected = [
-        'nested' + path.sep + 'three.txt: no issues found',
-        'one.txt: no issues found',
-        ''
-      ].join('\n')
-
-      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
-    }
   })
 
   t.test('should support searching ignore files', (t) => {
@@ -85,18 +85,20 @@ test('ignore', (t) => {
         ignoreName: '.fooignore',
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        const expected = [
+          'nested' + path.sep + 'three.txt: no issues found',
+          'one.txt: no issues found',
+          ''
+        ].join('\n')
+
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, expected],
+          'should report'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      const expected = [
-        'nested' + path.sep + 'three.txt: no issues found',
-        'one.txt: no issues found',
-        ''
-      ].join('\n')
-
-      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
-    }
   })
 
   t.test('should not look into hidden files', (t) => {
@@ -113,16 +115,14 @@ test('ignore', (t) => {
         // No `ignoreName`.
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should report'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'one.txt: no issues found\n'],
-        'should report'
-      )
-    }
   })
 
   t.test('should support no ignore files', (t) => {
@@ -140,19 +140,21 @@ test('ignore', (t) => {
         ignoreName: '.fooignore',
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        const expected = [
+          'nested' + path.sep + 'three.txt: no issues found',
+          'nested' + path.sep + 'two.txt: no issues found',
+          'one.txt: no issues found',
+          ''
+        ].join('\n')
+
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, expected],
+          'should report'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      const expected = [
-        'nested' + path.sep + 'three.txt: no issues found',
-        'nested' + path.sep + 'two.txt: no issues found',
-        'one.txt: no issues found',
-        ''
-      ].join('\n')
-
-      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
-    }
   })
 
   t.test('should support ignore patterns', (t) => {
@@ -169,14 +171,16 @@ test('ignore', (t) => {
         ignorePatterns: ['**/t*.*'],
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        const expected = ['one.txt: no issues found', ''].join('\n')
+
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, expected],
+          'should report'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      const expected = ['one.txt: no issues found', ''].join('\n')
-
-      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
-    }
   })
 
   t.test('should support ignore files and ignore patterns', (t) => {
@@ -195,14 +199,16 @@ test('ignore', (t) => {
         ignorePatterns: ['nested'],
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        const expected = ['one.txt: no issues found', ''].join('\n')
+
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, expected],
+          'should report'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      const expected = ['one.txt: no issues found', ''].join('\n')
-
-      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
-    }
   })
 
   t.test(
@@ -222,22 +228,20 @@ test('ignore', (t) => {
           ignorePatterns: ['files/two.txt'],
           extensions: ['txt']
         },
-        onrun
+        (error, code) => {
+          const expected = [
+            path.join('deep', 'files', 'two.txt') + ': no issues found',
+            path.join('files', 'one.txt') + ': no issues found',
+            ''
+          ].join('\n')
+
+          t.deepEqual(
+            [error, code, stderr()],
+            [null, 0, expected],
+            'should report'
+          )
+        }
       )
-
-      function onrun(error, code) {
-        const expected = [
-          path.join('deep', 'files', 'two.txt') + ': no issues found',
-          path.join('files', 'one.txt') + ': no issues found',
-          ''
-        ].join('\n')
-
-        t.deepEqual(
-          [error, code, stderr()],
-          [null, 0, expected],
-          'should report'
-        )
-      }
     }
   )
 
@@ -256,19 +260,21 @@ test('ignore', (t) => {
         ignorePathResolveFrom: 'cwd',
         extensions: ['txt']
       },
-      onrun
+      (error, code) => {
+        const expected = [
+          path.join('deep', 'files', 'one.txt') + ': no issues found',
+          path.join('deep', 'files', 'two.txt') + ': no issues found',
+          path.join('files', 'two.txt') + ': no issues found',
+          ''
+        ].join('\n')
+
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, expected],
+          'should report'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      const expected = [
-        path.join('deep', 'files', 'one.txt') + ': no issues found',
-        path.join('deep', 'files', 'two.txt') + ': no issues found',
-        path.join('files', 'two.txt') + ': no issues found',
-        ''
-      ].join('\n')
-
-      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
-    }
   })
 
   t.test('should support higher positioned files', (t) => {
@@ -287,15 +293,17 @@ test('ignore', (t) => {
         streamError: stderr.stream,
         files: [filePath]
       },
-      onrun
+      (error, code) => {
+        fs.unlinkSync(filePath)
+
+        const expected = path.relative(cwd, filePath) + ': no issues found\n'
+
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, expected],
+          'should report'
+        )
+      }
     )
-
-    function onrun(error, code) {
-      fs.unlinkSync(filePath)
-
-      const expected = path.relative(cwd, filePath) + ': no issues found\n'
-
-      t.deepEqual([error, code, stderr()], [null, 0, expected], 'should report')
-    }
   })
 })

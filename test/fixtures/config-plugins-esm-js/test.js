@@ -1,3 +1,8 @@
+/** @type {import('unified').Plugin} */
 export default function test() {
-  this.t.pass()
+  /** @type {import('tape').Test} */
+  // @ts-expect-error: hush.
+  const t = this.t
+
+  t.pass()
 }

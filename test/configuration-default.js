@@ -21,6 +21,7 @@ test('`defaultConfig`', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(addTest),
         streamError: stderr.stream,
         cwd: path.join(fixtures, 'config-default'),
@@ -29,18 +30,18 @@ test('`defaultConfig`', (t) => {
         extensions: ['txt'],
         defaultConfig
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should work'
+        )
+      }
     )
 
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'one.txt: no issues found\n'],
-        'should work'
-      )
-    }
-
     function addTest() {
+      // Used in test.
+      // type-coverage:ignore-next-line
       this.t = t
     }
   })
@@ -52,6 +53,7 @@ test('`defaultConfig`', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(addTest),
         streamError: stderr.stream,
         cwd: path.join(fixtures, 'config-default'),
@@ -60,18 +62,18 @@ test('`defaultConfig`', (t) => {
         extensions: ['txt'],
         defaultConfig
       },
-      onrun
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should work'
+        )
+      }
     )
 
-    function onrun(error, code) {
-      t.deepEqual(
-        [error, code, stderr()],
-        [null, 0, 'one.txt: no issues found\n'],
-        'should work'
-      )
-    }
-
     function addTest() {
+      // Used in test.
+      // type-coverage:ignore-next-line
       this.t = t
     }
   })
