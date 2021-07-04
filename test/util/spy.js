@@ -16,7 +16,7 @@ export function spy() {
     callback = typeof encoding === 'function' ? encoding : callback
 
     if (typeof callback === 'function') {
-      setImmediate(callback)
+      setImmediate(callback, undefined)
     }
 
     output.push(chunk)
