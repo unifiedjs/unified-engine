@@ -1,5 +1,7 @@
 /**
  * @typedef {import('unified').CompilerFunction} CompilerFunction
+ * @typedef {import('unified').Transformer} Transformer
+ * @typedef {import('unist').Literal} Literal
  */
 
 import fs from 'fs'
@@ -24,7 +26,12 @@ test('output', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
+          /**
+           * @type {Transformer}
+           * @param {Literal} tree
+           */
           return function (tree) {
             tree.value = 'two'
           }
@@ -54,7 +61,12 @@ test('output', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
+          /**
+           * @type {Transformer}
+           * @param {Literal} tree
+           */
           return function (tree) {
             tree.value = 'two'
           }
@@ -84,7 +96,12 @@ test('output', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
+          /**
+           * @type {Transformer}
+           * @param {Literal} tree
+           */
           return function (tree) {
             tree.value = 'two'
           }
@@ -115,7 +132,12 @@ test('output', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
+          /**
+           * @type {Transformer}
+           * @param {Literal} tree
+           */
           return function (tree) {
             tree.value = 'two'
           }
@@ -145,7 +167,12 @@ test('output', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
+          /**
+           * @type {Transformer}
+           * @param {Literal} tree
+           */
           return function (tree) {
             tree.value = 'two'
           }
@@ -178,7 +205,12 @@ test('output', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
+          /**
+           * @type {Transformer}
+           * @param {Literal} tree
+           */
           return function (tree) {
             tree.value = 'two'
           }
@@ -212,7 +244,12 @@ test('output', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
+          /**
+           * @type {Transformer}
+           * @param {Literal} tree
+           */
           return function (tree) {
             tree.value = 'two'
           }
@@ -286,7 +323,12 @@ test('output', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
+          /**
+           * @type {Transformer}
+           * @param {Literal} tree
+           */
           return function (tree) {
             tree.value = 'two'
           }
@@ -318,7 +360,12 @@ test('output', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
+          /**
+           * @type {Transformer}
+           * @param {Literal} tree
+           */
           return function (tree, file) {
             tree.value = 'two'
             file.history = []
@@ -451,7 +498,6 @@ test('output', (t) => {
         processor: noop().use(function () {
           /** @type {CompilerFunction} */
           this.Compiler = function () {
-            // @ts-expect-error: unified types are wrong.
             return Buffer.from('bravo')
           }
         }),
@@ -484,7 +530,6 @@ test('output', (t) => {
         processor: noop().use(function () {
           /** @type {CompilerFunction} */
           this.Compiler = function () {
-            // @ts-expect-error: unified types are wrong.
             return null
           }
         }),
@@ -517,7 +562,6 @@ test('output', (t) => {
         processor: noop().use(function () {
           /** @type {CompilerFunction} */
           this.Compiler = function () {
-            // @ts-expect-error: non-serializer.
             return {type: 'some-virtual-dom'}
           }
         }),

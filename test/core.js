@@ -1,5 +1,5 @@
 import test from 'tape'
-import unified from 'unified'
+import {unified} from 'unified'
 import {engine} from '../index.js'
 
 test('engine', (t) => {

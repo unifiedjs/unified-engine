@@ -1,3 +1,8 @@
+/**
+ * @typedef {import('unified').Transformer} Transformer
+ * @typedef {import('unist').Literal} Literal
+ */
+
 import fs from 'fs'
 import path from 'path'
 import {PassThrough} from 'stream'
@@ -46,7 +51,12 @@ test('tree', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
+          /**
+           * @type {Transformer}
+           * @param {Literal} tree
+           */
           return function (tree) {
             tree.value = 'two'
           }
@@ -84,7 +94,12 @@ test('tree', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
+          /**
+           * @type {Transformer}
+           * @param {Literal} tree
+           */
           return function (tree) {
             tree.value = 'two'
           }
@@ -118,7 +133,12 @@ test('tree', (t) => {
 
     engine(
       {
+        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
+          /**
+           * @type {Transformer}
+           * @param {Literal} tree
+           */
           return function (tree) {
             tree.value = 'two'
           }

@@ -1,6 +1,7 @@
 /**
  * @typedef {import('unified').ParserFunction} ParserFunction
  * @typedef {import('unified').CompilerFunction} CompilerFunction
+ * @typedef {import('unist').Literal} Literal
  */
 
 import path from 'path'
@@ -25,7 +26,10 @@ test('settings', (t) => {
         processor: noop().use(function () {
           t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
 
-          /** @type {ParserFunction} */
+          /**
+           * @type {ParserFunction}
+           * @returns {Literal}
+           */
           this.Parser = function (doc) {
             return {type: 'text', value: doc}
           }
@@ -61,7 +65,10 @@ test('settings', (t) => {
             'should configure'
           )
 
-          /** @type {ParserFunction} */
+          /**
+           * @type {ParserFunction}
+           * @returns {Literal}
+           */
           this.Parser = function (doc) {
             return {type: 'text', value: doc}
           }

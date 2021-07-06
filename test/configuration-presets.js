@@ -1,5 +1,6 @@
 /**
  * @typedef {import('unified').ParserFunction} ParserFunction
+ * @typedef {import('unist').Literal} Literal
  */
 
 import path from 'path'
@@ -203,7 +204,10 @@ test('configuration-presets', (t) => {
       {
         // @ts-expect-error: unified types are wrong.
         processor: noop().use(function () {
-          /** @type {ParserFunction} */
+          /**
+           * @type {ParserFunction}
+           * @returns {Literal}
+           */
           this.Parser = function (doc) {
             return {type: 'text', value: doc}
           }
@@ -236,7 +240,10 @@ test('configuration-presets', (t) => {
         // @ts-expect-error: unified types are wrong.
         processor: noop().use(function () {
           t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
-          /** @type {ParserFunction} */
+          /**
+           * @type {ParserFunction}
+           * @returns {Literal}
+           */
           this.Parser = function (doc) {
             return {type: 'text', value: doc}
           }
