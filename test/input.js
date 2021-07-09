@@ -11,7 +11,7 @@ import {engine} from '../index.js'
 const fixtures = path.join('test', 'fixtures')
 
 test('input', (t) => {
-  t.plan(19)
+  t.plan(20)
 
   t.test('should fail without input', (t) => {
     const stream = new PassThrough()
@@ -364,7 +364,7 @@ test('input', (t) => {
     )
   })
 
-  t.test('should not atempt to read files with `value` (1)', (t) => {
+  t.test('should not attempt to read files with `value` (1)', (t) => {
     const stderr = spy()
     const cwd = path.join(fixtures, 'ignore-file')
     const file = toVFile({
@@ -400,7 +400,7 @@ test('input', (t) => {
     )
   })
 
-  t.test('should not atempt to read files with `value` (2)', (t) => {
+  t.test('should not attempt to read files with `value` (2)', (t) => {
     const stderr = spy()
     const cwd = path.join(fixtures, 'ignore-file')
     const file = toVFile({
@@ -422,6 +422,33 @@ test('input', (t) => {
         t.deepEqual(
           [error, code, stderr()],
           [null, 0, 'not-existing-2.txt: no issues found\n'],
+          'should report'
+        )
+      }
+    )
+  })
+
+  t.test('should not attempt to read files with `value` (3)', (t) => {
+    const stderr = spy()
+    const cwd = path.join(fixtures, 'empty')
+    const file = toVFile({value: 'foo'})
+
+    t.plan(1)
+
+    engine(
+      {processor: noop, cwd, streamError: stderr.stream, files: [file]},
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [
+            null,
+            0,
+            'test' +
+              path.sep +
+              'fixtures' +
+              path.sep +
+              'empty: no issues found\n'
+          ],
           'should report'
         )
       }
