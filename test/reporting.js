@@ -1,7 +1,6 @@
 import path from 'path'
 import test from 'tape'
 import stripAnsi from 'strip-ansi'
-import figures from 'figures'
 import vfileReporterPretty from 'vfile-reporter-pretty'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
@@ -10,6 +9,8 @@ import {engine} from '../index.js'
 const fixtures = path.join('test', 'fixtures')
 
 const windows = process.platform === 'win32'
+const cross = windows ? '×' : '✖'
+const danger = windows ? '‼' : '⚠'
 
 if (!windows) {
   // See: <https://github.com/sindresorhus/eslint-formatter-pretty/blob/159b30a/index.js#L90-L93>.
@@ -48,9 +49,7 @@ test('reporting', (t) => {
           [
             null,
             1,
-            'one.txt\n  1:1  warning  Warning\n\n' +
-              figures.warning +
-              ' 1 warning\n'
+            'one.txt\n  1:1  warning  Warning\n\n' + danger + ' 1 warning\n'
           ],
           'should report'
         )
@@ -84,9 +83,7 @@ test('reporting', (t) => {
           [
             null,
             0,
-            'two.txt\n  1:1  warning  Warning\n\n' +
-              figures.warning +
-              ' 1 warning\n'
+            'two.txt\n  1:1  warning  Warning\n\n' + danger + ' 1 warning\n'
           ],
           'should report'
         )
@@ -139,11 +136,7 @@ test('reporting', (t) => {
       (error, code) => {
         t.deepEqual(
           [error, code, stderr()],
-          [
-            null,
-            1,
-            'two.txt\n  1:1  error  Error\n\n' + figures.cross + ' 1 error\n'
-          ],
+          [null, 1, 'two.txt\n  1:1  error  Error\n\n' + cross + ' 1 error\n'],
           'should report'
         )
       }

@@ -3,10 +3,12 @@ import {PassThrough} from 'stream'
 import test from 'tape'
 import {unified} from 'unified'
 import {toVFile} from 'to-vfile'
-import figures from 'figures'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 import {engine} from '../index.js'
+
+console.log('plat:', process.platform)
+const cross = process.platform === 'win32' ? '×' : '✖'
 
 const fixtures = path.join('test', 'fixtures')
 
@@ -88,7 +90,7 @@ test('input', (t) => {
           'readme.md',
           '  1:1  error  No such file or directory',
           '',
-          figures.cross + ' 1 error',
+          cross + ' 1 error',
           ''
         ].join('\n')
 
@@ -351,7 +353,7 @@ test('input', (t) => {
           '',
           'one.txt: no issues found',
           '',
-          figures.cross + ' 1 error',
+          cross + ' 1 error',
           ''
         ].join('\n')
 
@@ -387,7 +389,7 @@ test('input', (t) => {
           'not-existing.txt',
           '  1:1  error  Cannot process specified file: it’s ignored',
           '',
-          figures.cross + ' 1 error',
+          cross + ' 1 error',
           ''
         ].join('\n')
 
@@ -476,7 +478,7 @@ test('input', (t) => {
           '',
           'one.txt: no issues found',
           '',
-          figures.cross + ' 1 error',
+          cross + ' 1 error',
           ''
         ].join('\n')
 
