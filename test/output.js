@@ -1,7 +1,6 @@
 /**
- * @typedef {import('unified').CompilerFunction} CompilerFunction
- * @typedef {import('unified').Transformer} Transformer
- * @typedef {import('unist').Literal} Literal
+ * @typedef {import('unified').Compiler} Compiler
+ * @typedef {import('unist').Literal<string>} Literal
  */
 
 import fs from 'fs'
@@ -26,14 +25,10 @@ test('output', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
-          /**
-           * @type {Transformer}
-           * @param {Literal} tree
-           */
           return function (tree) {
-            tree.value = 'two'
+            const text = /** @type {Literal} */ (tree)
+            text.value = 'two'
           }
         }),
         cwd,
@@ -61,14 +56,10 @@ test('output', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
-          /**
-           * @type {Transformer}
-           * @param {Literal} tree
-           */
           return function (tree) {
-            tree.value = 'two'
+            const text = /** @type {Literal} */ (tree)
+            text.value = 'two'
           }
         }),
         cwd,
@@ -96,14 +87,10 @@ test('output', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
-          /**
-           * @type {Transformer}
-           * @param {Literal} tree
-           */
           return function (tree) {
-            tree.value = 'two'
+            const text = /** @type {Literal} */ (tree)
+            text.value = 'two'
           }
         }),
         cwd,
@@ -132,14 +119,10 @@ test('output', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
-          /**
-           * @type {Transformer}
-           * @param {Literal} tree
-           */
           return function (tree) {
-            tree.value = 'two'
+            const text = /** @type {Literal} */ (tree)
+            text.value = 'two'
           }
         }),
         streamOut: stdout.stream,
@@ -167,14 +150,10 @@ test('output', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
-          /**
-           * @type {Transformer}
-           * @param {Literal} tree
-           */
           return function (tree) {
-            tree.value = 'two'
+            const text = /** @type {Literal} */ (tree)
+            text.value = 'two'
           }
         }),
         cwd,
@@ -205,14 +184,10 @@ test('output', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
-          /**
-           * @type {Transformer}
-           * @param {Literal} tree
-           */
           return function (tree) {
-            tree.value = 'two'
+            const text = /** @type {Literal} */ (tree)
+            text.value = 'two'
           }
         }),
         cwd,
@@ -244,14 +219,10 @@ test('output', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
-          /**
-           * @type {Transformer}
-           * @param {Literal} tree
-           */
           return function (tree) {
-            tree.value = 'two'
+            const text = /** @type {Literal} */ (tree)
+            text.value = 'two'
           }
         }),
         cwd,
@@ -323,14 +294,10 @@ test('output', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
-          /**
-           * @type {Transformer}
-           * @param {Literal} tree
-           */
           return function (tree) {
-            tree.value = 'two'
+            const text = /** @type {Literal} */ (tree)
+            text.value = 'two'
           }
         }),
         cwd,
@@ -360,14 +327,10 @@ test('output', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
-          /**
-           * @type {Transformer}
-           * @param {Literal} tree
-           */
           return function (tree, file) {
-            tree.value = 'two'
+            const text = /** @type {Literal} */ (tree)
+            text.value = 'two'
             file.history = []
           }
         }),
@@ -494,12 +457,12 @@ test('output', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
         processor: noop().use(function () {
-          /** @type {CompilerFunction} */
-          this.Compiler = function () {
-            return Buffer.from('bravo')
-          }
+          Object.assign(this, {
+            Compiler() {
+              return Buffer.from('bravo')
+            }
+          })
         }),
         cwd,
         streamOut: stdout.stream,
@@ -526,12 +489,12 @@ test('output', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
         processor: noop().use(function () {
-          /** @type {CompilerFunction} */
-          this.Compiler = function () {
-            return null
-          }
+          Object.assign(this, {
+            Compiler() {
+              return null
+            }
+          })
         }),
         cwd,
         streamOut: stdout.stream,
@@ -558,12 +521,12 @@ test('output', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
         processor: noop().use(function () {
-          /** @type {CompilerFunction} */
-          this.Compiler = function () {
-            return {type: 'some-virtual-dom'}
-          }
+          Object.assign(this, {
+            Compiler() {
+              return {type: 'some-virtual-dom'}
+            }
+          })
         }),
         cwd,
         streamOut: stdout.stream,

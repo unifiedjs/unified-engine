@@ -21,8 +21,9 @@ test('`defaultConfig`', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
-        processor: noop().use(addTest),
+        processor: noop().use(function () {
+          Object.assign(this, {t})
+        }),
         streamError: stderr.stream,
         cwd: path.join(fixtures, 'config-default'),
         files: ['.'],
@@ -38,12 +39,6 @@ test('`defaultConfig`', (t) => {
         )
       }
     )
-
-    function addTest() {
-      // Used in test.
-      // type-coverage:ignore-next-line
-      this.t = t
-    }
   })
 
   t.test('should use found otherwise', (t) => {
@@ -53,8 +48,9 @@ test('`defaultConfig`', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
-        processor: noop().use(addTest),
+        processor: noop().use(function () {
+          Object.assign(this, {t})
+        }),
         streamError: stderr.stream,
         cwd: path.join(fixtures, 'config-default'),
         files: ['.'],
@@ -70,11 +66,5 @@ test('`defaultConfig`', (t) => {
         )
       }
     )
-
-    function addTest() {
-      // Used in test.
-      // type-coverage:ignore-next-line
-      this.t = t
-    }
   })
 })

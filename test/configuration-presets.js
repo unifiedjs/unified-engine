@@ -51,8 +51,9 @@ test('configuration-presets', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
-        processor: noop().use(addTest),
+        processor: noop().use(function () {
+          Object.assign(this, {t})
+        }),
         cwd: path.join(fixtures, 'config-presets-local'),
         streamError: stderr.stream,
         files: ['.'],
@@ -67,12 +68,6 @@ test('configuration-presets', (t) => {
         )
       }
     )
-
-    function addTest() {
-      // Used in test.
-      // type-coverage:ignore-next-line
-      this.t = t
-    }
   })
 
   t.test('should handle missing plugins in presets', (t) => {
@@ -114,8 +109,9 @@ test('configuration-presets', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
-        processor: noop().use(addTest),
+        processor: noop().use(function () {
+          Object.assign(this, {t})
+        }),
         cwd: path.join(fixtures, 'config-plugins-reconfigure'),
         streamError: stderr.stream,
         files: ['.'],
@@ -130,12 +126,6 @@ test('configuration-presets', (t) => {
         )
       }
     )
-
-    function addTest() {
-      // Used in test.
-      // type-coverage:ignore-next-line
-      this.t = t
-    }
   })
 
   t.test('should reconfigure imported plugins', (t) => {
@@ -146,8 +136,9 @@ test('configuration-presets', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
-        processor: noop().use(addTest),
+        processor: noop().use(function () {
+          Object.assign(this, {t})
+        }),
         cwd: path.join(fixtures, 'config-preset-plugins-reconfigure'),
         streamError: stderr.stream,
         files: ['.'],
@@ -162,12 +153,6 @@ test('configuration-presets', (t) => {
         )
       }
     )
-
-    function addTest() {
-      // Used in test.
-      // type-coverage:ignore-next-line
-      this.t = t
-    }
   })
 
   t.test('Should reconfigure: turn plugins off', (t) => {
@@ -202,15 +187,16 @@ test('configuration-presets', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
         processor: noop().use(function () {
-          /**
-           * @type {ParserFunction}
-           * @returns {Literal}
-           */
-          this.Parser = function (doc) {
-            return {type: 'text', value: doc}
-          }
+          Object.assign(this, {
+            /**
+             * @type {ParserFunction}
+             * @returns {Literal}
+             */
+            Parser(doc) {
+              return {type: 'text', value: doc}
+            }
+          })
 
           t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
         }),
@@ -237,16 +223,18 @@ test('configuration-presets', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
         processor: noop().use(function () {
           t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
-          /**
-           * @type {ParserFunction}
-           * @returns {Literal}
-           */
-          this.Parser = function (doc) {
-            return {type: 'text', value: doc}
-          }
+
+          Object.assign(this, {
+            /**
+             * @type {ParserFunction}
+             * @returns {Literal}
+             */
+            Parser(doc) {
+              return {type: 'text', value: doc}
+            }
+          })
         }),
         cwd: path.join(fixtures, 'config-settings-reconfigure-b'),
         streamError: stderr.stream,

@@ -22,17 +22,18 @@ test('settings', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types wrong.
         processor: noop().use(function () {
           t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
 
-          /**
-           * @type {ParserFunction}
-           * @returns {Literal}
-           */
-          this.Parser = function (doc) {
-            return {type: 'text', value: doc}
-          }
+          Object.assign(this, {
+            /**
+             * @type {ParserFunction}
+             * @returns {Literal}
+             */
+            Parser(doc) {
+              return {type: 'text', value: doc}
+            }
+          })
         }),
         cwd: path.join(fixtures, 'one-file'),
         streamError: stderr.stream,
@@ -57,7 +58,6 @@ test('settings', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types wrong.
         processor: noop().use(function () {
           t.deepEqual(
             this.data('settings'),
@@ -65,13 +65,15 @@ test('settings', (t) => {
             'should configure'
           )
 
-          /**
-           * @type {ParserFunction}
-           * @returns {Literal}
-           */
-          this.Parser = function (doc) {
-            return {type: 'text', value: doc}
-          }
+          Object.assign(this, {
+            /**
+             * @type {ParserFunction}
+             * @returns {Literal}
+             */
+            Parser(doc) {
+              return {type: 'text', value: doc}
+            }
+          })
         }),
         cwd: path.join(fixtures, 'config-settings-cascade'),
         streamError: stderr.stream,
@@ -140,10 +142,8 @@ test('plugins', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types wrong.
         processor: noop().use(function () {
-          // @ts-expect-error: tests.
-          this.t = t
+          Object.assign(this, {t})
         }),
         cwd: path.join(fixtures, 'config-plugins-basic-reconfigure'),
         streamError: stderr.stream,
@@ -171,10 +171,8 @@ test('plugins', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types wrong.
         processor: noop().use(function () {
-          // @ts-expect-error: tests.
-          this.t = t
+          Object.assign(this, {t})
         }),
         cwd: path.join(fixtures, 'config-plugins-basic-reconfigure'),
         streamError: stderr.stream,

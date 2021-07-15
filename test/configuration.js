@@ -382,16 +382,18 @@ test('configuration', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
         processor: noop().use(function () {
           t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
-          /**
-           * @type {ParserFunction}
-           * @returns {Literal}
-           */
-          this.Parser = (doc) => {
-            return {type: 'text', value: doc}
-          }
+
+          Object.assign(this, {
+            /**
+             * @type {ParserFunction}
+             * @returns {Literal}
+             */
+            Parser(doc) {
+              return {type: 'text', value: doc}
+            }
+          })
         }),
         cwd: path.join(fixtures, 'config-settings'),
         streamError: stderr.stream,

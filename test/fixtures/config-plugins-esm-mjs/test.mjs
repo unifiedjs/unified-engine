@@ -1,4 +1,4 @@
-/** @type {import('unified').Plugin} */
+/** @type {import('unified').Plugin<unknown[]>} */
 export default function test() {
   /** @type {import('tape').Test} */
   // @ts-expect-error: hush.

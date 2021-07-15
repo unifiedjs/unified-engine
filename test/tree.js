@@ -1,6 +1,5 @@
 /**
- * @typedef {import('unified').Transformer} Transformer
- * @typedef {import('unist').Literal} Literal
+ * @typedef {import('unist').Literal<string>} Literal
  */
 
 import fs from 'fs'
@@ -51,14 +50,10 @@ test('tree', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
-          /**
-           * @type {Transformer}
-           * @param {Literal} tree
-           */
           return function (tree) {
-            tree.value = 'two'
+            const text = /** @type {Literal} */ (tree)
+            text.value = 'two'
           }
         }),
         cwd,
@@ -94,14 +89,10 @@ test('tree', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
-          /**
-           * @type {Transformer}
-           * @param {Literal} tree
-           */
           return function (tree) {
-            tree.value = 'two'
+            const text = /** @type {Literal} */ (tree)
+            text.value = 'two'
           }
         }),
         cwd,
@@ -133,14 +124,10 @@ test('tree', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
         processor: noop().use(() => {
-          /**
-           * @type {Transformer}
-           * @param {Literal} tree
-           */
           return function (tree) {
-            tree.value = 'two'
+            const text = /** @type {Literal} */ (tree)
+            text.value = 'two'
           }
         }),
         cwd,

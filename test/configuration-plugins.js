@@ -17,8 +17,9 @@ test('configuration', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
-        processor: noop().use(addTest),
+        processor: noop().use(function () {
+          Object.assign(this, {t})
+        }),
         cwd: path.join(fixtures, 'config-plugins-cascade'),
         streamError: stderr.stream,
         files: ['.'],
@@ -34,12 +35,6 @@ test('configuration', (t) => {
         )
       }
     )
-
-    function addTest() {
-      // Used in test.
-      // type-coverage:ignore-next-line
-      this.t = t
-    }
   })
 
   t.test('should support an ESM plugin w/ an `.mjs` extname', (t) => {
@@ -50,8 +45,9 @@ test('configuration', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
-        processor: noop().use(addTest),
+        processor: noop().use(function () {
+          Object.assign(this, {t})
+        }),
         cwd: path.join(fixtures, 'config-plugins-esm-mjs'),
         streamError: stderr.stream,
         files: ['one.txt'],
@@ -65,12 +61,6 @@ test('configuration', (t) => {
         )
       }
     )
-
-    function addTest() {
-      // Used in test.
-      // type-coverage:ignore-next-line
-      this.t = t
-    }
   })
 
   t.test('should support an ESM plugin w/ a `.js` extname', (t) => {
@@ -81,8 +71,9 @@ test('configuration', (t) => {
 
     engine(
       {
-        // @ts-expect-error: unified types are wrong.
-        processor: noop().use(addTest),
+        processor: noop().use(function () {
+          Object.assign(this, {t})
+        }),
         cwd: path.join(fixtures, 'config-plugins-esm-js'),
         streamError: stderr.stream,
         files: ['one.txt'],
@@ -96,12 +87,6 @@ test('configuration', (t) => {
         )
       }
     )
-
-    function addTest() {
-      // Used in test.
-      // type-coverage:ignore-next-line
-      this.t = t
-    }
   })
 
   t.test('should handle failing plugins', (t) => {

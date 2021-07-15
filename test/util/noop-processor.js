@@ -1,27 +1,21 @@
 /**
- * @typedef {import('unified').ParserFunction} ParserFunction
- * @typedef {import('unified').CompilerFunction} CompilerFunction
- * @typedef {import('unist').Literal} Literal
+ * @typedef {import('unist').Literal<string>} Literal
  */
 
 import {unified} from 'unified'
 
-// @ts-expect-error: unified types are wrong.
-export const noop = unified().use(function () {
-  /**
-   * @type {ParserFunction}
-   * @returns {Literal}
-   */
-  this.Parser = (doc) => {
-    return {type: 'text', value: doc}
-  }
+/** @type {import('unified').Plugin<unknown[]>} */
+function plug() {
+  Object.assign(this, {
+    /** @param {string} doc */
+    Parser(doc) {
+      return {type: 'text', value: doc}
+    },
+    /** @param {Literal} tree */
+    Compiler(tree) {
+      return tree.value
+    }
+  })
+}
 
-  /**
-   * @type {CompilerFunction}
-   * @param {Literal} tree
-   */
-  // @ts-expect-error: fine.
-  this.Compiler = (tree) => {
-    return tree.value
-  }
-})
+export const noop = unified().use(plug)

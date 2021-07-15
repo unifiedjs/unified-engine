@@ -1,4 +1,5 @@
 /**
+ * @typedef {import('unified').Plugin<[unknown, FileSet]>} FileSetPlugin
  * @typedef {import('../index.js').FileSet} FileSet
  */
 
@@ -28,10 +29,7 @@ test('completers', (t) => {
         processor: noop,
         streamError: stderr.stream,
         plugins: [
-          /**
-           * @param {unknown} _
-           * @param {FileSet} set
-           */
+          /** @type {FileSetPlugin} */
           function (_, set) {
             t.equal(typeof set, 'object', 'should pass a set')
             t.equal(typeof set.use, 'function', 'should have a `use` method')
@@ -104,10 +102,7 @@ test('completers', (t) => {
         processor: noop,
         streamError: stderr.stream,
         plugins: [
-          /**
-           * @param {unknown} _
-           * @param {FileSet} set
-           */
+          /** @type {FileSetPlugin} */
           function (_, set) {
             set.add('bar.text')
           }

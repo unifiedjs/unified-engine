@@ -8,8 +8,6 @@ export function spy() {
 
   /**
    * @param {string} chunk
-   * @param {BufferEncoding|undefined} [encoding]
-   * @param {((error: Error|null|undefined) => void)|undefined} [callback]
    */
   // @ts-expect-error: hush.
   stream.write = (chunk, encoding, callback) => {
