@@ -7,7 +7,6 @@ import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 import {engine} from '../index.js'
 
-console.log('plat:', process.platform)
 const cross = process.platform === 'win32' ? '×' : '✖'
 
 const fixtures = path.join('test', 'fixtures')
