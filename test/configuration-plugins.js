@@ -7,7 +7,7 @@ import {spy} from './util/spy.js'
 const fixtures = path.join('test', 'fixtures')
 
 test('configuration', (t) => {
-  t.plan(8)
+  t.plan(9)
 
   t.test('should cascade `plugins`', (t) => {
     const stderr = spy()
@@ -111,6 +111,35 @@ test('configuration', (t) => {
           '  1:1  error  Error: Cannot parse file `package.json`',
           'Cannot import `test.js`',
           'Error: Boom!'
+        ].join('\n')
+
+        t.deepEqual([error, code, actual], [null, 1, expected], 'should work')
+      }
+    )
+  })
+
+  t.test('should handle plugins w/o `export default`', (t) => {
+    const stderr = spy()
+
+    t.plan(1)
+
+    engine(
+      {
+        processor: noop,
+        cwd: path.join(fixtures, 'plugin-without-default'),
+        streamError: stderr.stream,
+        files: ['.'],
+        packageField: 'fooConfig',
+        extensions: ['txt']
+      },
+      (error, code) => {
+        const actual = stderr().split('\n').slice(0, 4).join('\n')
+
+        const expected = [
+          'one.txt',
+          '  1:1  error  Error: Cannot parse file `package.json`',
+          'Cannot import `test.js`',
+          'Error: Expected a plugin or preset exported as the default export'
         ].join('\n')
 
         t.deepEqual([error, code, actual], [null, 1, expected], 'should work')
