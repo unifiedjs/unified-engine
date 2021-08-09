@@ -4,18 +4,24 @@
 
 import {unified} from 'unified'
 
-/** @type {import('unified').Plugin<unknown[]>} */
-function plug() {
+/** @type {import('unified').Plugin<void[], string, Literal>} */
+function parse() {
   Object.assign(this, {
-    /** @param {string} doc */
+    /** @type {import('unified').ParserFunction<Literal>} */
     Parser(doc) {
       return {type: 'text', value: doc}
-    },
-    /** @param {Literal} tree */
+    }
+  })
+}
+
+/** @type {import('unified').Plugin<void[], Literal, string>} */
+function stringify() {
+  Object.assign(this, {
+    /** @type {import('unified').CompilerFunction<Literal, string>} */
     Compiler(tree) {
       return tree.value
     }
   })
 }
 
-export const noop = unified().use(plug)
+export const noop = unified().use(parse).use(stringify)

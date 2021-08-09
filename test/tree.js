@@ -50,12 +50,14 @@ test('tree', (t) => {
 
     engine(
       {
-        processor: noop().use(() => {
-          return function (tree) {
-            const text = /** @type {Literal} */ (tree)
-            text.value = 'two'
+        processor: noop().use(
+          /** @type {import('unified').Plugin<void[], Literal>} */
+          () => {
+            return function (tree) {
+              tree.value = 'two'
+            }
           }
-        }),
+        ),
         cwd,
         streamError: stderr.stream,
         output: true,
@@ -89,12 +91,14 @@ test('tree', (t) => {
 
     engine(
       {
-        processor: noop().use(() => {
-          return function (tree) {
-            const text = /** @type {Literal} */ (tree)
-            text.value = 'two'
+        processor: noop().use(
+          /** @type {import('unified').Plugin<void[], Literal>} */
+          () => {
+            return function (tree) {
+              tree.value = 'two'
+            }
           }
-        }),
+        ),
         cwd,
         streamError: stderr.stream,
         output: true,
@@ -124,12 +128,14 @@ test('tree', (t) => {
 
     engine(
       {
-        processor: noop().use(() => {
-          return function (tree) {
-            const text = /** @type {Literal} */ (tree)
-            text.value = 'two'
+        processor: noop().use(
+          /** @type {import('unified').Plugin<void[], Literal>} */
+          () => {
+            return function (tree) {
+              tree.value = 'two'
+            }
           }
-        }),
+        ),
         cwd,
         streamError: stderr.stream,
         output: true,

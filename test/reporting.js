@@ -1,3 +1,7 @@
+/**
+ * @typedef {import('unist').Literal<string>} Literal
+ */
+
 import path from 'path'
 import test from 'tape'
 import stripAnsi from 'strip-ansi'
@@ -33,11 +37,14 @@ test('reporting', (t) => {
 
     engine(
       {
-        processor: noop().use(() => {
-          return function (_, file) {
-            file.message('Warning')
+        processor: noop().use(
+          /** @type {import('unified').Plugin<void[], Literal>} */
+          () => {
+            return function (_, file) {
+              file.message('Warning')
+            }
           }
-        }),
+        ),
         cwd: path.join(fixtures, 'one-file'),
         streamError: stderr.stream,
         files: ['one.txt'],
@@ -64,13 +71,16 @@ test('reporting', (t) => {
 
     engine(
       {
-        processor: noop().use(() => {
-          return function (_, file) {
-            if (file.stem === 'two') {
-              file.message('Warning')
+        processor: noop().use(
+          /** @type {import('unified').Plugin<void[], Literal>} */
+          () => {
+            return function (_, file) {
+              if (file.stem === 'two') {
+                file.message('Warning')
+              }
             }
           }
-        }),
+        ),
         cwd: path.join(fixtures, 'two-files'),
         streamError: stderr.stream,
         files: ['.'],
@@ -118,15 +128,18 @@ test('reporting', (t) => {
 
     engine(
       {
-        processor: noop().use(() => {
-          return function (_, file) {
-            file.message('Warning')
+        processor: noop().use(
+          /** @type {import('unified').Plugin<void[], Literal>} */
+          () => {
+            return function (_, file) {
+              file.message('Warning')
 
-            if (file.stem === 'two') {
-              file.fail('Error')
+              if (file.stem === 'two') {
+                file.fail('Error')
+              }
             }
           }
-        }),
+        ),
         cwd: path.join(fixtures, 'two-files'),
         streamError: stderr.stream,
         files: ['.'],
@@ -172,13 +185,16 @@ test('reporting', (t) => {
 
     engine(
       {
-        processor: noop().use(() => {
-          return (_, file) => {
-            if (file.stem === 'two') {
-              file.fail('Error')
+        processor: noop().use(
+          /** @type {import('unified').Plugin<void[], Literal>} */
+          () => {
+            return (_, file) => {
+              if (file.stem === 'two') {
+                file.fail('Error')
+              }
             }
           }
-        }),
+        ),
         cwd: root,
         streamError: stderr.stream,
         files: ['.'],
@@ -235,13 +251,16 @@ test('reporting', (t) => {
 
     engine(
       {
-        processor: noop().use(() => {
-          return function (_, file) {
-            if (file.stem === 'one') {
-              file.info('Info!')
+        processor: noop().use(
+          /** @type {import('unified').Plugin<void[], Literal>} */
+          () => {
+            return function (_, file) {
+              if (file.stem === 'one') {
+                file.info('Info!')
+              }
             }
           }
-        }),
+        ),
         cwd: root,
         streamError: stderr.stream,
         files: ['.'],

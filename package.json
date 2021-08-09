@@ -115,6 +115,7 @@
     "ignoreCatch": true,
     "#": "needed `any`s",
     "ignoreFiles": [
+      "lib/index.d.ts",
       "lib/configuration.d.ts"
     ]
   }

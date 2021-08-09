@@ -25,12 +25,14 @@ test('output', (t) => {
 
     engine(
       {
-        processor: noop().use(() => {
-          return function (tree) {
-            const text = /** @type {Literal} */ (tree)
-            text.value = 'two'
+        processor: noop().use(
+          /** @type {import('unified').Plugin<void[], Literal>} */
+          () => {
+            return function (tree) {
+              tree.value = 'two'
+            }
           }
-        }),
+        ),
         cwd,
         streamOut: stdout.stream,
         streamError: stderr.stream,
@@ -56,12 +58,14 @@ test('output', (t) => {
 
     engine(
       {
-        processor: noop().use(() => {
-          return function (tree) {
-            const text = /** @type {Literal} */ (tree)
-            text.value = 'two'
+        processor: noop().use(
+          /** @type {import('unified').Plugin<void[], Literal>} */
+          () => {
+            return function (tree) {
+              tree.value = 'two'
+            }
           }
-        }),
+        ),
         cwd,
         streamOut: stdout.stream,
         streamError: stderr.stream,
@@ -87,12 +91,14 @@ test('output', (t) => {
 
     engine(
       {
-        processor: noop().use(() => {
-          return function (tree) {
-            const text = /** @type {Literal} */ (tree)
-            text.value = 'two'
+        processor: noop().use(
+          /** @type {import('unified').Plugin<void[], Literal>} */
+          () => {
+            return function (tree) {
+              tree.value = 'two'
+            }
           }
-        }),
+        ),
         cwd,
         streamError: stderr.stream,
         streamOut: stdout.stream,
@@ -119,12 +125,14 @@ test('output', (t) => {
 
     engine(
       {
-        processor: noop().use(() => {
-          return function (tree) {
-            const text = /** @type {Literal} */ (tree)
-            text.value = 'two'
+        processor: noop().use(
+          /** @type {import('unified').Plugin<void[], Literal>} */
+          () => {
+            return function (tree) {
+              tree.value = 'two'
+            }
           }
-        }),
+        ),
         streamOut: stdout.stream,
         streamError: stderr.stream,
         cwd,
@@ -150,12 +158,14 @@ test('output', (t) => {
 
     engine(
       {
-        processor: noop().use(() => {
-          return function (tree) {
-            const text = /** @type {Literal} */ (tree)
-            text.value = 'two'
+        processor: noop().use(
+          /** @type {import('unified').Plugin<void[], Literal>} */
+          () => {
+            return function (tree) {
+              tree.value = 'two'
+            }
           }
-        }),
+        ),
         cwd,
         streamError: stderr.stream,
         output: true,
@@ -184,12 +194,14 @@ test('output', (t) => {
 
     engine(
       {
-        processor: noop().use(() => {
-          return function (tree) {
-            const text = /** @type {Literal} */ (tree)
-            text.value = 'two'
+        processor: noop().use(
+          /** @type {import('unified').Plugin<void[], Literal>} */
+          () => {
+            return function (tree) {
+              tree.value = 'two'
+            }
           }
-        }),
+        ),
         cwd,
         streamError: stderr.stream,
         output: 'four.txt',
@@ -219,12 +231,14 @@ test('output', (t) => {
 
     engine(
       {
-        processor: noop().use(() => {
-          return function (tree) {
-            const text = /** @type {Literal} */ (tree)
-            text.value = 'two'
+        processor: noop().use(
+          /** @type {import('unified').Plugin<void[], Literal>} */
+          () => {
+            return function (tree) {
+              tree.value = 'two'
+            }
           }
-        }),
+        ),
         cwd,
         streamError: stderr.stream,
         output: 'nested/',
@@ -294,12 +308,14 @@ test('output', (t) => {
 
     engine(
       {
-        processor: noop().use(() => {
-          return function (tree) {
-            const text = /** @type {Literal} */ (tree)
-            text.value = 'two'
+        processor: noop().use(
+          /** @type {import('unified').Plugin<void[], Literal>} */
+          () => {
+            return function (tree) {
+              tree.value = 'two'
+            }
           }
-        }),
+        ),
         cwd,
         streamError: stderr.stream,
         output: true,
@@ -327,13 +343,15 @@ test('output', (t) => {
 
     engine(
       {
-        processor: noop().use(() => {
-          return function (tree, file) {
-            const text = /** @type {Literal} */ (tree)
-            text.value = 'two'
-            file.history = []
+        processor: noop().use(
+          /** @type {import('unified').Plugin<void[], Literal>} */
+          () => {
+            return function (tree, file) {
+              tree.value = 'two'
+              file.history = []
+            }
           }
-        }),
+        ),
         cwd,
         streamError: stderr.stream,
         output: true,
@@ -457,13 +475,16 @@ test('output', (t) => {
 
     engine(
       {
-        processor: noop().use(function () {
-          Object.assign(this, {
-            Compiler() {
-              return Buffer.from('bravo')
-            }
-          })
-        }),
+        processor: noop().use(
+          /** @type {import('unified').Plugin<void[], Literal, Buffer>} */
+          function () {
+            Object.assign(this, {
+              Compiler() {
+                return Buffer.from('bravo')
+              }
+            })
+          }
+        ),
         cwd,
         streamOut: stdout.stream,
         streamError: stderr.stream,
@@ -489,13 +510,16 @@ test('output', (t) => {
 
     engine(
       {
-        processor: noop().use(function () {
-          Object.assign(this, {
-            Compiler() {
-              return null
-            }
-          })
-        }),
+        processor: noop().use(
+          /** @type {import('unified').Plugin<void[], Literal, null>} */
+          function () {
+            Object.assign(this, {
+              Compiler() {
+                return null
+              }
+            })
+          }
+        ),
         cwd,
         streamOut: stdout.stream,
         streamError: stderr.stream,
@@ -521,13 +545,16 @@ test('output', (t) => {
 
     engine(
       {
-        processor: noop().use(function () {
-          Object.assign(this, {
-            Compiler() {
-              return {type: 'some-virtual-dom'}
-            }
-          })
-        }),
+        processor: noop().use(
+          /** @type {import('unified').Plugin<void[], {kind: string}>} */
+          function () {
+            Object.assign(this, {
+              Compiler() {
+                return {kind: 'some-virtual-dom'}
+              }
+            })
+          }
+        ),
         cwd,
         streamOut: stdout.stream,
         streamError: stderr.stream,
