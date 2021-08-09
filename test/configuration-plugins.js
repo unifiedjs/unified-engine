@@ -1,8 +1,8 @@
-import path from 'path'
+import path from 'node:path'
 import test from 'tape'
+import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
-import {engine} from '../index.js'
 
 const fixtures = path.join('test', 'fixtures')
 
@@ -213,11 +213,11 @@ test('configuration', (t) => {
         streamError: stderr.stream,
         files: ['.'],
         plugins: [
-          function (/** @type {unknown} */ options) {
+          (/** @type {unknown} */ options) => {
             t.equal(options, undefined, 'should support a plugin')
           },
           [
-            function (/** @type {unknown} */ options) {
+            (/** @type {unknown} */ options) => {
               t.equal(options, o, 'should support a plugin--options tuple')
             },
             o

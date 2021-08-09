@@ -1,4 +1,4 @@
-import {PassThrough} from 'stream'
+import {PassThrough} from 'node:stream'
 
 export function spy() {
   const stream = new PassThrough()

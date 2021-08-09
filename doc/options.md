@@ -253,7 +253,7 @@ engine(
 
 streamIn.write('doc')
 
-setTimeout(function () {
+setTimeout(() => {
   streamIn.end('ument')
 }, 100)
 

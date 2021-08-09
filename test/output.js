@@ -3,13 +3,15 @@
  * @typedef {import('unist').Literal<string>} Literal
  */
 
-import fs from 'fs'
-import path from 'path'
+import {Buffer} from 'node:buffer'
+import fs from 'node:fs'
+import path from 'node:path'
+import process from 'node:process'
 import test from 'tape'
 import {toVFile} from 'to-vfile'
+import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
-import {engine} from '../index.js'
 
 const fixtures = path.join(process.cwd(), 'test', 'fixtures')
 
@@ -27,10 +29,8 @@ test('output', (t) => {
       {
         processor: noop().use(
           /** @type {import('unified').Plugin<void[], Literal>} */
-          () => {
-            return function (tree) {
-              tree.value = 'two'
-            }
+          () => (tree) => {
+            tree.value = 'two'
           }
         ),
         cwd,
@@ -60,10 +60,8 @@ test('output', (t) => {
       {
         processor: noop().use(
           /** @type {import('unified').Plugin<void[], Literal>} */
-          () => {
-            return function (tree) {
-              tree.value = 'two'
-            }
+          () => (tree) => {
+            tree.value = 'two'
           }
         ),
         cwd,
@@ -93,10 +91,8 @@ test('output', (t) => {
       {
         processor: noop().use(
           /** @type {import('unified').Plugin<void[], Literal>} */
-          () => {
-            return function (tree) {
-              tree.value = 'two'
-            }
+          () => (tree) => {
+            tree.value = 'two'
           }
         ),
         cwd,
@@ -127,10 +123,8 @@ test('output', (t) => {
       {
         processor: noop().use(
           /** @type {import('unified').Plugin<void[], Literal>} */
-          () => {
-            return function (tree) {
-              tree.value = 'two'
-            }
+          () => (tree) => {
+            tree.value = 'two'
           }
         ),
         streamOut: stdout.stream,
@@ -160,10 +154,8 @@ test('output', (t) => {
       {
         processor: noop().use(
           /** @type {import('unified').Plugin<void[], Literal>} */
-          () => {
-            return function (tree) {
-              tree.value = 'two'
-            }
+          () => (tree) => {
+            tree.value = 'two'
           }
         ),
         cwd,
@@ -196,10 +188,8 @@ test('output', (t) => {
       {
         processor: noop().use(
           /** @type {import('unified').Plugin<void[], Literal>} */
-          () => {
-            return function (tree) {
-              tree.value = 'two'
-            }
+          () => (tree) => {
+            tree.value = 'two'
           }
         ),
         cwd,
@@ -233,10 +223,8 @@ test('output', (t) => {
       {
         processor: noop().use(
           /** @type {import('unified').Plugin<void[], Literal>} */
-          () => {
-            return function (tree) {
-              tree.value = 'two'
-            }
+          () => (tree) => {
+            tree.value = 'two'
           }
         ),
         cwd,
@@ -310,10 +298,8 @@ test('output', (t) => {
       {
         processor: noop().use(
           /** @type {import('unified').Plugin<void[], Literal>} */
-          () => {
-            return function (tree) {
-              tree.value = 'two'
-            }
+          () => (tree) => {
+            tree.value = 'two'
           }
         ),
         cwd,
@@ -345,11 +331,9 @@ test('output', (t) => {
       {
         processor: noop().use(
           /** @type {import('unified').Plugin<void[], Literal>} */
-          () => {
-            return function (tree, file) {
-              tree.value = 'two'
-              file.history = []
-            }
+          () => (tree, file) => {
+            tree.value = 'two'
+            file.history = []
           }
         ),
         cwd,

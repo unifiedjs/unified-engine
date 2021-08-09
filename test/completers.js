@@ -3,12 +3,12 @@
  * @typedef {import('../index.js').FileSet} FileSet
  */
 
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
 import test from 'tape'
+import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
-import {engine} from '../index.js'
 
 const fixtures = path.join('test', 'fixtures')
 
@@ -30,7 +30,7 @@ test('completers', (t) => {
         streamError: stderr.stream,
         plugins: [
           /** @type {FileSetPlugin} */
-          function (_, set) {
+          (_, set) => {
             t.equal(typeof set, 'object', 'should pass a set')
             t.equal(typeof set.use, 'function', 'should have a `use` method')
             t.equal(typeof set.add, 'function', 'should have an `add` method')
@@ -103,7 +103,7 @@ test('completers', (t) => {
         streamError: stderr.stream,
         plugins: [
           /** @type {FileSetPlugin} */
-          function (_, set) {
+          (_, set) => {
             set.add('bar.text')
           }
         ],

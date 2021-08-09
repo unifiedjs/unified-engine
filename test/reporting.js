@@ -2,13 +2,14 @@
  * @typedef {import('unist').Literal<string>} Literal
  */
 
-import path from 'path'
+import path from 'node:path'
+import process from 'node:process'
 import test from 'tape'
 import stripAnsi from 'strip-ansi'
 import vfileReporterPretty from 'vfile-reporter-pretty'
+import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
-import {engine} from '../index.js'
 
 const fixtures = path.join('test', 'fixtures')
 
@@ -39,10 +40,8 @@ test('reporting', (t) => {
       {
         processor: noop().use(
           /** @type {import('unified').Plugin<void[], Literal>} */
-          () => {
-            return function (_, file) {
-              file.message('Warning')
-            }
+          () => (_, file) => {
+            file.message('Warning')
           }
         ),
         cwd: path.join(fixtures, 'one-file'),
@@ -73,11 +72,9 @@ test('reporting', (t) => {
       {
         processor: noop().use(
           /** @type {import('unified').Plugin<void[], Literal>} */
-          () => {
-            return function (_, file) {
-              if (file.stem === 'two') {
-                file.message('Warning')
-              }
+          () => (_, file) => {
+            if (file.stem === 'two') {
+              file.message('Warning')
             }
           }
         ),
@@ -130,13 +127,11 @@ test('reporting', (t) => {
       {
         processor: noop().use(
           /** @type {import('unified').Plugin<void[], Literal>} */
-          () => {
-            return function (_, file) {
-              file.message('Warning')
+          () => (_, file) => {
+            file.message('Warning')
 
-              if (file.stem === 'two') {
-                file.fail('Error')
-              }
+            if (file.stem === 'two') {
+              file.fail('Error')
             }
           }
         ),
@@ -187,11 +182,9 @@ test('reporting', (t) => {
       {
         processor: noop().use(
           /** @type {import('unified').Plugin<void[], Literal>} */
-          () => {
-            return (_, file) => {
-              if (file.stem === 'two') {
-                file.fail('Error')
-              }
+          () => (_, file) => {
+            if (file.stem === 'two') {
+              file.fail('Error')
             }
           }
         ),
@@ -253,11 +246,9 @@ test('reporting', (t) => {
       {
         processor: noop().use(
           /** @type {import('unified').Plugin<void[], Literal>} */
-          () => {
-            return function (_, file) {
-              if (file.stem === 'one') {
-                file.info('Info!')
-              }
+          () => (_, file) => {
+            if (file.stem === 'one') {
+              file.info('Info!')
             }
           }
         ),

@@ -54,6 +54,7 @@
     "vfile-statistics": "^2.0.0"
   },
   "devDependencies": {
+    "@types/glob": "^7.0.0",
     "@types/tape": "^4.0.0",
     "c8": "^7.0.0",
     "prettier": "^2.0.0",
@@ -70,7 +71,7 @@
     "vfile": "^5.0.0",
     "vfile-reporter-json": "^3.0.0",
     "vfile-reporter-pretty": "^6.0.0",
-    "xo": "^0.39.0"
+    "xo": "^0.44.0"
   },
   "scripts": {
     "build": "rimraf \"lib/**/*.d.ts\" \"test/**/*.d.ts\" \"*.d.ts\" && tsc && type-coverage",
@@ -106,7 +107,15 @@
       "capitalized-comments": "off",
       "complexity": "off",
       "unicorn/no-this-assignment": "off"
-    }
+    },
+    "overrides": [
+      {
+        "files": "test/fixtures/**/*.js",
+        "rules": {
+          "unicorn/prefer-module": "off"
+        }
+      }
+    ]
   },
   "typeCoverage": {
     "atLeast": 100,

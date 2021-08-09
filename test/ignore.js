@@ -1,9 +1,10 @@
-import fs from 'fs'
-import path from 'path'
+import fs from 'node:fs'
+import path from 'node:path'
+import process from 'node:process'
 import test from 'tape'
+import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
-import {engine} from '../index.js'
 
 const fixtures = path.join('test', 'fixtures')
 

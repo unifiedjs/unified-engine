@@ -4,11 +4,11 @@
  * @typedef {import('unist').Literal} Literal
  */
 
-import path from 'path'
+import path from 'node:path'
 import test from 'tape'
+import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
-import {engine} from '../index.js'
 
 const fixtures = path.join('test', 'fixtures')
 
@@ -109,17 +109,13 @@ test('plugins', (t) => {
         files: ['.'],
         extensions: ['txt'],
         plugins: [
-          function () {
-            return function () {
-              t.pass('transformer')
-            }
+          () => () => {
+            t.pass('transformer')
           },
           [
             /** @param {unknown} options */
-            function (options) {
-              return function () {
-                t.deepEqual(options, {alpha: true}, 'transformer')
-              }
+            (options) => () => {
+              t.deepEqual(options, {alpha: true}, 'transformer')
             },
             {alpha: true}
           ]

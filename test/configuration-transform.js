@@ -3,11 +3,11 @@
  * @typedef {import('../index.js').Preset['plugins']} Plugins
  */
 
-import path from 'path'
+import path from 'node:path'
 import test from 'tape'
+import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
-import {engine} from '../index.js'
 
 const fixtures = path.join('test', 'fixtures')
 

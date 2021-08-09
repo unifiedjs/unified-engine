@@ -2,14 +2,14 @@
  * @typedef {import('unist').Literal<string>} Literal
  */
 
-import fs from 'fs'
-import path from 'path'
-import {PassThrough} from 'stream'
+import fs from 'node:fs'
+import path from 'node:path'
+import {PassThrough} from 'node:stream'
 import test from 'tape'
 import {toVFile} from 'to-vfile'
+import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
-import {engine} from '../index.js'
 
 const fixtures = path.join('test', 'fixtures')
 
@@ -52,10 +52,8 @@ test('tree', (t) => {
       {
         processor: noop().use(
           /** @type {import('unified').Plugin<void[], Literal>} */
-          () => {
-            return function (tree) {
-              tree.value = 'two'
-            }
+          () => (tree) => {
+            tree.value = 'two'
           }
         ),
         cwd,
@@ -93,10 +91,8 @@ test('tree', (t) => {
       {
         processor: noop().use(
           /** @type {import('unified').Plugin<void[], Literal>} */
-          () => {
-            return function (tree) {
-              tree.value = 'two'
-            }
+          () => (tree) => {
+            tree.value = 'two'
           }
         ),
         cwd,
@@ -130,10 +126,8 @@ test('tree', (t) => {
       {
         processor: noop().use(
           /** @type {import('unified').Plugin<void[], Literal>} */
-          () => {
-            return function (tree) {
-              tree.value = 'two'
-            }
+          () => (tree) => {
+            tree.value = 'two'
           }
         ),
         cwd,
