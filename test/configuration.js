@@ -12,7 +12,7 @@ import {spy} from './util/spy.js'
 const fixtures = path.join('test', 'fixtures')
 
 test('configuration', (t) => {
-  t.plan(14)
+  t.plan(15)
 
   t.test('should fail fatally when custom rc files are missing', (t) => {
     const stderr = spy()
@@ -174,7 +174,7 @@ test('configuration', (t) => {
   t.test('should support `.rc.mjs` module', (t) => {
     const stderr = spy()
 
-    t.plan(1)
+    t.plan(2)
 
     engine(
       {
@@ -183,7 +183,19 @@ test('configuration', (t) => {
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
-        extensions: ['txt']
+        extensions: ['txt'],
+        plugins: [
+          function () {
+            const settings = this.data('settings')
+            return () => {
+              t.deepEqual(
+                settings,
+                {foo: 'bar'},
+                'should process files w/ settings'
+              )
+            }
+          }
+        ]
       },
       (error, code) => {
         t.deepEqual(
@@ -195,7 +207,43 @@ test('configuration', (t) => {
     )
   })
 
-  t.test('should support `.rc.yaml` cpmfog files', (t) => {
+  t.test('should support `.rc.cjs` module', (t) => {
+    const stderr = spy()
+
+    t.plan(2)
+
+    engine(
+      {
+        processor: noop,
+        cwd: path.join(fixtures, 'rc-module-cjs'),
+        streamError: stderr.stream,
+        files: ['.'],
+        rcName: '.foorc',
+        extensions: ['txt'],
+        plugins: [
+          function () {
+            const settings = this.data('settings')
+            return () => {
+              t.deepEqual(
+                settings,
+                {foo: 'bar'},
+                'should process files w/ settings'
+              )
+            }
+          }
+        ]
+      },
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'one.txt: no issues found\n'],
+          'should use Node’s module caching (coverage)'
+        )
+      }
+    )
+  })
+
+  t.test('should support `.rc.yaml` config files', (t) => {
     const stderr = spy()
 
     t.plan(1)
@@ -229,7 +277,7 @@ test('configuration', (t) => {
   t.test('should support custom rc files', (t) => {
     const stderr = spy()
 
-    t.plan(1)
+    t.plan(5)
 
     engine(
       {
@@ -238,7 +286,19 @@ test('configuration', (t) => {
         streamError: stderr.stream,
         files: ['.'],
         rcPath: '.foorc',
-        extensions: ['txt']
+        extensions: ['txt'],
+        plugins: [
+          function () {
+            const settings = this.data('settings')
+            return () => {
+              t.deepEqual(
+                settings,
+                {foo: 'bar'},
+                'should process files w/ settings'
+              )
+            }
+          }
+        ]
       },
       (error, code) => {
         const expected = [
@@ -289,7 +349,7 @@ test('configuration', (t) => {
   t.test('should support custom rc files', (t) => {
     const stderr = spy()
 
-    t.plan(1)
+    t.plan(5)
 
     engine(
       {
@@ -298,7 +358,19 @@ test('configuration', (t) => {
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
-        extensions: ['txt']
+        extensions: ['txt'],
+        plugins: [
+          function () {
+            const settings = this.data('settings')
+            return () => {
+              t.deepEqual(
+                settings,
+                {foo: 'bar'},
+                'should process files w/ settings'
+              )
+            }
+          }
+        ]
       },
       (error, code) => {
         const expected = [

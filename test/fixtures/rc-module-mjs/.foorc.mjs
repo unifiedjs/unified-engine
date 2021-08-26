@@ -1,6 +1,8 @@
 /** @type {import('../../../../index.js').Preset} */
 const config = {
-  settings: []
+  settings: {
+    foo: 'bar'
+  }
 }
 
 export default config

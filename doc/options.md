@@ -672,7 +672,7 @@ root[1] (1:1-2:1, 0-27)
 
 ## `options.rcName`
 
-Name of [configuration][configure] file to load.
+File path of [configuration][configure] file to load.
 If given and [`detectConfig`][detect-config] is not `false`, then:
 
 *   `$rcName` and `$rcName.json` are loaded and parsed as JSON
@@ -688,8 +688,8 @@ If given and [`detectConfig`][detect-config] is not `false`, then:
 ###### Example
 
 The following example processes `readme.md` and allows configuration from
-`.remarkrc`, `.remarkrc.yml`, `.remarkrc.yaml`, `.remarkrc.js`, `.remarkrc.cjs`,
-and `.remarkrc.mjs` files.
+`.remarkrc`, `.remarkrc.json`, `.remarkrc.yml`, `.remarkrc.yaml`,
+`.remarkrc.js`, `.remarkrc.cjs`, and `.remarkrc.mjs` files.
 
 ```js
 import {engine} from 'unified-engine'
@@ -744,8 +744,8 @@ function done(error) {
 ## `options.detectConfig`
 
 Whether to search for [configuration][configure] files ([`$rcName`][rc-name],
-`$rcName.js`, `$rcName.yaml`, and `package.json` with
-[`$packageField`][package-field]).
+`$rcName.json`, `$rcName.cjs`, `$rcName.mjs`, `$rcName.js`, `$rcName.yaml`,
+`$rcName.yml`, and `package.json` with [`$packageField`][package-field]).
 
 *   Type: `boolean`, optional
 *   Default: `true` if [`rcName`][rc-name] or [`packageField`][package-field]
@@ -785,7 +785,7 @@ If the file’s extension is `yml` or `yaml`, it’s loaded as YAML.
 If it’s `js`, it’s either `require`d or `import`ed.
 If it’s `cjs`, it’s `require`d.
 If it’s `mjs`, it’s `import`ed.
-If the file’s basename is `package.json`, the property at
+If the file’s basename is `package.json`, the value at
 [`packageField`][package-field] is used.
 Otherwise, the file is parsed as JSON.
 
