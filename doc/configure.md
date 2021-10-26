@@ -49,7 +49,7 @@ exports.plugins = ['./script/natural-language.js', 'lint-recommended', 'license'
 exports.settings = {bullet: '*'}
 ```
 
-Using ES module syntax, **rc.mjs** could look as folows:
+When using ESM (ECMAScript modules), **rc.mjs** could look as folows:
 
 ```js
 export default {
