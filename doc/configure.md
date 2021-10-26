@@ -49,6 +49,15 @@ exports.plugins = ['./script/natural-language.js', 'lint-recommended', 'license'
 exports.settings = {bullet: '*'}
 ```
 
+Using ES module syntax, **rc.mjs** could look as folows:
+
+```js
+export default {
+  plugins: ['./script/natural-language.js', 'lint-recommended', 'license'],
+  settings: {bullet: '*'}
+}
+```
+
 Another example, **rc.yaml**, could look as follows:
 
 ```js
