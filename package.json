@@ -71,7 +71,7 @@
     "vfile": "^5.0.0",
     "vfile-reporter-json": "^3.0.0",
     "vfile-reporter-pretty": "^6.0.0",
-    "xo": "^0.44.0"
+    "xo": "^0.45.0"
   },
   "scripts": {
     "build": "rimraf \"lib/**/*.d.ts\" \"test/**/*.d.ts\" \"*.d.ts\" && tsc && type-coverage",
