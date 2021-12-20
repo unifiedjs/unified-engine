@@ -33,7 +33,7 @@
     "@types/debug": "^4.0.0",
     "@types/is-empty": "^1.0.0",
     "@types/js-yaml": "^4.0.0",
-    "@types/node": "^16.0.0",
+    "@types/node": "^17.0.0",
     "@types/unist": "^2.0.0",
     "concat-stream": "^2.0.0",
     "debug": "^4.0.0",
@@ -45,7 +45,7 @@
     "is-plain-obj": "^4.0.0",
     "js-yaml": "^4.0.0",
     "load-plugin": "^4.0.0",
-    "parse-json": "^5.0.0",
+    "parse-json": "^6.0.0",
     "to-vfile": "^7.0.0",
     "trough": "^2.0.0",
     "unist-util-inspect": "^7.0.0",
@@ -71,7 +71,7 @@
     "vfile": "^5.0.0",
     "vfile-reporter-json": "^3.0.0",
     "vfile-reporter-pretty": "^6.0.0",
-    "xo": "^0.45.0"
+    "xo": "^0.47.0"
   },
   "scripts": {
     "build": "rimraf \"lib/**/*.d.ts\" \"test/**/*.d.ts\" \"*.d.ts\" && tsc && type-coverage",
@@ -112,6 +112,7 @@
       {
         "files": "test/fixtures/**/*.js",
         "rules": {
+          "unicorn/no-empty-file": "off",
           "unicorn/prefer-module": "off"
         }
       }
