@@ -13,7 +13,7 @@ const cross = process.platform === 'win32' ? '×' : '✖'
 const fixtures = path.join('test', 'fixtures')
 
 test('input', (t) => {
-  t.plan(20)
+  t.plan(21)
 
   t.test('should fail without input', (t) => {
     const stream = new PassThrough()
@@ -424,6 +424,48 @@ test('input', (t) => {
         t.deepEqual(
           [error, code, stderr()],
           [null, 0, 'not-existing-2.txt: no issues found\n'],
+          'should report'
+        )
+      }
+    )
+  })
+
+  t.test('should not attempt to read files with `value` (3)', (t) => {
+    const stderr = spy()
+    const cwd = path.join(fixtures, 'empty')
+    const file1 = toVFile({
+      path: path.join(cwd, 'not-existing-1.txt'),
+      value: 'foo'
+    })
+    const file2 = toVFile({
+      path: path.join(cwd, 'not-existing-2.txt'),
+      value: 'bar'
+    })
+
+    t.plan(1)
+
+    engine(
+      {
+        processor: noop().use(
+          /** @type {import('unified').Plugin<[], import('unist').Node>} */
+          function () {
+            return (_, file) => {
+              file.message('!')
+            }
+          }
+        ),
+        cwd,
+        streamError: stderr.stream,
+        files: [file1, file2]
+      },
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [
+            null,
+            0,
+            'not-existing-1.txt\n  1:1  warning  !\n\nnot-existing-2.txt\n  1:1  warning  !\n\n⚠ 2 warnings\n'
+          ],
           'should report'
         )
       }
