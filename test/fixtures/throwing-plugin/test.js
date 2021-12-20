@@ -1,5 +1,5 @@
 /**
- * @type {import('unified').Plugin<unknown[]>}
+ * @type {import('unified').Plugin<Array<unknown>>}
  * @param {unknown} options
  */
 module.exports = function (options) {

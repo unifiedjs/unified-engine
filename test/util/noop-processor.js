@@ -4,7 +4,7 @@
 
 import {unified} from 'unified'
 
-/** @type {import('unified').Plugin<void[], string, Literal>} */
+/** @type {import('unified').Plugin<Array<void>, string, Literal>} */
 function parse() {
   Object.assign(this, {
     /** @type {import('unified').ParserFunction<Literal>} */
@@ -14,7 +14,7 @@ function parse() {
   })
 }
 
-/** @type {import('unified').Plugin<void[], Literal, string>} */
+/** @type {import('unified').Plugin<Array<void>, Literal, string>} */
 function stringify() {
   Object.assign(this, {
     /** @type {import('unified').CompilerFunction<Literal, string>} */

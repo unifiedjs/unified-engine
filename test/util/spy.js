@@ -2,7 +2,7 @@ import {PassThrough} from 'node:stream'
 
 export function spy() {
   const stream = new PassThrough()
-  /** @type {string[]} */
+  /** @type {Array<string>} */
   const output = []
   const originalWrite = stream.write
 

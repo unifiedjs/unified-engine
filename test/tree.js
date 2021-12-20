@@ -51,7 +51,7 @@ test('tree', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<void[], Literal>} */
+          /** @type {import('unified').Plugin<Array<void>, Literal>} */
           () => (tree) => {
             tree.value = 'two'
           }
@@ -90,7 +90,7 @@ test('tree', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<void[], Literal>} */
+          /** @type {import('unified').Plugin<Array<void>, Literal>} */
           () => (tree) => {
             tree.value = 'two'
           }
@@ -125,7 +125,7 @@ test('tree', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<void[], Literal>} */
+          /** @type {import('unified').Plugin<Array<void>, Literal>} */
           () => (tree) => {
             tree.value = 'two'
           }

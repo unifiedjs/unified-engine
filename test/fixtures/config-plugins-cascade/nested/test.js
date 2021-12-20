@@ -1,4 +1,4 @@
-/** @type {import('unified').Plugin<unknown[]>} */
+/** @type {import('unified').Plugin<Array<unknown>>} */
 module.exports = function () {
   /** @type {import('tape').Test} */
   // @ts-expect-error: hush.

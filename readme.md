@@ -85,9 +85,9 @@ done.
     — unified processor to transform files
 *   [`cwd`][cwd] (`string`, default: `process.cwd()`)
     — Directory to search files in, load plugins from, and more
-*   [`files`][files] (`Array.<string|VFile>`, optional)
+*   [`files`][files] (`Array<string|VFile>`, optional)
     — Paths or globs to files and directories, or virtual files, to process
-*   [`extensions`][extensions] (`Array.<string>`, optional)
+*   [`extensions`][extensions] (`Array<string>`, optional)
     — If `files` matches directories, include files with `extensions`
 *   [`streamIn`][stream-in] (`ReadableStream`, default: `process.stdin`)
     — Stream to read from if no files are found or given
@@ -133,7 +133,7 @@ done.
     default: `'dir'`)
     — Resolve patterns in `ignorePath` from the current working directory or the
     file’s directory
-*   [`ignorePatterns`][ignore-patterns] (`Array.<string>`, optional)
+*   [`ignorePatterns`][ignore-patterns] (`Array<string>`, optional)
     — Patterns to ignore in addition to ignore files, if any
 *   [`silentlyIgnore`][silently-ignore] (`boolean`, default: `false`)
     — Skip given files if they are ignored

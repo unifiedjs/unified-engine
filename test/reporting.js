@@ -39,7 +39,7 @@ test('reporting', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<void[], Literal>} */
+          /** @type {import('unified').Plugin<Array<void>, Literal>} */
           () => (_, file) => {
             file.message('Warning')
           }
@@ -71,7 +71,7 @@ test('reporting', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<void[], Literal>} */
+          /** @type {import('unified').Plugin<Array<void>, Literal>} */
           () => (_, file) => {
             if (file.stem === 'two') {
               file.message('Warning')
@@ -126,7 +126,7 @@ test('reporting', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<void[], Literal>} */
+          /** @type {import('unified').Plugin<Array<void>, Literal>} */
           () => (_, file) => {
             file.message('Warning')
 
@@ -181,7 +181,7 @@ test('reporting', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<void[], Literal>} */
+          /** @type {import('unified').Plugin<Array<void>, Literal>} */
           () => (_, file) => {
             if (file.stem === 'two') {
               file.fail('Error')
@@ -245,7 +245,7 @@ test('reporting', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<void[], Literal>} */
+          /** @type {import('unified').Plugin<Array<void>, Literal>} */
           () => (_, file) => {
             if (file.stem === 'one') {
               file.info('Info!')

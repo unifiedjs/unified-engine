@@ -130,7 +130,7 @@ Or an object:
 }
 ```
 
-*   Type: `Array.<string>` or `Object.<*>`
+*   Type: `Array<string>` or `Record<string, unknown>`
 
 <!-- Definitions -->
 

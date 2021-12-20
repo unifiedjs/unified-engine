@@ -28,7 +28,7 @@ test('output', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<void[], Literal>} */
+          /** @type {import('unified').Plugin<Array<void>, Literal>} */
           () => (tree) => {
             tree.value = 'two'
           }
@@ -59,7 +59,7 @@ test('output', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<void[], Literal>} */
+          /** @type {import('unified').Plugin<Array<void>, Literal>} */
           () => (tree) => {
             tree.value = 'two'
           }
@@ -90,7 +90,7 @@ test('output', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<void[], Literal>} */
+          /** @type {import('unified').Plugin<Array<void>, Literal>} */
           () => (tree) => {
             tree.value = 'two'
           }
@@ -122,7 +122,7 @@ test('output', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<void[], Literal>} */
+          /** @type {import('unified').Plugin<Array<void>, Literal>} */
           () => (tree) => {
             tree.value = 'two'
           }
@@ -153,7 +153,7 @@ test('output', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<void[], Literal>} */
+          /** @type {import('unified').Plugin<Array<void>, Literal>} */
           () => (tree) => {
             tree.value = 'two'
           }
@@ -187,7 +187,7 @@ test('output', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<void[], Literal>} */
+          /** @type {import('unified').Plugin<Array<void>, Literal>} */
           () => (tree) => {
             tree.value = 'two'
           }
@@ -222,7 +222,7 @@ test('output', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<void[], Literal>} */
+          /** @type {import('unified').Plugin<Array<void>, Literal>} */
           () => (tree) => {
             tree.value = 'two'
           }
@@ -297,7 +297,7 @@ test('output', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<void[], Literal>} */
+          /** @type {import('unified').Plugin<Array<void>, Literal>} */
           () => (tree) => {
             tree.value = 'two'
           }
@@ -330,7 +330,7 @@ test('output', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<void[], Literal>} */
+          /** @type {import('unified').Plugin<Array<void>, Literal>} */
           () => (tree, file) => {
             tree.value = 'two'
             file.history = []
@@ -460,7 +460,7 @@ test('output', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<void[], Literal, Buffer>} */
+          /** @type {import('unified').Plugin<Array<void>, Literal, Buffer>} */
           function () {
             Object.assign(this, {
               Compiler() {
@@ -495,7 +495,7 @@ test('output', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<void[], Literal, null>} */
+          /** @type {import('unified').Plugin<Array<void>, Literal, null>} */
           function () {
             Object.assign(this, {
               Compiler() {
@@ -530,7 +530,7 @@ test('output', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<void[], {kind: string}>} */
+          /** @type {import('unified').Plugin<Array<void>, {kind: string}>} */
           function () {
             Object.assign(this, {
               Compiler() {

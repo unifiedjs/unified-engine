@@ -447,7 +447,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop().use(
-          /** @type {import('unified').Plugin<[], import('unist').Node>} */
+          /** @type {import('unified').Plugin<Array<void>, import('unist').Node>} */
           function () {
             return (_, file) => {
               file.message('!')

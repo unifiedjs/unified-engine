@@ -106,7 +106,7 @@ Directories and globs to directories can be given alongside
 This searching will not include `node_modules` or hidden directories (those
 starting with a dot, `.`, like `.git`).
 
-*   Type: `Array.<string>`
+*   Type: `Array<string>`
 *   Default: `[]`
 
 ###### Example
@@ -140,7 +140,7 @@ files whose extension matches the given `extensions`.
 In addition, if [`treeIn`][tree-in] is turned on and [`output`][output] is
 `true` or points to a directory, generated files are given the first extension.
 
-*   Type: `Array.<string>`
+*   Type: `Array<string>`
 *   Default: `[]`
 
 ###### Example
@@ -1016,7 +1016,7 @@ function done(error) {
 
 Additional patterns to use to ignore files.
 
-*   Type: `Array.<string>`, optional
+*   Type: `Array<string>`, optional
 
 ###### Example
 
