@@ -8,7 +8,9 @@ import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const cross = process.platform === 'win32' ? '×' : '✖'
+const windows = process.platform === 'win32'
+const cross = windows ? '×' : '✖'
+const danger = windows ? '‼' : '⚠'
 
 const fixtures = path.join('test', 'fixtures')
 
@@ -464,7 +466,9 @@ test('input', (t) => {
           [
             null,
             0,
-            'not-existing-1.txt\n  1:1  warning  !\n\nnot-existing-2.txt\n  1:1  warning  !\n\n⚠ 2 warnings\n'
+            'not-existing-1.txt\n  1:1  warning  !\n\nnot-existing-2.txt\n  1:1  warning  !\n\n' +
+              danger +
+              ' 2 warnings\n'
           ],
           'should report'
         )
@@ -472,7 +476,7 @@ test('input', (t) => {
     )
   })
 
-  t.test('should not attempt to read files with `value` (3)', (t) => {
+  t.test('should not attempt to read files with `value` (4)', (t) => {
     const stderr = spy()
     const cwd = path.join(fixtures, 'empty')
     const file = toVFile({value: 'foo'})
