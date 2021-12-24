@@ -17,6 +17,8 @@ The following projects wrap the engine:
 *   [`unified-args`][args] — Create CLIs for processors
 *   [`unified-engine-gulp`][gulp] — Create Gulp plugins
 *   [`unified-engine-atom`][atom] — Create Atom Linters for processors
+*   [`unified-language-server`][language-server] — Create language servers for
+    processors
 
 ## Install
 
@@ -329,5 +331,7 @@ abide by its terms.
 [atom]: https://github.com/unifiedjs/unified-engine-atom
 
 [gulp]: https://github.com/unifiedjs/unified-engine-gulp
+
+[language-server]: https://github.com/unifiedjs/unified-language-server
 
 [args]: https://github.com/unifiedjs/unified-args
