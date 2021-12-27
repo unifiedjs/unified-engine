@@ -68,6 +68,7 @@ function done(error) {
 *   [Plugins](#plugins)
 *   [Configuration](#configuration)
 *   [Ignoring](#ignoring)
+*   [Security](#security)
 *   [Contribute](#contribute)
 *   [License](#license)
 
@@ -187,6 +188,13 @@ work.
 ## Ignoring
 
 [`doc/ignore.md`][ignore] describes in detail how ignore files work.
+
+## Security
+
+`unified-engine` loads configuration files, plugins, and presets from your workspace.
+Plugins and presets contain JavaScript which will be executed.
+Configuration files may also contain JavaScript which will be executed.
+Only use `unified-engine` in workspaces you trust.
 
 ## Contribute
 
