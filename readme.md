@@ -191,10 +191,11 @@ work.
 
 ## Security
 
-`unified-engine` loads configuration files, plugins, and presets from your workspace.
-Plugins and presets contain JavaScript which will be executed.
-Configuration files may also contain JavaScript which will be executed.
-Only use `unified-engine` in workspaces you trust.
+`unified-engine` loads and evaluates configuration files, plugins, and presets
+from the file system (often from `node_modules/`).
+That means code that is on your file system runs.
+Make sure you trust the workspace where you run `unified-engine` and be careful
+with packages from npm and changes made by contributors.
 
 ## Contribute
 
