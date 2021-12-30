@@ -68,6 +68,7 @@ function done(error) {
 *   [Plugins](#plugins)
 *   [Configuration](#configuration)
 *   [Ignoring](#ignoring)
+*   [Security](#security)
 *   [Contribute](#contribute)
 *   [License](#license)
 
@@ -187,6 +188,14 @@ work.
 ## Ignoring
 
 [`doc/ignore.md`][ignore] describes in detail how ignore files work.
+
+## Security
+
+`unified-engine` loads and evaluates configuration files, plugins, and presets
+from the file system (often from `node_modules/`).
+That means code that is on your file system runs.
+Make sure you trust the workspace where you run `unified-engine` and be careful
+with packages from npm and changes made by contributors.
 
 ## Contribute
 
