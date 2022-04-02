@@ -25,6 +25,9 @@ The format of each pattern in `ignorePattern` is the same as a line in an ignore
 file.
 Patterns and files are resolved based on the current working directory.
 
+It is also possible to ignore files that do not have an associated detected
+configuration file by turning on [`ignoreUnconfigured`][ignore-unconfigured].
+
 ## Ignoring
 
 Ignoring is used when searching for files in directories.
@@ -78,6 +81,8 @@ test/{input,tree}
 [ignore-path]: options.md#optionsignorepath
 
 [ignore-patterns]: options.md#optionsignorepatterns
+
+[ignore-unconfigured]: options.md#optionsignoreunconfigured
 
 [ignore-path-resolve-from]: options.md#optionsignorepathresolvefrom
 

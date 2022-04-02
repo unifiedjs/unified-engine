@@ -29,6 +29,7 @@
 *   [`options.ignorePath`](#optionsignorepath)
 *   [`options.ignorePathResolveFrom`](#optionsignorepathresolvefrom)
 *   [`options.ignorePatterns`](#optionsignorepatterns)
+*   [`options.ignoreUnconfigured`](#optionsignoreunconfigured)
 *   [`options.silentlyIgnore`](#optionssilentlyignore)
 *   [`options.plugins`](#optionsplugins)
 *   [`options.pluginPrefix`](#optionspluginprefix)
@@ -1033,6 +1034,41 @@ engine(
     files: ['.'],
     extensions: ['md'],
     ignorePatterns: ['readme.md']
+  },
+  done
+)
+
+function done(error) {
+  if (error) throw error
+}
+```
+
+## `options.ignoreUnconfigured`
+
+Ignore files that do not have an associated detected configuration file.
+
+*   Type: `boolean`, default: `false`
+
+> 👉 **Note**: this option cannot be turned on in combination with `rcPath` or
+> `detectConfig: false`.
+> Additionally, at least one of `rcName` or `packageField` must be defined.
+
+###### Example
+
+The following example processes files in the current working directory with an
+`md` extension, but only if there is an explicit `.remarkrc` config file near
+(upwards) to them:
+
+```js
+import {engine} from 'unified-engine'
+import {remark} from 'remark'
+
+engine(
+  {
+    processor: remark(),
+    files: ['.'],
+    extensions: ['md'],
+    rcName: '.remarkrc'
   },
   done
 )

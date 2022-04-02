@@ -15,7 +15,7 @@ const danger = windows ? '‼' : '⚠'
 const fixtures = path.join('test', 'fixtures')
 
 test('input', (t) => {
-  t.plan(21)
+  t.plan(22)
 
   t.test('should fail without input', (t) => {
     const stream = new PassThrough()
@@ -590,6 +590,90 @@ test('input', (t) => {
         const expected = [
           'nested' + path.sep + 'three.txt: no issues found',
           'one.txt: no issues found',
+          ''
+        ].join('\n')
+
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, expected],
+          'should report'
+        )
+      }
+    )
+  })
+
+  t.test('ignoreUnconfigured', (t) => {
+    t.plan(4)
+
+    engine(
+      {
+        processor: unified(),
+        cwd: path.join(fixtures, 'empty'),
+        streamError: spy().stream,
+        files: ['.'],
+        rcPath: '123',
+        ignoreUnconfigured: true
+      },
+      (error) => {
+        t.match(
+          String(error),
+          /Cannot accept both `rcPath` and `ignoreUnconfigured`/,
+          'should fail w/ `ignoreUnconfigured` and `rcPath`'
+        )
+      }
+    )
+
+    engine(
+      {
+        processor: unified(),
+        cwd: path.join(fixtures, 'empty'),
+        streamError: spy().stream,
+        files: ['.'],
+        ignoreUnconfigured: true
+      },
+      (error) => {
+        t.match(
+          String(error),
+          /Missing `rcName` or `packageField` with `ignoreUnconfigured`/,
+          'should fail w/ `ignoreUnconfigured` and w/o `rcName`, `packageField`'
+        )
+      }
+    )
+
+    engine(
+      {
+        processor: unified(),
+        cwd: path.join(fixtures, 'empty'),
+        streamError: spy().stream,
+        files: ['.'],
+        rcName: 'x',
+        packageField: 'y',
+        detectConfig: false,
+        ignoreUnconfigured: true
+      },
+      (error) => {
+        t.match(
+          String(error),
+          /Cannot use `detectConfig: false` with `ignoreUnconfigured`/,
+          'should fail w/ `ignoreUnconfigured` and `detectConfig: false`'
+        )
+      }
+    )
+
+    const stderr = spy()
+
+    engine(
+      {
+        processor: noop,
+        cwd: path.join(fixtures, 'config-ignore-unconfigured'),
+        streamError: stderr.stream,
+        files: ['.'],
+        rcName: '.foorc',
+        ignoreUnconfigured: true
+      },
+      (error, code) => {
+        const expected = [
+          'folder' + path.sep + 'two.txt: no issues found',
           ''
         ].join('\n')
 
