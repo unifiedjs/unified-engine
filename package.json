@@ -29,7 +29,7 @@
     "index.js"
   ],
   "dependencies": {
-    "@types/concat-stream": "^1.0.0",
+    "@types/concat-stream": "^2.0.0",
     "@types/debug": "^4.0.0",
     "@types/is-empty": "^1.0.0",
     "@types/js-yaml": "^4.0.0",
@@ -71,7 +71,7 @@
     "vfile": "^5.0.0",
     "vfile-reporter-json": "^3.0.0",
     "vfile-reporter-pretty": "^6.0.0",
-    "xo": "^0.47.0"
+    "xo": "^0.48.0"
   },
   "scripts": {
     "build": "rimraf \"lib/**/*.d.ts\" \"test/**/*.d.ts\" \"*.d.ts\" && tsc && type-coverage",
