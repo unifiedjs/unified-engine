@@ -138,6 +138,8 @@ done.
     file’s directory
 *   [`ignorePatterns`][ignore-patterns] (`Array<string>`, optional)
     — Patterns to ignore in addition to ignore files, if any
+*   [`ignoreUnconfigured`][ignore-unconfigured] (`boolean`, default: `false`)
+    — Ignore files that do not have an associated detected configuration file
 *   [`silentlyIgnore`][silently-ignore] (`boolean`, default: `false`)
     — Skip given files if they are ignored
 *   [`plugins`][options-plugins] (`Array|Object`, optional)
@@ -308,6 +310,8 @@ abide by its terms.
 [ignore-path-resolve-from]: doc/options.md#optionsignorepathresolvefrom
 
 [ignore-patterns]: doc/options.md#optionsignorepatterns
+
+[ignore-unconfigured]: doc/options.md#optionsignoreunconfigured
 
 [silently-ignore]: doc/options.md#optionssilentlyignore
 
