@@ -22,7 +22,7 @@ completer.pluginId = 'some-plugin-id'
 engine(
   {
     processor: remark(),
-    injectedPlugins: [plugin],
+    plugins: [plugin],
     files: ['readme.md']
   },
   done
