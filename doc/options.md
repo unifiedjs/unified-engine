@@ -677,7 +677,7 @@ File path of [configuration][configure] file to load.
 If given and [`detectConfig`][detect-config] is not `false`, then:
 
 *   `$rcName` and `$rcName.json` are loaded and parsed as JSON
-*   `$rcName.yml` and `$rcName.yaml` are loaded with `js-yaml`
+*   `$rcName.yml` and `$rcName.yaml` are loaded with `yaml`
 *   `$rcName.js` are either `require`d or `import`ed
 *   `$rcName.cjs` are `require`d
 *   `$rcName.mjs` are `import`ed
