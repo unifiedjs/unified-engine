@@ -15,7 +15,7 @@ const danger = windows ? '‼' : '⚠'
 const fixtures = path.join('test', 'fixtures')
 
 test('input', (t) => {
-  t.plan(22)
+  t.plan(23)
 
   t.test('should fail without input', (t) => {
     const stream = new PassThrough()
@@ -711,6 +711,34 @@ test('input', (t) => {
         t.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
+          'should report'
+        )
+      }
+    )
+  })
+
+  t.test('should not access the file system for empty given files', (t) => {
+    const cwd = path.join(fixtures, 'empty')
+    const stderr = spy()
+
+    t.plan(1)
+
+    engine(
+      {
+        processor: noop,
+        cwd,
+        streamError: stderr.stream,
+        files: [
+          toVFile({
+            path: path.join(cwd, 'this-does-not-exist.txt'),
+            value: ''
+          })
+        ]
+      },
+      (error, code) => {
+        t.deepEqual(
+          [error, code, stderr()],
+          [null, 0, 'this-does-not-exist.txt: no issues found\n'],
           'should report'
         )
       }
