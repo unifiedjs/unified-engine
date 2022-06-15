@@ -1,5 +1,4 @@
 import process from 'node:process'
-import {fileURLToPath} from 'node:url'
 import test from 'tape'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
@@ -17,7 +16,7 @@ test('color', (t) => {
   engine(
     {
       processor: noop,
-      cwd: fileURLToPath(new URL('empty/', fixtures)),
+      cwd: new URL('empty/', fixtures),
       streamError: stderr.stream,
       files: ['readme.md'],
       color: true

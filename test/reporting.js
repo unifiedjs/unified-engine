@@ -44,7 +44,7 @@ test('reporting', (t) => {
             file.message('Warning')
           }
         ),
-        cwd: fileURLToPath(new URL('one-file/', fixtures)),
+        cwd: new URL('one-file/', fixtures),
         streamError: stderr.stream,
         files: ['one.txt'],
         frail: true
@@ -78,7 +78,7 @@ test('reporting', (t) => {
             }
           }
         ),
-        cwd: fileURLToPath(new URL('two-files/', fixtures)),
+        cwd: new URL('two-files/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -106,7 +106,7 @@ test('reporting', (t) => {
     engine(
       {
         processor: noop(),
-        cwd: fileURLToPath(new URL('one-file/', fixtures)),
+        cwd: new URL('one-file/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -135,7 +135,7 @@ test('reporting', (t) => {
             }
           }
         ),
-        cwd: fileURLToPath(new URL('two-files/', fixtures)),
+        cwd: new URL('two-files/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],

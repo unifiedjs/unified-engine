@@ -1,4 +1,3 @@
-import {fileURLToPath} from 'node:url'
 import test from 'tape'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
@@ -25,7 +24,7 @@ test('`defaultConfig`', (t) => {
           Object.assign(this, {t})
         }),
         streamError: stderr.stream,
-        cwd: fileURLToPath(new URL('config-default/', fixtures)),
+        cwd: new URL('config-default/', fixtures),
         files: ['.'],
         packageField: 'bar',
         extensions: ['txt'],
@@ -52,7 +51,7 @@ test('`defaultConfig`', (t) => {
           Object.assign(this, {t})
         }),
         streamError: stderr.stream,
-        cwd: fileURLToPath(new URL('config-default/', fixtures)),
+        cwd: new URL('config-default/', fixtures),
         files: ['.'],
         packageField: 'foo',
         extensions: ['txt'],

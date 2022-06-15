@@ -1,4 +1,3 @@
-import {fileURLToPath} from 'node:url'
 import {sep, join} from 'node:path'
 import process from 'node:process'
 import {PassThrough} from 'node:stream'
@@ -66,7 +65,7 @@ test('input', (t) => {
     engine(
       {
         processor: unified(),
-        cwd: fileURLToPath(new URL('empty/', fixtures)),
+        cwd: new URL('empty/', fixtures),
         streamError: stderr.stream,
         files: ['.']
       },
@@ -84,7 +83,7 @@ test('input', (t) => {
     engine(
       {
         processor: unified(),
-        cwd: fileURLToPath(new URL('empty/', fixtures)),
+        cwd: new URL('empty/', fixtures),
         streamError: stderr.stream,
         files: ['readme.md']
       },
@@ -114,7 +113,7 @@ test('input', (t) => {
     engine(
       {
         processor: unified(),
-        cwd: fileURLToPath(new URL('directory/', fixtures)),
+        cwd: new URL('directory/', fixtures),
         streamError: stderr.stream,
         files: ['empty/']
       },
@@ -132,7 +131,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(new URL('extensions/', fixtures)),
+        cwd: new URL('extensions/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt', '.text']
@@ -163,7 +162,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(new URL('extensions/', fixtures)),
+        cwd: new URL('extensions/', fixtures),
         streamError: stderr.stream,
         files: ['nested'],
         extensions: ['txt', 'text']
@@ -192,7 +191,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(new URL('globs/', fixtures)),
+        cwd: new URL('globs/', fixtures),
         streamError: stderr.stream,
         files: ['*/*.+(txt|text)'],
         extensions: []
@@ -221,7 +220,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(new URL('globs/', fixtures)),
+        cwd: new URL('globs/', fixtures),
         streamError: stderr.stream,
         files: ['*/*.txt', '*/*.text'],
         extensions: []
@@ -250,7 +249,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(new URL('globs/', fixtures)),
+        cwd: new URL('globs/', fixtures),
         streamError: stderr.stream,
         files: ['**/nested'],
         extensions: []
@@ -280,7 +279,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         ignoreName: '.fooignore',
         files: [toVFile(new URL('nested', cwd))]
@@ -303,7 +302,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(new URL('globs-ignore/', fixtures)),
+        cwd: new URL('globs-ignore/', fixtures),
         streamError: stderr.stream,
         files: ['**/*.txt'],
         extensions: []
@@ -339,7 +338,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         ignoreName: '.fooignore',
         files: [
@@ -382,7 +381,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         ignoreName: '.fooignore',
         files: [file]
@@ -418,7 +417,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         ignoreName: '.fooignore',
         files: [file]
@@ -457,7 +456,7 @@ test('input', (t) => {
             }
           }
         ),
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         files: [file1, file2]
       },
@@ -508,7 +507,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(new URL('ignore-file/', fixtures)),
+        cwd: new URL('ignore-file/', fixtures),
         streamError: stderr.stream,
         ignoreName: '.fooignore',
         files: ['**/*.txt']
@@ -543,7 +542,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         ignoreName: '.fooignore',
         silentlyIgnore: true,
@@ -577,7 +576,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(new URL('ignore-file/', fixtures)),
+        cwd: new URL('ignore-file/', fixtures),
         silentlyIgnore: true,
         streamError: stderr.stream,
         ignoreName: '.fooignore',
@@ -605,7 +604,7 @@ test('input', (t) => {
     engine(
       {
         processor: unified(),
-        cwd: fileURLToPath(new URL('empty/', fixtures)),
+        cwd: new URL('empty/', fixtures),
         streamError: spy().stream,
         files: ['.'],
         rcPath: '123',
@@ -623,7 +622,7 @@ test('input', (t) => {
     engine(
       {
         processor: unified(),
-        cwd: fileURLToPath(new URL('empty/', fixtures)),
+        cwd: new URL('empty/', fixtures),
         streamError: spy().stream,
         files: ['.'],
         ignoreUnconfigured: true
@@ -640,7 +639,7 @@ test('input', (t) => {
     engine(
       {
         processor: unified(),
-        cwd: fileURLToPath(new URL('empty/', fixtures)),
+        cwd: new URL('empty/', fixtures),
         streamError: spy().stream,
         files: ['.'],
         rcName: 'x',
@@ -662,7 +661,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(new URL('config-ignore-unconfigured/', fixtures)),
+        cwd: new URL('config-ignore-unconfigured/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -691,7 +690,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         extensions: ['txt'],
         files: ['nested', toVFile(new URL('one.txt', cwd))]
@@ -722,7 +721,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         files: [
           toVFile({

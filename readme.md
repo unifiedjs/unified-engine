@@ -86,7 +86,7 @@ done.
 
 *   [`processor`][processor] ([`Processor`][unified-processor])
     — unified processor to transform files
-*   [`cwd`][cwd] (`string`, default: `process.cwd()`)
+*   [`cwd`][cwd] (`string` or `URL`, default: `process.cwd()`)
     — Directory to search files in, load plugins from, and more
 *   [`files`][files] (`Array<string|VFile>`, optional)
     — Paths or globs to files and directories, or virtual files, to process

@@ -68,7 +68,7 @@ function done(error) {
 
 Directory to search files in, load plugins from, and more.
 
-*   Type: `string`
+*   Type: `string` or `URL`
 *   Default: [`process.cwd()`][cwd]
 
 ###### Example
@@ -77,14 +77,13 @@ The following example reformats `readme.md`.  The `doc` directory is used to
 process from.
 
 ```js
-import {fileURLToPath} from 'node:url'
 import {engine} from 'unified-engine'
 import {remark} from 'remark'
 
 engine(
   {
     processor: remark(),
-    cwd: fileURLToPath(new URL('doc/', import.meta.url)),
+    cwd: new URL('doc/', import.meta.url),
     files: ['readme.md'],
     output: true
   },

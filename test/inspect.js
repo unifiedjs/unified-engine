@@ -1,5 +1,4 @@
 import fs from 'node:fs'
-import {fileURLToPath} from 'node:url'
 import {PassThrough} from 'node:stream'
 import test from 'tape'
 import {engine} from '../index.js'
@@ -20,7 +19,7 @@ test('inspect', (t) => {
     engine(
       {
         processor: noop(),
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         output: 'formatted.txt',
         inspect: true,

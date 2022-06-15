@@ -3,7 +3,6 @@
  * @typedef {import('../index.js').Preset['plugins']} Plugins
  */
 
-import {fileURLToPath} from 'node:url'
 import test from 'tape'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
@@ -26,7 +25,7 @@ test('`configTransform`', (t) => {
           Object.assign(this, {t})
         }),
         streamError: stderr.stream,
-        cwd: fileURLToPath(new URL('config-transform/', fixtures)),
+        cwd: new URL('config-transform/', fixtures),
         files: ['.'],
         packageField: 'foo',
         configTransform(

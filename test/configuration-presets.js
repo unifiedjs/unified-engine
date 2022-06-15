@@ -3,7 +3,6 @@
  * @typedef {import('unist').Literal} Literal
  */
 
-import {fileURLToPath} from 'node:url'
 import test from 'tape'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
@@ -23,7 +22,7 @@ test('configuration-presets', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(root),
+        cwd: root,
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -54,7 +53,7 @@ test('configuration-presets', (t) => {
         processor: noop().use(function () {
           Object.assign(this, {t})
         }),
-        cwd: fileURLToPath(new URL('config-presets-local/', fixtures)),
+        cwd: new URL('config-presets-local/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -78,7 +77,7 @@ test('configuration-presets', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(new URL('config-presets-missing-plugin/', fixtures)),
+        cwd: new URL('config-presets-missing-plugin/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -112,7 +111,7 @@ test('configuration-presets', (t) => {
         processor: noop().use(function () {
           Object.assign(this, {t})
         }),
-        cwd: fileURLToPath(new URL('config-plugins-reconfigure/', fixtures)),
+        cwd: new URL('config-plugins-reconfigure/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -139,9 +138,7 @@ test('configuration-presets', (t) => {
         processor: noop().use(function () {
           Object.assign(this, {t})
         }),
-        cwd: fileURLToPath(
-          new URL('config-preset-plugins-reconfigure/', fixtures)
-        ),
+        cwd: new URL('config-preset-plugins-reconfigure/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -166,9 +163,7 @@ test('configuration-presets', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(
-          new URL('config-plugins-reconfigure-off/', fixtures)
-        ),
+        cwd: new URL('config-plugins-reconfigure-off/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -204,7 +199,7 @@ test('configuration-presets', (t) => {
 
           t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
         }),
-        cwd: fileURLToPath(new URL('config-settings-reconfigure-a/', fixtures)),
+        cwd: new URL('config-settings-reconfigure-a/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -240,7 +235,7 @@ test('configuration-presets', (t) => {
             }
           })
         }),
-        cwd: fileURLToPath(new URL('config-settings-reconfigure-b/', fixtures)),
+        cwd: new URL('config-settings-reconfigure-b/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',

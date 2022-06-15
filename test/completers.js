@@ -5,7 +5,6 @@
 
 import fs from 'node:fs'
 import {sep} from 'node:path'
-import {fileURLToPath} from 'node:url'
 import test from 'tape'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
@@ -52,7 +51,7 @@ test('completers', (t) => {
             t.equal(set.add('two.txt'), set, 'should be able to `add` a file')
           }
         ],
-        cwd: fileURLToPath(new URL('two-files/', fixtures)),
+        cwd: new URL('two-files/', fixtures),
         files: ['one.txt']
       },
       (error, code) => {
@@ -108,7 +107,7 @@ test('completers', (t) => {
             set.add('bar.text')
           }
         ],
-        cwd: fileURLToPath(cwd),
+        cwd,
         files: ['foo.txt'],
         output: 'nested/'
       },

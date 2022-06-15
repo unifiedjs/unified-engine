@@ -3,7 +3,6 @@
  */
 
 import fs from 'node:fs'
-import {fileURLToPath} from 'node:url'
 import {PassThrough} from 'node:stream'
 import test from 'tape'
 import {toVFile} from 'to-vfile'
@@ -25,7 +24,7 @@ test('tree', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         treeIn: true,
         files: ['doc.json']
@@ -56,7 +55,7 @@ test('tree', (t) => {
             tree.value = 'two'
           }
         ),
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         output: true,
         tree: true,
@@ -95,7 +94,7 @@ test('tree', (t) => {
             tree.value = 'two'
           }
         ),
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         output: true,
         treeIn: true,
@@ -130,7 +129,7 @@ test('tree', (t) => {
             tree.value = 'two'
           }
         ),
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         output: true,
         treeOut: true,
@@ -232,7 +231,7 @@ test('tree', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         output: 'bar.json',
         treeOut: true,

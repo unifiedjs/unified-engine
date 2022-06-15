@@ -20,7 +20,7 @@ test('ignore', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         files: ['one.txt'],
         detectIgnore: false,
@@ -48,7 +48,7 @@ test('ignore', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(new URL('ignore-file/', fixtures)),
+        cwd: new URL('ignore-file/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         detectIgnore: false,
@@ -79,7 +79,7 @@ test('ignore', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(new URL('ignore-file/', fixtures)),
+        cwd: new URL('ignore-file/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         detectIgnore: true,
@@ -110,7 +110,7 @@ test('ignore', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(new URL('hidden-directory/', fixtures)),
+        cwd: new URL('hidden-directory/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         // No `ignoreName`.
@@ -134,7 +134,7 @@ test('ignore', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(new URL('simple-structure/', fixtures)),
+        cwd: new URL('simple-structure/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         detectIgnore: true,
@@ -166,7 +166,7 @@ test('ignore', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(new URL('simple-structure/', fixtures)),
+        cwd: new URL('simple-structure/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         ignorePatterns: ['**/t*.*'],
@@ -192,7 +192,7 @@ test('ignore', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(new URL('ignore-file/', fixtures)),
+        cwd: new URL('ignore-file/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         detectIgnore: true,
@@ -222,7 +222,7 @@ test('ignore', (t) => {
       engine(
         {
           processor: noop,
-          cwd: fileURLToPath(new URL('sibling-ignore/', fixtures)),
+          cwd: new URL('sibling-ignore/', fixtures),
           streamError: stderr.stream,
           files: ['.'],
           ignorePath: join('deep', 'ignore'),
@@ -254,7 +254,7 @@ test('ignore', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(new URL('sibling-ignore/', fixtures)),
+        cwd: new URL('sibling-ignore/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         ignorePath: join('deep', 'ignore'),
@@ -290,7 +290,7 @@ test('ignore', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         files: [fileURLToPath(url)]
       },

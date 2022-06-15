@@ -31,7 +31,7 @@ test('output', (t) => {
             tree.value = 'two'
           }
         ),
-        cwd: fileURLToPath(new URL('one-file/', fixtures)),
+        cwd: new URL('one-file/', fixtures),
         streamOut: stdout.stream,
         streamError: stderr.stream,
         files: ['.'],
@@ -61,7 +61,7 @@ test('output', (t) => {
             tree.value = 'two'
           }
         ),
-        cwd: fileURLToPath(new URL('one-file/', fixtures)),
+        cwd: new URL('one-file/', fixtures),
         streamOut: stdout.stream,
         streamError: stderr.stream,
         files: ['one.txt'],
@@ -92,7 +92,7 @@ test('output', (t) => {
             tree.value = 'two'
           }
         ),
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         streamOut: stdout.stream,
         out: false,
@@ -126,7 +126,7 @@ test('output', (t) => {
         ),
         streamOut: stdout.stream,
         streamError: stderr.stream,
-        cwd: fileURLToPath(cwd),
+        cwd,
         out: false,
         files: ['.'],
         extensions: ['txt']
@@ -155,7 +155,7 @@ test('output', (t) => {
             tree.value = 'two'
           }
         ),
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         output: true,
         files: ['.'],
@@ -190,7 +190,7 @@ test('output', (t) => {
             tree.value = 'two'
           }
         ),
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         output: 'four.txt',
         files: ['one.txt'],
@@ -225,7 +225,7 @@ test('output', (t) => {
             tree.value = 'two'
           }
         ),
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         output: 'nested/',
         files: ['one.txt'],
@@ -255,7 +255,7 @@ test('output', (t) => {
     engine(
       {
         processor: noop(),
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         output: 'missing/bar',
         files: ['one.txt'],
@@ -291,7 +291,7 @@ test('output', (t) => {
             tree.value = 'two'
           }
         ),
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         output: true,
         files: [toVFile(new URL('one.txt', cwd))]
@@ -325,7 +325,7 @@ test('output', (t) => {
             file.history = []
           }
         ),
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         output: true,
         files: ['one.txt'],
@@ -359,7 +359,7 @@ test('output', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         output: 'three.txt',
         files: ['.'],
@@ -389,7 +389,7 @@ test('output', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         output: 'three' + sep,
         files: ['.'],
@@ -418,7 +418,7 @@ test('output', (t) => {
     engine(
       {
         processor: noop(),
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamError: stderr.stream,
         output: true,
         files: ['one.txt'],
@@ -458,7 +458,7 @@ test('output', (t) => {
             })
           }
         ),
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamOut: stdout.stream,
         streamError: stderr.stream,
         files: ['one.txt'],
@@ -493,7 +493,7 @@ test('output', (t) => {
             })
           }
         ),
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamOut: stdout.stream,
         streamError: stderr.stream,
         files: ['one.txt'],
@@ -528,7 +528,7 @@ test('output', (t) => {
             })
           }
         ),
-        cwd: fileURLToPath(cwd),
+        cwd,
         streamOut: stdout.stream,
         streamError: stderr.stream,
         files: ['one.txt'],

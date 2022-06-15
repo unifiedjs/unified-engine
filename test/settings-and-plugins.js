@@ -3,7 +3,6 @@
  * @typedef {import('unist').Literal} Literal
  */
 
-import {fileURLToPath} from 'node:url'
 import test from 'tape'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
@@ -34,7 +33,7 @@ test('settings', (t) => {
             }
           })
         }),
-        cwd: fileURLToPath(new URL('one-file/', fixtures)),
+        cwd: new URL('one-file/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -74,7 +73,7 @@ test('settings', (t) => {
             }
           })
         }),
-        cwd: fileURLToPath(new URL('config-settings-cascade/', fixtures)),
+        cwd: new URL('config-settings-cascade/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -103,7 +102,7 @@ test('plugins', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(new URL('one-file/', fixtures)),
+        cwd: new URL('one-file/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -140,9 +139,7 @@ test('plugins', (t) => {
         processor: noop().use(function () {
           Object.assign(this, {t})
         }),
-        cwd: fileURLToPath(
-          new URL('config-plugins-basic-reconfigure/', fixtures)
-        ),
+        cwd: new URL('config-plugins-basic-reconfigure/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -171,9 +168,7 @@ test('plugins', (t) => {
         processor: noop().use(function () {
           Object.assign(this, {t})
         }),
-        cwd: fileURLToPath(
-          new URL('config-plugins-basic-reconfigure/', fixtures)
-        ),
+        cwd: new URL('config-plugins-basic-reconfigure/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],

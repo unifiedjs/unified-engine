@@ -1,6 +1,5 @@
 import {sep} from 'node:path'
 import {PassThrough} from 'node:stream'
-import {fileURLToPath} from 'node:url'
 import test from 'tape'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
@@ -17,7 +16,7 @@ test('file-path', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(new URL('simple-structure/', fixtures)),
+        cwd: new URL('simple-structure/', fixtures),
         files: ['.'],
         filePath: 'qux/quux.foo',
         extensions: ['txt']
@@ -57,7 +56,7 @@ test('file-path', (t) => {
     engine(
       {
         processor: noop,
-        cwd: fileURLToPath(new URL('empty/', fixtures)),
+        cwd: new URL('empty/', fixtures),
         streamOut: stdout.stream,
         streamError: stderr.stream,
         streamIn: stream,
