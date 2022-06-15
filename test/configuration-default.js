@@ -1,10 +1,10 @@
-import path from 'node:path'
+import {fileURLToPath} from 'node:url'
 import test from 'tape'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const fixtures = path.join('test', 'fixtures')
+const fixtures = new URL('fixtures/', import.meta.url)
 
 test('`defaultConfig`', (t) => {
   t.plan(2)
@@ -25,7 +25,7 @@ test('`defaultConfig`', (t) => {
           Object.assign(this, {t})
         }),
         streamError: stderr.stream,
-        cwd: path.join(fixtures, 'config-default'),
+        cwd: fileURLToPath(new URL('config-default/', fixtures)),
         files: ['.'],
         packageField: 'bar',
         extensions: ['txt'],
@@ -52,7 +52,7 @@ test('`defaultConfig`', (t) => {
           Object.assign(this, {t})
         }),
         streamError: stderr.stream,
-        cwd: path.join(fixtures, 'config-default'),
+        cwd: fileURLToPath(new URL('config-default/', fixtures)),
         files: ['.'],
         packageField: 'foo',
         extensions: ['txt'],

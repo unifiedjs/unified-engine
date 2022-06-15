@@ -77,14 +77,14 @@ The following example reformats `readme.md`.  The `doc` directory is used to
 process from.
 
 ```js
-import path from 'node:path'
+import {fileURLToPath} from 'node:url'
 import {engine} from 'unified-engine'
 import {remark} from 'remark'
 
 engine(
   {
     processor: remark(),
-    cwd: path.join(process.cwd(), 'doc'),
+    cwd: fileURLToPath(new URL('doc/', import.meta.url)),
     files: ['readme.md'],
     output: true
   },

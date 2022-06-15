@@ -3,13 +3,14 @@
  * @typedef {import('unist').Literal} Literal
  */
 
-import path from 'node:path'
+import {fileURLToPath} from 'node:url'
+import {sep} from 'node:path'
 import test from 'tape'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const fixtures = path.join('test', 'fixtures')
+const fixtures = new URL('fixtures/', import.meta.url)
 
 test('configuration', (t) => {
   t.plan(15)
@@ -23,7 +24,7 @@ test('configuration', (t) => {
       {
         processor: noop,
         streamError: stderr.stream,
-        cwd: path.join(fixtures, 'one-file'),
+        cwd: fileURLToPath(new URL('one-file/', fixtures)),
         files: ['.'],
         rcPath: '.foorc',
         extensions: ['txt']
@@ -50,7 +51,7 @@ test('configuration', (t) => {
       {
         processor: noop,
         streamError: stderr.stream,
-        cwd: path.join(fixtures, 'malformed-rc-empty'),
+        cwd: fileURLToPath(new URL('malformed-rc-empty/', fixtures)),
         files: ['.'],
         rcPath: '.foorc',
         extensions: ['txt']
@@ -77,7 +78,7 @@ test('configuration', (t) => {
       {
         processor: noop,
         streamError: stderr.stream,
-        cwd: path.join(fixtures, 'malformed-rc-invalid'),
+        cwd: fileURLToPath(new URL('malformed-rc-invalid/', fixtures)),
         files: ['.'],
         rcPath: '.foorc.js',
         extensions: ['txt']
@@ -104,7 +105,7 @@ test('configuration', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'malformed-rc-script'),
+        cwd: fileURLToPath(new URL('malformed-rc-script/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -131,7 +132,7 @@ test('configuration', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'rc-script'),
+        cwd: fileURLToPath(new URL('rc-script/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -155,7 +156,7 @@ test('configuration', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'rc-script'),
+        cwd: fileURLToPath(new URL('rc-script/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -179,7 +180,7 @@ test('configuration', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'rc-module-mjs'),
+        cwd: fileURLToPath(new URL('rc-module-mjs/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -215,7 +216,7 @@ test('configuration', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'rc-module-cjs'),
+        cwd: fileURLToPath(new URL('rc-module-cjs/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -251,7 +252,7 @@ test('configuration', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'malformed-rc-yaml'),
+        cwd: fileURLToPath(new URL('malformed-rc-yaml/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -282,7 +283,7 @@ test('configuration', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'rc-file'),
+        cwd: fileURLToPath(new URL('rc-file/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         rcPath: '.foorc',
@@ -302,8 +303,8 @@ test('configuration', (t) => {
       },
       (error, code) => {
         const expected = [
-          'nested' + path.sep + 'four.txt: no issues found',
-          'nested' + path.sep + 'three.txt: no issues found',
+          'nested' + sep + 'four.txt: no issues found',
+          'nested' + sep + 'three.txt: no issues found',
           'one.txt: no issues found',
           'two.txt: no issues found',
           ''
@@ -319,7 +320,7 @@ test('configuration', (t) => {
   })
 
   t.test('should support searching package files', (t) => {
-    const cwd = path.join(fixtures, 'malformed-package-file')
+    const cwd = new URL('malformed-package-file/', fixtures)
     const stderr = spy()
 
     t.plan(1)
@@ -327,7 +328,7 @@ test('configuration', (t) => {
     engine(
       {
         processor: noop,
-        cwd,
+        cwd: fileURLToPath(cwd),
         streamError: stderr.stream,
         files: ['.'],
         packageField: 'fooConfig',
@@ -354,7 +355,7 @@ test('configuration', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'rc-file'),
+        cwd: fileURLToPath(new URL('rc-file/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -374,8 +375,8 @@ test('configuration', (t) => {
       },
       (error, code) => {
         const expected = [
-          'nested' + path.sep + 'four.txt: no issues found',
-          'nested' + path.sep + 'three.txt: no issues found',
+          'nested' + sep + 'four.txt: no issues found',
+          'nested' + sep + 'three.txt: no issues found',
           'one.txt: no issues found',
           'two.txt: no issues found',
           ''
@@ -398,7 +399,7 @@ test('configuration', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'simple-structure'),
+        cwd: fileURLToPath(new URL('simple-structure/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         packageField: 'fooConfig',
@@ -407,8 +408,8 @@ test('configuration', (t) => {
       },
       (error, code) => {
         const expected = [
-          'nested' + path.sep + 'three.txt: no issues found',
-          'nested' + path.sep + 'two.txt: no issues found',
+          'nested' + sep + 'three.txt: no issues found',
+          'nested' + sep + 'two.txt: no issues found',
           'one.txt: no issues found',
           ''
         ].join('\n')
@@ -430,7 +431,7 @@ test('configuration', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'malformed-rc-script'),
+        cwd: fileURLToPath(new URL('malformed-rc-script/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -467,7 +468,7 @@ test('configuration', (t) => {
             }
           })
         }),
-        cwd: path.join(fixtures, 'config-settings'),
+        cwd: fileURLToPath(new URL('config-settings/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         packageField: 'fooConfig',

@@ -1,18 +1,18 @@
 import fs from 'node:fs'
-import path from 'node:path'
+import {fileURLToPath} from 'node:url'
 import {PassThrough} from 'node:stream'
 import test from 'tape'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const fixtures = path.join('test', 'fixtures')
+const fixtures = new URL('fixtures/', import.meta.url)
 
 test('inspect', (t) => {
   t.plan(3)
 
   t.test('should write text when `inspect` is given', (t) => {
-    const cwd = path.join(fixtures, 'one-file')
+    const cwd = new URL('one-file/', fixtures)
     const stderr = spy()
 
     t.plan(1)
@@ -20,7 +20,7 @@ test('inspect', (t) => {
     engine(
       {
         processor: noop(),
-        cwd,
+        cwd: fileURLToPath(cwd),
         streamError: stderr.stream,
         output: 'formatted.txt',
         inspect: true,
@@ -28,10 +28,11 @@ test('inspect', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        const doc = fs.readFileSync(path.join(cwd, 'formatted.txt'), 'utf8')
+        const url = new URL('formatted.txt', cwd)
+        const doc = fs.readFileSync(url, 'utf8')
 
         // Remove the file.
-        fs.unlinkSync(path.join(cwd, 'formatted.txt'))
+        fs.unlinkSync(url)
 
         t.deepEqual(
           [error, code, stderr(), doc],

@@ -1,11 +1,11 @@
-import path from 'node:path'
+import {fileURLToPath} from 'node:url'
 import {PassThrough} from 'node:stream'
 import test from 'tape'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const fixtures = path.join('test', 'fixtures')
+const fixtures = new URL('fixtures/', import.meta.url)
 
 test('stdin', (t) => {
   t.plan(3)
@@ -23,7 +23,7 @@ test('stdin', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'empty'),
+        cwd: fileURLToPath(new URL('empty/', fixtures)),
         streamIn: stream,
         streamOut: stdout.stream,
         streamError: stderr.stream
@@ -65,7 +65,7 @@ test('stdin', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'empty'),
+        cwd: fileURLToPath(new URL('empty/', fixtures)),
         streamIn: stream,
         streamOut: stdout.stream,
         streamError: stderr.stream,
@@ -105,7 +105,7 @@ test('stdin', (t) => {
         processor: noop().use(function () {
           t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
         }),
-        cwd: path.join(fixtures, 'config-settings'),
+        cwd: fileURLToPath(new URL('config-settings/', fixtures)),
         streamIn: stream,
         streamOut: stdout.stream,
         streamError: stderr.stream,

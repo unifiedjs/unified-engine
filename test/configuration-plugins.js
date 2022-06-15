@@ -1,10 +1,11 @@
-import path from 'node:path'
+import {sep} from 'node:path'
+import {fileURLToPath} from 'node:url'
 import test from 'tape'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const fixtures = path.join('test', 'fixtures')
+const fixtures = new URL('fixtures/', import.meta.url)
 
 test('configuration', (t) => {
   t.plan(9)
@@ -20,7 +21,7 @@ test('configuration', (t) => {
         processor: noop().use(function () {
           Object.assign(this, {t})
         }),
-        cwd: path.join(fixtures, 'config-plugins-cascade'),
+        cwd: fileURLToPath(new URL('config-plugins-cascade/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         packageField: 'fooConfig',
@@ -30,7 +31,7 @@ test('configuration', (t) => {
       (error, code) => {
         t.deepEqual(
           [error, code, stderr()],
-          [null, 0, 'nested' + path.sep + 'one.txt: no issues found\n'],
+          [null, 0, 'nested' + sep + 'one.txt: no issues found\n'],
           'should work'
         )
       }
@@ -48,7 +49,7 @@ test('configuration', (t) => {
         processor: noop().use(function () {
           Object.assign(this, {t})
         }),
-        cwd: path.join(fixtures, 'config-plugins-esm-mjs'),
+        cwd: fileURLToPath(new URL('config-plugins-esm-mjs/', fixtures)),
         streamError: stderr.stream,
         files: ['one.txt'],
         rcName: '.foorc'
@@ -74,7 +75,7 @@ test('configuration', (t) => {
         processor: noop().use(function () {
           Object.assign(this, {t})
         }),
-        cwd: path.join(fixtures, 'config-plugins-esm-js'),
+        cwd: fileURLToPath(new URL('config-plugins-esm-mjs/', fixtures)),
         streamError: stderr.stream,
         files: ['one.txt'],
         rcName: '.foorc'
@@ -97,7 +98,7 @@ test('configuration', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'malformed-plugin'),
+        cwd: fileURLToPath(new URL('malformed-plugin/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         packageField: 'fooConfig',
@@ -126,7 +127,7 @@ test('configuration', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'plugin-without-default'),
+        cwd: fileURLToPath(new URL('plugin-without-default/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         packageField: 'fooConfig',
@@ -155,7 +156,7 @@ test('configuration', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'missing-plugin'),
+        cwd: fileURLToPath(new URL('missing-plugin/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         packageField: 'fooConfig',
@@ -182,7 +183,7 @@ test('configuration', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'not-a-plugin'),
+        cwd: fileURLToPath(new URL('not-a-plugin/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         packageField: 'fooConfig',
@@ -210,7 +211,7 @@ test('configuration', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'throwing-plugin'),
+        cwd: fileURLToPath(new URL('throwing-plugin/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         packageField: 'fooConfig',
@@ -238,7 +239,7 @@ test('configuration', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'one-file'),
+        cwd: fileURLToPath(new URL('one-file/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         plugins: [

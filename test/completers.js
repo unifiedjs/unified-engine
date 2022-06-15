@@ -4,13 +4,14 @@
  */
 
 import fs from 'node:fs'
-import path from 'node:path'
+import {sep} from 'node:path'
+import {fileURLToPath} from 'node:url'
 import test from 'tape'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const fixtures = path.join('test', 'fixtures')
+const fixtures = new URL('fixtures/', import.meta.url)
 
 test('completers', (t) => {
   t.plan(2)
@@ -51,7 +52,7 @@ test('completers', (t) => {
             t.equal(set.add('two.txt'), set, 'should be able to `add` a file')
           }
         ],
-        cwd: path.join(fixtures, 'two-files'),
+        cwd: fileURLToPath(new URL('two-files/', fixtures)),
         files: ['one.txt']
       },
       (error, code) => {
@@ -92,7 +93,7 @@ test('completers', (t) => {
   })
 
   t.test('should pass `fileSet` to plugins', (t) => {
-    const cwd = path.join(fixtures, 'extensions')
+    const cwd = new URL('extensions/', fixtures)
     const stderr = spy()
 
     t.plan(1)
@@ -107,18 +108,19 @@ test('completers', (t) => {
             set.add('bar.text')
           }
         ],
-        cwd,
+        cwd: fileURLToPath(cwd),
         files: ['foo.txt'],
         output: 'nested/'
       },
       (error, code) => {
-        const doc = fs.readFileSync(path.join(cwd, 'nested', 'foo.txt'), 'utf8')
+        const url = new URL('nested/foo.txt', cwd)
+        const doc = fs.readFileSync(url, 'utf8')
 
-        fs.unlinkSync(path.join(cwd, 'nested', 'foo.txt'))
+        fs.unlinkSync(url)
 
         t.deepEqual(
           [error, code, doc, stderr()],
-          [null, 0, '', 'foo.txt > nested' + path.sep + 'foo.txt: written\n'],
+          [null, 0, '', 'foo.txt > nested' + sep + 'foo.txt: written\n'],
           'should work'
         )
       }

@@ -1,5 +1,5 @@
-import path from 'node:path'
 import process from 'node:process'
+import {fileURLToPath} from 'node:url'
 import test from 'tape'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
@@ -7,7 +7,7 @@ import {spy} from './util/spy.js'
 
 const cross = process.platform === 'win32' ? '×' : '✖'
 
-const fixtures = path.join('test', 'fixtures')
+const fixtures = new URL('fixtures/', import.meta.url)
 
 test('color', (t) => {
   const stderr = spy()
@@ -17,7 +17,7 @@ test('color', (t) => {
   engine(
     {
       processor: noop,
-      cwd: path.join(fixtures, 'empty'),
+      cwd: fileURLToPath(new URL('empty/', fixtures)),
       streamError: stderr.stream,
       files: ['readme.md'],
       color: true

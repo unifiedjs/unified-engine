@@ -3,7 +3,7 @@
  */
 
 import fs from 'node:fs'
-import path from 'node:path'
+import {fileURLToPath} from 'node:url'
 import {PassThrough} from 'node:stream'
 import test from 'tape'
 import {toVFile} from 'to-vfile'
@@ -11,13 +11,13 @@ import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const fixtures = path.join('test', 'fixtures')
+const fixtures = new URL('fixtures/', import.meta.url)
 
 test('tree', (t) => {
   t.plan(7)
 
   t.test('should fail on malformed input', (t) => {
-    const cwd = path.join(fixtures, 'malformed-tree')
+    const cwd = new URL('malformed-tree/', fixtures)
     const stderr = spy()
 
     t.plan(1)
@@ -25,7 +25,7 @@ test('tree', (t) => {
     engine(
       {
         processor: noop,
-        cwd,
+        cwd: fileURLToPath(cwd),
         streamError: stderr.stream,
         treeIn: true,
         files: ['doc.json']
@@ -43,7 +43,7 @@ test('tree', (t) => {
   })
 
   t.test('should read and write JSON when `tree` is given', (t) => {
-    const cwd = path.join(fixtures, 'tree')
+    const cwd = new URL('tree/', fixtures)
     const stderr = spy()
 
     t.plan(1)
@@ -56,16 +56,16 @@ test('tree', (t) => {
             tree.value = 'two'
           }
         ),
-        cwd,
+        cwd: fileURLToPath(cwd),
         streamError: stderr.stream,
         output: true,
         tree: true,
         files: ['doc']
       },
       (error, code) => {
-        const doc = fs.readFileSync(path.join(cwd, 'doc.json'), 'utf8')
+        const doc = fs.readFileSync(new URL('doc.json', cwd), 'utf8')
 
-        fs.unlinkSync(path.join(cwd, 'doc.json'))
+        fs.unlinkSync(new URL('doc.json', cwd))
 
         t.deepEqual(
           [error, code, doc, stderr()],
@@ -82,7 +82,7 @@ test('tree', (t) => {
   })
 
   t.test('should read JSON when `treeIn` is given', (t) => {
-    const cwd = path.join(fixtures, 'tree')
+    const cwd = new URL('tree/', fixtures)
     const stderr = spy()
 
     t.plan(1)
@@ -95,7 +95,7 @@ test('tree', (t) => {
             tree.value = 'two'
           }
         ),
-        cwd,
+        cwd: fileURLToPath(cwd),
         streamError: stderr.stream,
         output: true,
         treeIn: true,
@@ -103,9 +103,9 @@ test('tree', (t) => {
         extensions: ['foo']
       },
       (error, code) => {
-        const doc = fs.readFileSync(path.join(cwd, 'doc.foo'), 'utf8')
+        const doc = fs.readFileSync(new URL('doc.foo', cwd), 'utf8')
 
-        fs.unlinkSync(path.join(cwd, 'doc.foo'))
+        fs.unlinkSync(new URL('doc.foo', cwd))
 
         t.deepEqual(
           [error, code, doc, stderr()],
@@ -117,7 +117,7 @@ test('tree', (t) => {
   })
 
   t.test('should write JSON when `treeOut` is given', (t) => {
-    const cwd = path.join(fixtures, 'one-file')
+    const cwd = new URL('one-file/', fixtures)
     const stderr = spy()
 
     t.plan(1)
@@ -130,7 +130,7 @@ test('tree', (t) => {
             tree.value = 'two'
           }
         ),
-        cwd,
+        cwd: fileURLToPath(cwd),
         streamError: stderr.stream,
         output: true,
         treeOut: true,
@@ -138,9 +138,9 @@ test('tree', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        const doc = fs.readFileSync(path.join(cwd, 'one.json'), 'utf8')
+        const doc = fs.readFileSync(new URL('one.json', cwd), 'utf8')
 
-        fs.unlinkSync(path.join(cwd, 'one.json'))
+        fs.unlinkSync(new URL('one.json', cwd))
 
         t.deepEqual(
           [error, code, doc, stderr()],
@@ -224,7 +224,7 @@ test('tree', (t) => {
   })
 
   t.test('should write injected files', (t) => {
-    const cwd = path.join(fixtures, 'one-file')
+    const cwd = new URL('one-file/', fixtures)
     const stderr = spy()
 
     t.plan(1)
@@ -232,14 +232,14 @@ test('tree', (t) => {
     engine(
       {
         processor: noop,
-        cwd,
+        cwd: fileURLToPath(cwd),
         streamError: stderr.stream,
         output: 'bar.json',
         treeOut: true,
-        files: [toVFile(path.join(cwd, 'one.txt'))]
+        files: [toVFile(new URL('one.txt', cwd))]
       },
       (error, code) => {
-        fs.unlinkSync(path.join(cwd, 'bar.json'))
+        fs.unlinkSync(new URL('bar.json', cwd))
 
         t.deepEqual(
           [error, code, stderr()],

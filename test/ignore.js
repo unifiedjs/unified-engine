@@ -1,18 +1,18 @@
 import fs from 'node:fs'
-import path from 'node:path'
-import process from 'node:process'
+import {fileURLToPath} from 'node:url'
+import {join, sep, relative} from 'node:path'
 import test from 'tape'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const fixtures = path.join('test', 'fixtures')
+const fixtures = new URL('fixtures/', import.meta.url)
 
 test('ignore', (t) => {
   t.plan(10)
 
   t.test('should fail fatally when given ignores are not found', (t) => {
-    const cwd = path.join(fixtures, 'simple-structure')
+    const cwd = new URL('simple-structure/', fixtures)
     const stderr = spy()
 
     t.plan(1)
@@ -20,7 +20,7 @@ test('ignore', (t) => {
     engine(
       {
         processor: noop,
-        cwd,
+        cwd: fileURLToPath(cwd),
         streamError: stderr.stream,
         files: ['one.txt'],
         detectIgnore: false,
@@ -48,7 +48,7 @@ test('ignore', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'ignore-file'),
+        cwd: fileURLToPath(new URL('ignore-file/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         detectIgnore: false,
@@ -57,7 +57,7 @@ test('ignore', (t) => {
       },
       (error, code) => {
         const expected = [
-          'nested' + path.sep + 'three.txt: no issues found',
+          'nested' + sep + 'three.txt: no issues found',
           'one.txt: no issues found',
           ''
         ].join('\n')
@@ -79,7 +79,7 @@ test('ignore', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'ignore-file'),
+        cwd: fileURLToPath(new URL('ignore-file/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         detectIgnore: true,
@@ -88,7 +88,7 @@ test('ignore', (t) => {
       },
       (error, code) => {
         const expected = [
-          'nested' + path.sep + 'three.txt: no issues found',
+          'nested' + sep + 'three.txt: no issues found',
           'one.txt: no issues found',
           ''
         ].join('\n')
@@ -110,7 +110,7 @@ test('ignore', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'hidden-directory'),
+        cwd: fileURLToPath(new URL('hidden-directory/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         // No `ignoreName`.
@@ -134,7 +134,7 @@ test('ignore', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'simple-structure'),
+        cwd: fileURLToPath(new URL('simple-structure/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         detectIgnore: true,
@@ -143,8 +143,8 @@ test('ignore', (t) => {
       },
       (error, code) => {
         const expected = [
-          'nested' + path.sep + 'three.txt: no issues found',
-          'nested' + path.sep + 'two.txt: no issues found',
+          'nested' + sep + 'three.txt: no issues found',
+          'nested' + sep + 'two.txt: no issues found',
           'one.txt: no issues found',
           ''
         ].join('\n')
@@ -166,7 +166,7 @@ test('ignore', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'simple-structure'),
+        cwd: fileURLToPath(new URL('simple-structure/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         ignorePatterns: ['**/t*.*'],
@@ -192,7 +192,7 @@ test('ignore', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'ignore-file'),
+        cwd: fileURLToPath(new URL('ignore-file/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         detectIgnore: true,
@@ -222,17 +222,17 @@ test('ignore', (t) => {
       engine(
         {
           processor: noop,
-          cwd: path.join(fixtures, 'sibling-ignore'),
+          cwd: fileURLToPath(new URL('sibling-ignore/', fixtures)),
           streamError: stderr.stream,
           files: ['.'],
-          ignorePath: path.join('deep', 'ignore'),
+          ignorePath: join('deep', 'ignore'),
           ignorePatterns: ['files/two.txt'],
           extensions: ['txt']
         },
         (error, code) => {
           const expected = [
-            path.join('deep', 'files', 'two.txt') + ': no issues found',
-            path.join('files', 'one.txt') + ': no issues found',
+            join('deep', 'files', 'two.txt') + ': no issues found',
+            join('files', 'one.txt') + ': no issues found',
             ''
           ].join('\n')
 
@@ -254,18 +254,18 @@ test('ignore', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'sibling-ignore'),
+        cwd: fileURLToPath(new URL('sibling-ignore/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
-        ignorePath: path.join('deep', 'ignore'),
+        ignorePath: join('deep', 'ignore'),
         ignorePathResolveFrom: 'cwd',
         extensions: ['txt']
       },
       (error, code) => {
         const expected = [
-          path.join('deep', 'files', 'one.txt') + ': no issues found',
-          path.join('deep', 'files', 'two.txt') + ': no issues found',
-          path.join('files', 'two.txt') + ': no issues found',
+          join('deep', 'files', 'one.txt') + ': no issues found',
+          join('deep', 'files', 'two.txt') + ': no issues found',
+          join('files', 'two.txt') + ': no issues found',
           ''
         ].join('\n')
 
@@ -279,25 +279,27 @@ test('ignore', (t) => {
   })
 
   t.test('should support higher positioned files', (t) => {
-    const cwd = path.join(fixtures, 'empty')
-    const filePath = path.resolve(process.cwd(), '../..', 'example.txt')
+    const cwd = new URL('empty/', fixtures)
+    const url = new URL('../../../example.txt', import.meta.url)
     const stderr = spy()
 
-    fs.writeFileSync(filePath, '')
+    fs.writeFileSync(url, '')
 
     t.plan(1)
 
     engine(
       {
         processor: noop,
-        cwd,
+        cwd: fileURLToPath(cwd),
         streamError: stderr.stream,
-        files: [filePath]
+        files: [fileURLToPath(url)]
       },
       (error, code) => {
-        fs.unlinkSync(filePath)
+        fs.unlinkSync(url)
 
-        const expected = path.relative(cwd, filePath) + ': no issues found\n'
+        const expected =
+          relative(fileURLToPath(cwd), fileURLToPath(url)) +
+          ': no issues found\n'
 
         t.deepEqual(
           [error, code, stderr()],

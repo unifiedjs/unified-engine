@@ -1,4 +1,5 @@
-import path from 'node:path'
+import {fileURLToPath} from 'node:url'
+import {sep, join} from 'node:path'
 import process from 'node:process'
 import {PassThrough} from 'node:stream'
 import test from 'tape'
@@ -12,7 +13,7 @@ const windows = process.platform === 'win32'
 const cross = windows ? '×' : '✖'
 const danger = windows ? '‼' : '⚠'
 
-const fixtures = path.join('test', 'fixtures')
+const fixtures = new URL('fixtures/', import.meta.url)
 
 test('input', (t) => {
   t.plan(23)
@@ -65,7 +66,7 @@ test('input', (t) => {
     engine(
       {
         processor: unified(),
-        cwd: path.join(fixtures, 'empty'),
+        cwd: fileURLToPath(new URL('empty/', fixtures)),
         streamError: stderr.stream,
         files: ['.']
       },
@@ -83,7 +84,7 @@ test('input', (t) => {
     engine(
       {
         processor: unified(),
-        cwd: path.join(fixtures, 'empty'),
+        cwd: fileURLToPath(new URL('empty/', fixtures)),
         streamError: stderr.stream,
         files: ['readme.md']
       },
@@ -113,7 +114,7 @@ test('input', (t) => {
     engine(
       {
         processor: unified(),
-        cwd: path.join(fixtures, 'directory'),
+        cwd: fileURLToPath(new URL('directory/', fixtures)),
         streamError: stderr.stream,
         files: ['empty/']
       },
@@ -131,7 +132,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'extensions'),
+        cwd: fileURLToPath(new URL('extensions/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt', '.text']
@@ -140,8 +141,8 @@ test('input', (t) => {
         const expected = [
           'bar.text: no issues found',
           'foo.txt: no issues found',
-          'nested' + path.sep + 'quux.text: no issues found',
-          'nested' + path.sep + 'qux.txt: no issues found',
+          'nested' + sep + 'quux.text: no issues found',
+          'nested' + sep + 'qux.txt: no issues found',
           ''
         ].join('\n')
 
@@ -162,15 +163,15 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'extensions'),
+        cwd: fileURLToPath(new URL('extensions/', fixtures)),
         streamError: stderr.stream,
         files: ['nested'],
         extensions: ['txt', 'text']
       },
       (error, code) => {
         const expected = [
-          'nested' + path.sep + 'quux.text: no issues found',
-          'nested' + path.sep + 'qux.txt: no issues found',
+          'nested' + sep + 'quux.text: no issues found',
+          'nested' + sep + 'qux.txt: no issues found',
           ''
         ].join('\n')
 
@@ -191,15 +192,15 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'globs'),
+        cwd: fileURLToPath(new URL('globs/', fixtures)),
         streamError: stderr.stream,
         files: ['*/*.+(txt|text)'],
         extensions: []
       },
       (error, code) => {
         const expected = [
-          'nested' + path.sep + 'no-3.txt: no issues found',
-          'nested' + path.sep + 'no-4.text: no issues found',
+          'nested' + sep + 'no-3.txt: no issues found',
+          'nested' + sep + 'no-4.text: no issues found',
           ''
         ].join('\n')
 
@@ -220,15 +221,15 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'globs'),
+        cwd: fileURLToPath(new URL('globs/', fixtures)),
         streamError: stderr.stream,
         files: ['*/*.txt', '*/*.text'],
         extensions: []
       },
       (error, code) => {
         const expected = [
-          'nested' + path.sep + 'no-3.txt: no issues found',
-          'nested' + path.sep + 'no-4.text: no issues found',
+          'nested' + sep + 'no-3.txt: no issues found',
+          'nested' + sep + 'no-4.text: no issues found',
           ''
         ].join('\n')
 
@@ -249,15 +250,15 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'globs'),
+        cwd: fileURLToPath(new URL('globs/', fixtures)),
         streamError: stderr.stream,
         files: ['**/nested'],
         extensions: []
       },
       (error, code) => {
         const expected = [
-          'nested' + path.sep + 'no-3.txt: no issues found',
-          'nested' + path.sep + 'no-4.text: no issues found',
+          'nested' + sep + 'no-3.txt: no issues found',
+          'nested' + sep + 'no-4.text: no issues found',
           ''
         ].join('\n')
 
@@ -271,7 +272,7 @@ test('input', (t) => {
   })
 
   t.test('should search vfile’s pointing to directories', (t) => {
-    const cwd = path.join(fixtures, 'ignore-file')
+    const cwd = new URL('ignore-file/', fixtures)
     const stderr = spy()
 
     t.plan(1)
@@ -279,15 +280,15 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd,
+        cwd: fileURLToPath(cwd),
         streamError: stderr.stream,
         ignoreName: '.fooignore',
-        files: [toVFile(path.join(cwd, 'nested'))]
+        files: [toVFile(new URL('nested', cwd))]
       },
       (error, code) => {
         t.deepEqual(
           [error, code, stderr()],
-          [null, 0, 'nested' + path.sep + 'three.txt: no issues found\n'],
+          [null, 0, 'nested' + sep + 'three.txt: no issues found\n'],
           'should report'
         )
       }
@@ -302,7 +303,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'globs-ignore'),
+        cwd: fileURLToPath(new URL('globs-ignore/', fixtures)),
         streamError: stderr.stream,
         files: ['**/*.txt'],
         extensions: []
@@ -310,12 +311,12 @@ test('input', (t) => {
       (error, code) => {
         const expected = [
           'nested' +
-            path.sep +
+            sep +
             'node_modules' +
-            path.sep +
+            sep +
             'ignore-two.txt: no issues found',
-          'nested' + path.sep + 'two.txt: no issues found',
-          'node_modules' + path.sep + 'ignore-one.txt: no issues found',
+          'nested' + sep + 'two.txt: no issues found',
+          'node_modules' + sep + 'ignore-one.txt: no issues found',
           'one.txt: no issues found',
           ''
         ].join('\n')
@@ -330,7 +331,7 @@ test('input', (t) => {
   })
 
   t.test('should include given ignored files (#1)', (t) => {
-    const cwd = path.join(fixtures, 'ignore-file')
+    const cwd = new URL('ignore-file/', fixtures)
     const stderr = spy()
 
     t.plan(1)
@@ -338,19 +339,19 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd,
+        cwd: fileURLToPath(cwd),
         streamError: stderr.stream,
         ignoreName: '.fooignore',
         files: [
-          toVFile(path.join(cwd, 'one.txt')),
-          toVFile(path.join(cwd, 'nested', 'two.txt')),
-          toVFile(path.join(cwd, 'nested', 'three.txt'))
+          toVFile(new URL('one.txt', cwd)),
+          toVFile(new URL('nested/two.txt', cwd)),
+          toVFile(new URL('nested/three.txt', cwd))
         ]
       },
       (error, code) => {
         const expected = [
-          'nested' + path.sep + 'three.txt: no issues found',
-          'nested' + path.sep + 'two.txt',
+          'nested' + sep + 'three.txt: no issues found',
+          'nested' + sep + 'two.txt',
           '  1:1  error  Cannot process specified file: it’s ignored',
           '',
           'one.txt: no issues found',
@@ -370,9 +371,9 @@ test('input', (t) => {
 
   t.test('should not attempt to read files with `value` (1)', (t) => {
     const stderr = spy()
-    const cwd = path.join(fixtures, 'ignore-file')
+    const cwd = new URL('ignore-file/', fixtures)
     const file = toVFile({
-      path: path.join(cwd, 'not-existing.txt'),
+      path: new URL('not-existing.txt', cwd),
       value: 'foo'
     })
 
@@ -381,7 +382,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd,
+        cwd: fileURLToPath(cwd),
         streamError: stderr.stream,
         ignoreName: '.fooignore',
         files: [file]
@@ -406,9 +407,9 @@ test('input', (t) => {
 
   t.test('should not attempt to read files with `value` (2)', (t) => {
     const stderr = spy()
-    const cwd = path.join(fixtures, 'ignore-file')
+    const cwd = new URL('ignore-file/', fixtures)
     const file = toVFile({
-      path: path.join(cwd, 'not-existing-2.txt'),
+      path: new URL('not-existing-2.txt', cwd),
       value: 'foo'
     })
 
@@ -417,7 +418,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd,
+        cwd: fileURLToPath(cwd),
         streamError: stderr.stream,
         ignoreName: '.fooignore',
         files: [file]
@@ -434,13 +435,13 @@ test('input', (t) => {
 
   t.test('should not attempt to read files with `value` (3)', (t) => {
     const stderr = spy()
-    const cwd = path.join(fixtures, 'empty')
+    const cwd = new URL('empty/', fixtures)
     const file1 = toVFile({
-      path: path.join(cwd, 'not-existing-1.txt'),
+      path: new URL('not-existing-1.txt', cwd),
       value: 'foo'
     })
     const file2 = toVFile({
-      path: path.join(cwd, 'not-existing-2.txt'),
+      path: new URL('not-existing-2.txt', cwd),
       value: 'bar'
     })
 
@@ -456,7 +457,7 @@ test('input', (t) => {
             }
           }
         ),
-        cwd,
+        cwd: fileURLToPath(cwd),
         streamError: stderr.stream,
         files: [file1, file2]
       },
@@ -478,7 +479,7 @@ test('input', (t) => {
 
   t.test('should not attempt to read files with `value` (4)', (t) => {
     const stderr = spy()
-    const cwd = path.join(fixtures, 'empty')
+    const cwd = join('test', 'fixtures', 'empty')
     const file = toVFile({value: 'foo'})
 
     t.plan(1)
@@ -491,11 +492,7 @@ test('input', (t) => {
           [
             null,
             0,
-            'test' +
-              path.sep +
-              'fixtures' +
-              path.sep +
-              'empty: no issues found\n'
+            'test' + sep + 'fixtures' + sep + 'empty: no issues found\n'
           ],
           'should report'
         )
@@ -511,15 +508,15 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'ignore-file'),
+        cwd: fileURLToPath(new URL('ignore-file/', fixtures)),
         streamError: stderr.stream,
         ignoreName: '.fooignore',
         files: ['**/*.txt']
       },
       (error, code) => {
         const expected = [
-          'nested' + path.sep + 'three.txt: no issues found',
-          'nested' + path.sep + 'two.txt',
+          'nested' + sep + 'three.txt: no issues found',
+          'nested' + sep + 'two.txt',
           '  1:1  error  Cannot process specified file: it’s ignored',
           '',
           'one.txt: no issues found',
@@ -538,7 +535,7 @@ test('input', (t) => {
   })
 
   t.test('silentlyIgnore: skip detected ignored files (#1)', (t) => {
-    const cwd = path.join(fixtures, 'ignore-file')
+    const cwd = new URL('ignore-file/', fixtures)
     const stderr = spy()
 
     t.plan(1)
@@ -546,19 +543,19 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd,
+        cwd: fileURLToPath(cwd),
         streamError: stderr.stream,
         ignoreName: '.fooignore',
         silentlyIgnore: true,
         files: [
-          toVFile(path.join(cwd, 'one.txt')),
-          toVFile(path.join(cwd, 'nested', 'two.txt')),
-          toVFile(path.join(cwd, 'nested', 'three.txt'))
+          toVFile(new URL('one.txt', cwd)),
+          toVFile(new URL('nested/two.txt', cwd)),
+          toVFile(new URL('nested/three.txt', cwd))
         ]
       },
       (error, code) => {
         const expected = [
-          'nested' + path.sep + 'three.txt: no issues found',
+          'nested' + sep + 'three.txt: no issues found',
           'one.txt: no issues found',
           ''
         ].join('\n')
@@ -580,7 +577,7 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'ignore-file'),
+        cwd: fileURLToPath(new URL('ignore-file/', fixtures)),
         silentlyIgnore: true,
         streamError: stderr.stream,
         ignoreName: '.fooignore',
@@ -588,7 +585,7 @@ test('input', (t) => {
       },
       (error, code) => {
         const expected = [
-          'nested' + path.sep + 'three.txt: no issues found',
+          'nested' + sep + 'three.txt: no issues found',
           'one.txt: no issues found',
           ''
         ].join('\n')
@@ -608,7 +605,7 @@ test('input', (t) => {
     engine(
       {
         processor: unified(),
-        cwd: path.join(fixtures, 'empty'),
+        cwd: fileURLToPath(new URL('empty/', fixtures)),
         streamError: spy().stream,
         files: ['.'],
         rcPath: '123',
@@ -626,7 +623,7 @@ test('input', (t) => {
     engine(
       {
         processor: unified(),
-        cwd: path.join(fixtures, 'empty'),
+        cwd: fileURLToPath(new URL('empty/', fixtures)),
         streamError: spy().stream,
         files: ['.'],
         ignoreUnconfigured: true
@@ -643,7 +640,7 @@ test('input', (t) => {
     engine(
       {
         processor: unified(),
-        cwd: path.join(fixtures, 'empty'),
+        cwd: fileURLToPath(new URL('empty/', fixtures)),
         streamError: spy().stream,
         files: ['.'],
         rcName: 'x',
@@ -665,17 +662,16 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'config-ignore-unconfigured'),
+        cwd: fileURLToPath(new URL('config-ignore-unconfigured/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
         ignoreUnconfigured: true
       },
       (error, code) => {
-        const expected = [
-          'folder' + path.sep + 'two.txt: no issues found',
-          ''
-        ].join('\n')
+        const expected = ['folder' + sep + 'two.txt: no issues found', ''].join(
+          '\n'
+        )
 
         t.deepEqual(
           [error, code, stderr()],
@@ -687,7 +683,7 @@ test('input', (t) => {
   })
 
   t.test('should search if given files', (t) => {
-    const cwd = path.join(fixtures, 'simple-structure')
+    const cwd = new URL('simple-structure/', fixtures)
     const stderr = spy()
 
     t.plan(1)
@@ -695,15 +691,15 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd,
+        cwd: fileURLToPath(cwd),
         streamError: stderr.stream,
         extensions: ['txt'],
-        files: ['nested', toVFile(path.join(cwd, 'one.txt'))]
+        files: ['nested', toVFile(new URL('one.txt', cwd))]
       },
       (error, code) => {
         const expected = [
-          'nested' + path.sep + 'three.txt: no issues found',
-          'nested' + path.sep + 'two.txt: no issues found',
+          'nested' + sep + 'three.txt: no issues found',
+          'nested' + sep + 'two.txt: no issues found',
           'one.txt: no issues found',
           ''
         ].join('\n')
@@ -718,7 +714,7 @@ test('input', (t) => {
   })
 
   t.test('should not access the file system for empty given files', (t) => {
-    const cwd = path.join(fixtures, 'empty')
+    const cwd = new URL('empty/', fixtures)
     const stderr = spy()
 
     t.plan(1)
@@ -726,11 +722,11 @@ test('input', (t) => {
     engine(
       {
         processor: noop,
-        cwd,
+        cwd: fileURLToPath(cwd),
         streamError: stderr.stream,
         files: [
           toVFile({
-            path: path.join(cwd, 'this-does-not-exist.txt'),
+            path: new URL('this-does-not-exist.txt', cwd),
             value: ''
           })
         ]

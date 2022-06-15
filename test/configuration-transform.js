@@ -3,13 +3,13 @@
  * @typedef {import('../index.js').Preset['plugins']} Plugins
  */
 
-import path from 'node:path'
+import {fileURLToPath} from 'node:url'
 import test from 'tape'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const fixtures = path.join('test', 'fixtures')
+const fixtures = new URL('fixtures/', import.meta.url)
 
 test('`configTransform`', (t) => {
   t.plan(1)
@@ -26,7 +26,7 @@ test('`configTransform`', (t) => {
           Object.assign(this, {t})
         }),
         streamError: stderr.stream,
-        cwd: path.join(fixtures, 'config-transform'),
+        cwd: fileURLToPath(new URL('config-transform/', fixtures)),
         files: ['.'],
         packageField: 'foo',
         configTransform(

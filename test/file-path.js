@@ -1,11 +1,12 @@
-import path from 'node:path'
+import {sep} from 'node:path'
 import {PassThrough} from 'node:stream'
+import {fileURLToPath} from 'node:url'
 import test from 'tape'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const fixtures = path.join('test', 'fixtures')
+const fixtures = new URL('fixtures/', import.meta.url)
 
 test('file-path', (t) => {
   t.plan(2)
@@ -16,7 +17,7 @@ test('file-path', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'simple-structure'),
+        cwd: fileURLToPath(new URL('simple-structure/', fixtures)),
         files: ['.'],
         filePath: 'qux/quux.foo',
         extensions: ['txt']
@@ -56,11 +57,11 @@ test('file-path', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'empty'),
+        cwd: fileURLToPath(new URL('empty/', fixtures)),
         streamOut: stdout.stream,
         streamError: stderr.stream,
         streamIn: stream,
-        filePath: 'foo' + path.sep + 'bar.baz'
+        filePath: 'foo' + sep + 'bar.baz'
       },
       (error, code) => {
         t.deepEqual(
@@ -69,7 +70,7 @@ test('file-path', (t) => {
             null,
             0,
             '1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n',
-            'foo' + path.sep + 'bar.baz: no issues found\n'
+            'foo' + sep + 'bar.baz: no issues found\n'
           ],
           'should report'
         )

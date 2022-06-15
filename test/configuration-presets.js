@@ -3,19 +3,19 @@
  * @typedef {import('unist').Literal} Literal
  */
 
-import path from 'node:path'
+import {fileURLToPath} from 'node:url'
 import test from 'tape'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const fixtures = path.join('test', 'fixtures')
+const fixtures = new URL('fixtures/', import.meta.url)
 
 test('configuration-presets', (t) => {
   t.plan(8)
 
   t.test('should fail on invalid `presets`', (t) => {
-    const root = path.join(fixtures, 'config-presets-invalid')
+    const root = new URL('config-presets-invalid/', fixtures)
     const stderr = spy()
 
     t.plan(1)
@@ -23,7 +23,7 @@ test('configuration-presets', (t) => {
     engine(
       {
         processor: noop,
-        cwd: root,
+        cwd: fileURLToPath(root),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -54,7 +54,7 @@ test('configuration-presets', (t) => {
         processor: noop().use(function () {
           Object.assign(this, {t})
         }),
-        cwd: path.join(fixtures, 'config-presets-local'),
+        cwd: fileURLToPath(new URL('config-presets-local/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -78,7 +78,7 @@ test('configuration-presets', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'config-presets-missing-plugin'),
+        cwd: fileURLToPath(new URL('config-presets-missing-plugin/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -112,7 +112,7 @@ test('configuration-presets', (t) => {
         processor: noop().use(function () {
           Object.assign(this, {t})
         }),
-        cwd: path.join(fixtures, 'config-plugins-reconfigure'),
+        cwd: fileURLToPath(new URL('config-plugins-reconfigure/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -139,7 +139,9 @@ test('configuration-presets', (t) => {
         processor: noop().use(function () {
           Object.assign(this, {t})
         }),
-        cwd: path.join(fixtures, 'config-preset-plugins-reconfigure'),
+        cwd: fileURLToPath(
+          new URL('config-preset-plugins-reconfigure/', fixtures)
+        ),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -155,7 +157,7 @@ test('configuration-presets', (t) => {
     )
   })
 
-  t.test('Should reconfigure: turn plugins off', (t) => {
+  t.test('should reconfigure: turn plugins off', (t) => {
     const stderr = spy()
 
     // More assertions are in loaded plugins.
@@ -164,7 +166,9 @@ test('configuration-presets', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'config-plugins-reconfigure-off'),
+        cwd: fileURLToPath(
+          new URL('config-plugins-reconfigure-off/', fixtures)
+        ),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -200,7 +204,7 @@ test('configuration-presets', (t) => {
 
           t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
         }),
-        cwd: path.join(fixtures, 'config-settings-reconfigure-a'),
+        cwd: fileURLToPath(new URL('config-settings-reconfigure-a/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',
@@ -236,7 +240,7 @@ test('configuration-presets', (t) => {
             }
           })
         }),
-        cwd: path.join(fixtures, 'config-settings-reconfigure-b'),
+        cwd: fileURLToPath(new URL('config-settings-reconfigure-b/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         rcName: '.foorc',

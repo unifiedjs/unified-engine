@@ -1,16 +1,15 @@
 /**
  * @typedef {import('unified').ParserFunction} ParserFunction
- * @typedef {import('unified').CompilerFunction} CompilerFunction
  * @typedef {import('unist').Literal} Literal
  */
 
-import path from 'node:path'
+import {fileURLToPath} from 'node:url'
 import test from 'tape'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const fixtures = path.join('test', 'fixtures')
+const fixtures = new URL('fixtures/', import.meta.url)
 
 test('settings', (t) => {
   t.plan(2)
@@ -35,7 +34,7 @@ test('settings', (t) => {
             }
           })
         }),
-        cwd: path.join(fixtures, 'one-file'),
+        cwd: fileURLToPath(new URL('one-file/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -75,7 +74,7 @@ test('settings', (t) => {
             }
           })
         }),
-        cwd: path.join(fixtures, 'config-settings-cascade'),
+        cwd: fileURLToPath(new URL('config-settings-cascade/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -104,7 +103,7 @@ test('plugins', (t) => {
     engine(
       {
         processor: noop,
-        cwd: path.join(fixtures, 'one-file'),
+        cwd: fileURLToPath(new URL('one-file/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -141,7 +140,9 @@ test('plugins', (t) => {
         processor: noop().use(function () {
           Object.assign(this, {t})
         }),
-        cwd: path.join(fixtures, 'config-plugins-basic-reconfigure'),
+        cwd: fileURLToPath(
+          new URL('config-plugins-basic-reconfigure/', fixtures)
+        ),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -170,7 +171,9 @@ test('plugins', (t) => {
         processor: noop().use(function () {
           Object.assign(this, {t})
         }),
-        cwd: path.join(fixtures, 'config-plugins-basic-reconfigure'),
+        cwd: fileURLToPath(
+          new URL('config-plugins-basic-reconfigure/', fixtures)
+        ),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],

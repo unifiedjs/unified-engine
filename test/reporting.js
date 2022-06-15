@@ -2,7 +2,7 @@
  * @typedef {import('unist').Literal<string>} Literal
  */
 
-import path from 'node:path'
+import {fileURLToPath} from 'node:url'
 import process from 'node:process'
 import test from 'tape'
 import stripAnsi from 'strip-ansi'
@@ -11,7 +11,7 @@ import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const fixtures = path.join('test', 'fixtures')
+const fixtures = new URL('fixtures/', import.meta.url)
 
 const windows = process.platform === 'win32'
 const cross = windows ? '×' : '✖'
@@ -44,7 +44,7 @@ test('reporting', (t) => {
             file.message('Warning')
           }
         ),
-        cwd: path.join(fixtures, 'one-file'),
+        cwd: fileURLToPath(new URL('one-file/', fixtures)),
         streamError: stderr.stream,
         files: ['one.txt'],
         frail: true
@@ -78,7 +78,7 @@ test('reporting', (t) => {
             }
           }
         ),
-        cwd: path.join(fixtures, 'two-files'),
+        cwd: fileURLToPath(new URL('two-files/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -106,7 +106,7 @@ test('reporting', (t) => {
     engine(
       {
         processor: noop(),
-        cwd: path.join(fixtures, 'one-file'),
+        cwd: fileURLToPath(new URL('one-file/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -135,7 +135,7 @@ test('reporting', (t) => {
             }
           }
         ),
-        cwd: path.join(fixtures, 'two-files'),
+        cwd: fileURLToPath(new URL('two-files/', fixtures)),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -153,7 +153,7 @@ test('reporting', (t) => {
 
   t.test('should support custom given reporters', (t) => {
     const stderr = spy()
-    const root = path.join(fixtures, 'two-files')
+    const root = fileURLToPath(new URL('two-files/', fixtures))
 
     t.plan(1)
 
@@ -174,7 +174,7 @@ test('reporting', (t) => {
 
   t.test('should support custom reporters (without prefix)', (t) => {
     const stderr = spy()
-    const root = path.join(fixtures, 'two-files')
+    const root = fileURLToPath(new URL('two-files/', fixtures))
 
     t.plan(1)
 
@@ -238,7 +238,7 @@ test('reporting', (t) => {
 
   t.test('should support custom reporters (with prefix)', (t) => {
     const stderr = spy()
-    const root = path.join(fixtures, 'two-files')
+    const root = fileURLToPath(new URL('two-files/', fixtures))
 
     t.plan(1)
 
@@ -273,7 +273,7 @@ test('reporting', (t) => {
   })
 
   t.test('should fail on an unfound reporter', (t) => {
-    const root = path.join(fixtures, 'one-file')
+    const root = fileURLToPath(new URL('one-file/', fixtures))
 
     t.plan(1)
 
