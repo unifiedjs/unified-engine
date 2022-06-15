@@ -66,7 +66,7 @@ files, and more.
 
 ```js
 /**
- * @typedef {import('unified').Callback} Callback
+ * @typedef {import('unified-engine').Callback} Callback
  */
 
 import {engine} from 'unified-engine'
@@ -107,81 +107,81 @@ done.
 *   [`processor`][processor] ([`Processor`][unified-processor])
     — unified processor to transform files
 *   [`cwd`][cwd] (`string` or `URL`, default: `process.cwd()`)
-    — Directory to search files in, load plugins from, and more
+    — directory to search files in, load plugins from, and more
 *   [`files`][files] (`Array<string|URL|VFile>`, optional)
-    — Paths or globs to files and directories, virtual files, or URLs, to
+    — paths or globs to files and directories, virtual files, or URLs, to
     process
 *   [`extensions`][extensions] (`Array<string>`, optional)
-    — If `files` matches directories, include files with `extensions`
+    — if `files` matches directories, include files with `extensions`
 *   [`streamIn`][stream-in] (`ReadableStream`, default: `process.stdin`)
-    — Stream to read from if no files are found or given
+    — stream to read from if no files are found or given
 *   [`filePath`][file-path] (`string`, optional)
-    — File path to process the given file on `streamIn` as
+    — file path to process the given file on `streamIn` as
 *   [`streamOut`][stream-out] (`WritableStream`, default: `process.stdout`)
-    — Stream to write processed files to
+    — stream to write processed files to
 *   [`streamError`][stream-error] (`WritableStream`, default: `process.stderr`)
-    — Stream to write the report (if any) to
+    — stream to write the report (if any) to
 *   [`out`][out] (`boolean`, default: depends)
-    — Whether to write the processed file to `streamOut`
+    — whether to write the processed file to `streamOut`
 *   [`output`][output] (`boolean` or `string`, default: `false`)
-    — Whether to write successfully processed files, and where to
+    — whether to write successfully processed files, and where to
 *   [`alwaysStringify`][always-stringify] (`boolean`, default: `false`)
-    — Whether to always serialize successfully processed files
+    — whether to always serialize successfully processed files
 *   [`tree`][tree] (`boolean`, default: `false`)
-    — Whether to treat both input and output as a syntax tree
+    — whether to treat both input and output as a syntax tree
 *   [`treeIn`][tree-in] (`boolean`, default: `tree`)
-    — Whether to treat input as a syntax tree
+    — whether to treat input as a syntax tree
 *   [`treeOut`][tree-out] (`boolean`, default: `tree`)
-    — Whether to treat output as a syntax tree
+    — whether to treat output as a syntax tree
 *   [`inspect`][inspect] (`boolean`, default: `false`)
-    — Whether to output a formatted syntax tree
+    — whether to output a formatted syntax tree
 *   [`rcName`][rc-name] (`string`, optional)
-    — Name of configuration files to load
+    — wame of configuration files to load
 *   [`packageField`][package-field] (`string`, optional)
-    — Property at which configuration can be found in `package.json` files
+    — property at which configuration can be found in `package.json` files
 *   [`detectConfig`][detect-config] (`boolean`, default: whether `rcName` or
     `packageField` is given)
-    — Whether to search for configuration files
+    — whether to search for configuration files
 *   [`rcPath`][rc-path] (`string`, optional)
-    — Filepath to a configuration file to load
+    — filepath to a configuration file to load
 *   [`settings`][settings] (`Object`, optional)
-    — Configuration for the parser and compiler of the processor
+    — configuration for the parser and compiler of the processor
 *   [`ignoreName`][ignore-name] (`string`, optional)
-    — Name of ignore files to load
+    — name of ignore files to load
 *   [`detectIgnore`][detect-ignore] (`boolean`, default: whether `ignoreName`
     is given)
-    — Whether to search for ignore files
+    — whether to search for ignore files
 *   [`ignorePath`][ignore-path] (`string`, optional)
-    — Filepath to an ignore file to load
+    — filepath to an ignore file to load
 *   [`ignorePathResolveFrom`][ignore-path-resolve-from] (`'dir'` or `'cwd'`,
     default: `'dir'`)
-    — Resolve patterns in `ignorePath` from the current working directory or the
+    — resolve patterns in `ignorePath` from the current working directory or the
     file’s directory
 *   [`ignorePatterns`][ignore-patterns] (`Array<string>`, optional)
-    — Patterns to ignore in addition to ignore files, if any
+    — patterns to ignore in addition to ignore files, if any
 *   [`ignoreUnconfigured`][ignore-unconfigured] (`boolean`, default: `false`)
-    — Ignore files that do not have an associated detected configuration file
+    — ignore files that do not have an associated detected configuration file
 *   [`silentlyIgnore`][silently-ignore] (`boolean`, default: `false`)
-    — Skip given files if they are ignored
+    — skip given files if they are ignored
 *   [`plugins`][options-plugins] (`Array|Object`, optional)
-    — Plugins to use
+    — plugins to use
 *   [`pluginPrefix`][plugin-prefix] (`string`, optional)
-    — Optional prefix to use when searching for plugins
+    — optional prefix to use when searching for plugins
 *   [`configTransform`][config-transform] (`Function`, optional)
-    — Transform config files from a different schema
+    — transform config files from a different schema
 *   [`reporter`][reporter] (`string` or `function`, default:
     `import {reporter} from 'vfile-reporter'`)
-    — Reporter to use
+    — reporter to use
 *   [`reporterOptions`][reporteroptions] (`Object?`, optional)
-    — Config to pass to the used reporter
+    — config to pass to the used reporter
 *   [`color`][color] (`boolean`, default: `false`)
-    — Whether to report with ANSI color sequences
+    — whether to report with ANSI color sequences
 *   [`silent`][silent] (`boolean`, default: `false`)
-    — Report only fatal errors
+    — report only fatal errors
 *   [`quiet`][quiet] (`boolean`, default: `silent`)
-    — Do not report successful files
+    — do not report successful files
 *   [`frail`][frail] (`boolean`, default: `false`)
-    — Call back with an unsuccessful (`1`) code on warnings as well as errors
+    — call back with an unsuccessful (`1`) code on warnings as well as errors
 
 #### `function callback(error[, code, context])`
 

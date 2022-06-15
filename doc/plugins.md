@@ -89,8 +89,8 @@ Returns self.
 
 ###### Parameters
 
-*   `filePath` (`string`) — Path to virtual file
-*   `file` ([`VFile`][vfile]) — Virtual file
+*   `filePath` (`string`) — path to virtual file
+*   `file` ([`VFile`][vfile]) — virtual file
 
 ### `fileSet.use(completer)`
 
@@ -113,12 +113,12 @@ If an error occurs (either because it’s thrown, returned, rejected, or passed 
 ###### Returns
 
 *   `Error`
-*   `Promise` — If a promise is returned, the function is asynchronous, and
+*   `Promise` — if a promise is returned, the function is asynchronous, and
     **must** be resolved (with nothing) or rejected (with an `Error`)
 
 ###### Properties
 
-*   `pluginId` (`string`) — Plugins specified through various mechanisms are
+*   `pluginId` (`string`) — plugins specified through various mechanisms are
     attached to a new [`processor`][unified-processor] for each file.
     If a `completer` is `use`d multiple times, it is called multiple times as
     well.
@@ -132,7 +132,7 @@ If the signature of a completer includes `next` (second argument), the function
 
 ###### Parameters
 
-*   `error` (`Error`, optional) — Fatal error
+*   `error` (`Error`, optional) — fatal error
 
 <!-- Definitions -->
 
