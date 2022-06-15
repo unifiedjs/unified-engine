@@ -153,14 +153,13 @@ test('reporting', (t) => {
 
   t.test('should support custom given reporters', (t) => {
     const stderr = spy()
-    const root = fileURLToPath(new URL('two-files/', fixtures))
 
     t.plan(1)
 
     engine(
       {
         processor: noop(),
-        cwd: root,
+        cwd: new URL('two-files/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -174,7 +173,7 @@ test('reporting', (t) => {
 
   t.test('should support custom reporters (without prefix)', (t) => {
     const stderr = spy()
-    const root = fileURLToPath(new URL('two-files/', fixtures))
+    const cwd = new URL('two-files/', fixtures)
 
     t.plan(1)
 
@@ -188,7 +187,7 @@ test('reporting', (t) => {
             }
           }
         ),
-        cwd: root,
+        cwd,
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -202,13 +201,13 @@ test('reporting', (t) => {
           [
             {
               path: 'one.txt',
-              cwd: root,
+              cwd: fileURLToPath(cwd),
               history: ['one.txt'],
               messages: []
             },
             {
               path: 'two.txt',
-              cwd: root,
+              cwd: fileURLToPath(cwd),
               history: ['two.txt'],
               messages: [
                 {
@@ -238,7 +237,7 @@ test('reporting', (t) => {
 
   t.test('should support custom reporters (with prefix)', (t) => {
     const stderr = spy()
-    const root = fileURLToPath(new URL('two-files/', fixtures))
+    const cwd = new URL('two-files/', fixtures)
 
     t.plan(1)
 
@@ -252,7 +251,7 @@ test('reporting', (t) => {
             }
           }
         ),
-        cwd: root,
+        cwd,
         streamError: stderr.stream,
         files: ['.'],
         extensions: ['txt'],
@@ -273,14 +272,12 @@ test('reporting', (t) => {
   })
 
   t.test('should fail on an unfound reporter', (t) => {
-    const root = fileURLToPath(new URL('one-file/', fixtures))
-
     t.plan(1)
 
     engine(
       {
         processor: noop(),
-        cwd: root,
+        cwd: new URL('one-file/', fixtures),
         files: ['.'],
         extensions: ['txt'],
         reporter: 'missing'

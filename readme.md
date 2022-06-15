@@ -88,8 +88,9 @@ done.
     — unified processor to transform files
 *   [`cwd`][cwd] (`string` or `URL`, default: `process.cwd()`)
     — Directory to search files in, load plugins from, and more
-*   [`files`][files] (`Array<string|VFile>`, optional)
-    — Paths or globs to files and directories, or virtual files, to process
+*   [`files`][files] (`Array<string|URL|VFile>`, optional)
+    — Paths or globs to files and directories, virtual files, or URLs, to
+    process
 *   [`extensions`][extensions] (`Array<string>`, optional)
     — If `files` matches directories, include files with `extensions`
 *   [`streamIn`][stream-in] (`ReadableStream`, default: `process.stdin`)

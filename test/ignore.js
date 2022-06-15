@@ -292,7 +292,7 @@ test('ignore', (t) => {
         processor: noop,
         cwd,
         streamError: stderr.stream,
-        files: [fileURLToPath(url)]
+        files: [url]
       },
       (error, code) => {
         fs.unlinkSync(url)

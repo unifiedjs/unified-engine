@@ -97,7 +97,8 @@ function done(error) {
 
 ## `options.files`
 
-Paths or [globs][glob], or [vfile][]s to files and directories to process.
+Paths or [globs][glob], or [vfile][]s or `URL`s to files and directories to
+process.
 Fileglobs (for example, `*.md`) can be given to add all matching files.
 Directories and globs to directories can be given alongside
 [`extensions`][extensions] to search directories for files matching an extension
@@ -106,7 +107,7 @@ Directories and globs to directories can be given alongside
 This searching will not include `node_modules` or hidden directories (those
 starting with a dot, `.`, like `.git`).
 
-*   Type: `Array<string>`
+*   Type: `Array<string|URL|VFile>`
 *   Default: `[]`
 
 ###### Example
