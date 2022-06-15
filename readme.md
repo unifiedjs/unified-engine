@@ -7,25 +7,51 @@
 [![Backers][backers-badge]][collective]
 [![Chat][chat-badge]][chat]
 
-Engine to process multiple files with [**unified**][unified], allowing users to
-[configure][] from the file system.
+**[unified][]** engine to process multiple files, lettings users [configure][]
+from the file system.
 
-## Projects
+## Contents
 
-The following projects wrap the engine:
+*   [What is this?](#what-is-this)
+*   [When should I use this?](#when-should-i-use-this)
+*   [Install](#install)
+*   [Use](#use)
+*   [API](#api)
+    *   [`engine(options, callback)`](#engineoptions-callback)
+*   [Plugins](#plugins)
+*   [Configuration](#configuration)
+*   [Ignoring](#ignoring)
+*   [Types](#types)
+*   [Compatibility](#compatibility)
+*   [Security](#security)
+*   [Contribute](#contribute)
+*   [License](#license)
 
-*   [`unified-args`][args] — Create CLIs for processors
-*   [`unified-engine-gulp`][gulp] — Create Gulp plugins
-*   [`unified-engine-atom`][atom] — Create Atom Linters for processors
-*   [`unified-language-server`][language-server] — Create language servers for
-    processors
+## What is this?
+
+This package is the engine.
+It’s what you use underneath when you use [`remark-cli`][remark-cli] or a
+language server.
+Compared to unified, this deals with multiple files, often from the file
+system, and with configuration files and ignore files.
+
+## When should I use this?
+
+You typically use something that wraps this, such as:
+
+*   [`unified-args`][args]
+    — create CLIs
+*   [`unified-engine-gulp`][gulp]
+    — create Gulp plugins
+*   [`unified-language-server`][language-server]
+    — create language servers
+
+You can use this to make such things.
 
 ## Install
 
-This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
-Node 14+ is needed to use it and it must be `import`ed instead of `require`d.
-
-[npm][]:
+This package is [ESM only][esm].
+In Node.js (version 12.20+, 14.14+, 16.0+, or 18.0+), install with [npm][]:
 
 ```sh
 npm install unified-engine
@@ -34,11 +60,15 @@ npm install unified-engine
 ## Use
 
 The following example processes all files in the current directory with a
-Markdown extension with [**remark**][remark], allows [configuration][configure]
+markdown extension with **[remark][]**, allows [configuration][configure]
 from `.remarkrc` and `package.json` files, ignoring files from `.remarkignore`
 files, and more.
 
 ```js
+/**
+ * @typedef {import('unified').Callback} Callback
+ */
+
 import {engine} from 'unified-engine'
 import {remark} from 'remark'
 
@@ -56,25 +86,15 @@ engine(
   done
 )
 
+/** @type {Callback} */
 function done(error) {
   if (error) throw error
 }
 ```
 
-## Contents
-
-*   [API](#api)
-    *   [`engine(options, callback)`](#engineoptions-callback)
-*   [Plugins](#plugins)
-*   [Configuration](#configuration)
-*   [Ignoring](#ignoring)
-*   [Security](#security)
-*   [Contribute](#contribute)
-*   [License](#license)
-
 ## API
 
-This package exports the following identifiers: `engine`.
+This package exports the identifier `engine`.
 There is no default export.
 
 ### `engine(options, callback)`
@@ -165,17 +185,17 @@ done.
 
 #### `function callback(error[, code, context])`
 
-Called when processing is complete, either with a fatal error if processing went
-horribly wrong (probably due to incorrect configuration), or a status code and
-the processing context.
+Called when processing is complete, either with a fatal error if processing
+went horribly wrong (probably due to incorrect configuration on your part as a
+developer), or a status code and the processing context.
 
 ###### Parameters
 
-*   `error` (`Error`) — Fatal error
-*   `code` (`number`) — Either `0` if successful, or `1` if unsuccessful.
-    The latter occurs if [fatal][] errors happen when processing individual
+*   `error` (`Error`) — fatal error
+*   `code` (`number`) — either `0` if successful, or `1` if unsuccessful,
+    the latter occurs if [fatal][] errors happen when processing individual
     files, or if [`frail`][frail] is set and warnings occur
-*   `context` (`Object`) — Processing context, containing internally used
+*   `context` (`Object`) — processing context, containing internally used
     information and a `files` array with the processed files
 
 ## Plugins
@@ -191,6 +211,30 @@ work.
 ## Ignoring
 
 [`doc/ignore.md`][ignore] describes in detail how ignore files work.
+
+## Types
+
+This package is fully typed with [TypeScript][].
+It additionally exports the following types:
+
+*   `VFileReporterOptions` — models options passed to vfile reporters
+*   `VFileReporter` — models the signature accepted as a vfile reporter
+*   `FileSet` — models what is passed to plugins as a second parameter
+*   `Completer` — models file set plugins
+*   `ResolveFrom` — models the enum allowed for `options.ignorePathResolveFrom`
+*   `ConfigTransform` — models the signature of `options.configTransform`
+*   `Preset` — models a preset, like `Preset` from `unified` but accepts
+    strings
+*   `Options` — models configuration
+*   `Context` — models the third parameter to `callback`
+*   `Callback` — models the signature of `callback`
+
+## Compatibility
+
+Projects maintained by the unified collective are compatible with all maintained
+versions of Node.js.
+As of now, that is Node.js 12.20+, 14.14+, 16.0+, and 18.0+.
+Our projects sometimes work with older versions, but this is not guaranteed.
 
 ## Security
 
@@ -240,13 +284,17 @@ abide by its terms.
 
 [npm]: https://docs.npmjs.com/cli/install
 
+[esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
+
+[typescript]: https://www.typescriptlang.org
+
 [health]: https://github.com/unifiedjs/.github
 
-[contributing]: https://github.com/unifiedjs/.github/blob/HEAD/contributing.md
+[contributing]: https://github.com/unifiedjs/.github/blob/main/contributing.md
 
-[support]: https://github.com/unifiedjs/.github/blob/HEAD/support.md
+[support]: https://github.com/unifiedjs/.github/blob/main/support.md
 
-[coc]: https://github.com/unifiedjs/.github/blob/HEAD/code-of-conduct.md
+[coc]: https://github.com/unifiedjs/.github/blob/main/code-of-conduct.md
 
 [license]: license
 
@@ -342,10 +390,10 @@ abide by its terms.
 
 [plugins]: doc/plugins.md
 
-[atom]: https://github.com/unifiedjs/unified-engine-atom
-
 [gulp]: https://github.com/unifiedjs/unified-engine-gulp
 
 [language-server]: https://github.com/unifiedjs/unified-language-server
 
 [args]: https://github.com/unifiedjs/unified-args
+
+[remark-cli]: https://github.com/remarkjs/remark/tree/main/packages/remark-cli#readme
