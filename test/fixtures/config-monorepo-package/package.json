@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "fooConfig": {
+    "plugins": [
+      "./plugin.js"
+    ]
+  }
+}
