@@ -12,7 +12,7 @@ import {spy} from './util/spy.js'
 const fixtures = path.join('test', 'fixtures')
 
 test('configuration', (t) => {
-  t.plan(15)
+  t.plan(16)
 
   t.test('should fail fatally when custom rc files are missing', (t) => {
     const stderr = spy()
@@ -480,6 +480,34 @@ test('configuration', (t) => {
           [null, 0, 'one.txt: no issues found\n'],
           'should report'
         )
+      }
+    )
+  })
+
+  t.test('should ignore unconfigured `packages.json`', (t) => {
+    const stderr = spy()
+
+    t.plan(1)
+
+    engine(
+      {
+        processor: noop(),
+        cwd: path.join(fixtures, 'config-monorepo-package'),
+        streamError: stderr.stream,
+        files: ['.'],
+        packageField: 'fooConfig',
+        extensions: ['txt']
+      },
+      (error, code) => {
+        const actual = stderr().split('\n').slice(0, 4).join('\n')
+        const expected = [
+          'packages' + path.sep + 'deep' + path.sep + 'one.txt',
+          '  1:1  error  Error: Cannot parse file `package.json`',
+          'Cannot import `plugin.js`',
+          'Error: Boom!'
+        ].join('\n')
+
+        t.deepEqual([error, code, actual], [null, 1, expected], 'should report')
       }
     )
   })
