@@ -32,7 +32,7 @@ function done(error) {
   if (error) throw error
 }
 
-function plugin(processor, options, set) {
+function plugin(options, set) {
   set.use(completer)
   set.add('history.md')
 }
