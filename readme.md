@@ -136,7 +136,7 @@ done.
 *   [`inspect`][inspect] (`boolean`, default: `false`)
     — whether to output a formatted syntax tree
 *   [`rcName`][rc-name] (`string`, optional)
-    — wame of configuration files to load
+    — name of configuration files to load
 *   [`packageField`][package-field] (`string`, optional)
     — property at which configuration can be found in `package.json` files
 *   [`detectConfig`][detect-config] (`boolean`, default: whether `rcName` or
