@@ -1,4 +1,7 @@
-/** @type {import('unified').Plugin<Array<unknown>>} */
+/**
+ * @this {import('unified').Processor}
+ * @type {import('unified').Plugin<Array<unknown>>}
+ */
 export default function mergeObject(options) {
   /** @type {import('tape').Test} */
   // @ts-expect-error: hush.
