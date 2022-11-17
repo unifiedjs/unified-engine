@@ -18,6 +18,9 @@ const windows = process.platform === 'win32'
 const cross = windows ? '×' : '✖'
 const danger = windows ? '‼' : '⚠'
 
+/** @type {import('unified-engine').VFileReporter} */
+const vfileReporterPrettyAsync = async (files) => vfileReporterPretty(files)
+
 // See: <https://github.com/sindresorhus/eslint-formatter-pretty/blob/159b30a/index.js#L90-L93>.
 const original = process.env.CI
 
@@ -163,6 +166,29 @@ test('reporting', async () => {
           [error, code, stripAnsi(stderr())],
           [null, 0, ''],
           'should support custom given reporters'
+        )
+        resolve(undefined)
+      }
+    )
+  })
+
+  await new Promise((resolve) => {
+    const stderr = spy()
+
+    engine(
+      {
+        processor: noop(),
+        cwd: new URL('two-files/', fixtures),
+        streamError: stderr.stream,
+        files: ['.'],
+        extensions: ['txt'],
+        reporter: vfileReporterPrettyAsync
+      },
+      (error, code) => {
+        assert.deepEqual(
+          [error, code, stripAnsi(stderr())],
+          [null, 0, ''],
+          'should support async reporters'
         )
         resolve(undefined)
       }
