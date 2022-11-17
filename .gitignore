@@ -3,5 +3,6 @@ coverage/
 .DS_Store
 *.d.ts
 *.d.mts
+*.d.cts
 *.log
 yarn.lock

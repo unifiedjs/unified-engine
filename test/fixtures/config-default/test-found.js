@@ -1,3 +1,4 @@
+// @ts-expect-error: TS 4.9 is wrong.
 /** @type {import('unified').Plugin<Array<unknown>>} */
 module.exports = function (options) {
   /** @type {import('tape').Test} */
