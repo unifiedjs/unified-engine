@@ -1,12 +1,7 @@
-/** @type {import('unified').Plugin<Array<unknown>>} */
+/** @param {unknown} options */
 export default function objectToArray(options) {
-  /** @type {import('tape').Test} */
-  // @ts-expect-error: hush.
-  const t = this.t
-
-  t.deepEqual(
-    options,
-    [2],
-    'object-to-array: should pass the reconfigured array'
-  )
+  // @ts-expect-error: set by tests.
+  globalThis.unifiedEngineTestCalls++
+  // @ts-expect-error: set by tests.
+  globalThis.unifiedEngineTestValues.objectToArray = options
 }

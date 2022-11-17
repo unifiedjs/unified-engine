@@ -2,11 +2,12 @@
  * @typedef {import('unist').Literal<string>} Literal
  */
 
+import assert from 'node:assert/strict'
 import {Buffer} from 'node:buffer'
 import fs from 'node:fs'
 import {sep} from 'node:path'
 import {fileURLToPath} from 'node:url'
-import test from 'tape'
+import test from 'node:test'
 import {toVFile} from 'to-vfile'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
@@ -14,14 +15,10 @@ import {spy} from './util/spy.js'
 
 const fixtures = new URL('fixtures/', import.meta.url)
 
-test('output', (t) => {
-  t.plan(16)
-
-  t.test('should not write to stdout on dirs', (t) => {
+test('output', async () => {
+  await new Promise((resolve) => {
     const stdout = spy()
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -38,20 +35,19 @@ test('output', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stdout(), stderr()],
           [null, 0, '', 'one.txt: no issues found\n'],
-          'should report'
+          'should not write to stdout on dirs'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should write to stdout on one file', (t) => {
+  await new Promise((resolve) => {
     const stdout = spy()
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -68,21 +64,20 @@ test('output', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stdout(), stderr()],
           [null, 0, 'two', 'one.txt: no issues found\n'],
-          'should report'
+          'should write to stdout on one file'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should not write to stdout without `out`', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('one-file/', fixtures)
     const stdout = spy()
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -100,22 +95,21 @@ test('output', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stdout(), stderr()],
           [null, 0, '', 'one.txt: no issues found\n'],
-          'should report'
+          'should not write to stdout without `out`'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should not write multiple files to stdout', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('two-files/', fixtures)
     const stdout = spy()
     const stderr = spy()
 
-    t.plan(1)
-
     engine(
       {
         processor: noop().use(
@@ -132,20 +126,19 @@ test('output', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stdout(), stderr()],
           [null, 0, '', 'one.txt: no issues found\ntwo.txt: no issues found\n'],
-          'should report'
+          'should not write multiple files to stdout'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should output files', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('one-file/', fixtures)
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -167,20 +160,19 @@ test('output', (t) => {
 
         fs.truncateSync(url)
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, doc, stderr()],
           [null, 0, 'two', 'one.txt: written\n'],
-          'should report'
+          'should output files'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should write to a path', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('simple-structure/', fixtures)
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -202,20 +194,19 @@ test('output', (t) => {
 
         fs.unlinkSync(new URL('four.txt', cwd))
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, input, output, stderr()],
           [null, 0, '', 'two', 'one.txt > four.txt: written\n'],
-          'should report'
+          'should write to a path'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should write to directories', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('simple-structure/', fixtures)
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -237,20 +228,19 @@ test('output', (t) => {
 
         fs.unlinkSync(new URL('nested/one.txt', cwd))
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, input, output, stderr()],
           [null, 0, '', 'two', 'one.txt > nested' + sep + 'one.txt: written\n'],
-          'should report'
+          'should write to directories'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should not create intermediate directories', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('simple-structure/', fixtures)
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -272,16 +262,19 @@ test('output', (t) => {
             "'"
         ].join('\n')
 
-        t.deepEqual([error, code, actual], [null, 1, expected], 'should report')
+        assert.deepEqual(
+          [error, code, actual],
+          [null, 1, expected],
+          'should not create intermediate directories'
+        )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should write injected files', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('one-file/', fixtures)
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -301,20 +294,19 @@ test('output', (t) => {
 
         fs.truncateSync(new URL('one.txt', cwd))
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, doc, stderr()],
           [null, 0, 'two', 'one.txt: written\n'],
-          'should report'
+          'should write injected files'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should not write without file-path', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('one-file/', fixtures)
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -341,20 +333,19 @@ test('output', (t) => {
           '  1:1  error  Error: Cannot write file without an output path'
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, doc, actual],
           [null, 1, '', expected],
-          'should report'
+          'should not write without file-path'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should fail when writing files to one path', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('two-files/', fixtures)
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -375,16 +366,19 @@ test('output', (t) => {
           '  1:1  error  Error: Cannot write multiple files to single output'
         ].join('\n')
 
-        t.deepEqual([error, code, actual], [null, 1, expected], 'should report')
+        assert.deepEqual(
+          [error, code, actual],
+          [null, 1, expected],
+          'should fail when writing files to one path'
+        )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should fail when writing to non-existent dirs', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('two-files/', fixtures)
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -403,17 +397,20 @@ test('output', (t) => {
           '  1:1  error  Error: Cannot read output directory. Error:'
         ].join('\n')
 
-        t.deepEqual([error, code, actual], [null, 1, expected], 'should report')
+        assert.deepEqual(
+          [error, code, actual],
+          [null, 1, expected],
+          'should fail when writing to non-existent dirs'
+        )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should not create a new file when input file does not exist', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('empty/', fixtures)
     const targetFile = new URL('one.txt', cwd)
     const stderr = spy()
-
-    t.plan(2)
 
     engine(
       {
@@ -432,19 +429,22 @@ test('output', (t) => {
           '  1:1  error  No such file or directory'
         ].join('\n')
 
-        t.deepEqual([error, code, actual], [null, 1, expected], 'should report')
+        assert.deepEqual(
+          [error, code, actual],
+          [null, 1, expected],
+          'should not create a new file when input file does not exist'
+        )
 
-        t.notOk(fs.existsSync(targetFile))
+        assert.ok(!fs.existsSync(targetFile))
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should write buffers', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('filled-file/', fixtures)
     const stdout = spy()
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -465,21 +465,20 @@ test('output', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stdout(), stderr()],
           [null, 0, 'bravo', 'one.txt: no issues found\n'],
-          'should report'
+          'should write buffers'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should ignore nullish compilers', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('filled-file/', fixtures)
     const stdout = spy()
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -500,21 +499,20 @@ test('output', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stdout().trim(), stderr()],
           [null, 0, 'alpha', 'one.txt: no issues found\n'],
-          'should report'
+          'should ignore nullish compilers'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should ignore non-text compilers', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('filled-file/', fixtures)
     const stdout = spy()
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -535,11 +533,12 @@ test('output', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stdout().trim(), stderr()],
           [null, 0, 'alpha', 'one.txt: no issues found\n'],
-          'should report'
+          'should ignore non-text compilers'
         )
+        resolve(undefined)
       }
     )
   })

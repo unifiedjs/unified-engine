@@ -3,8 +3,9 @@
  */
 
 import {fileURLToPath} from 'node:url'
+import assert from 'node:assert/strict'
 import process from 'node:process'
-import test from 'tape'
+import test from 'node:test'
 import stripAnsi from 'strip-ansi'
 import vfileReporterPretty from 'vfile-reporter-pretty'
 import {engine} from '../index.js'
@@ -17,24 +18,16 @@ const windows = process.platform === 'win32'
 const cross = windows ? '×' : '✖'
 const danger = windows ? '‼' : '⚠'
 
+// See: <https://github.com/sindresorhus/eslint-formatter-pretty/blob/159b30a/index.js#L90-L93>.
+const original = process.env.CI
+
 if (!windows) {
-  // See: <https://github.com/sindresorhus/eslint-formatter-pretty/blob/159b30a/index.js#L90-L93>.
-  const original = process.env.CI
-
   process.env.CI = 'true'
-
-  test.onFinish(() => {
-    process.env.CI = original
-  })
 }
 
-test('reporting', (t) => {
-  t.plan(8)
-
-  t.test('should fail for warnings with `frail`', (t) => {
+test('reporting', async () => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -50,23 +43,22 @@ test('reporting', (t) => {
         frail: true
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [
             null,
             1,
             'one.txt\n  1:1  warning  Warning\n\n' + danger + ' 1 warning\n'
           ],
-          'should report'
+          'should fail for warnings with `frail`'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should not report succesful files when `quiet` (#1)', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -85,23 +77,22 @@ test('reporting', (t) => {
         quiet: true
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [
             null,
             0,
             'two.txt\n  1:1  warning  Warning\n\n' + danger + ' 1 warning\n'
           ],
-          'should report'
+          'should not report succesful files when `quiet` (#1)'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should not report succesful files when `quiet` (#2)', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -113,15 +104,18 @@ test('reporting', (t) => {
         quiet: true
       },
       (error, code) => {
-        t.deepEqual([error, code, stderr()], [null, 0, ''], 'should not report')
+        assert.deepEqual(
+          [error, code, stderr()],
+          [null, 0, ''],
+          'should not report succesful files when `quiet` (#2)'
+        )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should not report succesful files when `silent`', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -142,19 +136,18 @@ test('reporting', (t) => {
         silent: true
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 1, 'two.txt\n  1:1  error  Error\n\n' + cross + ' 1 error\n'],
-          'should report'
+          'should not report succesful files when `silent`'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support custom given reporters', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -166,16 +159,19 @@ test('reporting', (t) => {
         reporter: vfileReporterPretty
       },
       (error, code) => {
-        t.deepEqual([error, code, stripAnsi(stderr())], [null, 0, ''])
+        assert.deepEqual(
+          [error, code, stripAnsi(stderr())],
+          [null, 0, ''],
+          'should support custom given reporters'
+        )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support custom reporters (without prefix)', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
     const cwd = new URL('two-files/', fixtures)
-
-    t.plan(1)
 
     engine(
       {
@@ -230,16 +226,19 @@ test('reporting', (t) => {
           2
         )
 
-        t.deepEqual([error, code, stderr()], [null, 1, report + '\n'])
+        assert.deepEqual(
+          [error, code, stderr()],
+          [null, 1, report + '\n'],
+          'should support custom reporters (without prefix)'
+        )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support custom reporters (with prefix)', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
     const cwd = new URL('two-files/', fixtures)
-
-    t.plan(1)
 
     engine(
       {
@@ -258,22 +257,22 @@ test('reporting', (t) => {
         reporter: 'vfile-reporter-pretty'
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stripAnsi(stderr())],
           [
             null,
             0,
             // Note: `vfile-reporter-pretty` returns `⚠` on Windows too.
             '\n  one.txt\n  ⚠  Info!  \n\n  1 warning\n'
-          ]
+          ],
+          'should support custom reporters (with prefix)'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should fail on an unfound reporter', (t) => {
-    t.plan(1)
-
+  await new Promise((resolve) => {
     engine(
       {
         processor: noop(),
@@ -283,8 +282,17 @@ test('reporting', (t) => {
         reporter: 'missing'
       },
       (error) => {
-        t.equal(error && error.message, 'Could not find reporter `missing`')
+        assert.equal(
+          error && error.message,
+          'Could not find reporter `missing`',
+          'should fail on an unfound reporter'
+        )
+        resolve(undefined)
       }
     )
   })
+
+  if (!windows) {
+    process.env.CI = original
+  }
 })

@@ -1,23 +1,15 @@
-/**
- * @typedef {import('unified').ParserFunction} ParserFunction
- * @typedef {import('unist').Literal} Literal
- */
-
-import test from 'tape'
+import assert from 'node:assert/strict'
+import test from 'node:test'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
 const fixtures = new URL('fixtures/', import.meta.url)
 
-test('configuration-presets', (t) => {
-  t.plan(8)
-
-  t.test('should fail on invalid `presets`', (t) => {
+test('configuration-presets', async () => {
+  await new Promise((resolve) => {
     const root = new URL('config-presets-invalid/', fixtures)
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -37,22 +29,27 @@ test('configuration-presets', (t) => {
           'Expected a list or object of plugins, not `./preset`'
         ].join('\n')
 
-        t.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
+        assert.deepEqual(
+          [error, code, actual],
+          [null, 1, expected],
+          'should fail on invalid `presets`'
+        )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support plugins with the same name', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
 
-    // More assertions are in loaded plugins.
-    t.plan(3)
+    // @ts-expect-error: incremented by plugins.
+    globalThis.unifiedEngineTestCalls = 0
+    // @ts-expect-error: set by plugins.
+    globalThis.unifiedEngineTestValues = {}
 
     engine(
       {
-        processor: noop().use(function () {
-          Object.assign(this, {t})
-        }),
+        processor: noop(),
         cwd: new URL('config-presets-local/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
@@ -60,19 +57,28 @@ test('configuration-presets', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
           'should succeed'
         )
+        // @ts-expect-error: incremented by plugins.
+        assert.equal(globalThis.unifiedEngineTestCalls, 2)
+
+        assert.deepEqual(
+          // @ts-expect-error: added by plugins.
+          globalThis.unifiedEngineTestValues,
+          {local: {three: true, two: false}, deep: {one: true, two: true}},
+          'should pass the correct options to the local and deep plugins'
+        )
+
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should handle missing plugins in presets', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -91,26 +97,28 @@ test('configuration-presets', (t) => {
           '  1:1  error  Error: Could not find module `./plugin.js`'
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, actual],
           [null, 1, expected],
-          'should succeed'
+          'should handle missing plugins in presets'
         )
+
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should reconfigure plugins', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
 
-    // Five more assertions are loaded in the plugin.
-    t.plan(6)
+    // @ts-expect-error: incremented by plugins.
+    globalThis.unifiedEngineTestCalls = 0
+    // @ts-expect-error: set by plugins.
+    globalThis.unifiedEngineTestValues = {}
 
     engine(
       {
-        processor: noop().use(function () {
-          Object.assign(this, {t})
-        }),
+        processor: noop(),
         cwd: new URL('config-plugins-reconfigure/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
@@ -118,26 +126,41 @@ test('configuration-presets', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
-          'should succeed'
+          'should reconfigure plugins'
         )
+        // @ts-expect-error: incremented by plugin.
+        assert.equal(globalThis.unifiedEngineTestCalls, 5)
+        assert.deepEqual(
+          // @ts-expect-error: added by plugins.
+          globalThis.unifiedEngineTestValues,
+          {
+            arrayToObject: {delta: 1},
+            mergeObject: {one: true, two: false, three: true},
+            objectToArray: [2],
+            stringToArray: [1],
+            stringToObject: {bravo: 1}
+          },
+          'should pass the correct options to plugins'
+        )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should reconfigure imported plugins', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
 
-    // One more assertion is loaded in the plugin.
-    t.plan(2)
+    // @ts-expect-error: incremented by plugins.
+    globalThis.unifiedEngineTestCalls = 0
+    // @ts-expect-error: set by plugins.
+    globalThis.unifiedEngineTestValues = {}
 
     engine(
       {
-        processor: noop().use(function () {
-          Object.assign(this, {t})
-        }),
+        processor: noop(),
         cwd: new URL('config-preset-plugins-reconfigure/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
@@ -145,20 +168,26 @@ test('configuration-presets', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
-          'should succeed'
+          'should reconfigure imported plugins'
         )
+        // @ts-expect-error: incremented by plugin.
+        assert.equal(globalThis.unifiedEngineTestCalls, 1)
+        assert.deepEqual(
+          // @ts-expect-error: added by plugins.
+          globalThis.unifiedEngineTestValues,
+          {one: true, two: false, three: true},
+          'should pass the correct options to plugins'
+        )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should reconfigure: turn plugins off', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    // More assertions are in loaded plugins.
-    t.plan(1)
 
     engine(
       {
@@ -170,34 +199,29 @@ test('configuration-presets', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
-          'should succeed'
+          'should reconfigure: turn plugins off'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should reconfigure settings', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(2)
+    let calls = 0
 
     engine(
       {
         processor: noop().use(function () {
-          Object.assign(this, {
-            /**
-             * @type {ParserFunction}
-             * @returns {Literal}
-             */
-            Parser(doc) {
-              return {type: 'text', value: doc}
-            }
-          })
-
-          t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
+          assert.deepEqual(
+            this.data('settings'),
+            {alpha: true},
+            'should configure'
+          )
+          calls++
         }),
         cwd: new URL('config-settings-reconfigure-a/', fixtures),
         streamError: stderr.stream,
@@ -206,34 +230,30 @@ test('configuration-presets', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
-          'should succeed'
+          'should reconfigure settings'
         )
+        assert.equal(calls, 1)
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should reconfigure settings (2)', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(2)
+    let calls = 0
 
     engine(
       {
         processor: noop().use(function () {
-          t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
-
-          Object.assign(this, {
-            /**
-             * @type {ParserFunction}
-             * @returns {Literal}
-             */
-            Parser(doc) {
-              return {type: 'text', value: doc}
-            }
-          })
+          assert.deepEqual(
+            this.data('settings'),
+            {alpha: true},
+            'should configure'
+          )
+          calls++
         }),
         cwd: new URL('config-settings-reconfigure-b/', fixtures),
         streamError: stderr.stream,
@@ -242,11 +262,13 @@ test('configuration-presets', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
-          'should succeed'
+          'should reconfigure settings (2)'
         )
+        assert.equal(calls, 1)
+        resolve(undefined)
       }
     )
   })

@@ -1,23 +1,15 @@
-/**
- * @typedef {import('unified').ParserFunction} ParserFunction
- * @typedef {import('unist').Literal} Literal
- */
-
+import assert from 'node:assert/strict'
 import {sep} from 'node:path'
-import test from 'tape'
+import test from 'node:test'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
 const fixtures = new URL('fixtures/', import.meta.url)
 
-test('configuration', (t) => {
-  t.plan(16)
-
-  t.test('should fail fatally when custom rc files are missing', (t) => {
+test('configuration', async () => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -36,16 +28,19 @@ test('configuration', (t) => {
           '  1:1  error  Error: Cannot read given file `.foorc`'
         ].join('\n')
 
-        t.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
+        assert.deepEqual(
+          [error, code, actual],
+          [null, 1, expected],
+          'should fail fatally when custom rc files are missing'
+        )
+
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should fail fatally when custom rc files are empty', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
-
     engine(
       {
         processor: noop,
@@ -57,21 +52,23 @@ test('configuration', (t) => {
       },
       (error, code) => {
         const actual = stderr().split('\n').slice(0, 2).join('\n')
-
         const expected = [
           'one.txt',
           '  1:1  error  Error: Cannot parse given file `.foorc`'
         ].join('\n')
+        assert.deepEqual(
+          [error, code, actual],
+          [null, 1, expected],
+          'should fail fatally when custom rc files are empty'
+        )
 
-        t.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should fail fatally when custom rc files are invalid', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -91,15 +88,19 @@ test('configuration', (t) => {
           'Error: Expected preset, not `false`'
         ].join('\n')
 
-        t.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
+        assert.deepEqual(
+          [error, code, actual],
+          [null, 1, expected],
+          'should fail fatally when custom rc files are invalid'
+        )
+
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support `.rc.js` scripts (1)', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -118,15 +119,19 @@ test('configuration', (t) => {
           '  1:1  error  Error: Cannot parse file `.foorc.js`'
         ].join('\n')
 
-        t.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
+        assert.deepEqual(
+          [error, code, actual],
+          [null, 1, expected],
+          'should support `.rc.js` scripts (1)'
+        )
+
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support `.rc.js` scripts (2)', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -138,19 +143,18 @@ test('configuration', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
-          'should support valid .rc scripts'
+          'should support `.rc.js` scripts (2)'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support `.rc.js` scripts (3)', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -162,19 +166,19 @@ test('configuration', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
-          'should use Node’s module caching (coverage)'
+          'should support `.rc.js` scripts (3)'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support `.rc.mjs` module', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(2)
+    let calls = 0
 
     engine(
       {
@@ -186,31 +190,32 @@ test('configuration', (t) => {
         extensions: ['txt'],
         plugins: [
           function () {
-            const settings = this.data('settings')
             return () => {
-              t.deepEqual(
-                settings,
+              assert.deepEqual(
+                this.data('settings'),
                 {foo: 'bar'},
                 'should process files w/ settings'
               )
+              calls++
             }
           }
         ]
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
-          'should use Node’s module caching (coverage)'
+          'should support `.rc.mjs` module'
         )
+        assert.equal(calls, 1)
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support `.rc.cjs` module', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(2)
+    let calls = 0
 
     engine(
       {
@@ -222,31 +227,31 @@ test('configuration', (t) => {
         extensions: ['txt'],
         plugins: [
           function () {
-            const settings = this.data('settings')
             return () => {
-              t.deepEqual(
-                settings,
+              assert.deepEqual(
+                this.data('settings'),
                 {foo: 'bar'},
                 'should process files w/ settings'
               )
+              calls++
             }
           }
         ]
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
-          'should use Node’s module caching (coverage)'
+          'should support `.rc.cjs` module'
         )
+        assert.equal(calls, 1)
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support `.rc.yaml` config files', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -265,19 +270,19 @@ test('configuration', (t) => {
           '  1:1  error  Error: Cannot parse file `.foorc.yaml`'
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, actual],
           [null, 1, expected],
-          'should fail fatally when custom .rc files are malformed'
+          'should support `.rc.yaml` config files'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support custom rc files', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(5)
+    let calls = 0
 
     engine(
       {
@@ -291,11 +296,12 @@ test('configuration', (t) => {
           function () {
             const settings = this.data('settings')
             return () => {
-              t.deepEqual(
+              assert.deepEqual(
                 settings,
                 {foo: 'bar'},
                 'should process files w/ settings'
               )
+              calls++
             }
           }
         ]
@@ -309,20 +315,20 @@ test('configuration', (t) => {
           ''
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
-          'should report'
+          'should support custom rc files'
         )
+        assert.equal(calls, 4)
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support searching package files', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('malformed-package-file/', fixtures)
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -341,15 +347,19 @@ test('configuration', (t) => {
           '  1:1  error  Error: Cannot parse file `package.json`'
         ].join('\n')
 
-        t.deepEqual([error, code, actual], [null, 1, expected], 'should report')
+        assert.deepEqual(
+          [error, code, actual],
+          [null, 1, expected],
+          'should support searching package files'
+        )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support custom rc files', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(5)
+    let calls = 0
 
     engine(
       {
@@ -361,13 +371,13 @@ test('configuration', (t) => {
         extensions: ['txt'],
         plugins: [
           function () {
-            const settings = this.data('settings')
             return () => {
-              t.deepEqual(
-                settings,
+              assert.deepEqual(
+                this.data('settings'),
                 {foo: 'bar'},
                 'should process files w/ settings'
               )
+              calls++
             }
           }
         ]
@@ -381,19 +391,19 @@ test('configuration', (t) => {
           ''
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
-          'should report'
+          'should support custom rc files'
         )
+        assert.equal(calls, 4)
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support no config files', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -412,20 +422,18 @@ test('configuration', (t) => {
           'one.txt: no issues found',
           ''
         ].join('\n')
-
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
-          'should report'
+          'should support no config files'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should not search if `detectConfig` is `false`', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -438,34 +446,29 @@ test('configuration', (t) => {
         rcName: '.foorc'
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
           'should not search for config if `detectConfig` is set to `false`'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should cascade `settings`', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(2)
+    let calls = 0
 
     engine(
       {
         processor: noop().use(function () {
-          t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
-
-          Object.assign(this, {
-            /**
-             * @type {ParserFunction}
-             * @returns {Literal}
-             */
-            Parser(doc) {
-              return {type: 'text', value: doc}
-            }
-          })
+          assert.deepEqual(
+            this.data('settings'),
+            {alpha: true},
+            'should configure'
+          )
+          calls++
         }),
         cwd: new URL('config-settings/', fixtures),
         streamError: stderr.stream,
@@ -475,19 +478,19 @@ test('configuration', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
-          'should report'
+          'should cascade `settings`'
         )
+        assert.equal(calls, 1)
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should ignore unconfigured `packages.json`', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -507,7 +510,12 @@ test('configuration', (t) => {
           'Error: Boom!'
         ].join('\n')
 
-        t.deepEqual([error, code, actual], [null, 1, expected], 'should report')
+        assert.deepEqual(
+          [error, code, actual],
+          [null, 1, expected],
+          'should ignore unconfigured `packages.json`'
+        )
+        resolve(undefined)
       }
     )
   })

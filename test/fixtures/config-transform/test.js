@@ -1,12 +1,7 @@
-/** @type {import('unified').Plugin<Array<unknown>>} */
+/** @param {unknown} options */
 module.exports = function (options) {
-  /** @type {import('tape').Test} */
-  // @ts-expect-error: hush.
-  const t = this.t
-
-  t.deepEqual(
-    options,
-    {golf: false},
-    'should pass the correct options to plugin `test`'
-  )
+  // @ts-expect-error: set by tests.
+  globalThis.unifiedEngineTestCalls++
+  // @ts-expect-error: set by tests.
+  globalThis.unifiedEngineTestValues = options
 }

@@ -1,7 +1,8 @@
+import assert from 'node:assert/strict'
 import {sep, join} from 'node:path'
 import process from 'node:process'
 import {PassThrough} from 'node:stream'
-import test from 'tape'
+import test from 'node:test'
 import {unified} from 'unified'
 import {toVFile} from 'to-vfile'
 import {engine} from '../index.js'
@@ -14,30 +15,29 @@ const danger = windows ? '‼' : '⚠'
 
 const fixtures = new URL('fixtures/', import.meta.url)
 
-test('input', (t) => {
-  t.plan(23)
-
-  t.test('should fail without input', (t) => {
+test('input', async () => {
+  await new Promise((resolve) => {
     const stream = new PassThrough()
-
-    t.plan(1)
 
     // Spoof stdin(4).
     // @ts-expect-error: fine.
     stream.isTTY = true
 
     engine({processor: unified(), streamIn: stream}, (error) => {
-      t.equal(error && error.message, 'No input', 'should fail')
+      assert.equal(
+        error && error.message,
+        'No input',
+        'should fail without input'
+      )
+      resolve(undefined)
     })
 
     stream.end()
   })
 
-  t.test('should not fail on empty input stream', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
     const stream = new PassThrough()
-
-    t.plan(1)
 
     engine(
       {
@@ -46,21 +46,20 @@ test('input', (t) => {
         streamError: stderr.stream
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, '<stdin>: no issues found\n'],
-          'should report'
+          'should not fail on empty input stream'
         )
+        resolve(undefined)
       }
     )
 
     stream.end('')
   })
 
-  t.test('should not fail on unmatched given globs', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -70,15 +69,18 @@ test('input', (t) => {
         files: ['.']
       },
       (error, code) => {
-        t.deepEqual([error, code, stderr()], [null, 0, ''], 'should work')
+        assert.deepEqual(
+          [error, code, stderr()],
+          [null, 0, ''],
+          'should not fail on unmatched given globs'
+        )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should report unfound given files', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -96,19 +98,18 @@ test('input', (t) => {
           ''
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 1, expected],
-          'should report'
+          'should report unfound given files'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should not report unfound given directories', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -118,15 +119,18 @@ test('input', (t) => {
         files: ['empty/']
       },
       (error, code) => {
-        t.deepEqual([error, code, stderr()], [null, 0, ''])
+        assert.deepEqual(
+          [error, code, stderr()],
+          [null, 0, ''],
+          'should not report unfound given directories'
+        )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should search for extensions', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -145,19 +149,18 @@ test('input', (t) => {
           ''
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
-          'should report'
+          'should search for extensions'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should search a directory for extensions', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -174,19 +177,18 @@ test('input', (t) => {
           ''
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
-          'should report'
+          'should search a directory for extensions'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should search for globs matching files (#1)', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -203,19 +205,18 @@ test('input', (t) => {
           ''
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
-          'should report'
+          'should search for globs matching files (#1)'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should search for globs matching files (#2)', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -232,19 +233,18 @@ test('input', (t) => {
           ''
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
-          'should report'
+          'should search for globs matching files (#2)'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should search for globs matching dirs', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -261,20 +261,19 @@ test('input', (t) => {
           ''
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
-          'should report'
+          'should search for globs matching dirs'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should search vfile’s pointing to directories', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('ignore-file/', fixtures)
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -285,19 +284,18 @@ test('input', (t) => {
         files: [toVFile(new URL('nested', cwd))]
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'nested' + sep + 'three.txt: no issues found\n'],
-          'should report'
+          'should search vfile’s pointing to directories'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should not ignore implicitly ignored files in globs', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -320,20 +318,19 @@ test('input', (t) => {
           ''
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
-          'should report'
+          'should not ignore implicitly ignored files in globs'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should include given ignored files (#1)', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('ignore-file/', fixtures)
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -359,24 +356,23 @@ test('input', (t) => {
           ''
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 1, expected],
-          'should report'
+          'should include given ignored files (#1)'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should not attempt to read files with `value` (1)', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
     const cwd = new URL('ignore-file/', fixtures)
     const file = toVFile({
       path: new URL('not-existing.txt', cwd),
       value: 'foo'
     })
-
-    t.plan(1)
 
     engine(
       {
@@ -395,24 +391,23 @@ test('input', (t) => {
           ''
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 1, expected],
-          'should report'
+          'should not attempt to read files with `value` (1)'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should not attempt to read files with `value` (2)', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
     const cwd = new URL('ignore-file/', fixtures)
     const file = toVFile({
       path: new URL('not-existing-2.txt', cwd),
       value: 'foo'
     })
-
-    t.plan(1)
 
     engine(
       {
@@ -423,16 +418,17 @@ test('input', (t) => {
         files: [file]
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'not-existing-2.txt: no issues found\n'],
-          'should report'
+          'should not attempt to read files with `value` (2)'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should not attempt to read files with `value` (3)', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
     const cwd = new URL('empty/', fixtures)
     const file1 = toVFile({
@@ -443,8 +439,6 @@ test('input', (t) => {
       path: new URL('not-existing-2.txt', cwd),
       value: 'bar'
     })
-
-    t.plan(1)
 
     engine(
       {
@@ -461,7 +455,7 @@ test('input', (t) => {
         files: [file1, file2]
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [
             null,
@@ -470,39 +464,37 @@ test('input', (t) => {
               danger +
               ' 2 warnings\n'
           ],
-          'should report'
+          'should not attempt to read files with `value` (3)'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should not attempt to read files with `value` (4)', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
     const cwd = join('test', 'fixtures', 'empty')
     const file = toVFile({value: 'foo'})
 
-    t.plan(1)
-
     engine(
       {processor: noop, cwd, streamError: stderr.stream, files: [file]},
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [
             null,
             0,
             'test' + sep + 'fixtures' + sep + 'empty: no issues found\n'
           ],
-          'should report'
+          'should not attempt to read files with `value` (4)'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should include given ignored files (#2)', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -524,20 +516,19 @@ test('input', (t) => {
           ''
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 1, expected],
-          'should report'
+          'should include given ignored files (#2)'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('silentlyIgnore: skip detected ignored files (#1)', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('ignore-file/', fixtures)
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -559,19 +550,18 @@ test('input', (t) => {
           ''
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
-          'should report'
+          'silentlyIgnore: skip detected ignored files (#1)'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('silentlyIgnore: skip detected ignored files (#2)', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -589,18 +579,17 @@ test('input', (t) => {
           ''
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
-          'should report'
+          'silentlyIgnore: skip detected ignored files (#2)'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('ignoreUnconfigured', (t) => {
-    t.plan(4)
-
+  await new Promise((resolve) => {
     engine(
       {
         processor: unified(),
@@ -611,14 +600,17 @@ test('input', (t) => {
         ignoreUnconfigured: true
       },
       (error) => {
-        t.match(
+        assert.match(
           String(error),
           /Cannot accept both `rcPath` and `ignoreUnconfigured`/,
           'should fail w/ `ignoreUnconfigured` and `rcPath`'
         )
+        resolve(undefined)
       }
     )
+  })
 
+  await new Promise((resolve) => {
     engine(
       {
         processor: unified(),
@@ -628,14 +620,17 @@ test('input', (t) => {
         ignoreUnconfigured: true
       },
       (error) => {
-        t.match(
+        assert.match(
           String(error),
           /Missing `rcName` or `packageField` with `ignoreUnconfigured`/,
           'should fail w/ `ignoreUnconfigured` and w/o `rcName`, `packageField`'
         )
+        resolve(undefined)
       }
     )
+  })
 
+  await new Promise((resolve) => {
     engine(
       {
         processor: unified(),
@@ -648,14 +643,17 @@ test('input', (t) => {
         ignoreUnconfigured: true
       },
       (error) => {
-        t.match(
+        assert.match(
           String(error),
           /Cannot use `detectConfig: false` with `ignoreUnconfigured`/,
           'should fail w/ `ignoreUnconfigured` and `detectConfig: false`'
         )
+        resolve(undefined)
       }
     )
+  })
 
+  await new Promise((resolve) => {
     const stderr = spy()
 
     engine(
@@ -672,20 +670,19 @@ test('input', (t) => {
           '\n'
         )
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
           'should report'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should search if given files', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('simple-structure/', fixtures)
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -703,20 +700,19 @@ test('input', (t) => {
           ''
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
-          'should report'
+          'should search if given files'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should not access the file system for empty given files', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('empty/', fixtures)
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -731,11 +727,12 @@ test('input', (t) => {
         ]
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'this-does-not-exist.txt: no issues found\n'],
-          'should report'
+          'should not access the file system for empty given files'
         )
+        resolve(undefined)
       }
     )
   })

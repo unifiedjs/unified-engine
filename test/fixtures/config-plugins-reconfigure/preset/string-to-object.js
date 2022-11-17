@@ -1,12 +1,7 @@
-/** @type {import('unified').Plugin<Array<unknown>>} */
+/** @param {unknown} options */
 export default function stringToObject(options) {
-  /** @type {import('tape').Test} */
-  // @ts-expect-error: hush.
-  const t = this.t
-
-  t.deepEqual(
-    options,
-    {bravo: 1},
-    'string-to-object: should pass the reconfigured object'
-  )
+  // @ts-expect-error: set by tests.
+  globalThis.unifiedEngineTestCalls++
+  // @ts-expect-error: set by tests.
+  globalThis.unifiedEngineTestValues.stringToObject = options
 }

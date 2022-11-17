@@ -1,18 +1,15 @@
+import assert from 'node:assert/strict'
 import {sep} from 'node:path'
 import {PassThrough} from 'node:stream'
-import test from 'tape'
+import test from 'node:test'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
 const fixtures = new URL('fixtures/', import.meta.url)
 
-test('file-path', (t) => {
-  t.plan(2)
-
-  t.test('should throw on `filePath` with files', (t) => {
-    t.plan(1)
-
+test('file-path', async () => {
+  await new Promise((resolve) => {
     engine(
       {
         processor: noop,
@@ -29,18 +26,17 @@ test('file-path', (t) => {
           'Did you mean to pass stdin instead of files?'
         ].join('\n')
 
-        t.equal(actual, expected, 'should fail')
+        assert.equal(actual, expected, 'should throw on `filePath` with files')
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support `filePath`', (t) => {
+  await new Promise((resolve) => {
     const stdout = spy()
     const stderr = spy()
     const stream = new PassThrough()
     let index = 0
-
-    t.plan(1)
 
     function send() {
       if (++index > 10) {
@@ -63,7 +59,7 @@ test('file-path', (t) => {
         filePath: 'foo' + sep + 'bar.baz'
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stdout(), stderr()],
           [
             null,
@@ -71,8 +67,9 @@ test('file-path', (t) => {
             '1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n',
             'foo' + sep + 'bar.baz: no issues found\n'
           ],
-          'should report'
+          'should support `filePath`'
         )
+        resolve(undefined)
       }
     )
   })
