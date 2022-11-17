@@ -1,21 +1,18 @@
+import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import {fileURLToPath} from 'node:url'
 import {join, sep, relative} from 'node:path'
-import test from 'tape'
+import test from 'node:test'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
 const fixtures = new URL('fixtures/', import.meta.url)
 
-test('ignore', (t) => {
-  t.plan(10)
-
-  t.test('should fail fatally when given ignores are not found', (t) => {
+test('ignore', async () => {
+  await new Promise((resolve) => {
     const cwd = new URL('simple-structure/', fixtures)
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -35,15 +32,18 @@ test('ignore', (t) => {
           '  1:1  error  Error: Cannot read given file `.missing-ignore`'
         ].join('\n')
 
-        t.deepEqual([error, code, actual], [null, 1, expected], 'should fail')
+        assert.deepEqual(
+          [error, code, actual],
+          [null, 1, expected],
+          'should fail fatally when given ignores are not found'
+        )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support custom ignore files', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -62,19 +62,18 @@ test('ignore', (t) => {
           ''
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
-          'should report'
+          'should support custom ignore files'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support searching ignore files', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -93,19 +92,18 @@ test('ignore', (t) => {
           ''
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
-          'should report'
+          'should support searching ignore files'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should not look into hidden files', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -117,19 +115,18 @@ test('ignore', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
-          'should report'
+          'should not look into hidden files'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support no ignore files', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -149,19 +146,18 @@ test('ignore', (t) => {
           ''
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
-          'should report'
+          'should support no ignore files'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support ignore patterns', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -175,19 +171,18 @@ test('ignore', (t) => {
       (error, code) => {
         const expected = ['one.txt: no issues found', ''].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
-          'should report'
+          'should support ignore patterns'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support ignore files and ignore patterns', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -203,53 +198,48 @@ test('ignore', (t) => {
       (error, code) => {
         const expected = ['one.txt: no issues found', ''].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
-          'should report'
+          'should support ignore files and ignore patterns'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test(
-    '`ignorePath` should resolve from its directory, `ignorePatterns` from cwd',
-    (t) => {
-      const stderr = spy()
-
-      t.plan(1)
-
-      engine(
-        {
-          processor: noop,
-          cwd: new URL('sibling-ignore/', fixtures),
-          streamError: stderr.stream,
-          files: ['.'],
-          ignorePath: join('deep', 'ignore'),
-          ignorePatterns: ['files/two.txt'],
-          extensions: ['txt']
-        },
-        (error, code) => {
-          const expected = [
-            join('deep', 'files', 'two.txt') + ': no issues found',
-            join('files', 'one.txt') + ': no issues found',
-            ''
-          ].join('\n')
-
-          t.deepEqual(
-            [error, code, stderr()],
-            [null, 0, expected],
-            'should report'
-          )
-        }
-      )
-    }
-  )
-
-  t.test('`ignorePathResolveFrom`', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
 
-    t.plan(1)
+    engine(
+      {
+        processor: noop,
+        cwd: new URL('sibling-ignore/', fixtures),
+        streamError: stderr.stream,
+        files: ['.'],
+        ignorePath: join('deep', 'ignore'),
+        ignorePatterns: ['files/two.txt'],
+        extensions: ['txt']
+      },
+      (error, code) => {
+        const expected = [
+          join('deep', 'files', 'two.txt') + ': no issues found',
+          join('files', 'one.txt') + ': no issues found',
+          ''
+        ].join('\n')
+
+        assert.deepEqual(
+          [error, code, stderr()],
+          [null, 0, expected],
+          '`ignorePath` should resolve from its directory, `ignorePatterns` from cwd'
+        )
+        resolve(undefined)
+      }
+    )
+  })
+
+  await new Promise((resolve) => {
+    const stderr = spy()
 
     engine(
       {
@@ -269,23 +259,22 @@ test('ignore', (t) => {
           ''
         ].join('\n')
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
-          'should report'
+          '`ignorePathResolveFrom`'
         )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support higher positioned files', (t) => {
+  await new Promise((resolve) => {
     const cwd = new URL('empty/', fixtures)
     const url = new URL('../../../example.txt', import.meta.url)
     const stderr = spy()
 
     fs.writeFileSync(url, '')
-
-    t.plan(1)
 
     engine(
       {
@@ -301,11 +290,12 @@ test('ignore', (t) => {
           relative(fileURLToPath(cwd), fileURLToPath(url)) +
           ': no issues found\n'
 
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, expected],
-          'should report'
+          'should support higher positioned files'
         )
+        resolve(undefined)
       }
     )
   })

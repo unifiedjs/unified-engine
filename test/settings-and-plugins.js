@@ -3,35 +3,28 @@
  * @typedef {import('unist').Literal} Literal
  */
 
-import test from 'tape'
+import assert from 'node:assert/strict'
+import test from 'node:test'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
 const fixtures = new URL('fixtures/', import.meta.url)
 
-test('settings', (t) => {
-  t.plan(2)
-
-  t.test('should use `settings`', (t) => {
+test('settings', async () => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(2)
+    let called = false
 
     engine(
       {
         processor: noop().use(function () {
-          t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
-
-          Object.assign(this, {
-            /**
-             * @type {ParserFunction}
-             * @returns {Literal}
-             */
-            Parser(doc) {
-              return {type: 'text', value: doc}
-            }
-          })
+          assert.deepEqual(
+            this.data('settings'),
+            {alpha: true},
+            'should configure'
+          )
+          called = true
         }),
         cwd: new URL('one-file/', fixtures),
         streamError: stderr.stream,
@@ -40,38 +33,30 @@ test('settings', (t) => {
         settings: {alpha: true}
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
-          'should report'
+          'should use `settings`'
         )
+        assert.ok(called)
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should cascade `settings`', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(2)
+    let called = false
 
     engine(
       {
         processor: noop().use(function () {
-          t.deepEqual(
+          assert.deepEqual(
             this.data('settings'),
             {alpha: false, bravo: 'charlie', delta: 1},
             'should configure'
           )
-
-          Object.assign(this, {
-            /**
-             * @type {ParserFunction}
-             * @returns {Literal}
-             */
-            Parser(doc) {
-              return {type: 'text', value: doc}
-            }
-          })
+          called = true
         }),
         cwd: new URL('config-settings-cascade/', fixtures),
         streamError: stderr.stream,
@@ -81,23 +66,22 @@ test('settings', (t) => {
         settings: {alpha: false, bravo: 'charlie'}
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
-          'should report'
+          'should cascade `settings`'
         )
+        assert.ok(called)
+        resolve(undefined)
       }
     )
   })
 })
 
-test('plugins', (t) => {
-  t.plan(3)
-
-  t.test('should use `plugins` as list of functions', (t) => {
+test('plugins', async () => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(3)
+    let calls = 0
 
     engine(
       {
@@ -108,37 +92,41 @@ test('plugins', (t) => {
         extensions: ['txt'],
         plugins: [
           () => () => {
-            t.pass('transformer')
+            calls++
           },
           [
             /** @param {unknown} options */
             (options) => () => {
-              t.deepEqual(options, {alpha: true}, 'transformer')
+              assert.deepEqual(options, {alpha: true}, 'transformer')
+              calls++
             },
             {alpha: true}
           ]
         ]
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
-          'should report'
+          'should use `plugins` as list of functions'
         )
+        assert.equal(calls, 2)
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should use `plugins` as list of strings', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
 
-    t.plan(2)
+    // @ts-expect-error: incremented by plugins.
+    globalThis.unifiedEngineTestCalls = 0
+    // @ts-expect-error: set by plugins.
+    globalThis.unifiedEngineTestValues = {}
 
     engine(
       {
-        processor: noop().use(function () {
-          Object.assign(this, {t})
-        }),
+        processor: noop(),
         cwd: new URL('config-plugins-basic-reconfigure/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
@@ -149,25 +137,35 @@ test('plugins', (t) => {
         ]
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
-          'should report'
+          'should use `plugins` as list of strings'
         )
+        // @ts-expect-error: incremented by plugin.
+        assert.equal(globalThis.unifiedEngineTestCalls, 1)
+        assert.deepEqual(
+          // @ts-expect-error: added by plugins.
+          globalThis.unifiedEngineTestValues,
+          {one: true, two: false, three: true},
+          'should pass the correct options to plugins'
+        )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should use `plugins` as list of objects', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
 
-    t.plan(2)
+    // @ts-expect-error: incremented by plugins.
+    globalThis.unifiedEngineTestCalls = 0
+    // @ts-expect-error: set by plugins.
+    globalThis.unifiedEngineTestValues = {}
 
     engine(
       {
-        processor: noop().use(function () {
-          Object.assign(this, {t})
-        }),
+        processor: noop(),
         cwd: new URL('config-plugins-basic-reconfigure/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
@@ -178,11 +176,20 @@ test('plugins', (t) => {
         }
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
-          'should report'
+          'should use `plugins` as list of objects'
         )
+        // @ts-expect-error: incremented by plugin.
+        assert.equal(globalThis.unifiedEngineTestCalls, 1)
+        assert.deepEqual(
+          // @ts-expect-error: added by plugins.
+          globalThis.unifiedEngineTestValues,
+          {one: true, two: false, three: true},
+          'should pass the correct options to plugins'
+        )
+        resolve(undefined)
       }
     )
   })

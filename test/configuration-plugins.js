@@ -1,25 +1,22 @@
+import assert from 'node:assert/strict'
 import {sep} from 'node:path'
-import test from 'tape'
+import test from 'node:test'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
 const fixtures = new URL('fixtures/', import.meta.url)
 
-test('configuration', (t) => {
-  t.plan(9)
-
-  t.test('should cascade `plugins`', (t) => {
+test('configuration', async () => {
+  await new Promise((resolve) => {
     const stderr = spy()
 
-    // One more assertions is loaded in a plugin.
-    t.plan(2)
+    // @ts-expect-error: incremented by plugin.
+    globalThis.unifiedEngineTestCalls = 0
 
     engine(
       {
-        processor: noop().use(function () {
-          Object.assign(this, {t})
-        }),
+        processor: noop(),
         cwd: new URL('config-plugins-cascade/', fixtures),
         streamError: stderr.stream,
         files: ['.'],
@@ -28,71 +25,74 @@ test('configuration', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'nested' + sep + 'one.txt: no issues found\n'],
-          'should work'
+          'should cascade `plugins`'
         )
+        // @ts-expect-error: incremented by plugin.
+        assert.equal(globalThis.unifiedEngineTestCalls, 1)
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support an ESM plugin w/ an `.mjs` extname', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
 
-    // One more assertions is loaded in a plugin.
-    t.plan(2)
+    // @ts-expect-error: incremented by plugin.
+    globalThis.unifiedEngineTestCalls = 0
 
     engine(
       {
-        processor: noop().use(function () {
-          Object.assign(this, {t})
-        }),
+        processor: noop(),
         cwd: new URL('config-plugins-esm-mjs/', fixtures),
         streamError: stderr.stream,
         files: ['one.txt'],
         rcName: '.foorc'
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
-          'should work'
+          'should support an ESM plugin w/ an `.mjs` extname'
         )
+        // @ts-expect-error: incremented by plugin.
+        assert.equal(globalThis.unifiedEngineTestCalls, 1)
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should support an ESM plugin w/ a `.js` extname', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
 
-    // One more assertions is loaded in a plugin.
-    t.plan(2)
+    // @ts-expect-error: incremented by plugin.
+    globalThis.unifiedEngineTestCalls = 0
 
     engine(
       {
-        processor: noop().use(function () {
-          Object.assign(this, {t})
-        }),
-        cwd: new URL('config-plugins-esm-mjs/', fixtures),
+        processor: noop(),
+        cwd: new URL('config-plugins-esm-js/', fixtures),
         streamError: stderr.stream,
         files: ['one.txt'],
         rcName: '.foorc'
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
-          'should work'
+          'should support an ESM plugin w/ a `.js` extname'
         )
+        // @ts-expect-error: incremented by plugin.
+        assert.equal(globalThis.unifiedEngineTestCalls, 1)
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should handle failing plugins', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -113,15 +113,18 @@ test('configuration', (t) => {
           'Error: Boom!'
         ].join('\n')
 
-        t.deepEqual([error, code, actual], [null, 1, expected], 'should work')
+        assert.deepEqual(
+          [error, code, actual],
+          [null, 1, expected],
+          'should handle failing plugins'
+        )
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should handle plugins w/o `export default`', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -142,15 +145,19 @@ test('configuration', (t) => {
           'Error: Expected a plugin or preset exported as the default export'
         ].join('\n')
 
-        t.deepEqual([error, code, actual], [null, 1, expected], 'should work')
+        assert.deepEqual(
+          [error, code, actual],
+          [null, 1, expected],
+          'should handle plugins w/o `export default`'
+        )
+
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should handle missing plugins', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -169,15 +176,19 @@ test('configuration', (t) => {
           '  1:1  error  Error: Could not find module `missing`'
         ].join('\n')
 
-        t.deepEqual([error, code, actual], [null, 1, expected], 'should work')
+        assert.deepEqual(
+          [error, code, actual],
+          [null, 1, expected],
+          'should handle missing plugins'
+        )
+
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should handle invalid plugins', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -197,15 +208,19 @@ test('configuration', (t) => {
           'Error: Expected preset or plugin, not false, at `test.js`'
         ].join('\n')
 
-        t.deepEqual([error, code, actual], [null, 1, expected], 'should work')
+        assert.deepEqual(
+          [error, code, actual],
+          [null, 1, expected],
+          'should handle invalid plugins'
+        )
+
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should handle throwing plugins', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
-
-    t.plan(1)
 
     engine(
       {
@@ -224,16 +239,21 @@ test('configuration', (t) => {
           '  1:1  error  Error: Missing `required`'
         ].join('\n')
 
-        t.deepEqual([error, code, actual], [null, 1, expected], 'should work')
+        assert.deepEqual(
+          [error, code, actual],
+          [null, 1, expected],
+          'should handle throwing plugins'
+        )
+
+        resolve(undefined)
       }
     )
   })
 
-  t.test('should handle injected plugins', (t) => {
+  await new Promise((resolve) => {
     const stderr = spy()
     const o = {foo: 'bar'}
-
-    t.plan(3)
+    let calls = 0
 
     engine(
       {
@@ -243,11 +263,13 @@ test('configuration', (t) => {
         files: ['.'],
         plugins: [
           (/** @type {unknown} */ options) => {
-            t.equal(options, undefined, 'should support a plugin')
+            calls++
+            assert.equal(options, undefined, 'should support a plugin')
           },
           [
             (/** @type {unknown} */ options) => {
-              t.equal(options, o, 'should support a plugin--options tuple')
+              calls++
+              assert.equal(options, o, 'should support a plugin--options tuple')
             },
             o
           ]
@@ -255,11 +277,13 @@ test('configuration', (t) => {
         extensions: ['txt']
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stderr()],
           [null, 0, 'one.txt: no issues found\n'],
-          'should work'
+          'should handle injected plugins'
         )
+        assert.equal(calls, 2)
+        resolve(undefined)
       }
     )
   })

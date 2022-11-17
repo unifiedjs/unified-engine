@@ -1,15 +1,7 @@
-/**
- * @this {import('unified').Processor}
- * @type {import('unified').Plugin<Array<unknown>>}
- */
+/** @param {unknown} options */
 export default function mergeObject(options) {
-  /** @type {import('tape').Test} */
-  // @ts-expect-error: hush.
-  const t = this.t
-
-  t.deepEqual(
-    options,
-    {one: true, two: false, three: true},
-    'merge-object: should pass the merged object'
-  )
+  // @ts-expect-error: set by tests.
+  globalThis.unifiedEngineTestCalls++
+  // @ts-expect-error: set by tests.
+  globalThis.unifiedEngineTestValues.mergeObject = options
 }

@@ -1,7 +1,4 @@
 module.exports = function () {
-  /** @type {import('tape').Test} */
-  // @ts-expect-error: hush.
-  const t = this.t
-
-  t.pass()
+  // @ts-expect-error: set by tests.
+  globalThis.unifiedEngineTestCalls++
 }

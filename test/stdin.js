@@ -1,21 +1,18 @@
+import assert from 'node:assert/strict'
 import {PassThrough} from 'node:stream'
-import test from 'tape'
+import test from 'node:test'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
 const fixtures = new URL('fixtures/', import.meta.url)
 
-test('stdin', (t) => {
-  t.plan(3)
-
-  t.test('should support stdin', (t) => {
+test('stdin', async () => {
+  await new Promise((resolve) => {
     const stdout = spy()
     const stderr = spy()
     const stream = new PassThrough()
     let index = 0
-
-    t.plan(1)
 
     send()
 
@@ -28,7 +25,7 @@ test('stdin', (t) => {
         streamError: stderr.stream
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stdout(), stderr()],
           [
             null,
@@ -36,8 +33,9 @@ test('stdin', (t) => {
             '1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n',
             '<stdin>: no issues found\n'
           ],
-          'should report'
+          'should support stdin'
         )
+        resolve(undefined)
       }
     )
 
@@ -51,13 +49,11 @@ test('stdin', (t) => {
     }
   })
 
-  t.test('should not output if `out: false`', (t) => {
+  await new Promise((resolve) => {
     const stdout = spy()
     const stderr = spy()
     const stream = new PassThrough()
     let index = 0
-
-    t.plan(1)
 
     send()
 
@@ -71,11 +67,12 @@ test('stdin', (t) => {
         out: false
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stdout(), stderr()],
           [null, 0, '', '<stdin>: no issues found\n'],
-          'should report'
+          'should not output if `out: false`'
         )
+        resolve(undefined)
       }
     )
 
@@ -89,20 +86,22 @@ test('stdin', (t) => {
     }
   })
 
-  t.test('should support config files on stdin', (t) => {
+  await new Promise((resolve) => {
     const stdout = spy()
     const stderr = spy()
     const stream = new PassThrough()
     let index = 0
-
-    t.plan(2)
 
     send()
 
     engine(
       {
         processor: noop().use(function () {
-          t.deepEqual(this.data('settings'), {alpha: true}, 'should configure')
+          assert.deepEqual(
+            this.data('settings'),
+            {alpha: true},
+            'should configure'
+          )
         }),
         cwd: new URL('config-settings/', fixtures),
         streamIn: stream,
@@ -112,7 +111,7 @@ test('stdin', (t) => {
         rcName: '.foorc'
       },
       (error, code) => {
-        t.deepEqual(
+        assert.deepEqual(
           [error, code, stdout(), stderr()],
           [
             null,
@@ -120,8 +119,9 @@ test('stdin', (t) => {
             '1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n',
             '<stdin>: no issues found\n'
           ],
-          'should work'
+          'should support config files on stdin'
         )
+        resolve(undefined)
       }
     )
 
