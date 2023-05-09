@@ -107,7 +107,7 @@ Directories and globs to directories can be given alongside
 This searching will not include `node_modules` or hidden directories (those
 starting with a dot, `.`, like `.git`).
 
-*   Type: `Array<string|URL|VFile>`
+*   Type: `Array<string | URL | VFile>`
 *   Default: `[]`
 
 ###### Example
