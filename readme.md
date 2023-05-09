@@ -108,7 +108,7 @@ done.
     — unified processor to transform files
 *   [`cwd`][cwd] (`string` or `URL`, default: `process.cwd()`)
     — directory to search files in, load plugins from, and more
-*   [`files`][files] (`Array<string|URL|VFile>`, optional)
+*   [`files`][files] (`Array<string | URL | VFile>`, optional)
     — paths or globs to files and directories, virtual files, or URLs, to
     process
 *   [`extensions`][extensions] (`Array<string>`, optional)
@@ -163,7 +163,7 @@ done.
     — ignore files that do not have an associated detected configuration file
 *   [`silentlyIgnore`][silently-ignore] (`boolean`, default: `false`)
     — skip given files if they are ignored
-*   [`plugins`][options-plugins] (`Array|Object`, optional)
+*   [`plugins`][options-plugins] (`Array | Object`, optional)
     — plugins to use
 *   [`pluginPrefix`][plugin-prefix] (`string`, optional)
     — optional prefix to use when searching for plugins
