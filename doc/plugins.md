@@ -1,10 +1,9 @@
 # Plugins
 
-Normally, **unified** plugins receive upon attaching two arguments: `processor`
-(the [`Processor`][unified-processor] it’s attached to) and `options` (an
-`Object` users can provide to configure the plugin).
+Normally, **unified** plugins receive a single `options` argument upon attaching
+(an`Object` users can provide to configure the plugin).
 
-If a plugin is attached by **unified-engine**, a third argument is given:
+If a plugin is attached by **unified-engine**, a second argument is given:
 [`fileSet`][file-set].
 
 ###### Example
