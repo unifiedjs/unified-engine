@@ -12,3 +12,6 @@
  */
 
 export {engine} from './lib/index.js'
+
+// it’s mostly private, but useful for tools like `eslint-mdx`.
+export {Configuration} from './lib/configuration.js'
