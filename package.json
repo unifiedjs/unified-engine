@@ -37,7 +37,7 @@
     "concat-stream": "^2.0.0",
     "debug": "^4.0.0",
     "fault": "^2.0.0",
-    "glob": "^8.0.0",
+    "glob": "^10.0.0",
     "ignore": "^5.0.0",
     "is-buffer": "^2.0.0",
     "is-empty": "^1.0.0",
@@ -53,7 +53,6 @@
     "yaml": "^2.0.0"
   },
   "devDependencies": {
-    "@types/glob": "^8.0.0",
     "@types/parse-json": "^4.0.0",
     "c8": "^8.0.0",
     "prettier": "^3.0.0",
