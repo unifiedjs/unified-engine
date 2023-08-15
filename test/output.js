@@ -1,15 +1,15 @@
 /**
- * @typedef {import('unist').Literal<string>} Literal
+ * @typedef {import('unist').Literal} Literal
  */
 
 import assert from 'node:assert/strict'
 import {Buffer} from 'node:buffer'
 import fs from 'node:fs'
 import {sep} from 'node:path'
-import {fileURLToPath} from 'node:url'
 import test from 'node:test'
 import {toVFile} from 'to-vfile'
 import {engine} from '../index.js'
+import {cleanError} from './util/clean-error.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
@@ -252,14 +252,12 @@ test('output', async () => {
         extensions: ['txt']
       },
       (error, code) => {
-        const actual = stderr().split('\n').slice(0, 3).join('\n')
+        const actual = cleanError(stderr(), 3)
 
         const expected = [
           'one.txt',
-          '  1:1  error  Error: Cannot read parent directory. Error:',
-          "ENOENT: no such file or directory, stat '" +
-            fileURLToPath(new URL('missing', cwd)) +
-            "'"
+          ' error Error: Cannot read parent directory',
+          '    at copy.js:1:1'
         ].join('\n')
 
         assert.deepEqual(
@@ -325,12 +323,10 @@ test('output', async () => {
       },
       (error, code) => {
         const doc = fs.readFileSync(new URL('one.txt', cwd), 'utf8')
-
-        const actual = stderr().split('\n').slice(0, 2).join('\n')
-
+        const actual = cleanError(stderr(), 2)
         const expected = [
           '<stdin>',
-          '  1:1  error  Error: Cannot write file without an output path'
+          ' error Error: Cannot write file without an output path'
         ].join('\n')
 
         assert.deepEqual(
@@ -357,19 +353,15 @@ test('output', async () => {
         extensions: ['txt']
       },
       (error, code) => {
-        const lines = stderr().split('\n').slice(0, 2)
-        lines[1] = lines[1].split(':').slice(0, 3).join(':')
-        const actual = lines.join('\n')
-
-        const expected = [
-          'one.txt',
-          '  1:1  error  Error: Cannot write multiple files to single output'
-        ].join('\n')
-
         assert.deepEqual(
-          [error, code, actual],
-          [null, 1, expected],
-          'should fail when writing files to one path'
+          [error, code],
+          [null, 1],
+          'should fail when writing files to one path (#1)'
+        )
+        assert.match(
+          stderr(),
+          /Cannot write multiple files to single output/,
+          'should fail when writing files to one path (#2)'
         )
         resolve(undefined)
       }
@@ -390,11 +382,11 @@ test('output', async () => {
         extensions: ['txt']
       },
       (error, code) => {
-        const actual = stderr().split('\n').slice(0, 2).join('\n')
+        const actual = cleanError(stderr(), 2)
 
         const expected = [
           'one.txt',
-          '  1:1  error  Error: Cannot read output directory. Error:'
+          ' error Error: Cannot read output directory. Error:'
         ].join('\n')
 
         assert.deepEqual(
@@ -422,12 +414,11 @@ test('output', async () => {
         extensions: ['txt']
       },
       (error, code) => {
-        const actual = stderr().split('\n').slice(0, 2).join('\n')
+        const actual = cleanError(stderr(), 2)
 
-        const expected = [
-          'one.txt',
-          '  1:1  error  No such file or directory'
-        ].join('\n')
+        const expected = ['one.txt', ' error No such file or directory'].join(
+          '\n'
+        )
 
         assert.deepEqual(
           [error, code, actual],

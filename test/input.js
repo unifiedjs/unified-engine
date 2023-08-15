@@ -1,17 +1,13 @@
 import assert from 'node:assert/strict'
 import {sep, join} from 'node:path'
-import process from 'node:process'
 import {PassThrough} from 'node:stream'
 import test from 'node:test'
 import {unified} from 'unified'
 import {toVFile} from 'to-vfile'
 import {engine} from '../index.js'
+import {cleanError} from './util/clean-error.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
-
-const windows = process.platform === 'win32'
-const cross = windows ? '×' : '✖'
-const danger = windows ? '‼' : '⚠'
 
 const fixtures = new URL('fixtures/', import.meta.url)
 
@@ -92,14 +88,16 @@ test('input', async () => {
       (error, code) => {
         const expected = [
           'readme.md',
-          '  1:1  error  No such file or directory',
+          ' error No such file or directory',
+          '  [cause]:',
+          '    Error: ENOENT:…',
           '',
-          cross + ' 1 error',
+          '✖ 1 error',
           ''
         ].join('\n')
 
         assert.deepEqual(
-          [error, code, stderr()],
+          [error, code, cleanError(stderr())],
           [null, 1, expected],
           'should report unfound given files'
         )
@@ -348,11 +346,11 @@ test('input', async () => {
         const expected = [
           'nested' + sep + 'three.txt: no issues found',
           'nested' + sep + 'two.txt',
-          '  1:1  error  Cannot process specified file: it’s ignored',
+          ' error Cannot process specified file: it’s ignored',
           '',
           'one.txt: no issues found',
           '',
-          cross + ' 1 error',
+          '✖ 1 error',
           ''
         ].join('\n')
 
@@ -385,9 +383,9 @@ test('input', async () => {
       (error, code) => {
         const expected = [
           'not-existing.txt',
-          '  1:1  error  Cannot process specified file: it’s ignored',
+          ' error Cannot process specified file: it’s ignored',
           '',
-          cross + ' 1 error',
+          '✖ 1 error',
           ''
         ].join('\n')
 
@@ -460,9 +458,16 @@ test('input', async () => {
           [
             null,
             0,
-            'not-existing-1.txt\n  1:1  warning  !\n\nnot-existing-2.txt\n  1:1  warning  !\n\n' +
-              danger +
-              ' 2 warnings\n'
+            [
+              'not-existing-1.txt',
+              ' warning !',
+              '',
+              'not-existing-2.txt',
+              ' warning !',
+              '',
+              '⚠ 2 warnings',
+              ''
+            ].join('\n')
           ],
           'should not attempt to read files with `value` (3)'
         )
@@ -508,11 +513,11 @@ test('input', async () => {
         const expected = [
           'nested' + sep + 'three.txt: no issues found',
           'nested' + sep + 'two.txt',
-          '  1:1  error  Cannot process specified file: it’s ignored',
+          ' error Cannot process specified file: it’s ignored',
           '',
           'one.txt: no issues found',
           '',
-          cross + ' 1 error',
+          '✖ 1 error',
           ''
         ].join('\n')
 

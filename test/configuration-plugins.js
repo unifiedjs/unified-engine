@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import {sep} from 'node:path'
 import test from 'node:test'
 import {engine} from '../index.js'
+import {cleanError} from './util/clean-error.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
@@ -104,11 +105,11 @@ test('configuration', async () => {
         extensions: ['txt']
       },
       (error, code) => {
-        const actual = stderr().split('\n').slice(0, 4).join('\n')
+        const actual = cleanError(stderr(), 4)
 
         const expected = [
           'one.txt',
-          '  1:1  error  Error: Cannot parse file `package.json`',
+          ' error Error: Cannot parse file `package.json`',
           'Cannot import `test.js`',
           'Error: Boom!'
         ].join('\n')
@@ -136,11 +137,11 @@ test('configuration', async () => {
         extensions: ['txt']
       },
       (error, code) => {
-        const actual = stderr().split('\n').slice(0, 4).join('\n')
+        const actual = cleanError(stderr(), 4)
 
         const expected = [
           'one.txt',
-          '  1:1  error  Error: Cannot parse file `package.json`',
+          ' error Error: Cannot parse file `package.json`',
           'Cannot import `test.js`',
           'Error: Expected a plugin or preset exported as the default export'
         ].join('\n')
@@ -169,11 +170,11 @@ test('configuration', async () => {
         extensions: ['txt']
       },
       (error, code) => {
-        const actual = stderr().split('\n').slice(0, 2).join('\n')
+        const actual = cleanError(stderr(), 2)
 
         const expected = [
           'one.txt',
-          '  1:1  error  Error: Could not find module `missing`'
+          ' error Error: Could not find module `missing`'
         ].join('\n')
 
         assert.deepEqual(
@@ -200,11 +201,11 @@ test('configuration', async () => {
         extensions: ['txt']
       },
       (error, code) => {
-        const actual = stderr().split('\n').slice(0, 3).join('\n')
+        const actual = cleanError(stderr(), 3)
 
         const expected = [
           'one.txt',
-          '  1:1  error  Error: Cannot parse file `package.json`',
+          ' error Error: Cannot parse file `package.json`',
           'Error: Expected preset or plugin, not false, at `test.js`'
         ].join('\n')
 
@@ -232,12 +233,11 @@ test('configuration', async () => {
         extensions: ['txt']
       },
       (error, code) => {
-        const actual = stderr().split('\n').slice(0, 2).join('\n')
+        const actual = cleanError(stderr(), 2)
 
-        const expected = [
-          'one.txt',
-          '  1:1  error  Error: Missing `required`'
-        ].join('\n')
+        const expected = ['one.txt', ' error Error: Missing `required`'].join(
+          '\n'
+        )
 
         assert.deepEqual(
           [error, code, actual],

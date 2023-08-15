@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import {sep} from 'node:path'
 import test from 'node:test'
 import {engine} from '../index.js'
+import {cleanError} from './util/clean-error.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
@@ -21,11 +22,11 @@ test('configuration', async () => {
         extensions: ['txt']
       },
       (error, code) => {
-        const actual = stderr().split('\n').slice(0, 2).join('\n')
-
+        const actual = cleanError(stderr(), 3)
         const expected = [
           'one.txt',
-          '  1:1  error  Error: Cannot read given file `.foorc`'
+          ' error Error: Cannot read given file `.foorc`',
+          'Error: ENOENT:…'
         ].join('\n')
 
         assert.deepEqual(
@@ -51,13 +52,12 @@ test('configuration', async () => {
         extensions: ['txt']
       },
       (error, code) => {
-        const actual = stderr().split('\n').slice(0, 2).join('\n')
         const expected = [
           'one.txt',
-          '  1:1  error  Error: Cannot parse given file `.foorc`'
+          ' error Error: Cannot parse given file `.foorc`'
         ].join('\n')
         assert.deepEqual(
-          [error, code, actual],
+          [error, code, cleanError(stderr(), 2)],
           [null, 1, expected],
           'should fail fatally when custom rc files are empty'
         )
@@ -80,12 +80,13 @@ test('configuration', async () => {
         extensions: ['txt']
       },
       (error, code) => {
-        const actual = stderr().split('\n').slice(0, 3).join('\n')
+        const actual = cleanError(stderr(), 4)
 
         const expected = [
           'one.txt',
-          '  1:1  error  Error: Cannot parse given file `.foorc.js`',
-          'Error: Expected preset, not `false`'
+          ' error Error: Cannot parse given file `.foorc.js`',
+          'Error: Expected preset, not `false`',
+          '    at merge (configuration.js:1:1)'
         ].join('\n')
 
         assert.deepEqual(
@@ -112,11 +113,13 @@ test('configuration', async () => {
         extensions: ['txt']
       },
       (error, code) => {
-        const actual = stderr().split('\n').slice(0, 2).join('\n')
+        const actual = cleanError(stderr(), 4)
 
         const expected = [
           'one.txt',
-          '  1:1  error  Error: Cannot parse file `.foorc.js`'
+          ' error Error: Cannot parse file `.foorc.js`',
+          'Cannot import `.foorc.js`',
+          'Error: Broken config'
         ].join('\n')
 
         assert.deepEqual(
@@ -263,11 +266,12 @@ test('configuration', async () => {
         extensions: ['txt']
       },
       (error, code) => {
-        const actual = stderr().split('\n').slice(0, 2).join('\n')
+        const actual = cleanError(stderr(), 3)
 
         const expected = [
           'one.txt',
-          '  1:1  error  Error: Cannot parse file `.foorc.yaml`'
+          ' error Error: Cannot parse file `.foorc.yaml`',
+          'Unexpected scalar at node end at line 2, column 1:'
         ].join('\n')
 
         assert.deepEqual(
@@ -340,11 +344,11 @@ test('configuration', async () => {
         extensions: ['txt']
       },
       (error, code) => {
-        const actual = stderr().split('\n').slice(0, 2).join('\n')
+        const actual = cleanError(stderr(), 2)
 
         const expected = [
           'one.txt',
-          '  1:1  error  Error: Cannot parse file `package.json`'
+          ' error Error: Cannot parse file `package.json`'
         ].join('\n')
 
         assert.deepEqual(
@@ -502,10 +506,10 @@ test('configuration', async () => {
         extensions: ['txt']
       },
       (error, code) => {
-        const actual = stderr().split('\n').slice(0, 4).join('\n')
+        const actual = cleanError(stderr(), 4)
         const expected = [
           'packages' + sep + 'deep' + sep + 'one.txt',
-          '  1:1  error  Error: Cannot parse file `package.json`',
+          ' error Error: Cannot parse file `package.json`',
           'Cannot import `plugin.js`',
           'Error: Boom!'
         ].join('\n')

@@ -1,28 +1,27 @@
 /**
- * @typedef {import('unist').Literal<string>} Literal
+ * @typedef {import('unist').Literal} Literal
  */
 
 import {unified} from 'unified'
 
 /**
- * @type {import('unified').Plugin<Array<void>, string, Literal>}
+ * @type {import('unified').Plugin<[], string, Literal>}
  */
 function parse() {
-  /** @type {import('unified').ParserFunction<Literal>} */
+  /** @type {import('unified').Parser<Literal>} */
   this.Parser = function (doc) {
     return {type: 'text', value: doc}
   }
 }
 
 /**
- * @type {import('unified').Plugin<Array<void>, Literal, string>}
+ * @type {import('unified').Plugin<[], Literal, string>}
  */
 function stringify() {
-  /** @type {import('unified').CompilerFunction<Literal, string>} */
+  /** @type {import('unified').Compiler<Literal, string>} */
   this.Compiler = function (tree) {
-    return tree.value
+    return String(tree.value)
   }
 }
 
-// @ts-expect-error: `parse` is fine.
 export const noop = unified().use(parse).use(stringify)

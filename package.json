@@ -33,7 +33,7 @@
     "@types/debug": "^4.0.0",
     "@types/is-empty": "^1.0.0",
     "@types/node": "^20.0.0",
-    "@types/unist": "^2.0.0",
+    "@types/unist": "^3.0.0",
     "concat-stream": "^2.0.0",
     "debug": "^4.0.0",
     "fault": "^2.0.0",
@@ -44,12 +44,12 @@
     "is-plain-obj": "^4.0.0",
     "load-plugin": "^5.0.0",
     "parse-json": "^7.0.0",
-    "to-vfile": "^7.0.0",
+    "to-vfile": "^8.0.0",
     "trough": "^2.0.0",
-    "unist-util-inspect": "^7.0.0",
-    "vfile-message": "^3.0.0",
-    "vfile-reporter": "^7.0.0",
-    "vfile-statistics": "^2.0.0",
+    "unist-util-inspect": "^8.0.0",
+    "vfile-message": "^4.0.0",
+    "vfile-reporter": "^8.0.0",
+    "vfile-statistics": "^3.0.0",
     "yaml": "^2.0.0"
   },
   "devDependencies": {
@@ -63,10 +63,10 @@
     "strip-ansi": "^7.0.0",
     "type-coverage": "^2.0.0",
     "typescript": "^5.0.0",
-    "unified": "^10.0.0",
-    "vfile": "^5.0.0",
-    "vfile-reporter-json": "^3.0.0",
-    "vfile-reporter-pretty": "^6.0.0",
+    "unified": "^11.0.0",
+    "vfile": "^6.0.0",
+    "vfile-reporter-json": "^4.0.0",
+    "vfile-reporter-pretty": "^7.0.0",
     "xo": "^0.56.0"
   },
   "scripts": {
@@ -105,7 +105,8 @@
       "complexity": "off",
       "unicorn/no-this-assignment": "off",
       "unicorn/prefer-at": "off",
-      "unicorn/prefer-event-target": "off"
+      "unicorn/prefer-event-target": "off",
+      "unicorn/prefer-string-replace-all": "off"
     },
     "overrides": [
       {

@@ -1,5 +1,4 @@
 /**
- * @typedef {import('unified').ParserFunction} ParserFunction
  * @typedef {import('unist').Literal} Literal
  */
 

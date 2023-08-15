@@ -1,5 +1,5 @@
 /**
- * @typedef {import('unist').Literal<string>} Literal
+ * @typedef {import('unist').Literal} Literal
  */
 
 import {fileURLToPath} from 'node:url'
@@ -15,10 +15,8 @@ import {spy} from './util/spy.js'
 const fixtures = new URL('fixtures/', import.meta.url)
 
 const windows = process.platform === 'win32'
-const cross = windows ? '×' : '✖'
-const danger = windows ? '‼' : '⚠'
 
-/** @type {import('unified-engine').VFileReporter} */
+/** @type {import('../index.js').VFileReporter} */
 const vfileReporterPrettyAsync = async (files) => vfileReporterPretty(files)
 
 // See: <https://github.com/sindresorhus/eslint-formatter-pretty/blob/159b30a/index.js#L90-L93>.
@@ -48,11 +46,7 @@ test('reporting', async () => {
       (error, code) => {
         assert.deepEqual(
           [error, code, stderr()],
-          [
-            null,
-            1,
-            'one.txt\n  1:1  warning  Warning\n\n' + danger + ' 1 warning\n'
-          ],
+          [null, 1, 'one.txt\n warning Warning\n\n⚠ 1 warning\n'],
           'should fail for warnings with `frail`'
         )
         resolve(undefined)
@@ -82,11 +76,7 @@ test('reporting', async () => {
       (error, code) => {
         assert.deepEqual(
           [error, code, stderr()],
-          [
-            null,
-            0,
-            'two.txt\n  1:1  warning  Warning\n\n' + danger + ' 1 warning\n'
-          ],
+          [null, 0, 'two.txt\n warning Warning\n\n⚠ 1 warning\n'],
           'should not report succesful files when `quiet` (#1)'
         )
         resolve(undefined)
@@ -141,7 +131,7 @@ test('reporting', async () => {
       (error, code) => {
         assert.deepEqual(
           [error, code, stderr()],
-          [null, 1, 'two.txt\n  1:1  error  Error\n\n' + cross + ' 1 error\n'],
+          [null, 1, 'two.txt\n error Error\n\n✖ 1 error\n'],
           'should not report succesful files when `silent`'
         )
         resolve(undefined)
@@ -231,21 +221,7 @@ test('reporting', async () => {
               path: 'two.txt',
               cwd: fileURLToPath(cwd),
               history: ['two.txt'],
-              messages: [
-                {
-                  reason: 'Error',
-                  line: null,
-                  column: null,
-                  position: {
-                    start: {line: null, column: null},
-                    end: {line: null, column: null}
-                  },
-                  ruleId: null,
-                  source: null,
-                  fatal: true,
-                  stack: null
-                }
-              ]
+              messages: [{fatal: true, reason: 'Error'}]
             }
           ],
           null,

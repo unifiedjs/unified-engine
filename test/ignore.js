@@ -4,6 +4,7 @@ import {fileURLToPath} from 'node:url'
 import {join, sep, relative} from 'node:path'
 import test from 'node:test'
 import {engine} from '../index.js'
+import {cleanError} from './util/clean-error.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
@@ -25,15 +26,14 @@ test('ignore', async () => {
         extensions: ['txt']
       },
       (error, code) => {
-        const actual = stderr().split('\n').slice(0, 2).join('\n')
-
         const expected = [
           'one.txt',
-          '  1:1  error  Error: Cannot read given file `.missing-ignore`'
+          ' error Error: Cannot read given file `.missing-ignore`',
+          'Error: ENOENT:…'
         ].join('\n')
 
         assert.deepEqual(
-          [error, code, actual],
+          [error, code, cleanError(stderr(), 3)],
           [null, 1, expected],
           'should fail fatally when given ignores are not found'
         )

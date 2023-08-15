@@ -1,5 +1,5 @@
 /**
- * @typedef {import('unist').Literal<string>} Literal
+ * @typedef {import('unist').Literal} Literal
  */
 
 import assert from 'node:assert/strict'
@@ -8,6 +8,7 @@ import {PassThrough} from 'node:stream'
 import test from 'node:test'
 import {toVFile} from 'to-vfile'
 import {engine} from '../index.js'
+import {cleanError} from './util/clean-error.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
@@ -27,11 +28,9 @@ test('tree', async () => {
         files: ['doc.json']
       },
       (error, code) => {
-        const actual = stderr().split('\n').slice(0, 2).join('\n')
-
         assert.deepEqual(
-          [error, code, actual],
-          [null, 1, 'doc.json\n  1:1  error  Error: Cannot read file as JSON'],
+          [error, code, cleanError(stderr(), 2)],
+          [null, 1, 'doc.json\n error Error: Cannot read file as JSON'],
           'should fail on malformed input'
         )
         resolve(undefined)
