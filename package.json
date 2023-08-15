@@ -1,12 +1,12 @@
 {
   "name": "unified-engine",
   "version": "10.1.0",
-  "description": "Engine to process multiple files with unified",
+  "description": "unified engine to process multiple files, lettings users configure from the file system",
   "license": "MIT",
   "keywords": [
-    "unified",
+    "engine",
     "processor",
-    "engine"
+    "unified"
   ],
   "repository": "unifiedjs/unified-engine",
   "bugs": "https://github.com/unifiedjs/unified-engine/issues",
@@ -70,18 +70,26 @@
     "xo": "^0.56.0"
   },
   "scripts": {
-    "prepack": "npm run build && npm run format",
     "build": "tsc --build --clean && tsc --build && type-coverage",
-    "format": "remark . -qfo && prettier . -w --log-level warn && xo --fix",
+    "format": "remark . --frail --output --quiet && prettier . --log-level warn --write && xo --fix",
+    "prepack": "npm run build && npm run format",
+    "test": "npm run build && npm run format && npm run test-coverage",
     "test-api": "node --conditions development test/index.js",
-    "test-coverage": "c8 --check-coverage --100 --reporter lcov npm run test-api",
-    "test": "npm run build && npm run format && npm run test-coverage"
+    "test-coverage": "c8 --100 --check-coverage --reporter lcov npm run test-api"
+  },
+  "prettier": {
+    "bracketSpacing": false,
+    "singleQuote": true,
+    "semi": false,
+    "tabWidth": 2,
+    "trailingComma": "none",
+    "useTabs": false
   },
   "remarkConfig": {
     "plugins": [
-      "preset-wooorm",
+      "remark-preset-wooorm",
       [
-        "toc",
+        "remark-toc",
         {
           "heading": "contents",
           "maxDepth": 3,
@@ -90,24 +98,7 @@
       ]
     ]
   },
-  "prettier": {
-    "tabWidth": 2,
-    "useTabs": false,
-    "singleQuote": true,
-    "bracketSpacing": false,
-    "semi": false,
-    "trailingComma": "none"
-  },
   "xo": {
-    "prettier": true,
-    "rules": {
-      "capitalized-comments": "off",
-      "complexity": "off",
-      "unicorn/no-this-assignment": "off",
-      "unicorn/prefer-at": "off",
-      "unicorn/prefer-event-target": "off",
-      "unicorn/prefer-string-replace-all": "off"
-    },
     "overrides": [
       {
         "files": "test/fixtures/**/*.js",
@@ -116,12 +107,20 @@
           "unicorn/prefer-module": "off"
         }
       }
-    ]
+    ],
+    "prettier": true,
+    "rules": {
+      "capitalized-comments": "off",
+      "complexity": "off",
+      "unicorn/no-this-assignment": "off",
+      "unicorn/prefer-at": "off",
+      "unicorn/prefer-event-target": "off",
+      "unicorn/prefer-string-replace-all": "off"
+    }
   },
   "typeCoverage": {
     "atLeast": 100,
     "detail": true,
-    "strict": true,
     "ignoreCatch": true,
     "#": "needed `any`s",
     "ignoreFiles": [
@@ -130,6 +129,7 @@
       "test/**/*.js",
       "test/**/*.cjs",
       "test/**/*.mjs"
-    ]
+    ],
+    "strict": true
   }
 }
