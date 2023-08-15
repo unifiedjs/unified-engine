@@ -55,8 +55,8 @@
   "devDependencies": {
     "@types/glob": "^8.0.0",
     "@types/parse-json": "^4.0.0",
-    "c8": "^7.0.0",
-    "prettier": "^2.0.0",
+    "c8": "^8.0.0",
+    "prettier": "^3.0.0",
     "remark": "^14.0.0",
     "remark-cli": "^11.0.0",
     "remark-preset-wooorm": "^9.0.0",
@@ -68,12 +68,12 @@
     "vfile": "^5.0.0",
     "vfile-reporter-json": "^3.0.0",
     "vfile-reporter-pretty": "^6.0.0",
-    "xo": "^0.54.0"
+    "xo": "^0.56.0"
   },
   "scripts": {
     "prepack": "npm run build && npm run format",
     "build": "tsc --build --clean && tsc --build && type-coverage",
-    "format": "remark . -qfo && prettier . -w --loglevel warn && xo --fix",
+    "format": "remark . -qfo && prettier . -w --log-level warn && xo --fix",
     "test-api": "node --conditions development test/index.js",
     "test-coverage": "c8 --check-coverage --100 --reporter lcov npm run test-api",
     "test": "npm run build && npm run format && npm run test-coverage"
@@ -104,7 +104,9 @@
     "rules": {
       "capitalized-comments": "off",
       "complexity": "off",
-      "unicorn/no-this-assignment": "off"
+      "unicorn/no-this-assignment": "off",
+      "unicorn/prefer-at": "off",
+      "unicorn/prefer-event-target": "off"
     },
     "overrides": [
       {
