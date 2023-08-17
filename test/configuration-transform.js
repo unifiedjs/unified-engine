@@ -1,6 +1,16 @@
 /**
- * @typedef {import('../index.js').Preset['settings']} Settings
  * @typedef {import('../index.js').Preset['plugins']} Plugins
+ * @typedef {import('../index.js').Preset['settings']} Settings
+ * @typedef {import('../lib/configuration.js').Configuration} Configuration
+ */
+
+/**
+ * @typedef RawValue
+ *   Format of our example custom config.
+ * @property {Settings} options
+ *   Settings.
+ * @property {Plugins} plugs
+ *   Plugins.
  */
 
 import assert from 'node:assert/strict'
@@ -11,65 +21,56 @@ import {spy} from './util/spy.js'
 
 const fixtures = new URL('fixtures/', import.meta.url)
 
-test('`configTransform`', async () => {
-  await new Promise((resolve) => {
-    const stderr = spy()
+test('`configTransform`', async function (t) {
+  await t.test('should support a `configTransform`', async function () {
+    await new Promise(function (resolve) {
+      const stderr = spy()
 
-    // @ts-expect-error: incremented by plugins.
-    globalThis.unifiedEngineTestCalls = 0
-    // @ts-expect-error: set by plugins.
-    globalThis.unifiedEngineTestValues = {}
+      globalThis.unifiedEngineTestCalls = 0
+      globalThis.unifiedEngineTestValues = {}
 
-    engine(
-      {
-        processor: noop(),
-        streamError: stderr.stream,
-        cwd: new URL('config-transform/', fixtures),
-        files: ['.'],
-        packageField: 'foo',
-        configTransform(
-          /** @type {{options: Settings, plugs: Plugins}} */ raw
-        ) {
-          return {settings: raw.options, plugins: raw.plugs}
+      engine(
+        {
+          /**
+           * @param {RawValue} raw
+           *   Format of our example custom config.
+           * @returns
+           *   Expected format.
+           */
+          configTransform(raw) {
+            return {settings: raw.options, plugins: raw.plugs}
+          },
+          cwd: new URL('config-transform/', fixtures),
+          extensions: ['txt'],
+          files: ['.'],
+          packageField: 'foo',
+          processor: noop(),
+          streamError: stderr.stream
         },
-        extensions: ['txt']
-      },
-      (error, code, result) => {
-        // @ts-expect-error: internals
-        const cache = result.configuration.findUp.cache
-        const keys = Object.keys(cache)
+        function (error, code, result) {
+          assert.equal(error, undefined)
+          assert.equal(code, 0)
+          assert.equal(stderr(), 'one.txt: no issues found\n')
 
-        // @ts-expect-error: incremented by plugin.
-        assert.equal(globalThis.unifiedEngineTestCalls, 1)
-        assert.deepEqual(
-          // @ts-expect-error: added by plugins.
-          globalThis.unifiedEngineTestValues,
-          {golf: false},
-          'should pass the correct options to the plugins'
-        )
+          /** @type {Configuration} */
+          // @ts-expect-error: access the internals
+          const config = result.configuration
+          const cache = config.findUp.cache
+          const keys = Object.keys(cache)
 
-        assert.equal(keys.length, 1, 'should have one cache entry')
+          assert.equal(keys.length, 1)
+          const value = cache[keys[0]]
+          assert(typeof value === 'object')
+          assert('settings' in value)
+          assert.deepEqual(value.settings, {foxtrot: true})
+          assert.deepEqual(value.plugins[0][1], {golf: false})
 
-        assert.deepEqual(
-          cache[keys[0]].settings,
-          {foxtrot: true},
-          'should set the correct settings'
-        )
+          assert.equal(globalThis.unifiedEngineTestCalls, 1)
+          assert.deepEqual(globalThis.unifiedEngineTestValues, {golf: false})
 
-        assert.deepEqual(
-          cache[keys[0]].plugins[0][1],
-          {golf: false},
-          'should pass the correct options to plugins'
-        )
-
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, 'one.txt: no issues found\n'],
-          'should succeed'
-        )
-
-        resolve(undefined)
-      }
-    )
+          resolve(undefined)
+        }
+      )
+    })
   })
 })

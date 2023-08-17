@@ -21,7 +21,7 @@ is turned on, depending on the following options:
 
 In this case, the first file that is searched for in a directory is used as the
 configuration.
-If no file is found, the parent directory is searched, and so on.
+If no file is found, the parent folder is searched, and so on.
 
 ###### Example
 

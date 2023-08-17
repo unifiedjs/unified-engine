@@ -13,9 +13,9 @@ regardless of [`detectIgnore`][detect-ignore] and [`ignoreName`][ignore-name].
 Otherwise, ignore files are detected if [`detectIgnore`][detect-ignore] is
 turned on and [`ignoreName`][ignore-name] is given.
 
-The first file named `ignoreName` in the parent directory of a checked path is
+The first file named `ignoreName` in the parent folder of a checked path is
 used.
-Or, if no file is found, the parent directory if searched, and so on.
+Or, if no file is found, the parent folder if searched, and so on.
 
 ## Additional ignoring
 

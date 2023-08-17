@@ -1,10 +1,23 @@
-// @ts-expect-error: TS 4.9 is wrong.
-/** @type {import('unified').Plugin<Array<unknown>>} */
+// @ts-expect-error: import for types in CJS works fine.
+/** @typedef {import('unified').Processor} Processor */
+
+const assert = require('node:assert/strict')
+
+/**
+ * @this {Processor}
+ *   Processor.
+ * @param {unknown} [options]
+ *   Options.
+ * @returns {undefined}
+ *   Nothing.
+ */
 module.exports = function (options) {
-  // @ts-expect-error: set by tests.
+  assert(typeof globalThis.unifiedEngineTestCalls === 'number')
+  assert(globalThis.unifiedEngineTestValues)
   globalThis.unifiedEngineTestCalls++
-  // @ts-expect-error: set by tests.
-  globalThis.unifiedEngineTestValues.foundSettings = this.data('settings')
-  // @ts-expect-error: set by tests.
-  globalThis.unifiedEngineTestValues.foundOptions = options
+  globalThis.unifiedEngineTestValues = {
+    ...globalThis.unifiedEngineTestValues,
+    foundOptions: options,
+    foundSettings: this.data('settings')
+  }
 }

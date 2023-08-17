@@ -1,4 +1,6 @@
+const assert = require('node:assert/strict')
+
 module.exports = function () {
-  // @ts-expect-error: set by tests.
+  assert(typeof globalThis.unifiedEngineTestCalls === 'number')
   globalThis.unifiedEngineTestCalls++
 }

@@ -1,23 +1,30 @@
 import {PassThrough} from 'node:stream'
 
 export function spy() {
-  const stream = new PassThrough()
-  /** @type {Array<string>} */
+  /** @type {Array<unknown>} */
   const output = []
+  const stream = new PassThrough()
   const originalWrite = stream.write
 
   /**
-   * @param {string} chunk
+   * Write method.
+   *
+   * @type {PassThrough['write']}
+   * @param {unknown} chunk
+   *   Thing.
+   * @returns {boolean}
+   *   Whether the write was succesful (yes).
    */
-  // @ts-expect-error: hush.
-  stream.write = (chunk, encoding, callback) => {
-    callback = typeof encoding === 'function' ? encoding : callback
+  // @ts-expect-error: TS can’t apply overloads I think?.
+  stream.write = function (chunk, encoding, callback) {
+    const cb = typeof encoding === 'function' ? encoding : callback
 
-    if (typeof callback === 'function') {
-      setImmediate(callback, undefined)
+    if (typeof cb === 'function') {
+      setImmediate(cb, undefined)
     }
 
     output.push(chunk)
+    return true
   }
 
   done.stream = stream
@@ -26,7 +33,6 @@ export function spy() {
 
   function done() {
     stream.write = originalWrite
-
     return output.join('')
   }
 }

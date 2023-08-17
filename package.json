@@ -34,19 +34,18 @@
     "@types/is-empty": "^1.0.0",
     "@types/node": "^20.0.0",
     "@types/unist": "^3.0.0",
+    "@ungap/structured-clone": "^1.0.0",
     "concat-stream": "^2.0.0",
     "debug": "^4.0.0",
-    "fault": "^2.0.0",
     "glob": "^10.0.0",
     "ignore": "^5.0.0",
-    "is-buffer": "^2.0.0",
     "is-empty": "^1.0.0",
     "is-plain-obj": "^4.0.0",
     "load-plugin": "^5.0.0",
     "parse-json": "^7.0.0",
-    "to-vfile": "^8.0.0",
     "trough": "^2.0.0",
     "unist-util-inspect": "^8.0.0",
+    "vfile": "^6.0.0",
     "vfile-message": "^4.0.0",
     "vfile-reporter": "^8.0.0",
     "vfile-statistics": "^3.0.0",
@@ -54,6 +53,7 @@
   },
   "devDependencies": {
     "@types/parse-json": "^4.0.0",
+    "@types/ungap__structured-clone": "^0.3.0",
     "c8": "^8.0.0",
     "prettier": "^3.0.0",
     "remark": "^14.0.0",
@@ -64,7 +64,6 @@
     "type-coverage": "^2.0.0",
     "typescript": "^5.0.0",
     "unified": "^11.0.0",
-    "vfile": "^6.0.0",
     "vfile-reporter-json": "^4.0.0",
     "vfile-reporter-pretty": "^7.0.0",
     "xo": "^0.56.0"
@@ -110,8 +109,9 @@
     ],
     "prettier": true,
     "rules": {
-      "capitalized-comments": "off",
       "complexity": "off",
+      "no-await-in-loop": "off",
+      "no-unused-expressions": "off",
       "unicorn/no-this-assignment": "off",
       "unicorn/prefer-at": "off",
       "unicorn/prefer-event-target": "off",
@@ -125,10 +125,7 @@
     "#": "needed `any`s",
     "ignoreFiles": [
       "lib/index.d.ts",
-      "lib/configuration.d.ts",
-      "test/**/*.js",
-      "test/**/*.cjs",
-      "test/**/*.mjs"
+      "lib/configuration.d.ts"
     ],
     "strict": true
   }

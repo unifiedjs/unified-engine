@@ -6,3 +6,4 @@ coverage/
 *.d.cts
 *.log
 yarn.lock
+!/test/types.d.ts

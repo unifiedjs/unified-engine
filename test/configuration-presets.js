@@ -1,276 +1,208 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
+import {promisify} from 'node:util'
 import {engine} from '../index.js'
 import {cleanError} from './util/clean-error.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
 const fixtures = new URL('fixtures/', import.meta.url)
+const run = promisify(engine)
 
-test('configuration-presets', async () => {
-  await new Promise((resolve) => {
+test('configuration-presets', async function (t) {
+  await t.test('should fail on invalid `presets`', async function () {
     const root = new URL('config-presets-invalid/', fixtures)
     const stderr = spy()
 
-    engine(
-      {
-        processor: noop,
-        cwd: root,
-        streamError: stderr.stream,
-        files: ['.'],
-        rcName: '.foorc',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        const actual = cleanError(stderr(), 3)
+    const code = await run({
+      cwd: root,
+      extensions: ['txt'],
+      files: ['.'],
+      processor: noop,
+      streamError: stderr.stream,
+      rcName: '.foorc'
+    })
 
-        const expected = [
-          'one.txt',
-          ' error Error: Cannot parse file `.foorc`',
-          'Expected a list or object of plugins, not `./preset`'
-        ].join('\n')
-
-        assert.deepEqual(
-          [error, code, actual],
-          [null, 1, expected],
-          'should fail on invalid `presets`'
-        )
-        resolve(undefined)
-      }
+    assert.equal(code, 1)
+    assert.equal(
+      cleanError(stderr(), 4),
+      [
+        'one.txt',
+        ' error Cannot process file',
+        '  [cause]:',
+        '    Error: Cannot parse file `.foorc`'
+      ].join('\n')
     )
   })
 
-  await new Promise((resolve) => {
-    const stderr = spy()
+  await t.test(
+    'should pass the correct options to the local and deep plugins',
+    async function () {
+      const stderr = spy()
 
-    // @ts-expect-error: incremented by plugins.
-    globalThis.unifiedEngineTestCalls = 0
-    // @ts-expect-error: set by plugins.
-    globalThis.unifiedEngineTestValues = {}
+      globalThis.unifiedEngineTestCalls = 0
+      globalThis.unifiedEngineTestValues = {}
 
-    engine(
-      {
-        processor: noop(),
+      const code = await run({
         cwd: new URL('config-presets-local/', fixtures),
-        streamError: stderr.stream,
+        extensions: ['txt'],
         files: ['.'],
+        processor: noop(),
         rcName: '.foorc',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, 'one.txt: no issues found\n'],
-          'should succeed'
-        )
-        // @ts-expect-error: incremented by plugins.
-        assert.equal(globalThis.unifiedEngineTestCalls, 2)
+        streamError: stderr.stream
+      })
 
-        assert.deepEqual(
-          // @ts-expect-error: added by plugins.
-          globalThis.unifiedEngineTestValues,
-          {local: {three: true, two: false}, deep: {one: true, two: true}},
-          'should pass the correct options to the local and deep plugins'
-        )
+      assert.equal(code, 0)
+      assert.equal(stderr(), 'one.txt: no issues found\n')
+      assert.equal(globalThis.unifiedEngineTestCalls, 2)
 
-        resolve(undefined)
-      }
+      assert.deepEqual(
+        globalThis.unifiedEngineTestValues,
+        {deep: {one: true, two: true}, local: {three: true, two: false}},
+        'should pass the correct options to the local and deep plugins'
+      )
+    }
+  )
+
+  await t.test('should handle missing plugins in presets', async function () {
+    const stderr = spy()
+
+    const code = await run({
+      cwd: new URL('config-presets-missing-plugin/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      processor: noop,
+      rcName: '.foorc',
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 1)
+    assert.equal(
+      cleanError(stderr(), 4),
+      [
+        'one.txt',
+        ' error Cannot process file',
+        '  [cause]:',
+        '    Error: Cannot find module `./plugin.js`'
+      ].join('\n')
     )
   })
 
-  await new Promise((resolve) => {
+  await t.test('should reconfigure plugins', async function () {
     const stderr = spy()
 
-    engine(
-      {
-        processor: noop,
-        cwd: new URL('config-presets-missing-plugin/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        rcName: '.foorc',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        const actual = cleanError(stderr(), 2)
-
-        const expected = [
-          'one.txt',
-          ' error Error: Could not find module `./plugin.js`'
-        ].join('\n')
-
-        assert.deepEqual(
-          [error, code, actual],
-          [null, 1, expected],
-          'should handle missing plugins in presets'
-        )
-
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-
-    // @ts-expect-error: incremented by plugins.
     globalThis.unifiedEngineTestCalls = 0
-    // @ts-expect-error: set by plugins.
     globalThis.unifiedEngineTestValues = {}
 
-    engine(
-      {
-        processor: noop(),
-        cwd: new URL('config-plugins-reconfigure/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        rcName: '.foorc',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, 'one.txt: no issues found\n'],
-          'should reconfigure plugins'
-        )
-        // @ts-expect-error: incremented by plugin.
-        assert.equal(globalThis.unifiedEngineTestCalls, 5)
-        assert.deepEqual(
-          // @ts-expect-error: added by plugins.
-          globalThis.unifiedEngineTestValues,
-          {
-            arrayToObject: {delta: 1},
-            mergeObject: {one: true, two: false, three: true},
-            objectToArray: [2],
-            stringToArray: [1],
-            stringToObject: {bravo: 1}
-          },
-          'should pass the correct options to plugins'
-        )
-        resolve(undefined)
-      }
-    )
+    const code = await run({
+      cwd: new URL('config-plugins-reconfigure/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      processor: noop(),
+      rcName: '.foorc',
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 0)
+    assert.equal(stderr(), 'one.txt: no issues found\n')
+    assert.equal(globalThis.unifiedEngineTestCalls, 5)
+    assert.deepEqual(globalThis.unifiedEngineTestValues, {
+      arrayToObject: {delta: 1},
+      mergeObject: {one: true, three: true, two: false},
+      objectToArray: [2],
+      stringToArray: [1],
+      stringToObject: {bravo: 1}
+    })
   })
 
-  await new Promise((resolve) => {
+  await t.test('should reconfigure imported plugins', async function () {
     const stderr = spy()
 
-    // @ts-expect-error: incremented by plugins.
     globalThis.unifiedEngineTestCalls = 0
-    // @ts-expect-error: set by plugins.
     globalThis.unifiedEngineTestValues = {}
 
-    engine(
-      {
-        processor: noop(),
-        cwd: new URL('config-preset-plugins-reconfigure/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        rcName: '.foorc',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, 'one.txt: no issues found\n'],
-          'should reconfigure imported plugins'
-        )
-        // @ts-expect-error: incremented by plugin.
-        assert.equal(globalThis.unifiedEngineTestCalls, 1)
-        assert.deepEqual(
-          // @ts-expect-error: added by plugins.
-          globalThis.unifiedEngineTestValues,
-          {one: true, two: false, three: true},
-          'should pass the correct options to plugins'
-        )
-        resolve(undefined)
-      }
-    )
+    const code = await run({
+      cwd: new URL('config-preset-plugins-reconfigure/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      processor: noop(),
+      rcName: '.foorc',
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 0)
+    assert.equal(stderr(), 'one.txt: no issues found\n')
+    assert.equal(globalThis.unifiedEngineTestCalls, 1)
+    assert.deepEqual(globalThis.unifiedEngineTestValues, {
+      one: true,
+      three: true,
+      two: false
+    })
   })
 
-  await new Promise((resolve) => {
+  await t.test('should reconfigure: turn plugins off', async function () {
     const stderr = spy()
 
-    engine(
-      {
-        processor: noop,
-        cwd: new URL('config-plugins-reconfigure-off/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        rcName: '.foorc',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, 'one.txt: no issues found\n'],
-          'should reconfigure: turn plugins off'
-        )
-        resolve(undefined)
-      }
-    )
+    const code = await run({
+      cwd: new URL('config-plugins-reconfigure-off/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      processor: noop,
+      rcName: '.foorc',
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 0)
+    assert.equal(stderr(), 'one.txt: no issues found\n')
   })
 
-  await new Promise((resolve) => {
+  await t.test('should reconfigure settings', async function () {
     const stderr = spy()
     let calls = 0
 
-    engine(
-      {
-        processor: noop().use(function () {
-          assert.deepEqual(
-            this.data('settings'),
-            {alpha: true},
-            'should configure'
-          )
-          calls++
-        }),
-        cwd: new URL('config-settings-reconfigure-a/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        rcName: '.foorc',
-        extensions: ['txt']
-      },
-      (error, code) => {
+    const code = await run({
+      cwd: new URL('config-settings-reconfigure-a/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      processor: noop().use(function () {
         assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, 'one.txt: no issues found\n'],
-          'should reconfigure settings'
+          this.data('settings'),
+          {alpha: true},
+          'should configure'
         )
-        assert.equal(calls, 1)
-        resolve(undefined)
-      }
-    )
+        calls++
+      }),
+      rcName: '.foorc',
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 0)
+    assert.equal(stderr(), 'one.txt: no issues found\n')
+    assert.equal(calls, 1)
   })
 
-  await new Promise((resolve) => {
+  await t.test('should reconfigure settings (2)', async function () {
     const stderr = spy()
     let calls = 0
 
-    engine(
-      {
-        processor: noop().use(function () {
-          assert.deepEqual(
-            this.data('settings'),
-            {alpha: true},
-            'should configure'
-          )
-          calls++
-        }),
-        cwd: new URL('config-settings-reconfigure-b/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        rcName: '.foorc',
-        extensions: ['txt']
-      },
-      (error, code) => {
+    const code = await run({
+      cwd: new URL('config-settings-reconfigure-b/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      processor: noop().use(function () {
         assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, 'one.txt: no issues found\n'],
-          'should reconfigure settings (2)'
+          this.data('settings'),
+          {alpha: true},
+          'should configure'
         )
-        assert.equal(calls, 1)
-        resolve(undefined)
-      }
-    )
+        calls++
+      }),
+      rcName: '.foorc',
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 0)
+    assert.equal(stderr(), 'one.txt: no issues found\n')
+    assert.equal(calls, 1)
   })
 })

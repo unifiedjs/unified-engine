@@ -1,7 +1,13 @@
-/** @param {unknown} options */
+const assert = require('node:assert/strict')
+
+/**
+ * @param {unknown} [options]
+ *   Options.
+ * @returns {undefined}
+ *   Nothing.
+ */
 module.exports = function (options) {
-  // @ts-expect-error: set by tests.
+  assert(typeof globalThis.unifiedEngineTestCalls === 'number')
   globalThis.unifiedEngineTestCalls++
-  // @ts-expect-error: set by tests.
   globalThis.unifiedEngineTestValues = options
 }

@@ -1,7 +1,17 @@
-/** @param {unknown} options */
+import assert from 'node:assert/strict'
+
+/**
+ * @param {unknown} [options]
+ *   Options.
+ * @returns {undefined}
+ *   Nothing.
+ */
 export default function stringToArray(options) {
-  // @ts-expect-error: set by tests.
+  assert(typeof globalThis.unifiedEngineTestCalls === 'number')
+  assert(globalThis.unifiedEngineTestValues)
   globalThis.unifiedEngineTestCalls++
-  // @ts-expect-error: set by tests.
-  globalThis.unifiedEngineTestValues.stringToArray = options
+  globalThis.unifiedEngineTestValues = {
+    ...globalThis.unifiedEngineTestValues,
+    stringToArray: options
+  }
 }

@@ -1,23 +1,27 @@
 /**
  * @typedef {import('unist').Literal} Literal
+ * @typedef {import('../index.js').VFileReporter} VFileReporter
  */
 
 import {fileURLToPath} from 'node:url'
 import assert from 'node:assert/strict'
 import process from 'node:process'
 import test from 'node:test'
+import {promisify} from 'node:util'
 import stripAnsi from 'strip-ansi'
 import vfileReporterPretty from 'vfile-reporter-pretty'
 import {engine} from '../index.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
+const run = promisify(engine)
 const fixtures = new URL('fixtures/', import.meta.url)
-
 const windows = process.platform === 'win32'
 
-/** @type {import('../index.js').VFileReporter} */
-const vfileReporterPrettyAsync = async (files) => vfileReporterPretty(files)
+/** @type {VFileReporter} */
+const vfileReporterPrettyAsync = async function (files) {
+  return vfileReporterPretty(files)
+}
 
 // See: <https://github.com/sindresorhus/eslint-formatter-pretty/blob/159b30a/index.js#L90-L93>.
 const original = process.env.CI
@@ -26,190 +30,167 @@ if (!windows) {
   process.env.CI = 'true'
 }
 
-test('reporting', async () => {
-  await new Promise((resolve) => {
+test('reporting', async function (t) {
+  await t.test('should fail for warnings with `frail`', async function () {
     const stderr = spy()
 
-    engine(
-      {
-        processor: noop().use(
-          /** @type {import('unified').Plugin<Array<void>, Literal>} */
-          () => (_, file) => {
+    const code = await run({
+      cwd: new URL('one-file/', fixtures),
+      files: ['one.txt'],
+      frail: true,
+      processor: noop().use(
+        /** @type {import('unified').Plugin<[], Literal>} */
+        function () {
+          return function (_, file) {
             file.message('Warning')
           }
-        ),
-        cwd: new URL('one-file/', fixtures),
-        streamError: stderr.stream,
-        files: ['one.txt'],
-        frail: true
-      },
-      (error, code) => {
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 1, 'one.txt\n warning Warning\n\n⚠ 1 warning\n'],
-          'should fail for warnings with `frail`'
-        )
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-
-    engine(
-      {
-        processor: noop().use(
-          /** @type {import('unified').Plugin<Array<void>, Literal>} */
-          () => (_, file) => {
-            if (file.stem === 'two') {
-              file.message('Warning')
-            }
-          }
-        ),
-        cwd: new URL('two-files/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        extensions: ['txt'],
-        quiet: true
-      },
-      (error, code) => {
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, 'two.txt\n warning Warning\n\n⚠ 1 warning\n'],
-          'should not report succesful files when `quiet` (#1)'
-        )
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-
-    engine(
-      {
-        processor: noop(),
-        cwd: new URL('one-file/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        extensions: ['txt'],
-        quiet: true
-      },
-      (error, code) => {
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, ''],
-          'should not report succesful files when `quiet` (#2)'
-        )
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-
-    engine(
-      {
-        processor: noop().use(
-          /** @type {import('unified').Plugin<Array<void>, Literal>} */
-          () => (_, file) => {
-            file.message('Warning')
-
-            if (file.stem === 'two') {
-              file.fail('Error')
-            }
-          }
-        ),
-        cwd: new URL('two-files/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        extensions: ['txt'],
-        silent: true
-      },
-      (error, code) => {
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 1, 'two.txt\n error Error\n\n✖ 1 error\n'],
-          'should not report succesful files when `silent`'
-        )
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-
-    engine(
-      {
-        processor: noop(),
-        cwd: new URL('two-files/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        extensions: ['txt'],
-        reporter: vfileReporterPretty
-      },
-      (error, code) => {
-        assert.deepEqual(
-          [error, code, stripAnsi(stderr())],
-          [null, 0, ''],
-          'should support custom given reporters'
-        )
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-
-    engine(
-      {
-        processor: noop(),
-        cwd: new URL('two-files/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        extensions: ['txt'],
-        reporter: vfileReporterPrettyAsync
-      },
-      (error, code) => {
-        assert.deepEqual(
-          [error, code, stripAnsi(stderr())],
-          [null, 0, ''],
-          'should support async reporters'
-        )
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-    const cwd = new URL('two-files/', fixtures)
-
-    engine(
-      {
-        processor: noop().use(
-          /** @type {import('unified').Plugin<Array<void>, Literal>} */
-          () => (_, file) => {
-            if (file.stem === 'two') {
-              file.fail('Error')
-            }
-          }
-        ),
-        cwd,
-        streamError: stderr.stream,
-        files: ['.'],
-        extensions: ['txt'],
-        reporter: 'json',
-        reporterOptions: {
-          pretty: true
         }
-      },
-      (error, code) => {
-        const report = JSON.stringify(
+      ),
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 1)
+    assert.equal(stderr(), 'one.txt\n warning Warning\n\n⚠ 1 warning\n')
+  })
+
+  await t.test(
+    'should not report succesful files when `quiet` (#1)',
+    async function () {
+      const stderr = spy()
+
+      const code = await run({
+        cwd: new URL('two-files/', fixtures),
+        extensions: ['txt'],
+        files: ['.'],
+        processor: noop().use(
+          /** @type {import('unified').Plugin<[], Literal>} */
+          function () {
+            return function (_, file) {
+              if (file.stem === 'two') {
+                file.message('Warning')
+              }
+            }
+          }
+        ),
+        quiet: true,
+        streamError: stderr.stream
+      })
+
+      assert.equal(code, 0)
+      assert.equal(stderr(), 'two.txt\n warning Warning\n\n⚠ 1 warning\n')
+    }
+  )
+
+  await t.test(
+    'should not report succesful files when `quiet` (#2)',
+    async function () {
+      const stderr = spy()
+
+      const code = await run({
+        cwd: new URL('one-file/', fixtures),
+        extensions: ['txt'],
+        files: ['.'],
+        processor: noop(),
+        quiet: true,
+        streamError: stderr.stream
+      })
+
+      assert.equal(code, 0)
+      assert.equal(stderr(), '')
+    }
+  )
+
+  await t.test(
+    'should not report succesful files when `silent`',
+    async function () {
+      const stderr = spy()
+
+      const code = await run({
+        cwd: new URL('two-files/', fixtures),
+        extensions: ['txt'],
+        files: ['.'],
+        processor: noop().use(
+          /** @type {import('unified').Plugin<[], Literal>} */
+          function () {
+            return function (_, file) {
+              file.message('Warning')
+
+              if (file.stem === 'two') {
+                file.fail('Error')
+              }
+            }
+          }
+        ),
+        silent: true,
+        streamError: stderr.stream
+      })
+
+      assert.equal(code, 1)
+      assert.equal(stderr(), 'two.txt\n error Error\n\n✖ 1 error\n')
+    }
+  )
+
+  await t.test('should support custom given reporters', async function () {
+    const stderr = spy()
+
+    const code = await run({
+      cwd: new URL('two-files/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      processor: noop(),
+      reporter: vfileReporterPretty,
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 0)
+    assert.equal(stderr(), '')
+  })
+
+  await t.test('should support async reporters', async function () {
+    const stderr = spy()
+
+    const code = await run({
+      cwd: new URL('two-files/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      processor: noop(),
+      reporter: vfileReporterPrettyAsync,
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 0)
+    assert.equal(stderr(), '')
+  })
+
+  await t.test(
+    'should support custom reporters (without prefix)',
+    async function () {
+      const stderr = spy()
+      const cwd = new URL('two-files/', fixtures)
+
+      const code = await run({
+        cwd,
+        extensions: ['txt'],
+        files: ['.'],
+        processor: noop().use(
+          /** @type {import('unified').Plugin<[], Literal>} */
+          function () {
+            return function (_, file) {
+              if (file.stem === 'two') {
+                file.fail('Error')
+              }
+            }
+          }
+        ),
+        reporter: 'json',
+        reporterOptions: {pretty: true},
+        streamError: stderr.stream
+      })
+
+      assert.equal(code, 1)
+      assert.equal(
+        stderr(),
+        JSON.stringify(
           [
             {
               path: 'one.txt',
@@ -224,74 +205,57 @@ test('reporting', async () => {
               messages: [{fatal: true, reason: 'Error'}]
             }
           ],
-          null,
+          undefined,
           2
-        )
+        ) + '\n'
+      )
+    }
+  )
 
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 1, report + '\n'],
-          'should support custom reporters (without prefix)'
-        )
-        resolve(undefined)
-      }
-    )
-  })
+  await t.test(
+    'should support custom reporters (with prefix)',
+    async function () {
+      const stderr = spy()
 
-  await new Promise((resolve) => {
-    const stderr = spy()
-    const cwd = new URL('two-files/', fixtures)
-
-    engine(
-      {
+      const code = await run({
+        cwd: new URL('two-files/', fixtures),
+        extensions: ['txt'],
+        files: ['.'],
         processor: noop().use(
-          /** @type {import('unified').Plugin<Array<void>, Literal>} */
-          () => (_, file) => {
-            if (file.stem === 'one') {
-              file.info('Info!')
+          /** @type {import('unified').Plugin<[], Literal>} */
+          function () {
+            return function (_, file) {
+              if (file.stem === 'one') {
+                file.info('Info!')
+              }
             }
           }
         ),
-        cwd,
-        streamError: stderr.stream,
-        files: ['.'],
-        extensions: ['txt'],
-        reporter: 'vfile-reporter-pretty'
-      },
-      (error, code) => {
-        assert.deepEqual(
-          [error, code, stripAnsi(stderr())],
-          [
-            null,
-            0,
-            // Note: `vfile-reporter-pretty` returns `⚠` on Windows too.
-            '\n  one.txt\n  ⚠  Info!  \n\n  1 warning\n'
-          ],
-          'should support custom reporters (with prefix)'
-        )
-        resolve(undefined)
-      }
-    )
-  })
+        reporter: 'vfile-reporter-pretty',
+        streamError: stderr.stream
+      })
 
-  await new Promise((resolve) => {
-    engine(
-      {
-        processor: noop(),
+      assert.equal(code, 0)
+      assert.equal(
+        stripAnsi(stderr()),
+        '\n  one.txt\n  ⚠  Info!  \n\n  1 warning\n'
+      )
+    }
+  )
+
+  await t.test('should fail on an unfound reporter', async function () {
+    try {
+      await run({
         cwd: new URL('one-file/', fixtures),
-        files: ['.'],
         extensions: ['txt'],
+        files: ['.'],
+        processor: noop(),
         reporter: 'missing'
-      },
-      (error) => {
-        assert.equal(
-          error && error.message,
-          'Could not find reporter `missing`',
-          'should fail on an unfound reporter'
-        )
-        resolve(undefined)
-      }
-    )
+      })
+      assert.fail()
+    } catch (error) {
+      assert.match(String(error), /Cannot find reporter `missing`/)
+    }
   })
 
   if (!windows) {

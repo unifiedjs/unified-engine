@@ -74,14 +74,14 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark,
-    files: ['.'],
+    color: true,
     extensions: ['md', 'markdown', 'mkd', 'mkdn', 'mkdown'],
-    pluginPrefix: 'remark',
-    rcName: '.remarkrc',
-    packageField: 'remarkConfig',
+    files: ['.'],
     ignoreName: '.remarkignore',
-    color: true
+    packageField: 'remarkConfig',
+    pluginPrefix: 'remark',
+    processor: remark,
+    rcName: '.remarkrc'
   },
   done
 )

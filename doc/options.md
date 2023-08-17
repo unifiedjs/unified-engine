@@ -82,10 +82,10 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark(),
     cwd: new URL('doc/', import.meta.url),
     files: ['readme.md'],
-    output: true
+    output: true,
+    processor: remark()
   },
   done
 )
@@ -121,9 +121,9 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark,
+    extensions: ['md'],
     files: ['README', 'doc'],
-    extensions: ['md']
+    processor: remark
   },
   done
 )
@@ -155,10 +155,10 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark,
-    files: ['.'],
     extensions: ['md', 'mkd', 'markdown'],
-    output: true
+    files: ['.'],
+    output: true,
+    processor: remark
   },
   done
 )
@@ -192,10 +192,10 @@ const streamIn = new PassThrough()
 
 engine(
   {
-    processor: remark(),
+    out: false,
     plugins: [remarkPresetLintRecommended],
-    streamIn: streamIn,
-    out: false
+    processor: remark(),
+    streamIn
   },
   done
 )
@@ -243,18 +243,18 @@ const streamIn = new PassThrough()
 
 engine(
   {
-    processor: remark(),
-    plugins: [remarkPresetLintRecommended],
     filePath: '~/alpha/bravo/charlie.md',
-    streamIn: streamIn,
-    out: false
+    out: false,
+    plugins: [remarkPresetLintRecommended],
+    processor: remark(),
+    streamIn
   },
   done
 )
 
 streamIn.write('doc')
 
-setTimeout(() => {
+setTimeout(function () {
   streamIn.end('ument')
 }, 100)
 
@@ -301,8 +301,8 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark(),
     files: ['readme.md'],
+    processor: remark(),
     streamOut: fs.createWriteStream('readme-two.md')
   },
   done
@@ -333,10 +333,10 @@ import remarkPresetLintRecommended from 'remark-preset-lint-recommended'
 
 engine(
   {
-    processor: remark(),
     files: ['readme.md'],
-    plugins: [remarkPresetLintRecommended],
     out: false,
+    plugins: [remarkPresetLintRecommended],
+    processor: remark(),
     streamErr: fs.createWriteStream('report.txt')
   },
   done
@@ -369,10 +369,10 @@ import remarkPresetLintRecommended from 'remark-preset-lint-recommended'
 
 engine(
   {
-    processor: remark(),
     files: ['readme.md'],
+    out: false,
     plugins: [remarkPresetLintRecommended],
-    out: false
+    processor: remark()
   },
   done
 )
@@ -390,7 +390,7 @@ Whether to write successfully processed files and where to.
 *   When `false`, does not write to the file system
 *   When pointing to an existing directory, files are written to that directory
     and keep their original basenames
-*   When the parent directory of the given path exists and one file is
+*   When the parent folder of the given path exists and one file is
     processed, the file is written to the given path
 *   Otherwise, a fatal error is thrown
 
@@ -417,10 +417,10 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark(),
-    files: ['src/'],
     extensions: ['md'],
-    output: 'dest/'
+    files: ['src/'],
+    output: 'dest/',
+    processor: remark()
   },
   done
 )
@@ -463,9 +463,9 @@ import remarkUnlink from 'remark-unlink'
 
 engine(
   {
-    processor: remark(),
-    plugins: [remarkUnlink],
     files: ['tree.json'],
+    plugins: [remarkUnlink],
+    processor: remark(),
     tree: true
   },
   done
@@ -529,9 +529,9 @@ import remarkUnlink from 'remark-unlink'
 
 engine(
   {
-    processor: remark(),
-    plugins: [remarkUnlink],
     files: ['tree.json'],
+    plugins: [remarkUnlink],
+    processor: remark(),
     treeIn: true
   },
   done
@@ -587,9 +587,9 @@ import remarkUnlink from 'remark-unlink'
 
 engine(
   {
-    processor: remark(),
-    plugins: [remarkUnlink],
     files: ['doc.md'],
+    plugins: [remarkUnlink],
+    processor: remark(),
     treeOut: true
   },
   done
@@ -644,10 +644,10 @@ import remarkUnlink from 'remark-unlink'
 
 engine(
   {
-    processor: remark(),
-    plugins: [remarkUnlink],
     files: ['doc.md'],
-    inspect: true
+    inspect: true,
+    plugins: [remarkUnlink],
+    processor: remark()
   },
   done
 )
@@ -698,9 +698,9 @@ import {remark} from 'remark'
 
 engine(
   {
+    files: ['readme.md'],
     processor: remark(),
-    rcName: '.remarkrc',
-    files: ['readme.md']
+    rcName: '.remarkrc'
   },
   done
 )
@@ -730,9 +730,9 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark(),
+    files: ['readme.md'],
     packageField: 'remarkConfig',
-    files: ['readme.md']
+    processor: remark()
   },
   done
 )
@@ -763,11 +763,11 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark(),
     detectConfig: false,
-    rcName: '.remarkrc',
+    files: ['readme.md'],
+    processor: remark(),
     packageField: 'remarkConfig',
-    files: ['readme.md']
+    rcName: '.remarkrc'
   },
   done
 )
@@ -803,9 +803,9 @@ import {remark} from 'remark'
 
 engine(
   {
+    files: ['readme.md'],
     processor: remark(),
-    rcPath: 'config.json',
-    files: ['readme.md']
+    rcPath: 'config.json'
   },
   done
 )
@@ -832,8 +832,8 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark(),
     files: ['readme.md'],
+    processor: remark(),
     settings: {position: false}
   },
   done
@@ -876,10 +876,10 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark(),
-    files: ['.'],
     extensions: ['md'],
-    ignoreName: '.remarkignore'
+    files: ['.'],
+    ignoreName: '.remarkignore',
+    processor: remark()
   },
   done
 )
@@ -908,11 +908,11 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark(),
-    files: ['.'],
+    detectIgnore: false,
     extensions: ['md'],
+    files: ['.'],
     ignoreName: '.remarkignore',
-    detectIgnore: false
+    processor: remark()
   },
   done
 )
@@ -955,10 +955,10 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark(),
-    files: ['.'],
     extensions: ['md'],
-    ignorePath: '.gitignore'
+    files: ['.'],
+    ignorePath: '.gitignore',
+    processor: remark()
   },
   done
 )
@@ -999,11 +999,11 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark(),
-    files: ['.'],
     extensions: ['md'],
+    files: ['.'],
     ignorePath: 'node_modules/my-config/my-ignore',
-    ignorePathResolveFrom: 'cwd'
+    ignorePathResolveFrom: 'cwd',
+    processor: remark()
   },
   done
 )
@@ -1030,10 +1030,10 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark(),
-    files: ['.'],
     extensions: ['md'],
-    ignorePatterns: ['readme.md']
+    files: ['.'],
+    ignorePatterns: ['readme.md'],
+    processor: remark()
   },
   done
 )
@@ -1065,9 +1065,9 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark(),
-    files: ['.'],
     extensions: ['md'],
+    files: ['.'],
+    processor: remark(),
     rcName: '.remarkrc'
   },
   done
@@ -1104,9 +1104,9 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark(),
     files: ['readme.md'],
-    plugins: ['remark-preset-lint-recommended']
+    plugins: ['remark-preset-lint-recommended'],
+    processor: remark()
   },
   done
 )
@@ -1140,10 +1140,10 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark(),
     files: ['readme.md'],
     pluginPrefix: 'remark',
-    plugins: ['preset-lint-recommended']
+    plugins: ['preset-lint-recommended'],
+    processor: remark()
   },
   done
 )
@@ -1171,10 +1171,10 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark(),
+    defaultConfig: {settings: {commonmark: true}},
     files: ['readme.md'],
     packageField: 'remarkConfig',
-    defaultConfig: {settings: {commonmark: true}}
+    processor: remark()
   },
   done
 )
@@ -1221,10 +1221,10 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark(),
+    configTransform: configTransform
     files: ['readme.md'],
     packageField: 'custom',
-    configTransform: configTransform
+    processor: remark()
   },
   done
 )
@@ -1283,9 +1283,9 @@ import {rehype} from 'rehype'
 
 engine(
   {
-    processor: rehype(),
-    files: ['.'],
     extensions: ['html'],
+    files: ['.'],
+    processor: rehype(),
     rcName: '.rehyperc',
     reporter: 'json',
     reporterOptions: {pretty: true}
@@ -1333,10 +1333,10 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark(),
-    files: ['readme.md'],
     color: true,
-    out: false
+    files: ['readme.md'],
+    out: false,
+    processor: remark()
   },
   done
 )
@@ -1374,9 +1374,9 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark(),
     files: ['readme.md'],
     plugins: ['remark-preset-lint-recommended'],
+    processor: remark(),
     silent: true
   },
   done
@@ -1410,9 +1410,9 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark(),
     files: ['readme.md'],
     plugins: ['remark-preset-lint-recommended'],
+    processor: remark(),
     quiet: true
   },
   done
@@ -1442,10 +1442,10 @@ import {remark} from 'remark'
 
 engine(
   {
-    processor: remark(),
     files: ['readme.md'],
+    frail: true,
     plugins: ['remark-preset-lint-recommended'],
-    frail: true
+    processor: remark()
   },
   done
 )

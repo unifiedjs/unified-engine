@@ -1,11 +1,11 @@
 /** @type {import('../../../../index.js').Preset} */
 const config = {
   plugins: [
-    ['./merge-object.js', {one: true, two: true}],
-    ['./string-to-object.js', 'alpha'],
     ['./array-to-object.js', ['charlie']],
+    ['./merge-object.js', {one: true, two: true}],
+    ['./object-to-array.js', {golf: 'hotel'}],
     ['./string-to-array.js', 'echo'],
-    ['./object-to-array.js', {golf: 'hotel'}]
+    ['./string-to-object.js', 'alpha']
   ]
 }
 

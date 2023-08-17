@@ -1,7 +1,13 @@
-/** @param {unknown} options */
+import assert from 'node:assert/strict'
+
+/**
+ * @param {unknown} options
+ *   Configuration.
+ * @returns {undefined}
+ *   Nothing.
+ */
 export default function plugin(options) {
-  // @ts-expect-error: set by tests.
+  assert(typeof globalThis.unifiedEngineTestCalls === 'number')
   globalThis.unifiedEngineTestCalls++
-  // @ts-expect-error: set by tests.
   globalThis.unifiedEngineTestValues = options
 }

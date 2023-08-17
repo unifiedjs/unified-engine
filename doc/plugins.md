@@ -20,9 +20,9 @@ completer.pluginId = 'some-plugin-id'
 
 engine(
   {
-    processor: remark(),
+    files: ['readme.md'],
     plugins: [plugin],
-    files: ['readme.md']
+    processor: remark()
   },
   done
 )
@@ -37,11 +37,9 @@ function plugin(options, set) {
 }
 
 function completer(set) {
-  console.log('done:', set.valueOf().map(path))
-}
-
-function path(file) {
-  return file.path
+  console.log('done:', set.valueOf().map(function (file) {
+    return file.path
+  }))
 }
 ```
 

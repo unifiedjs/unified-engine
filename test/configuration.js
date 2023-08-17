@@ -1,526 +1,405 @@
 import assert from 'node:assert/strict'
 import {sep} from 'node:path'
 import test from 'node:test'
+import {promisify} from 'node:util'
 import {engine} from '../index.js'
 import {cleanError} from './util/clean-error.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
+const run = promisify(engine)
 const fixtures = new URL('fixtures/', import.meta.url)
 
-test('configuration', async () => {
-  await new Promise((resolve) => {
-    const stderr = spy()
+test('configuration', async function (t) {
+  await t.test(
+    'should fail fatally when custom rc files are missing',
+    async function () {
+      const stderr = spy()
 
-    engine(
-      {
-        processor: noop,
-        streamError: stderr.stream,
+      const code = await run({
         cwd: new URL('one-file/', fixtures),
+        extensions: ['txt'],
         files: ['.'],
-        rcPath: '.foorc',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        const actual = cleanError(stderr(), 3)
-        const expected = [
-          'one.txt',
-          ' error Error: Cannot read given file `.foorc`',
-          'Error: ENOENT:…'
-        ].join('\n')
-
-        assert.deepEqual(
-          [error, code, actual],
-          [null, 1, expected],
-          'should fail fatally when custom rc files are missing'
-        )
-
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-    engine(
-      {
         processor: noop,
-        streamError: stderr.stream,
+        rcPath: '.foorc',
+        streamError: stderr.stream
+      })
+
+      assert.equal(code, 1)
+      assert.equal(
+        cleanError(stderr(), 4),
+        [
+          'one.txt',
+          ' error Cannot process file',
+          '  [cause]:',
+          '    Error: Cannot read given file `.foorc`'
+        ].join('\n')
+      )
+    }
+  )
+
+  await t.test(
+    'should fail fatally when custom rc files are empty',
+    async function () {
+      const stderr = spy()
+
+      const code = await run({
         cwd: new URL('malformed-rc-empty/', fixtures),
+        extensions: ['txt'],
         files: ['.'],
-        rcPath: '.foorc',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        const expected = [
-          'one.txt',
-          ' error Error: Cannot parse given file `.foorc`'
-        ].join('\n')
-        assert.deepEqual(
-          [error, code, cleanError(stderr(), 2)],
-          [null, 1, expected],
-          'should fail fatally when custom rc files are empty'
-        )
-
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-
-    engine(
-      {
         processor: noop,
-        streamError: stderr.stream,
+        rcPath: '.foorc',
+        streamError: stderr.stream
+      })
+
+      assert.equal(code, 1)
+      assert.equal(
+        cleanError(stderr(), 4),
+        [
+          'one.txt',
+          ' error Cannot process file',
+          '  [cause]:',
+          '    Error: Cannot parse given file `.foorc`'
+        ].join('\n')
+      )
+    }
+  )
+
+  await t.test(
+    'should fail fatally when custom rc files are invalid',
+    async function () {
+      const stderr = spy()
+
+      const code = await run({
         cwd: new URL('malformed-rc-invalid/', fixtures),
+        extensions: ['txt'],
         files: ['.'],
+        processor: noop,
         rcPath: '.foorc.js',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        const actual = cleanError(stderr(), 4)
+        streamError: stderr.stream
+      })
 
-        const expected = [
+      assert.equal(code, 1)
+      assert.equal(
+        cleanError(stderr(), 4),
+        [
           'one.txt',
-          ' error Error: Cannot parse given file `.foorc.js`',
-          'Error: Expected preset, not `false`',
-          '    at merge (configuration.js:1:1)'
+          ' error Cannot process file',
+          '  [cause]:',
+          '    Error: Cannot parse given file `.foorc.js`'
         ].join('\n')
+      )
+    }
+  )
 
-        assert.deepEqual(
-          [error, code, actual],
-          [null, 1, expected],
-          'should fail fatally when custom rc files are invalid'
-        )
-
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
+  await t.test('should support `.rc.js` scripts (1)', async function () {
     const stderr = spy()
 
-    engine(
-      {
-        processor: noop,
-        cwd: new URL('malformed-rc-script/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        rcName: '.foorc',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        const actual = cleanError(stderr(), 4)
-
-        const expected = [
-          'one.txt',
-          ' error Error: Cannot parse file `.foorc.js`',
-          'Cannot import `.foorc.js`',
-          'Error: Broken config'
-        ].join('\n')
-
-        assert.deepEqual(
-          [error, code, actual],
-          [null, 1, expected],
-          'should support `.rc.js` scripts (1)'
-        )
-
-        resolve(undefined)
-      }
+    const code = await run({
+      cwd: new URL('malformed-rc-script/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      processor: noop,
+      rcName: '.foorc',
+      streamError: stderr.stream
+    })
+    assert.equal(code, 1)
+    assert.equal(
+      cleanError(stderr(), 4),
+      [
+        'one.txt',
+        ' error Cannot process file',
+        '  [cause]:',
+        '    Error: Cannot parse file `.foorc.js`'
+      ].join('\n')
     )
   })
 
-  await new Promise((resolve) => {
+  await t.test('should support `.rc.js` scripts (2)', async function () {
     const stderr = spy()
 
-    engine(
-      {
-        processor: noop,
-        cwd: new URL('rc-script/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        rcName: '.foorc',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, 'one.txt: no issues found\n'],
-          'should support `.rc.js` scripts (2)'
-        )
-        resolve(undefined)
-      }
-    )
+    const code = await run({
+      cwd: new URL('rc-script/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      processor: noop,
+      rcName: '.foorc',
+      streamError: stderr.stream
+    })
+    assert.equal(code, 0)
+    assert.equal(stderr(), 'one.txt: no issues found\n')
   })
 
-  await new Promise((resolve) => {
+  await t.test('should support `.rc.js` scripts (3)', async function () {
     const stderr = spy()
 
-    engine(
-      {
-        processor: noop,
-        cwd: new URL('rc-script/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        rcName: '.foorc',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, 'one.txt: no issues found\n'],
-          'should support `.rc.js` scripts (3)'
-        )
-        resolve(undefined)
-      }
-    )
+    const code = await run({
+      cwd: new URL('rc-script/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      processor: noop,
+      rcName: '.foorc',
+      streamError: stderr.stream
+    })
+    assert.equal(code, 0)
+    assert.equal(stderr(), 'one.txt: no issues found\n')
   })
 
-  await new Promise((resolve) => {
+  await t.test('should support `.rc.mjs` module', async function () {
     const stderr = spy()
     let calls = 0
 
-    engine(
-      {
-        processor: noop,
-        cwd: new URL('rc-module-mjs/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        rcName: '.foorc',
-        extensions: ['txt'],
-        plugins: [
-          function () {
-            return () => {
-              assert.deepEqual(
-                this.data('settings'),
-                {foo: 'bar'},
-                'should process files w/ settings'
-              )
-              calls++
-            }
-          }
-        ]
-      },
-      (error, code) => {
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, 'one.txt: no issues found\n'],
-          'should support `.rc.mjs` module'
-        )
-        assert.equal(calls, 1)
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-    let calls = 0
-
-    engine(
-      {
-        processor: noop,
-        cwd: new URL('rc-module-cjs/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        rcName: '.foorc',
-        extensions: ['txt'],
-        plugins: [
-          function () {
-            return () => {
-              assert.deepEqual(
-                this.data('settings'),
-                {foo: 'bar'},
-                'should process files w/ settings'
-              )
-              calls++
-            }
-          }
-        ]
-      },
-      (error, code) => {
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, 'one.txt: no issues found\n'],
-          'should support `.rc.cjs` module'
-        )
-        assert.equal(calls, 1)
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-
-    engine(
-      {
-        processor: noop,
-        cwd: new URL('malformed-rc-yaml/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        rcName: '.foorc',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        const actual = cleanError(stderr(), 3)
-
-        const expected = [
-          'one.txt',
-          ' error Error: Cannot parse file `.foorc.yaml`',
-          'Unexpected scalar at node end at line 2, column 1:'
-        ].join('\n')
-
-        assert.deepEqual(
-          [error, code, actual],
-          [null, 1, expected],
-          'should support `.rc.yaml` config files'
-        )
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-    let calls = 0
-
-    engine(
-      {
-        processor: noop,
-        cwd: new URL('rc-file/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        rcPath: '.foorc',
-        extensions: ['txt'],
-        plugins: [
-          function () {
-            const settings = this.data('settings')
-            return () => {
-              assert.deepEqual(
-                settings,
-                {foo: 'bar'},
-                'should process files w/ settings'
-              )
-              calls++
-            }
-          }
-        ]
-      },
-      (error, code) => {
-        const expected = [
-          'nested' + sep + 'four.txt: no issues found',
-          'nested' + sep + 'three.txt: no issues found',
-          'one.txt: no issues found',
-          'two.txt: no issues found',
-          ''
-        ].join('\n')
-
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, expected],
-          'should support custom rc files'
-        )
-        assert.equal(calls, 4)
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const cwd = new URL('malformed-package-file/', fixtures)
-    const stderr = spy()
-
-    engine(
-      {
-        processor: noop,
-        cwd,
-        streamError: stderr.stream,
-        files: ['.'],
-        packageField: 'fooConfig',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        const actual = cleanError(stderr(), 2)
-
-        const expected = [
-          'one.txt',
-          ' error Error: Cannot parse file `package.json`'
-        ].join('\n')
-
-        assert.deepEqual(
-          [error, code, actual],
-          [null, 1, expected],
-          'should support searching package files'
-        )
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-    let calls = 0
-
-    engine(
-      {
-        processor: noop,
-        cwd: new URL('rc-file/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        rcName: '.foorc',
-        extensions: ['txt'],
-        plugins: [
-          function () {
-            return () => {
-              assert.deepEqual(
-                this.data('settings'),
-                {foo: 'bar'},
-                'should process files w/ settings'
-              )
-              calls++
-            }
-          }
-        ]
-      },
-      (error, code) => {
-        const expected = [
-          'nested' + sep + 'four.txt: no issues found',
-          'nested' + sep + 'three.txt: no issues found',
-          'one.txt: no issues found',
-          'two.txt: no issues found',
-          ''
-        ].join('\n')
-
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, expected],
-          'should support custom rc files'
-        )
-        assert.equal(calls, 4)
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-
-    engine(
-      {
-        processor: noop,
-        cwd: new URL('simple-structure/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        packageField: 'fooConfig',
-        rcName: '.foorc',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        const expected = [
-          'nested' + sep + 'three.txt: no issues found',
-          'nested' + sep + 'two.txt: no issues found',
-          'one.txt: no issues found',
-          ''
-        ].join('\n')
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, expected],
-          'should support no config files'
-        )
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-
-    engine(
-      {
-        processor: noop,
-        cwd: new URL('malformed-rc-script/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        extensions: ['txt'],
-        detectConfig: false,
-        rcName: '.foorc'
-      },
-      (error, code) => {
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, 'one.txt: no issues found\n'],
-          'should not search for config if `detectConfig` is set to `false`'
-        )
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-    let calls = 0
-
-    engine(
-      {
-        processor: noop().use(function () {
-          assert.deepEqual(
-            this.data('settings'),
-            {alpha: true},
-            'should configure'
-          )
+    const code = await run({
+      cwd: new URL('rc-module-mjs/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      plugins: [
+        function () {
+          assert.deepEqual(this.data('settings'), {foo: 'bar'})
           calls++
-        }),
-        cwd: new URL('config-settings/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        packageField: 'fooConfig',
-        rcName: '.foorc',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, 'one.txt: no issues found\n'],
-          'should cascade `settings`'
-        )
-        assert.equal(calls, 1)
-        resolve(undefined)
-      }
+        }
+      ],
+      processor: noop,
+      rcName: '.foorc',
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 0)
+    assert.equal(stderr(), 'one.txt: no issues found\n')
+    assert.equal(calls, 1)
+  })
+
+  await t.test('should support `.rc.cjs` module', async function () {
+    const stderr = spy()
+    let calls = 0
+
+    const code = await run({
+      cwd: new URL('rc-module-cjs/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      plugins: [
+        function () {
+          assert.deepEqual(this.data('settings'), {foo: 'bar'})
+          calls++
+        }
+      ],
+      processor: noop,
+      rcName: '.foorc',
+      streamError: stderr.stream
+    })
+    assert.equal(code, 0)
+    assert.equal(stderr(), 'one.txt: no issues found\n')
+    assert.equal(calls, 1)
+  })
+
+  await t.test('should support `.rc.yaml` config files', async function () {
+    const stderr = spy()
+
+    const code = await run({
+      cwd: new URL('malformed-rc-yaml/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      processor: noop,
+      rcName: '.foorc',
+      streamError: stderr.stream
+    })
+    assert.equal(code, 1)
+    assert.equal(
+      cleanError(stderr(), 4),
+      [
+        'one.txt',
+        ' error Cannot process file',
+        '  [cause]:',
+        '    Error: Cannot parse file `.foorc.yaml`'
+      ].join('\n')
     )
   })
 
-  await new Promise((resolve) => {
+  await t.test('should support custom rc files', async function () {
+    const stderr = spy()
+    let calls = 0
+
+    const code = await run({
+      cwd: new URL('rc-file/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      plugins: [
+        function () {
+          const settings = this.data('settings')
+          return function () {
+            assert.deepEqual(settings, {foo: 'bar'})
+            calls++
+          }
+        }
+      ],
+      processor: noop,
+      rcPath: '.foorc',
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 0)
+    assert.equal(
+      stderr(),
+      [
+        'nested' + sep + 'four.txt: no issues found',
+        'nested' + sep + 'three.txt: no issues found',
+        'one.txt: no issues found',
+        'two.txt: no issues found',
+        ''
+      ].join('\n')
+    )
+    assert.equal(calls, 4)
+  })
+
+  await t.test('should support searching package files', async function () {
     const stderr = spy()
 
-    engine(
-      {
-        processor: noop(),
-        cwd: new URL('config-monorepo-package/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        packageField: 'fooConfig',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        const actual = cleanError(stderr(), 4)
-        const expected = [
-          'packages' + sep + 'deep' + sep + 'one.txt',
-          ' error Error: Cannot parse file `package.json`',
-          'Cannot import `plugin.js`',
-          'Error: Boom!'
-        ].join('\n')
+    const code = await run({
+      cwd: new URL('malformed-package-file/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      packageField: 'fooConfig',
+      processor: noop,
+      streamError: stderr.stream
+    })
 
-        assert.deepEqual(
-          [error, code, actual],
-          [null, 1, expected],
-          'should ignore unconfigured `packages.json`'
-        )
-        resolve(undefined)
-      }
+    assert.equal(code, 1)
+    assert.equal(
+      cleanError(stderr(), 4),
+      [
+        'one.txt',
+        ' error Cannot process file',
+        '  [cause]:',
+        '    Error: Cannot parse file `package.json`'
+      ].join('\n')
+    )
+  })
+
+  await t.test('should support custom rc files', async function () {
+    const stderr = spy()
+    let calls = 0
+
+    const code = await run({
+      cwd: new URL('rc-file/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      plugins: [
+        function () {
+          const self = this
+
+          return function () {
+            assert.deepEqual(self.data('settings'), {foo: 'bar'})
+            calls++
+          }
+        }
+      ],
+      processor: noop,
+      rcName: '.foorc',
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 0)
+    assert.equal(
+      stderr(),
+      [
+        'nested' + sep + 'four.txt: no issues found',
+        'nested' + sep + 'three.txt: no issues found',
+        'one.txt: no issues found',
+        'two.txt: no issues found',
+        ''
+      ].join('\n')
+    )
+    assert.equal(calls, 4)
+  })
+
+  await t.test('should support no config files', async function () {
+    const stderr = spy()
+
+    const code = await run({
+      cwd: new URL('simple-structure/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      packageField: 'fooConfig',
+      processor: noop,
+      rcName: '.foorc',
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 0)
+    assert.equal(
+      stderr(),
+      [
+        'nested' + sep + 'three.txt: no issues found',
+        'nested' + sep + 'two.txt: no issues found',
+        'one.txt: no issues found',
+        ''
+      ].join('\n')
+    )
+  })
+
+  await t.test(
+    'should not search for config if `detectConfig` is set to `false`',
+    async function () {
+      const stderr = spy()
+
+      const code = await run({
+        cwd: new URL('malformed-rc-script/', fixtures),
+        detectConfig: false,
+        extensions: ['txt'],
+        files: ['.'],
+        processor: noop,
+        rcName: '.foorc',
+        streamError: stderr.stream
+      })
+
+      assert.equal(code, 0)
+      assert.equal(stderr(), 'one.txt: no issues found\n')
+    }
+  )
+
+  await t.test('should cascade `settings`', async function () {
+    const stderr = spy()
+    let calls = 0
+
+    const code = await run({
+      cwd: new URL('config-settings/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      processor: noop().use(function () {
+        assert.deepEqual(this.data('settings'), {alpha: true})
+        calls++
+      }),
+      packageField: 'fooConfig',
+      rcName: '.foorc',
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 0)
+    assert.equal(stderr(), 'one.txt: no issues found\n')
+    assert.equal(calls, 1)
+  })
+
+  await t.test('should ignore unconfigured `packages.json`', async function () {
+    const stderr = spy()
+
+    const code = await run({
+      cwd: new URL('config-monorepo-package/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      packageField: 'fooConfig',
+      processor: noop(),
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 1)
+    assert.equal(
+      cleanError(stderr(), 4),
+      [
+        'packages' + sep + 'deep' + sep + 'one.txt',
+        ' error Cannot process file',
+        '  [cause]:',
+        '    Error: Cannot parse file `package.json`'
+      ].join('\n')
     )
   })
 })

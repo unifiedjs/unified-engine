@@ -1,7 +1,16 @@
 /**
+ * Clean an error so that it’s easier to test.
+ *
+ * This particularly removed error cause messages, which change across Node
+ * versions.
+ * It also drops file paths, which differ across platforms.
+ *
  * @param {string} value
+ *   Error, report, or stack.
  * @param {number | undefined} [max=Infinity]
+ *   Lines to include.
  * @returns {string}
+ *   Clean error.
  */
 export function cleanError(value, max) {
   return (

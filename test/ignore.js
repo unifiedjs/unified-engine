@@ -1,302 +1,244 @@
 import assert from 'node:assert/strict'
-import fs from 'node:fs'
+import fs from 'node:fs/promises'
 import {fileURLToPath} from 'node:url'
-import {join, sep, relative} from 'node:path'
+import {join, relative, sep} from 'node:path'
 import test from 'node:test'
+import {promisify} from 'node:util'
 import {engine} from '../index.js'
 import {cleanError} from './util/clean-error.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
+const run = promisify(engine)
 const fixtures = new URL('fixtures/', import.meta.url)
 
-test('ignore', async () => {
-  await new Promise((resolve) => {
-    const cwd = new URL('simple-structure/', fixtures)
-    const stderr = spy()
+test('ignore', async function (t) {
+  await t.test(
+    'should fail fatally when given ignores are not found',
+    async function () {
+      const stderr = spy()
 
-    engine(
-      {
-        processor: noop,
-        cwd,
-        streamError: stderr.stream,
+      const code = await run({
+        cwd: new URL('simple-structure/', fixtures),
+        detectIgnore: false,
+        extensions: ['txt'],
         files: ['one.txt'],
-        detectIgnore: false,
         ignorePath: '.missing-ignore',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        const expected = [
+        processor: noop,
+        streamError: stderr.stream
+      })
+
+      assert.equal(code, 1)
+      assert.equal(
+        cleanError(stderr(), 4),
+        [
           'one.txt',
-          ' error Error: Cannot read given file `.missing-ignore`',
-          'Error: ENOENT:…'
+          ' error Cannot find file',
+          '  [cause]:',
+          '    Error: Cannot read given file `.missing-ignore`'
         ].join('\n')
+      )
+    }
+  )
 
-        assert.deepEqual(
-          [error, code, cleanError(stderr(), 3)],
-          [null, 1, expected],
-          'should fail fatally when given ignores are not found'
-        )
-        resolve(undefined)
-      }
+  await t.test('should support custom ignore files', async function () {
+    const stderr = spy()
+
+    const code = await run({
+      cwd: new URL('ignore-file/', fixtures),
+      detectIgnore: false,
+      extensions: ['txt'],
+      files: ['.'],
+      ignorePath: '.fooignore',
+      processor: noop,
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 0)
+    assert.equal(
+      stderr(),
+      [
+        'nested' + sep + 'three.txt: no issues found',
+        'one.txt: no issues found',
+        ''
+      ].join('\n')
     )
   })
 
-  await new Promise((resolve) => {
+  await t.test('should support searching ignore files', async function () {
     const stderr = spy()
 
-    engine(
-      {
-        processor: noop,
+    const code = await run({
+      cwd: new URL('ignore-file/', fixtures),
+      detectIgnore: true,
+      extensions: ['txt'],
+      files: ['.'],
+      ignoreName: '.fooignore',
+      processor: noop,
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 0)
+    assert.equal(
+      stderr(),
+      [
+        'nested' + sep + 'three.txt: no issues found',
+        'one.txt: no issues found',
+        ''
+      ].join('\n')
+    )
+  })
+
+  await t.test('should not look into hidden files', async function () {
+    const stderr = spy()
+
+    const code = await run({
+      cwd: new URL('hidden-directory/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      // No `ignoreName`.
+      processor: noop,
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 0)
+    assert.equal(stderr(), 'one.txt: no issues found\n')
+  })
+
+  await t.test('should support no ignore files', async function () {
+    const stderr = spy()
+
+    const code = await run({
+      cwd: new URL('simple-structure/', fixtures),
+      detectIgnore: true,
+      extensions: ['txt'],
+      files: ['.'],
+      ignoreName: '.fooignore',
+      processor: noop,
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 0)
+    assert.equal(
+      stderr(),
+      [
+        'nested' + sep + 'three.txt: no issues found',
+        'nested' + sep + 'two.txt: no issues found',
+        'one.txt: no issues found',
+        ''
+      ].join('\n')
+    )
+  })
+
+  await t.test('should support ignore patterns', async function () {
+    const stderr = spy()
+
+    const code = await run({
+      cwd: new URL('simple-structure/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      ignorePatterns: ['**/t*.*'],
+      processor: noop,
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 0)
+    assert.equal(stderr(), 'one.txt: no issues found\n')
+  })
+
+  await t.test(
+    'should support ignore files and ignore patterns',
+    async function () {
+      const stderr = spy()
+
+      const code = await run({
         cwd: new URL('ignore-file/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        detectIgnore: false,
-        ignorePath: '.fooignore',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        const expected = [
-          'nested' + sep + 'three.txt: no issues found',
-          'one.txt: no issues found',
-          ''
-        ].join('\n')
-
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, expected],
-          'should support custom ignore files'
-        )
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-
-    engine(
-      {
-        processor: noop,
-        cwd: new URL('ignore-file/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
         detectIgnore: true,
-        ignoreName: '.fooignore',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        const expected = [
-          'nested' + sep + 'three.txt: no issues found',
-          'one.txt: no issues found',
-          ''
-        ].join('\n')
-
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, expected],
-          'should support searching ignore files'
-        )
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-
-    engine(
-      {
-        processor: noop,
-        cwd: new URL('hidden-directory/', fixtures),
-        streamError: stderr.stream,
+        extensions: ['txt'],
         files: ['.'],
-        // No `ignoreName`.
-        extensions: ['txt']
-      },
-      (error, code) => {
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, 'one.txt: no issues found\n'],
-          'should not look into hidden files'
-        )
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-
-    engine(
-      {
-        processor: noop,
-        cwd: new URL('simple-structure/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        detectIgnore: true,
-        ignoreName: '.fooignore',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        const expected = [
-          'nested' + sep + 'three.txt: no issues found',
-          'nested' + sep + 'two.txt: no issues found',
-          'one.txt: no issues found',
-          ''
-        ].join('\n')
-
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, expected],
-          'should support no ignore files'
-        )
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-
-    engine(
-      {
-        processor: noop,
-        cwd: new URL('simple-structure/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        ignorePatterns: ['**/t*.*'],
-        extensions: ['txt']
-      },
-      (error, code) => {
-        const expected = ['one.txt: no issues found', ''].join('\n')
-
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, expected],
-          'should support ignore patterns'
-        )
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-
-    engine(
-      {
-        processor: noop,
-        cwd: new URL('ignore-file/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        detectIgnore: true,
         ignoreName: '.fooignore',
         ignorePatterns: ['nested'],
-        extensions: ['txt']
-      },
-      (error, code) => {
-        const expected = ['one.txt: no issues found', ''].join('\n')
-
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, expected],
-          'should support ignore files and ignore patterns'
-        )
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
-    const stderr = spy()
-
-    engine(
-      {
         processor: noop,
+        streamError: stderr.stream
+      })
+
+      assert.equal(code, 0)
+      assert.equal(stderr(), 'one.txt: no issues found\n')
+    }
+  )
+
+  await t.test(
+    '`ignorePath` should resolve from its directory, `ignorePatterns` from cwd',
+    async function () {
+      const stderr = spy()
+
+      const code = await run({
         cwd: new URL('sibling-ignore/', fixtures),
-        streamError: stderr.stream,
+        extensions: ['txt'],
         files: ['.'],
         ignorePath: join('deep', 'ignore'),
         ignorePatterns: ['files/two.txt'],
-        extensions: ['txt']
-      },
-      (error, code) => {
-        const expected = [
+        processor: noop,
+        streamError: stderr.stream
+      })
+
+      assert.equal(code, 0)
+      assert.equal(
+        stderr(),
+        [
           join('deep', 'files', 'two.txt') + ': no issues found',
           join('files', 'one.txt') + ': no issues found',
           ''
         ].join('\n')
+      )
+    }
+  )
 
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, expected],
-          '`ignorePath` should resolve from its directory, `ignorePatterns` from cwd'
-        )
-        resolve(undefined)
-      }
-    )
-  })
-
-  await new Promise((resolve) => {
+  await t.test('`ignorePathResolveFrom`', async function () {
     const stderr = spy()
 
-    engine(
-      {
-        processor: noop,
-        cwd: new URL('sibling-ignore/', fixtures),
-        streamError: stderr.stream,
-        files: ['.'],
-        ignorePath: join('deep', 'ignore'),
-        ignorePathResolveFrom: 'cwd',
-        extensions: ['txt']
-      },
-      (error, code) => {
-        const expected = [
-          join('deep', 'files', 'one.txt') + ': no issues found',
-          join('deep', 'files', 'two.txt') + ': no issues found',
-          join('files', 'two.txt') + ': no issues found',
-          ''
-        ].join('\n')
+    const code = await run({
+      cwd: new URL('sibling-ignore/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      ignorePath: join('deep', 'ignore'),
+      ignorePathResolveFrom: 'cwd',
+      processor: noop,
+      streamError: stderr.stream
+    })
 
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, expected],
-          '`ignorePathResolveFrom`'
-        )
-        resolve(undefined)
-      }
+    assert.equal(code, 0)
+    assert.equal(
+      stderr(),
+      [
+        join('deep', 'files', 'one.txt') + ': no issues found',
+        join('deep', 'files', 'two.txt') + ': no issues found',
+        join('files', 'two.txt') + ': no issues found',
+        ''
+      ].join('\n')
     )
   })
 
-  await new Promise((resolve) => {
+  await t.test('should support higher positioned files', async function () {
+    const stderr = spy()
     const cwd = new URL('empty/', fixtures)
     const url = new URL('../../../example.txt', import.meta.url)
-    const stderr = spy()
 
-    fs.writeFileSync(url, '')
+    await fs.writeFile(url, '')
 
-    engine(
-      {
-        processor: noop,
-        cwd,
-        streamError: stderr.stream,
-        files: [url]
-      },
-      (error, code) => {
-        fs.unlinkSync(url)
+    const code = await run({
+      cwd,
+      files: [url],
+      processor: noop,
+      streamError: stderr.stream
+    })
 
-        const expected =
-          relative(fileURLToPath(cwd), fileURLToPath(url)) +
-          ': no issues found\n'
+    await fs.unlink(url)
 
-        assert.deepEqual(
-          [error, code, stderr()],
-          [null, 0, expected],
-          'should support higher positioned files'
-        )
-        resolve(undefined)
-      }
+    assert.equal(code, 0)
+    assert.equal(
+      stderr(),
+      relative(fileURLToPath(cwd), fileURLToPath(url)) + ': no issues found\n'
     )
   })
 })

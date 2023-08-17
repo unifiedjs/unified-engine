@@ -1,72 +1,76 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
+import {promisify} from 'node:util'
 import {unified} from 'unified'
 import {engine} from '../index.js'
 
-test('engine', async () => {
-  assert.throws(
-    () => {
-      // @ts-expect-error: runtime.
+const run = promisify(engine)
+
+test('engine', async function (t) {
+  await t.test('should expose the public api', async function () {
+    assert.deepEqual(Object.keys(await import('../index.js')).sort(), [
+      'Configuration',
+      'engine'
+    ])
+  })
+
+  await t.test('should throw w/o `callback`', async function () {
+    assert.throws(function () {
+      // @ts-expect-error: check how the runtime handles no callback.
       engine()
-    },
-    /Missing `callback`/,
-    'should throw w/o `callback`'
+    }, /Missing `callback`/)
+  })
+
+  await t.test('should fail when w/o options', async function () {
+    try {
+      // @ts-expect-error: check how the runtime handles `null`.
+      await run(null)
+      assert.fail()
+    } catch (error) {
+      assert.match(String(error), /Missing `processor`/)
+    }
+  })
+
+  await t.test('should fail when w/o processor', async function () {
+    try {
+      // @ts-expect-error: check how the runtime handles `processor` missing.
+      await run({})
+      assert.fail()
+    } catch (error) {
+      assert.match(String(error), /Missing `processor`/)
+    }
+  })
+
+  await t.test('should fail w/ `output` and w/ `out`', async function () {
+    try {
+      await run({out: true, output: true, processor: unified()})
+      assert.fail()
+    } catch (error) {
+      assert.match(String(error), /Cannot accept both `output` and `out`/)
+    }
+  })
+
+  await t.test('should fail w/ `detectConfig` w/o `rcName`', async function () {
+    try {
+      await run({detectConfig: true, processor: unified()})
+      assert.fail()
+    } catch (error) {
+      assert.match(
+        String(error),
+        /Missing `rcName` or `packageField` with `detectConfig`/
+      )
+    }
+  })
+
+  await t.test(
+    'should fail w/ `detectIgnore` w/o `ignoreName`',
+    async function () {
+      try {
+        await run({detectIgnore: true, processor: unified()})
+        assert.fail()
+      } catch (error) {
+        assert.match(String(error), /Missing `ignoreName` with `detectIgnore`/)
+      }
+    }
   )
-
-  await new Promise((resolve) => {
-    // @ts-expect-error: runtime.
-    engine(null, (error) => {
-      assert.equal(
-        error && error.message,
-        'Missing `processor`',
-        'should fail when w/o options'
-      )
-      resolve(undefined)
-    })
-  })
-
-  await new Promise((resolve) => {
-    // @ts-expect-error: runtime.
-    engine({}, (error) => {
-      assert.equal(
-        error && error.message,
-        'Missing `processor`',
-        'should fail when w/o processor'
-      )
-      resolve(undefined)
-    })
-  })
-
-  await new Promise((resolve) => {
-    engine({processor: unified(), output: true, out: true}, (error) => {
-      assert.equal(
-        error && error.message,
-        'Cannot accept both `output` and `out`',
-        'should fail w/ `output` and w/ `out`'
-      )
-      resolve(undefined)
-    })
-  })
-
-  await new Promise((resolve) => {
-    engine({processor: unified(), detectConfig: true}, (error) => {
-      assert.equal(
-        error && error.message,
-        'Missing `rcName` or `packageField` with `detectConfig`',
-        'should fail w/ `detectConfig` w/o `rcName`'
-      )
-      resolve(undefined)
-    })
-  })
-
-  await new Promise((resolve) => {
-    engine({processor: unified(), detectIgnore: true}, (error) => {
-      assert.equal(
-        error && error.message,
-        'Missing `ignoreName` with `detectIgnore`',
-        'should fail w/ `detectIgnore` w/o `ignoreName`'
-      )
-      resolve(undefined)
-    })
-  })
 })
