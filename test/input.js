@@ -3,6 +3,7 @@
  */
 
 import assert from 'node:assert/strict'
+import fs from 'node:fs/promises'
 import {join, sep} from 'node:path'
 import {PassThrough} from 'node:stream'
 import test from 'node:test'
@@ -56,10 +57,13 @@ test('input', async function (t) {
   })
 
   await t.test('should not fail on unmatched given globs', async function () {
+    const cwd = new URL('empty/', fixtures)
     const stderr = spy()
 
+    await fs.mkdir(cwd, {recursive: true})
+
     const code = await run({
-      cwd: new URL('empty/', fixtures),
+      cwd,
       files: ['.'],
       processor: unified(),
       streamError: stderr.stream
@@ -70,10 +74,13 @@ test('input', async function (t) {
   })
 
   await t.test('should report unfound given files', async function () {
+    const cwd = new URL('empty/', fixtures)
     const stderr = spy()
 
+    await fs.mkdir(cwd, {recursive: true})
+
     const code = await run({
-      cwd: new URL('empty/', fixtures),
+      cwd,
       files: ['readme.md'],
       processor: unified(),
       streamError: stderr.stream
@@ -101,6 +108,7 @@ test('input', async function (t) {
 
       const code = await run({
         cwd: new URL('directory/', fixtures),
+        extensions: ['txt'],
         files: ['empty/'],
         processor: unified(),
         streamError: stderr.stream
@@ -374,6 +382,8 @@ test('input', async function (t) {
       const stderr = spy()
       const cwd = new URL('empty/', fixtures)
 
+      await fs.mkdir(cwd, {recursive: true})
+
       const code = await run({
         cwd,
         files: [
@@ -420,6 +430,8 @@ test('input', async function (t) {
       const stderr = spy()
       const cwd = join('test', 'fixtures', 'empty')
       const file = new VFile({value: 'foo'})
+
+      await fs.mkdir(cwd, {recursive: true})
 
       const code = await run({
         cwd,
@@ -523,9 +535,12 @@ test('input', async function (t) {
   await t.test(
     'should fail w/ `ignoreUnconfigured` and `rcPath`',
     async function () {
+      const cwd = new URL('empty/', fixtures)
+      await fs.mkdir(cwd, {recursive: true})
+
       try {
         await run({
-          cwd: new URL('empty/', fixtures),
+          cwd,
           files: ['.'],
           ignoreUnconfigured: true,
           processor: unified(),
@@ -545,9 +560,12 @@ test('input', async function (t) {
   await t.test(
     'should fail w/ `ignoreUnconfigured` and w/o `rcName`, `packageField`',
     async function () {
+      const cwd = new URL('empty/', fixtures)
+      await fs.mkdir(cwd, {recursive: true})
+
       try {
         await run({
-          cwd: new URL('empty/', fixtures),
+          cwd,
           files: ['.'],
           ignoreUnconfigured: true,
           processor: unified(),
@@ -566,9 +584,12 @@ test('input', async function (t) {
   await t.test(
     'should fail w/ `ignoreUnconfigured` and `detectConfig: false`',
     async function () {
+      const cwd = new URL('empty/', fixtures)
+      await fs.mkdir(cwd, {recursive: true})
+
       try {
         await run({
-          cwd: new URL('empty/', fixtures),
+          cwd,
           detectConfig: false,
           files: ['.'],
           ignoreUnconfigured: true,
@@ -593,6 +614,7 @@ test('input', async function (t) {
     const code = await run({
       cwd: new URL('config-ignore-unconfigured/', fixtures),
       files: ['.'],
+      extensions: ['txt'],
       ignoreUnconfigured: true,
       processor: noop,
       rcName: '.foorc',
@@ -632,6 +654,8 @@ test('input', async function (t) {
     async function () {
       const cwd = new URL('empty/', fixtures)
       const stderr = spy()
+
+      await fs.mkdir(cwd, {recursive: true})
 
       const code = await run({
         cwd,

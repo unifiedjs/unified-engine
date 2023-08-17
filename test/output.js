@@ -358,6 +358,8 @@ test('output', async function (t) {
       const targetFile = new URL('one.txt', cwd)
       const stderr = spy()
 
+      await fs.mkdir(cwd, {recursive: true})
+
       const code = await run({
         cwd,
         extensions: ['txt'],

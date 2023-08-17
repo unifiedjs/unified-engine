@@ -104,8 +104,7 @@ Directories and globs to directories can be given alongside
 [`extensions`][extensions] to search directories for files matching an extension
 (for example, `dir` to add `dir/readme.txt` and `dir/sub/history.text` if
 `extensions` is `['txt', 'text']`).
-This searching will not include `node_modules` or hidden directories (those
-starting with a dot, `.`, like `.git`).
+This searching will not include `node_modules`, but you can pass it explicitly.
 
 *   Type: `Array<string | URL | VFile>`
 *   Default: `[]`

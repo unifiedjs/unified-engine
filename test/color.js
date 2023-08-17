@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import fs from 'node:fs/promises'
 import test from 'node:test'
 import {promisify} from 'node:util'
 import {engine} from '../index.js'
@@ -11,10 +12,14 @@ const fixtures = new URL('fixtures/', import.meta.url)
 
 test('color', async function (t) {
   await t.test('should support color', async function () {
+    const cwd = new URL('empty/', fixtures)
     const stderr = spy()
+
+    await fs.mkdir(cwd, {recursive: true})
+
     const code = await run({
       color: true,
-      cwd: new URL('empty/', fixtures),
+      cwd,
       files: ['readme.md'],
       processor: noop,
       streamError: stderr.stream

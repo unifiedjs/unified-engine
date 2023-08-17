@@ -89,14 +89,35 @@ test('ignore', async function (t) {
     )
   })
 
-  await t.test('should not look into hidden files', async function () {
+  await t.test('should look into hidden files', async function () {
     const stderr = spy()
 
     const code = await run({
       cwd: new URL('hidden-directory/', fixtures),
       extensions: ['txt'],
       files: ['.'],
-      // No `ignoreName`.
+      processor: noop,
+      streamError: stderr.stream
+    })
+
+    assert.equal(code, 0)
+    assert.equal(
+      stderr(),
+      [
+        '.hidden' + sep + 'two.txt: no issues found',
+        'one.txt: no issues found',
+        ''
+      ].join('\n')
+    )
+  })
+
+  await t.test('should not look into `node_modules`', async function () {
+    const stderr = spy()
+
+    const code = await run({
+      cwd: new URL('node-modules-directory/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
       processor: noop,
       streamError: stderr.stream
     })
@@ -104,6 +125,31 @@ test('ignore', async function (t) {
     assert.equal(code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
   })
+
+  await t.test(
+    'should look into `node_modules` w/ explicit search',
+    async function () {
+      const stderr = spy()
+
+      const code = await run({
+        cwd: new URL('node-modules-directory/', fixtures),
+        extensions: ['txt'],
+        files: ['node_modules/', '.'],
+        processor: noop,
+        streamError: stderr.stream
+      })
+
+      assert.equal(code, 0)
+      assert.equal(
+        stderr(),
+        [
+          'node_modules' + sep + 'two.txt: no issues found',
+          'one.txt: no issues found',
+          ''
+        ].join('\n')
+      )
+    }
+  )
 
   await t.test('should support no ignore files', async function () {
     const stderr = spy()

@@ -47,10 +47,8 @@ directory instead, by setting
 (default).
 
 If paths or globs to directories are given to the engine, they will be searched
-for matching files, but `node_modules` and hidden directories (those starting
-with a dot, `.`, such as `.git`) are normally not searched.
-Pass paths or globs to files or those directories to include files inside
-`node_modules` and hidden directories.
+for matching files, but `node_modules` are normally not searched.
+Pass paths or globs to `node_modules` to include files inside them.
 
 The format for ignore files is the same as [`.gitignore`][gitignore], so it’s
 possible to pass a `.gitignore` in as [`ignorePath`][ignore-path].

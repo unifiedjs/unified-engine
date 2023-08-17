@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import fs from 'node:fs/promises'
 import {PassThrough} from 'node:stream'
 import test from 'node:test'
 import {promisify} from 'node:util'
@@ -11,16 +12,19 @@ const fixtures = new URL('fixtures/', import.meta.url)
 
 test('stdin', async function (t) {
   await t.test('should support stdin', async function () {
-    const stdout = spy()
+    const cwd = new URL('empty/', fixtures)
     const stderr = spy()
+    const stdout = spy()
     const stream = new PassThrough()
     let index = 0
+
+    await fs.mkdir(cwd, {recursive: true})
 
     setImmediate(send)
 
     const code = await run({
+      cwd,
       processor: noop,
-      cwd: new URL('empty/', fixtures),
       streamIn: stream,
       streamOut: stdout.stream,
       streamError: stderr.stream
@@ -41,20 +45,23 @@ test('stdin', async function (t) {
   })
 
   await t.test('should not output if `out: false`', async function () {
-    const stdout = spy()
+    const cwd = new URL('empty/', fixtures)
     const stderr = spy()
+    const stdout = spy()
     const stream = new PassThrough()
     let index = 0
+
+    await fs.mkdir(cwd, {recursive: true})
 
     setImmediate(send)
 
     const code = await run({
+      cwd,
+      out: false,
       processor: noop,
-      cwd: new URL('empty/', fixtures),
       streamIn: stream,
       streamOut: stdout.stream,
-      streamError: stderr.stream,
-      out: false
+      streamError: stderr.stream
     })
 
     assert.equal(code, 0)

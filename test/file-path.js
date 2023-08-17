@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import fs from 'node:fs/promises'
 import {sep} from 'node:path'
 import {PassThrough} from 'node:stream'
 import test from 'node:test'
@@ -27,15 +28,18 @@ test('file-path', async function (t) {
   })
 
   await t.test('should support `filePath`', async function () {
+    const cwd = new URL('empty/', fixtures)
     const stderr = spy()
     const stdout = spy()
     const stream = new PassThrough()
     let index = 0
 
+    await fs.mkdir(cwd, {recursive: true})
+
     send()
 
     const code = await run({
-      cwd: new URL('empty/', fixtures),
+      cwd,
       filePath: 'foo' + sep + 'bar.baz',
       processor: noop,
       streamError: stderr.stream,
