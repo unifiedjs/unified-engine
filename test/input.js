@@ -91,7 +91,7 @@ test('input', async function (t) {
       cleanError(stderr()),
       [
         'readme.md',
-        ' error No such file or directory',
+        ' error No such file or folder',
         '  [cause]:',
         '    Error: ENOENT:…',
         '',
@@ -101,23 +101,20 @@ test('input', async function (t) {
     )
   })
 
-  await t.test(
-    'should not report unfound given directories',
-    async function () {
-      const stderr = spy()
+  await t.test('should not report unfound given folders', async function () {
+    const stderr = spy()
 
-      const code = await run({
-        cwd: new URL('directory/', fixtures),
-        extensions: ['txt'],
-        files: ['empty/'],
-        processor: unified(),
-        streamError: stderr.stream
-      })
+    const code = await run({
+      cwd: new URL('directory/', fixtures),
+      extensions: ['txt'],
+      files: ['empty/'],
+      processor: unified(),
+      streamError: stderr.stream
+    })
 
-      assert.equal(code, 0)
-      assert.equal(stderr(), '')
-    }
-  )
+    assert.equal(code, 0)
+    assert.equal(stderr(), '')
+  })
 
   await t.test('should search for extensions', async function () {
     const stderr = spy()
@@ -143,7 +140,7 @@ test('input', async function (t) {
     )
   })
 
-  await t.test('should search a directory for extensions', async function () {
+  await t.test('should search a folder for extensions', async function () {
     const stderr = spy()
 
     const code = await run({
@@ -237,24 +234,21 @@ test('input', async function (t) {
     )
   })
 
-  await t.test(
-    'should search vfile’s pointing to directories',
-    async function () {
-      const cwd = new URL('ignore-file/', fixtures)
-      const stderr = spy()
+  await t.test('should search vfile’s pointing to folders', async function () {
+    const cwd = new URL('ignore-file/', fixtures)
+    const stderr = spy()
 
-      const code = await run({
-        cwd,
-        files: [new VFile(new URL('nested', cwd))],
-        ignoreName: '.fooignore',
-        processor: noop,
-        streamError: stderr.stream
-      })
+    const code = await run({
+      cwd,
+      files: [new VFile(new URL('nested', cwd))],
+      ignoreName: '.fooignore',
+      processor: noop,
+      streamError: stderr.stream
+    })
 
-      assert.equal(code, 0)
-      assert.equal(stderr(), 'nested' + sep + 'three.txt: no issues found\n')
-    }
-  )
+    assert.equal(code, 0)
+    assert.equal(stderr(), 'nested' + sep + 'three.txt: no issues found\n')
+  })
 
   await t.test(
     'should not ignore implicitly ignored files in globs',

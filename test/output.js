@@ -186,7 +186,7 @@ test('output', async function (t) {
     assert.equal(output, 'two')
   })
 
-  await t.test('should write to directories', async function () {
+  await t.test('should write to folders', async function () {
     const cwd = new URL('simple-structure/', fixtures)
     const stderr = spy()
 
@@ -217,7 +217,7 @@ test('output', async function (t) {
     assert.equal(output, 'two')
   })
 
-  await t.test('should not create intermediate directories', async function () {
+  await t.test('should not create intermediate folders', async function () {
     const cwd = new URL('simple-structure/', fixtures)
     const stderr = spy()
 
@@ -372,7 +372,7 @@ test('output', async function (t) {
       assert.equal(code, 1)
       assert.equal(
         cleanError(stderr(), 2),
-        ['one.txt', ' error No such file or directory'].join('\n')
+        ['one.txt', ' error No such file or folder'].join('\n')
       )
 
       try {

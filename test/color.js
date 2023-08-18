@@ -30,7 +30,7 @@ test('color', async function (t) {
       cleanError(stderr()),
       [
         '\u001B[4m\u001B[31mreadme.md\u001B[39m\u001B[24m',
-        ' \u001B[31merror\u001B[39m \u001B[1mNo such file or directory\u001B[22m',
+        ' \u001B[31merror\u001B[39m \u001B[1mNo such file or folder\u001B[22m',
         '  \u001B[1m[cause]\u001B[22m:',
         '    Error: ENOENT:…',
         '',

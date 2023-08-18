@@ -214,7 +214,7 @@ test('ignore', async function (t) {
   )
 
   await t.test(
-    '`ignorePath` should resolve from its directory, `ignorePatterns` from cwd',
+    '`ignorePath` should resolve from its folder, `ignorePatterns` from cwd',
     async function () {
       const stderr = spy()
 
