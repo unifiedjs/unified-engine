@@ -295,7 +295,7 @@ Configuration (TypeScript type).
     — search for files with these extensions, when folders are passed;
     generated files are also given the first extension if `treeIn` is on and
     `output` is on or points to a folder
-*   `filePath` (`string`, optional)
+*   `filePath` (`URL` or `string`, optional)
     — file path to process the given file on `streamIn` as
 *   `files` (`Array<URL | VFile | string>`, optional)
     — paths or [globs][node-glob] to files and folder, or virtual files, to
@@ -304,7 +304,7 @@ Configuration (TypeScript type).
     — call back with an unsuccessful (`1`) code on warnings as well as errors
 *   `ignoreName` (`string`, optional)
     — name of ignore files to load
-*   `ignorePath` (`string`, optional)
+*   `ignorePath` (`URL` or `string`, optional)
     — filepath to an ignore file to load
 *   `ignorePathResolveFrom` ([`ResolveFrom`][api-resolve-from], default:
     `'dir'`)
@@ -320,7 +320,7 @@ Configuration (TypeScript type).
     — whether to output a formatted syntax tree for debugging
 *   `out` (`boolean`, default: `false`)
     — whether to write the processed file to `streamOut`
-*   `output` (`boolean` or `string`, default: `false`)
+*   `output` (`URL`, `boolean` or `string`, default: `false`)
     — whether to write successfully processed files, and where to; when `true`,
     overwrites the given files, when `false`, does not write to the file system;
     when pointing to an existing folder, files are written to that folder and
@@ -338,7 +338,7 @@ Configuration (TypeScript type).
     — do not report successful files; given to the reporter
 *   `rcName` (`string`, optional)
     — name of configuration files to load
-*   `rcPath` (`string`, optional)
+*   `rcPath` (`URL` or `string`, optional)
     — filepath to a configuration file to load
 *   `reporter` ([`VFileReporter`][api-vfile-reporter] or `string`, default:
     `vfile-reporter`)

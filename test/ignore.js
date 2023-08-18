@@ -41,29 +41,33 @@ test('ignore', async function (t) {
     }
   )
 
-  await t.test('should support custom ignore files', async function () {
-    const stderr = spy()
+  await t.test(
+    'should support custom ignore files and support URLs',
+    async function () {
+      const cwd = new URL('ignore-file/', fixtures)
+      const stderr = spy()
 
-    const code = await run({
-      cwd: new URL('ignore-file/', fixtures),
-      detectIgnore: false,
-      extensions: ['txt'],
-      files: ['.'],
-      ignorePath: '.fooignore',
-      processor: noop,
-      streamError: stderr.stream
-    })
+      const code = await run({
+        cwd,
+        detectIgnore: false,
+        extensions: ['txt'],
+        files: ['.'],
+        ignorePath: new URL('.fooignore', cwd),
+        processor: noop,
+        streamError: stderr.stream
+      })
 
-    assert.equal(code, 0)
-    assert.equal(
-      stderr(),
-      [
-        'nested' + sep + 'three.txt: no issues found',
-        'one.txt: no issues found',
-        ''
-      ].join('\n')
-    )
-  })
+      assert.equal(code, 0)
+      assert.equal(
+        stderr(),
+        [
+          'nested' + sep + 'three.txt: no issues found',
+          'one.txt: no issues found',
+          ''
+        ].join('\n')
+      )
+    }
+  )
 
   await t.test('should support searching ignore files', async function () {
     const stderr = spy()

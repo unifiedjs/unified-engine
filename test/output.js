@@ -186,7 +186,7 @@ test('output', async function (t) {
     assert.equal(output, 'two')
   })
 
-  await t.test('should write to folders', async function () {
+  await t.test('should write to folders and support URLs', async function () {
     const cwd = new URL('simple-structure/', fixtures)
     const stderr = spy()
 
@@ -194,7 +194,7 @@ test('output', async function (t) {
       cwd,
       extensions: ['txt'],
       files: ['one.txt'],
-      output: 'nested/',
+      output: new URL('nested/', cwd),
       processor: noop().use(
         /** @type {import('unified').Plugin<[], Literal>} */
         function () {
