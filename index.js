@@ -8,8 +8,6 @@
  * @typedef {import('./lib/index.js').PresetSupportingSpecifiers} Preset
  * @typedef {import('./lib/index.js').ResolveFrom} ResolveFrom
  * @typedef {import('./lib/index.js').VFileReporter} VFileReporter
- * @typedef {import('./lib/index.js').VFileReporterOptions} VFileReporterOptions
- *   To do: remove, get it from your particular reporter instead.
  */
 
 // it’s mostly private, but useful for tools like `eslint-mdx`.
