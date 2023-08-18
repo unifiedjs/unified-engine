@@ -1,6 +1,6 @@
 import plugin from './plugin.js'
 
-/** @type {import('../../../../index.js').Preset} */
+/** @type {import('unified-engine').Preset} */
 const config = {plugins: [[plugin, {one: true, two: true}]]}
 
 export default config

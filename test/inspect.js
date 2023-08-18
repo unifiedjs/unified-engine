@@ -3,7 +3,7 @@ import fs from 'node:fs/promises'
 import {PassThrough} from 'node:stream'
 import test from 'node:test'
 import {promisify} from 'node:util'
-import {engine} from '../index.js'
+import {engine} from 'unified-engine'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 

@@ -1,5 +1,5 @@
 /**
- * @typedef {import('../index.js').FileSet} FileSet
+ * @typedef {import('unified-engine').FileSet} FileSet
  */
 
 import assert from 'node:assert/strict'
@@ -7,7 +7,7 @@ import fs from 'node:fs/promises'
 import {sep} from 'node:path'
 import test from 'node:test'
 import {promisify} from 'node:util'
-import {engine} from '../index.js'
+import {engine} from 'unified-engine'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 

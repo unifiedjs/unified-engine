@@ -1,6 +1,6 @@
 /**
- * @typedef {import('../index.js').Preset['plugins']} Plugins
- * @typedef {import('../index.js').Preset['settings']} Settings
+ * @typedef {import('unified-engine').Preset['plugins']} Plugins
+ * @typedef {import('unified-engine').Preset['settings']} Settings
  * @typedef {import('../lib/configuration.js').Configuration} Configuration
  */
 
@@ -15,7 +15,7 @@
 
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import {engine} from '../index.js'
+import {engine} from 'unified-engine'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 

@@ -1,6 +1,6 @@
 /**
  * @typedef {import('unist').Literal} Literal
- * @typedef {import('../index.js').VFileReporter} VFileReporter
+ * @typedef {import('unified-engine').VFileReporter} VFileReporter
  */
 
 import {fileURLToPath} from 'node:url'
@@ -10,7 +10,7 @@ import test from 'node:test'
 import {promisify} from 'node:util'
 import stripAnsi from 'strip-ansi'
 import vfileReporterPretty from 'vfile-reporter-pretty'
-import {engine} from '../index.js'
+import {engine} from 'unified-engine'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 

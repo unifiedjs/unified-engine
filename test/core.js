@@ -2,13 +2,13 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import {promisify} from 'node:util'
 import {unified} from 'unified'
-import {engine} from '../index.js'
+import {engine} from 'unified-engine'
 
 const run = promisify(engine)
 
 test('engine', async function (t) {
   await t.test('should expose the public api', async function () {
-    assert.deepEqual(Object.keys(await import('../index.js')).sort(), [
+    assert.deepEqual(Object.keys(await import('unified-engine')).sort(), [
       'Configuration',
       'engine'
     ])
