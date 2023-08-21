@@ -370,6 +370,8 @@ Configuration (TypeScript type).
     — whether to treat input as a syntax tree
 *   `treeOut` (`boolean`, default: `options.tree`)
     — whether to output as a syntax tree
+*   `verbose` (`boolean`, default: `false`)
+    — report extra info; given to the reporter
 
 ### `Preset`
 

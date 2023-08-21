@@ -130,6 +130,44 @@ test('reporting', async function (t) {
     }
   )
 
+  await t.test('should report extra info w/ `verbose`', async function () {
+    const stderr = spy()
+
+    const code = await run({
+      cwd: new URL('one-file/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      processor: noop().use(
+        /** @type {import('unified').Plugin<[], Literal>} */
+        function () {
+          return function (_, file) {
+            const message = file.message('x')
+            message.url = 'https://example.com'
+            message.note = 'lorem ipsum'
+          }
+        }
+      ),
+      streamError: stderr.stream,
+      verbose: true
+    })
+
+    assert.equal(code, 0)
+    assert.equal(
+      stderr(),
+      [
+        'one.txt',
+        ' warning x',
+        '  [url]:',
+        '    https://example.com',
+        '  [note]:',
+        '    lorem ipsum',
+        '',
+        '⚠ 1 warning',
+        ''
+      ].join('\n')
+    )
+  })
+
   await t.test('should support custom given reporters', async function () {
     const stderr = spy()
 
