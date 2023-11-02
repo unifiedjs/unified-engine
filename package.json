@@ -1,6 +1,6 @@
 {
   "name": "unified-engine",
-  "version": "11.1.0",
+  "version": "11.1.1",
   "description": "unified engine to process multiple files, lettings users configure from the file system",
   "license": "MIT",
   "keywords": [
