@@ -25,15 +25,17 @@ test('configuration', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 1)
-      assert.equal(
-        cleanError(stderr(), 4),
+      assert.deepEqual(
+        [code, cleanError(stderr(), 4)],
         [
-          'one.txt',
-          ' error Cannot process file',
-          '  [cause]:',
-          '    Error: Cannot read given file `.foorc`'
-        ].join('\n')
+          1,
+          [
+            'one.txt',
+            ' error Cannot process file',
+            '  [cause]:',
+            '    Error: Cannot read given file `.foorc`'
+          ].join('\n')
+        ]
       )
     }
   )
@@ -52,15 +54,17 @@ test('configuration', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 1)
-      assert.equal(
-        cleanError(stderr(), 4),
+      assert.deepEqual(
+        [code, cleanError(stderr(), 4)],
         [
-          'one.txt',
-          ' error Cannot process file',
-          '  [cause]:',
-          '    Error: Cannot parse given file `.foorc`'
-        ].join('\n')
+          1,
+          [
+            'one.txt',
+            ' error Cannot process file',
+            '  [cause]:',
+            '    Error: Cannot parse given file `.foorc`'
+          ].join('\n')
+        ]
       )
     }
   )
@@ -79,15 +83,17 @@ test('configuration', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 1)
-      assert.equal(
-        cleanError(stderr(), 4),
+      assert.deepEqual(
+        [code, cleanError(stderr(), 4)],
         [
-          'one.txt',
-          ' error Cannot process file',
-          '  [cause]:',
-          '    Error: Cannot parse given file `.foorc.js`'
-        ].join('\n')
+          1,
+          [
+            'one.txt',
+            ' error Cannot process file',
+            '  [cause]:',
+            '    Error: Cannot parse given file `.foorc.js`'
+          ].join('\n')
+        ]
       )
     }
   )
@@ -103,15 +109,18 @@ test('configuration', async function (t) {
       rcName: '.foorc',
       streamError: stderr.stream
     })
-    assert.equal(code, 1)
-    assert.equal(
-      cleanError(stderr(), 4),
+
+    assert.deepEqual(
+      [code, cleanError(stderr(), 4)],
       [
-        'one.txt',
-        ' error Cannot process file',
-        '  [cause]:',
-        '    Error: Cannot parse file `.foorc.js`'
-      ].join('\n')
+        1,
+        [
+          'one.txt',
+          ' error Cannot process file',
+          '  [cause]:',
+          '    Error: Cannot parse file `.foorc.js`'
+        ].join('\n')
+      ]
     )
   })
 
@@ -126,8 +135,8 @@ test('configuration', async function (t) {
       rcName: '.foorc',
       streamError: stderr.stream
     })
-    assert.equal(code, 0)
-    assert.equal(stderr(), 'one.txt: no issues found\n')
+
+    assert.deepEqual([code, stderr()], [0, 'one.txt: no issues found\n'])
   })
 
   await t.test('should support `.rc.js` scripts (3)', async function () {
@@ -141,8 +150,8 @@ test('configuration', async function (t) {
       rcName: '.foorc',
       streamError: stderr.stream
     })
-    assert.equal(code, 0)
-    assert.equal(stderr(), 'one.txt: no issues found\n')
+
+    assert.deepEqual([code, stderr()], [0, 'one.txt: no issues found\n'])
   })
 
   await t.test('should support `.rc.mjs` module', async function () {
@@ -164,9 +173,10 @@ test('configuration', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
-    assert.equal(stderr(), 'one.txt: no issues found\n')
-    assert.equal(calls, 1)
+    assert.deepEqual(
+      [code, calls, stderr()],
+      [0, 1, 'one.txt: no issues found\n']
+    )
   })
 
   await t.test('should support `.rc.cjs` module', async function () {
@@ -187,9 +197,11 @@ test('configuration', async function (t) {
       rcName: '.foorc',
       streamError: stderr.stream
     })
-    assert.equal(code, 0)
-    assert.equal(stderr(), 'one.txt: no issues found\n')
-    assert.equal(calls, 1)
+
+    assert.deepEqual(
+      [code, calls, stderr()],
+      [0, 1, 'one.txt: no issues found\n']
+    )
   })
 
   await t.test('should support `.rc.yaml` config files', async function () {
@@ -203,15 +215,18 @@ test('configuration', async function (t) {
       rcName: '.foorc',
       streamError: stderr.stream
     })
-    assert.equal(code, 1)
-    assert.equal(
-      cleanError(stderr(), 4),
+
+    assert.deepEqual(
+      [code, cleanError(stderr(), 4)],
       [
-        'one.txt',
-        ' error Cannot process file',
-        '  [cause]:',
-        '    Error: Cannot parse file `.foorc.yaml`'
-      ].join('\n')
+        1,
+        [
+          'one.txt',
+          ' error Cannot process file',
+          '  [cause]:',
+          '    Error: Cannot parse file `.foorc.yaml`'
+        ].join('\n')
+      ]
     )
   })
 
@@ -237,18 +252,20 @@ test('configuration', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
-    assert.equal(
-      stderr(),
+    assert.deepEqual(
+      [code, calls, stderr()],
       [
-        'nested' + sep + 'four.txt: no issues found',
-        'nested' + sep + 'three.txt: no issues found',
-        'one.txt: no issues found',
-        'two.txt: no issues found',
-        ''
-      ].join('\n')
+        0,
+        4,
+        [
+          'nested' + sep + 'four.txt: no issues found',
+          'nested' + sep + 'three.txt: no issues found',
+          'one.txt: no issues found',
+          'two.txt: no issues found',
+          ''
+        ].join('\n')
+      ]
     )
-    assert.equal(calls, 4)
   })
 
   await t.test('should support searching package files', async function () {
@@ -263,15 +280,17 @@ test('configuration', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 1)
-    assert.equal(
-      cleanError(stderr(), 4),
+    assert.deepEqual(
+      [code, cleanError(stderr(), 4)],
       [
-        'one.txt',
-        ' error Cannot process file',
-        '  [cause]:',
-        '    Error: Cannot parse file `package.json`'
-      ].join('\n')
+        1,
+        [
+          'one.txt',
+          ' error Cannot process file',
+          '  [cause]:',
+          '    Error: Cannot parse file `package.json`'
+        ].join('\n')
+      ]
     )
   })
 
@@ -298,18 +317,20 @@ test('configuration', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
-    assert.equal(
-      stderr(),
+    assert.deepEqual(
+      [code, calls, stderr()],
       [
-        'nested' + sep + 'four.txt: no issues found',
-        'nested' + sep + 'three.txt: no issues found',
-        'one.txt: no issues found',
-        'two.txt: no issues found',
-        ''
-      ].join('\n')
+        0,
+        4,
+        [
+          'nested' + sep + 'four.txt: no issues found',
+          'nested' + sep + 'three.txt: no issues found',
+          'one.txt: no issues found',
+          'two.txt: no issues found',
+          ''
+        ].join('\n')
+      ]
     )
-    assert.equal(calls, 4)
   })
 
   await t.test('should support no config files', async function () {
@@ -325,15 +346,17 @@ test('configuration', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
-    assert.equal(
-      stderr(),
+    assert.deepEqual(
+      [code, stderr()],
       [
-        'nested' + sep + 'three.txt: no issues found',
-        'nested' + sep + 'two.txt: no issues found',
-        'one.txt: no issues found',
-        ''
-      ].join('\n')
+        0,
+        [
+          'nested' + sep + 'three.txt: no issues found',
+          'nested' + sep + 'two.txt: no issues found',
+          'one.txt: no issues found',
+          ''
+        ].join('\n')
+      ]
     )
   })
 
@@ -352,8 +375,7 @@ test('configuration', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 0)
-      assert.equal(stderr(), 'one.txt: no issues found\n')
+      assert.deepEqual([code, stderr()], [0, 'one.txt: no issues found\n'])
     }
   )
 
@@ -374,9 +396,10 @@ test('configuration', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
-    assert.equal(stderr(), 'one.txt: no issues found\n')
-    assert.equal(calls, 1)
+    assert.deepEqual(
+      [code, calls, stderr()],
+      [0, 1, 'one.txt: no issues found\n']
+    )
   })
 
   await t.test('should ignore unconfigured `packages.json`', async function () {
@@ -391,15 +414,17 @@ test('configuration', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 1)
-    assert.equal(
-      cleanError(stderr(), 4),
+    assert.deepEqual(
+      [code, cleanError(stderr(), 4)],
       [
-        'packages' + sep + 'deep' + sep + 'one.txt',
-        ' error Cannot process file',
-        '  [cause]:',
-        '    Error: Cannot parse file `package.json`'
-      ].join('\n')
+        1,
+        [
+          'packages' + sep + 'deep' + sep + 'one.txt',
+          ' error Cannot process file',
+          '  [cause]:',
+          '    Error: Cannot parse file `package.json`'
+        ].join('\n')
+      ]
     )
   })
 })
