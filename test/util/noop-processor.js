@@ -1,5 +1,7 @@
 /**
  * @typedef {import('unist').Literal} Literal
+ * @typedef {import('unified').Processor<Literal>} ParseProcessor
+ * @typedef {import('unified').Processor<undefined, undefined, undefined, Literal, string>} SerializeProcessor
  */
 
 import {unified} from 'unified'
@@ -10,8 +12,16 @@ import {unified} from 'unified'
  * @type {import('unified').Plugin<[], string, Literal>}
  */
 function parse() {
-  /** @type {import('unified').Parser<Literal>} */
-  this.parser = function (doc) {
+  // @ts-expect-error: good.
+  const self = /** @type {ParseProcessor} */ (this)
+
+  self.parser = parser
+
+  /**
+   * @param {string} doc
+   * @returns {Literal}
+   */
+  function parser(doc) {
     return {type: 'text', value: doc}
   }
 }
@@ -22,8 +32,16 @@ function parse() {
  * @type {import('unified').Plugin<[], Literal, string>}
  */
 function stringify() {
-  /** @type {import('unified').Compiler<Literal, string>} */
-  this.compiler = function (tree) {
+  // @ts-expect-error: good.
+  const self = /** @type {SerializeProcessor} */ (this)
+
+  self.compiler = compiler
+
+  /**
+   * @param {Literal} tree
+   * @returns {string}
+   */
+  function compiler(tree) {
     return String(tree.value)
   }
 }

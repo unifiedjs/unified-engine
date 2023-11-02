@@ -1,6 +1,6 @@
 /**
  * @typedef {import('unist').Literal} Literal
- * @typedef {import('unified-engine').VFileReporter} VFileReporter
+ * @typedef {import('vfile').VFile} VFile
  */
 
 import {fileURLToPath} from 'node:url'
@@ -18,7 +18,12 @@ const run = promisify(engine)
 const fixtures = new URL('fixtures/', import.meta.url)
 const windows = process.platform === 'win32'
 
-/** @type {VFileReporter} */
+/**
+ * @param {Array<VFile>} files
+ *   Files.
+ * @returns {Promise<string>}
+ *   Report.
+ */
 const vfileReporterPrettyAsync = async function (files) {
   return vfileReporterPretty(files)
 }

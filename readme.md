@@ -12,72 +12,72 @@
 
 ## Contents
 
-*   [What is this?](#what-is-this)
-*   [When should I use this?](#when-should-i-use-this)
-*   [Install](#install)
-*   [Use](#use)
-*   [API](#api)
-    *   [`engine(options, callback)`](#engineoptions-callback)
-    *   [`Configuration`](#configuration)
-    *   [`Completer`](#completer)
-    *   [`Callback`](#callback)
-    *   [`ConfigTransform`](#configtransform)
-    *   [`Context`](#context)
-    *   [`FileSet`](#fileset)
-    *   [`Options`](#options)
-    *   [`Preset`](#preset)
-    *   [`ResolveFrom`](#resolvefrom)
-    *   [`VFileReporter`](#vfilereporter)
-*   [Config files](#config-files)
-    *   [Explicit configuration](#explicit-configuration)
-    *   [Implicit configuration](#implicit-configuration)
-    *   [Examples](#examples)
-*   [Ignore files](#ignore-files)
-    *   [Explicit ignoring](#explicit-ignoring)
-    *   [Implicit ignoring](#implicit-ignoring)
-    *   [Extra ignoring](#extra-ignoring)
-    *   [Ignoring](#ignoring)
-    *   [Examples](#examples-1)
-*   [Plugins](#plugins)
-*   [Examples](#examples-2)
-    *   [`options.alwaysStringify`](#optionsalwaysstringify)
-    *   [`options.configTransform`](#optionsconfigtransform)
-    *   [`options.defaultConfig`](#optionsdefaultconfig)
-    *   [`options.detectConfig`](#optionsdetectconfig)
-    *   [`options.detectIgnore`](#optionsdetectignore)
-    *   [`options.extensions`](#optionsextensions)
-    *   [`options.filePath`](#optionsfilepath)
-    *   [`options.files`](#optionsfiles)
-    *   [`options.frail`](#optionsfrail)
-    *   [`options.ignoreName`](#optionsignorename)
-    *   [`options.ignorePath`](#optionsignorepath)
-    *   [`options.ignorePathResolveFrom`](#optionsignorepathresolvefrom)
-    *   [`options.ignorePatterns`](#optionsignorepatterns)
-    *   [`options.ignoreUnconfigured`](#optionsignoreunconfigured)
-    *   [`options.inspect`](#optionsinspect)
-    *   [`options.out`](#optionsout)
-    *   [`options.output`](#optionsoutput)
-    *   [`options.packageField`](#optionspackagefield)
-    *   [`options.pluginPrefix`](#optionspluginprefix)
-    *   [`options.plugins`](#optionsplugins)
-    *   [`options.processor`](#optionsprocessor)
-    *   [`options.quiet`](#optionsquiet)
-    *   [`options.rcName`](#optionsrcname)
-    *   [`options.rcPath`](#optionsrcpath)
-    *   [`options.reporter` and `options.reporterOptions`](#optionsreporter-and-optionsreporteroptions)
-    *   [`options.settings`](#optionssettings)
-    *   [`options.silent`](#optionssilent)
-    *   [`options.streamError`](#optionsstreamerror)
-    *   [`options.streamIn`](#optionsstreamin)
-    *   [`options.streamOut`](#optionsstreamout)
-    *   [`options.tree`](#optionstree)
-    *   [`options.treeIn`](#optionstreein)
-    *   [`options.treeOut`](#optionstreeout)
-*   [Types](#types)
-*   [Compatibility](#compatibility)
-*   [Security](#security)
-*   [Contribute](#contribute)
-*   [License](#license)
+* [What is this?](#what-is-this)
+* [When should I use this?](#when-should-i-use-this)
+* [Install](#install)
+* [Use](#use)
+* [API](#api)
+  * [`engine(options, callback)`](#engineoptions-callback)
+  * [`Configuration`](#configuration)
+  * [`Completer`](#completer)
+  * [`Callback`](#callback)
+  * [`ConfigTransform`](#configtransform)
+  * [`Context`](#context)
+  * [`FileSet`](#fileset)
+  * [`Options`](#options)
+  * [`Preset`](#preset)
+  * [`ResolveFrom`](#resolvefrom)
+  * [`VFileReporter`](#vfilereporter)
+* [Config files](#config-files)
+  * [Explicit configuration](#explicit-configuration)
+  * [Implicit configuration](#implicit-configuration)
+  * [Examples](#examples)
+* [Ignore files](#ignore-files)
+  * [Explicit ignoring](#explicit-ignoring)
+  * [Implicit ignoring](#implicit-ignoring)
+  * [Extra ignoring](#extra-ignoring)
+  * [Ignoring](#ignoring)
+  * [Examples](#examples-1)
+* [Plugins](#plugins)
+* [Examples](#examples-2)
+  * [`options.alwaysStringify`](#optionsalwaysstringify)
+  * [`options.configTransform`](#optionsconfigtransform)
+  * [`options.defaultConfig`](#optionsdefaultconfig)
+  * [`options.detectConfig`](#optionsdetectconfig)
+  * [`options.detectIgnore`](#optionsdetectignore)
+  * [`options.extensions`](#optionsextensions)
+  * [`options.filePath`](#optionsfilepath)
+  * [`options.files`](#optionsfiles)
+  * [`options.frail`](#optionsfrail)
+  * [`options.ignoreName`](#optionsignorename)
+  * [`options.ignorePath`](#optionsignorepath)
+  * [`options.ignorePathResolveFrom`](#optionsignorepathresolvefrom)
+  * [`options.ignorePatterns`](#optionsignorepatterns)
+  * [`options.ignoreUnconfigured`](#optionsignoreunconfigured)
+  * [`options.inspect`](#optionsinspect)
+  * [`options.out`](#optionsout)
+  * [`options.output`](#optionsoutput)
+  * [`options.packageField`](#optionspackagefield)
+  * [`options.pluginPrefix`](#optionspluginprefix)
+  * [`options.plugins`](#optionsplugins)
+  * [`options.processor`](#optionsprocessor)
+  * [`options.quiet`](#optionsquiet)
+  * [`options.rcName`](#optionsrcname)
+  * [`options.rcPath`](#optionsrcpath)
+  * [`options.reporter` and `options.reporterOptions`](#optionsreporter-and-optionsreporteroptions)
+  * [`options.settings`](#optionssettings)
+  * [`options.silent`](#optionssilent)
+  * [`options.streamError`](#optionsstreamerror)
+  * [`options.streamIn`](#optionsstreamin)
+  * [`options.streamOut`](#optionsstreamout)
+  * [`options.tree`](#optionstree)
+  * [`options.treeIn`](#optionstreein)
+  * [`options.treeOut`](#optionstreeout)
+* [Types](#types)
+* [Compatibility](#compatibility)
+* [Security](#security)
+* [Contribute](#contribute)
+* [License](#license)
 
 ## What is this?
 
@@ -92,12 +92,12 @@ system, and with [configuration files][config-files] and
 
 You typically use something that wraps this, such as:
 
-*   [`unified-args`][unified-args]
-    — create CLIs
-*   [`unified-engine-gulp`][unified-engine-gulp]
-    — create Gulp plugins
-*   [`unified-language-server`][unified-language-server]
-    — create language servers
+* [`unified-args`][unified-args]
+  — create CLIs
+* [`unified-engine-gulp`][unified-engine-gulp]
+  — create Gulp plugins
+* [`unified-language-server`][unified-language-server]
+  — create language servers
 
 You can use this to make such things.
 
@@ -159,10 +159,10 @@ Process.
 
 ###### Parameters
 
-*   `options` ([`Options`][api-options], required)
-    — configuration
-*   `callback` ([`Callback`][api-callback], required)
-    — configuration
+* `options` ([`Options`][api-options], required)
+  — configuration
+* `callback` ([`Callback`][api-callback], required)
+  — configuration
 
 ###### Returns
 
@@ -176,13 +176,13 @@ Exposed to build more complex integrations.
 
 ###### Parameters
 
-*   `options` (subset of [`Options`][api-options], required)
-    — configuration (`cwd` is required)
+* `options` (subset of [`Options`][api-options], required)
+  — configuration (`cwd` is required)
 
 ###### Fields
 
-*   `load(string, (Error?[, Result?]): undefined): undefined`
-    — get the config for a file
+* `load(string, (Error?[, Result?]): undefined): undefined`
+  — get the config for a file
 
 ### `Completer`
 
@@ -209,12 +209,12 @@ incorrect configuration), or a status code and the processing context.
 
 ###### Parameters
 
-*   `error` (`Error`, optional)
-    — error
-*   `code` (`0` or `1`, optional)
-    — exit code, `0` if successful or `1` if unsuccessful
-*   `context` ([`Context`][api-context], optional)
-    — processing context
+* `error` (`Error`, optional)
+  — error
+* `code` (`0` or `1`, optional)
+  — exit code, `0` if successful or `1` if unsuccessful
+* `context` ([`Context`][api-context], optional)
+  — processing context
 
 ###### Returns
 
@@ -226,10 +226,10 @@ Transform arbitrary configs to our format (TypeScript type).
 
 ###### Parameters
 
-*   `config` (`unknown`)
-    — arbitrary config
-*   `filePath` (`string`)
-    — file path of config file
+* `config` (`unknown`)
+  — arbitrary config
+* `filePath` (`string`)
+  — file path of config file
 
 ###### Returns
 
@@ -241,10 +241,10 @@ Processing context (TypeScript type).
 
 ###### Fields
 
-*   `fileSet` ([`FileSet`][api-file-set])
-    — internally used info
-*   `files` ([`Array<VFile>`][vfile])
-    — processed files
+* `fileSet` ([`FileSet`][api-file-set])
+  — internally used info
+* `files` ([`Array<VFile>`][vfile])
+  — processed files
 
 ### `FileSet`
 
@@ -259,14 +259,14 @@ None.
 
 ###### Fields
 
-*   `valueOf(): Array<VFile>`
-    — get files in a set
-*   `use(completer: Completer): this`
-    — add middleware to be called when done (see: [`Completer`][api-completer])
-*   `add(file: VFile | string): this`
-    — add a file; the given file is processed like other files with a few
-    differences: it’s ignored when their file path is already added, never
-    written to the file system or `streamOut`, and not included in the  report
+* `valueOf(): Array<VFile>`
+  — get files in a set
+* `use(completer: Completer): this`
+  — add middleware to be called when done (see: [`Completer`][api-completer])
+* `add(file: VFile | string): this`
+  — add a file; the given file is processed like other files with a few
+  differences: it’s ignored when their file path is already added, never
+  written to the file system or `streamOut`, and not included in the  report
 
 ### `Options`
 
@@ -276,102 +276,102 @@ Configuration (TypeScript type).
 
 ###### Fields
 
-*   `alwaysStringify` (`boolean`, default: `false`)
-    — whether to always serialize successfully processed files
-*   `color` (`boolean`, default: `false`)
-    — whether to report with ANSI color sequences; given to the reporter
-*   `configTransform` ([`ConfigTransform`][api-config-transform], optional)
-    — transform config files from a different schema
-*   `cwd` (`URL` or `string`, default: `process.cwd()`)
-    — folder to search files in, load plugins from, and more
-*   `defaultConfig` ([`Preset`][api-preset], optional)
-    — default configuration to use if no config file is given or found
-*   `detectConfig` (`boolean`, default: `true` if `options.packageField` or
-    `options.rcName`)
-    — whether to search for configuration files
-*   `detectIgnore` (`boolean`, default: `true` if `options.ignoreName`)
-    — whether to search for ignore files
-*   `extensions` (`Array<string>`, optional)
-    — search for files with these extensions, when folders are passed;
-    generated files are also given the first extension if `treeIn` is on and
-    `output` is on or points to a folder
-*   `filePath` (`URL` or `string`, optional)
-    — file path to process the given file on `streamIn` as
-*   `files` (`Array<URL | VFile | string>`, optional)
-    — paths or [globs][node-glob] to files and folder, or virtual files, to
-    process
-*   `frail` (`boolean`, default: `false`)
-    — call back with an unsuccessful (`1`) code on warnings as well as errors
-*   `ignoreName` (`string`, optional)
-    — name of ignore files to load
-*   `ignorePath` (`URL` or `string`, optional)
-    — filepath to an ignore file to load
-*   `ignorePathResolveFrom` ([`ResolveFrom`][api-resolve-from], default:
-    `'dir'`)
-    — resolve patterns in `ignorePath` from the current working folder
-    (`'cwd'`) or the ignore file’s folder (`'dir'`)
-*   `ignorePatterns` (optional)
-    — patterns to ignore in addition to ignore files
-*   `ignoreUnconfigured` (`boolean`, default: `false`)
-    — ignore files that do not have an associated detected configuration file;
-    either `rcName` or `packageField` must be defined too; cannot be combined
-    with `rcPath` or `detectConfig: false`
-*   `inspect` (`boolean`, default: `false`)
-    — whether to output a formatted syntax tree for debugging
-*   `out` (`boolean`, default: `false`)
-    — whether to write the processed file to `streamOut`
-*   `output` (`URL`, `boolean` or `string`, default: `false`)
-    — whether to write successfully processed files, and where to; when `true`,
-    overwrites the given files, when `false`, does not write to the file system;
-    when pointing to an existing folder, files are written to that folder and
-    keep their original basenames; when the parent folder of the given path
-    exists and one file is processed, the file is written to the given path
-*   `packageField` (`string`, optional)
-    — field where configuration can be found in `package.json` files
-*   `pluginPrefix` (`string`, optional)
-    — prefix to use when searching for plugins
-*   `plugins` ([`Preset['plugins']`][api-preset], optional)
-    — plugins to use
-*   `processor` ([`Processor`][unified-processor], **required**)
-    — unified processor to transform files
-*   `quiet` (`boolean`, default: `false`)
-    — do not report successful files; given to the reporter
-*   `rcName` (`string`, optional)
-    — name of configuration files to load
-*   `rcPath` (`URL` or `string`, optional)
-    — filepath to a configuration file to load
-*   `reporter` ([`VFileReporter`][api-vfile-reporter] or `string`, default:
-    `vfile-reporter`)
-    — reporter to use; if a `string` is passed, it’s loaded from `cwd`, and
-    `'vfile-reporter-'` can be omitted
-*   `reporterOptions` ([`Options`][vfile-reporter-options] from
-    `vfile-reporter`, optional)
-    — config to pass to the used reporter
-*   `settings` ([`Settings`][unified-settings] from `unified`, optional)
-    — configuration for the parser and compiler of the processor
-*   `silent` (`boolean`, default: `false`)
-    — report only fatal errors; given to the reporter
-*   `silentlyIgnore` (`boolean`, default: `false`)
-    — skip given files if they are ignored
-*   `streamError` ([`WritableStream`][node-writable-stream] from Node.js,
-    default: `process.stderr`)
-    — stream to write the report (if any) to
-*   `streamIn` ([`ReadableStream`][node-readable-stream] from Node.js,
-    default: `process.stdin`)
-    — stream to read from if no files are found or given
-*   `streamOut` ([`WritableStream`][node-writable-stream] from Node.js,
-    default: `process.stdout`)
-    — stream to write processed files to, nothing is streamed if either `out`
-    is `false`, `output` is not `false`, multiple files are processed, or a
-    fatal error occurred while processing a file
-*   `tree` (`boolean`, default: `false`)
-    — whether to treat both input and output as a syntax tree
-*   `treeIn` (`boolean`, default: `options.tree`)
-    — whether to treat input as a syntax tree
-*   `treeOut` (`boolean`, default: `options.tree`)
-    — whether to output as a syntax tree
-*   `verbose` (`boolean`, default: `false`)
-    — report extra info; given to the reporter
+* `alwaysStringify` (`boolean`, default: `false`)
+  — whether to always serialize successfully processed files
+* `color` (`boolean`, default: `false`)
+  — whether to report with ANSI color sequences; given to the reporter
+* `configTransform` ([`ConfigTransform`][api-config-transform], optional)
+  — transform config files from a different schema
+* `cwd` (`URL` or `string`, default: `process.cwd()`)
+  — folder to search files in, load plugins from, and more
+* `defaultConfig` ([`Preset`][api-preset], optional)
+  — default configuration to use if no config file is given or found
+* `detectConfig` (`boolean`, default: `true` if `options.packageField` or
+  `options.rcName`)
+  — whether to search for configuration files
+* `detectIgnore` (`boolean`, default: `true` if `options.ignoreName`)
+  — whether to search for ignore files
+* `extensions` (`Array<string>`, optional)
+  — search for files with these extensions, when folders are passed;
+  generated files are also given the first extension if `treeIn` is on and
+  `output` is on or points to a folder
+* `filePath` (`URL` or `string`, optional)
+  — file path to process the given file on `streamIn` as
+* `files` (`Array<URL | VFile | string>`, optional)
+  — paths or [globs][node-glob] to files and folder, or virtual files, to
+  process
+* `frail` (`boolean`, default: `false`)
+  — call back with an unsuccessful (`1`) code on warnings as well as errors
+* `ignoreName` (`string`, optional)
+  — name of ignore files to load
+* `ignorePath` (`URL` or `string`, optional)
+  — filepath to an ignore file to load
+* `ignorePathResolveFrom` ([`ResolveFrom`][api-resolve-from], default:
+  `'dir'`)
+  — resolve patterns in `ignorePath` from the current working folder
+  (`'cwd'`) or the ignore file’s folder (`'dir'`)
+* `ignorePatterns` (optional)
+  — patterns to ignore in addition to ignore files
+* `ignoreUnconfigured` (`boolean`, default: `false`)
+  — ignore files that do not have an associated detected configuration file;
+  either `rcName` or `packageField` must be defined too; cannot be combined
+  with `rcPath` or `detectConfig: false`
+* `inspect` (`boolean`, default: `false`)
+  — whether to output a formatted syntax tree for debugging
+* `out` (`boolean`, default: `false`)
+  — whether to write the processed file to `streamOut`
+* `output` (`URL`, `boolean` or `string`, default: `false`)
+  — whether to write successfully processed files, and where to; when `true`,
+  overwrites the given files, when `false`, does not write to the file system;
+  when pointing to an existing folder, files are written to that folder and
+  keep their original basenames; when the parent folder of the given path
+  exists and one file is processed, the file is written to the given path
+* `packageField` (`string`, optional)
+  — field where configuration can be found in `package.json` files
+* `pluginPrefix` (`string`, optional)
+  — prefix to use when searching for plugins
+* `plugins` ([`Preset['plugins']`][api-preset], optional)
+  — plugins to use
+* `processor` ([`Processor`][unified-processor], **required**)
+  — unified processor to transform files
+* `quiet` (`boolean`, default: `false`)
+  — do not report successful files; given to the reporter
+* `rcName` (`string`, optional)
+  — name of configuration files to load
+* `rcPath` (`URL` or `string`, optional)
+  — filepath to a configuration file to load
+* `reporter` ([`VFileReporter`][api-vfile-reporter] or `string`, default:
+  `vfile-reporter`)
+  — reporter to use; if a `string` is passed, it’s loaded from `cwd`, and
+  `'vfile-reporter-'` can be omitted
+* `reporterOptions` ([`Options`][vfile-reporter-options] from
+  `vfile-reporter`, optional)
+  — config to pass to the used reporter
+* `settings` ([`Settings`][unified-settings] from `unified`, optional)
+  — configuration for the parser and compiler of the processor
+* `silent` (`boolean`, default: `false`)
+  — report only fatal errors; given to the reporter
+* `silentlyIgnore` (`boolean`, default: `false`)
+  — skip given files if they are ignored
+* `streamError` ([`WritableStream`][node-writable-stream] from Node.js,
+  default: `process.stderr`)
+  — stream to write the report (if any) to
+* `streamIn` ([`ReadableStream`][node-readable-stream] from Node.js,
+  default: `process.stdin`)
+  — stream to read from if no files are found or given
+* `streamOut` ([`WritableStream`][node-writable-stream] from Node.js,
+  default: `process.stdout`)
+  — stream to write processed files to, nothing is streamed if either `out`
+  is `false`, `output` is not `false`, multiple files are processed, or a
+  fatal error occurred while processing a file
+* `tree` (`boolean`, default: `false`)
+  — whether to treat both input and output as a syntax tree
+* `treeIn` (`boolean`, default: `options.tree`)
+  — whether to treat input as a syntax tree
+* `treeOut` (`boolean`, default: `options.tree`)
+  — whether to output as a syntax tree
+* `verbose` (`boolean`, default: `false`)
+  — report extra info; given to the reporter
 
 ### `Preset`
 
@@ -426,11 +426,11 @@ added support for unknown fields in options and async support.
 
 ###### Parameters
 
-*   `files` ([`Array<VFile>`][vfile])
-    — files
-*   `options` ([`Options`][vfile-reporter-options] from `vfile-reporter`,
-    optional)
-    — configuration
+* `files` ([`Array<VFile>`][vfile])
+  — files
+* `options` ([`Options`][vfile-reporter-options] from `vfile-reporter`,
+  optional)
+  — configuration
 
 ###### Returns
 
@@ -451,12 +451,12 @@ regardless of `options.detectConfig` and `options.rcName`.
 Otherwise, configuration files are detected if `options.detectConfig` is turned
 on, depending on the following options:
 
-*   if `options.rcName` is given, `$rcName` (JSON), `$rcName.js` (CommonJS or
-    ESM depending on the `type` field of the closest `package.json`),
-    `$rcName.cjs` (CommonJS), `$rcName.mjs` (ESM), `$rcName.yml` (YAML),
-    and `$rcName.yaml` (YAML) are loaded
-*   if `options.packageField` is given, `package.json` (JSON) files are loaded
-    and the configuration at their `$packageField` field is used
+* if `options.rcName` is given, `$rcName` (JSON), `$rcName.js` (CommonJS or
+  ESM depending on the `type` field of the closest `package.json`),
+  `$rcName.cjs` (CommonJS), `$rcName.mjs` (ESM), `$rcName.yml` (YAML),
+  and `$rcName.yaml` (YAML) are loaded
+* if `options.packageField` is given, `package.json` (JSON) files are loaded
+  and the configuration at their `$packageField` field is used
 
 The first file that is searched for in a folder is used as the configuration.
 If no file is found, the parent folder is searched, and so on.

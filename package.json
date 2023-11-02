@@ -55,10 +55,11 @@
     "@types/ungap__structured-clone": "^0.3.0",
     "c8": "^8.0.0",
     "prettier": "^3.0.0",
-    "remark": "^14.0.0",
-    "remark-cli": "^11.0.0",
+    "remark": "^15.0.0",
+    "remark-cli": "^12.0.0",
+    "remark-gfm": "^4.0.0",
     "remark-preset-wooorm": "^9.0.0",
-    "remark-toc": "^8.0.0",
+    "remark-toc": "^9.0.0",
     "strip-ansi": "^7.0.0",
     "type-coverage": "^2.0.0",
     "typescript": "^5.0.0",
@@ -87,12 +88,13 @@
     "plugins": [
       "remark-preset-wooorm",
       [
-        "remark-toc",
-        {
-          "heading": "contents",
-          "maxDepth": 3,
-          "tight": true
-        }
+        "remark-preset-wooorm/node_modules/remark-gfm/index.js",
+        false
+      ],
+      "remark-gfm",
+      [
+        "remark-lint-list-item-indent",
+        "space"
       ]
     ]
   },
