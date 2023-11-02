@@ -40,7 +40,7 @@
     "ignore": "^5.0.0",
     "is-empty": "^1.0.0",
     "is-plain-obj": "^4.0.0",
-    "load-plugin": "^5.0.0",
+    "load-plugin": "^6.0.0",
     "parse-json": "^7.0.0",
     "trough": "^2.0.0",
     "unist-util-inspect": "^8.0.0",
