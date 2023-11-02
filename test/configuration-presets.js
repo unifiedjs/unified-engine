@@ -83,7 +83,7 @@ test('configuration-presets', async function (t) {
         'one.txt',
         ' error Cannot process file',
         '  [cause]:',
-        '    Error: Cannot find module `./plugin.js`'
+        '    Error: Cannot parse file `.foorc`'
       ].join('\n')
     )
   })
