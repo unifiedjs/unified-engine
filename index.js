@@ -8,6 +8,7 @@
  * @typedef {import('./lib/index.js').PresetSupportingSpecifiers} Preset
  * @typedef {import('./lib/index.js').ResolveFrom} ResolveFrom
  * @typedef {import('./lib/index.js').VFileReporter} VFileReporter
+ * @typedef {import('./lib/configuration.js').ConfigurationResult} ConfigurationResult
  */
 
 // it’s mostly private, but useful for tools like `eslint-mdx`.

@@ -181,7 +181,7 @@ Exposed to build more complex integrations.
 
 ###### Fields
 
-* `load(string, (Error?[, Result?]): undefined): undefined`
+* `load(string, (Error?[, ConfigurationResult?]): undefined): undefined`
   — get the config for a file
 
 ### `Completer`
