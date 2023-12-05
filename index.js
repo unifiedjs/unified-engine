@@ -1,4 +1,5 @@
 /**
+ * @typedef {import('./lib/configuration.js').ConfigResult} ConfigResult
  * @typedef {import('./lib/file-set.js').Completer} Completer
  * @typedef {import('./lib/index.js').Callback} Callback
  * @typedef {import('./lib/index.js').ConfigTransform} ConfigTransform

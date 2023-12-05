@@ -21,6 +21,7 @@
   * [`Configuration`](#configuration)
   * [`Completer`](#completer)
   * [`Callback`](#callback)
+  * [`ConfigResult`](#configresult)
   * [`ConfigTransform`](#configtransform)
   * [`Context`](#context)
   * [`FileSet`](#fileset)
@@ -181,7 +182,7 @@ Exposed to build more complex integrations.
 
 ###### Fields
 
-* `load(string, (Error?[, Result?]): undefined): undefined`
+* `load(string, (Error?[, ConfigResult?]): undefined): undefined`
   — get the config for a file
 
 ### `Completer`
@@ -219,6 +220,20 @@ incorrect configuration), or a status code and the processing context.
 ###### Returns
 
 Nothing (`undefined`).
+
+### `ConfigResult`
+
+Resolved configuration from [`Configuration`][api-configuration] (TypeScript
+type).
+
+###### Fields
+
+* `filePath` (`string`)
+  — file path of found configuration
+* `plugins` (`Array<PluginTuple>` from `unified`)
+  — resolved plugins
+* `settings` ([`Settings` from `unified`][unified-settings])
+  — resolved settings
 
 ### `ConfigTransform`
 
@@ -1521,6 +1536,7 @@ This package is fully typed with [TypeScript][].
 It exports the additional types
 [`Completer`][api-completer],
 [`Callback`][api-callback],
+[`ConfigResult`][api-config-result],
 [`ConfigTransform`][api-config-transform],
 [`Context`][api-context],
 [`FileSet`][api-file-set],
@@ -1658,6 +1674,8 @@ abide by its terms.
 [api-completer]: #completer
 
 [api-callback]: #callback
+
+[api-config-result]: #configresult
 
 [api-config-transform]: #configtransform
 
