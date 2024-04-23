@@ -57,13 +57,13 @@ test('tree', async function (t) {
         tree: true
       })
 
-      const doc = String(await fs.readFile(new URL('doc.json', cwd)))
+      const document = String(await fs.readFile(new URL('doc.json', cwd)))
 
       await fs.unlink(new URL('doc.json', cwd))
 
       assert.equal(code, 0)
       assert.equal(stderr(), 'doc > doc.json: written\n')
-      assert.equal(doc, '{\n  "type": "text",\n  "value": "two"\n}\n')
+      assert.equal(document, '{\n  "type": "text",\n  "value": "two"\n}\n')
     }
   )
 
@@ -88,13 +88,13 @@ test('tree', async function (t) {
       treeIn: true
     })
 
-    const doc = String(await fs.readFile(new URL('doc.foo', cwd)))
+    const document = String(await fs.readFile(new URL('doc.foo', cwd)))
 
     await fs.unlink(new URL('doc.foo', cwd))
 
     assert.equal(code, 0)
     assert.equal(stderr(), 'doc > doc.foo: written\n')
-    assert.equal(doc, 'two')
+    assert.equal(document, 'two')
   })
 
   await t.test('should write JSON when `treeOut` is given', async function () {
@@ -118,13 +118,13 @@ test('tree', async function (t) {
       treeOut: true
     })
 
-    const doc = String(await fs.readFile(new URL('one.json', cwd)))
+    const document = String(await fs.readFile(new URL('one.json', cwd)))
 
     await fs.unlink(new URL('one.json', cwd))
 
     assert.equal(code, 0)
     assert.equal(stderr(), 'one.txt > one.json: written\n')
-    assert.equal(doc, '{\n  "type": "text",\n  "value": "two"\n}\n')
+    assert.equal(document, '{\n  "type": "text",\n  "value": "two"\n}\n')
   })
 
   await t.test('should support `treeOut` for stdin', async function () {

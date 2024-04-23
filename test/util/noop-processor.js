@@ -18,11 +18,11 @@ function parse() {
   self.parser = parser
 
   /**
-   * @param {string} doc
+   * @param {string} document
    * @returns {Literal}
    */
-  function parser(doc) {
-    return {type: 'text', value: doc}
+  function parser(document) {
+    return {type: 'text', value: document}
   }
 }
 

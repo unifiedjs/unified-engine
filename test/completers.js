@@ -123,12 +123,12 @@ test('completers', async function (t) {
     })
 
     const url = new URL('nested/foo.txt', cwd)
-    const doc = String(await fs.readFile(url))
+    const document = String(await fs.readFile(url))
 
     await fs.unlink(url)
 
     assert.equal(code, 0)
-    assert.equal(doc, '')
+    assert.equal(document, '')
     assert.equal(stderr(), 'foo.txt > nested' + sep + 'foo.txt: written\n')
   })
 })

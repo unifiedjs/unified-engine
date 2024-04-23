@@ -26,12 +26,12 @@ test('inspect', async function (t) {
       streamError: stderr.stream
     })
 
-    const doc = String(await fs.readFile(url))
+    const document = String(await fs.readFile(url))
     await fs.unlink(url)
 
     assert.equal(code, 0)
     assert.equal(stderr(), 'one.txt > formatted.txt: written\n')
-    assert.equal(doc, 'text ""\n')
+    assert.equal(document, 'text ""\n')
   })
 
   await t.test('should support `inspect` for stdin', async function () {

@@ -17,10 +17,10 @@ export function spy() {
    */
   // @ts-expect-error: TS can’t apply overloads I think?.
   stream.write = function (chunk, encoding, callback) {
-    const cb = typeof encoding === 'function' ? encoding : callback
+    const value = typeof encoding === 'function' ? encoding : callback
 
-    if (typeof cb === 'function') {
-      setImmediate(cb, undefined)
+    if (typeof value === 'function') {
+      setImmediate(value, undefined)
     }
 
     output.push(chunk)

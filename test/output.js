@@ -147,12 +147,12 @@ test('output', async function (t) {
     })
 
     const url = new URL('one.txt', cwd)
-    const doc = String(await fs.readFile(url))
+    const document = String(await fs.readFile(url))
     await fs.truncate(url)
 
     assert.equal(code, 0)
     assert.equal(stderr(), 'one.txt: written\n')
-    assert.equal(doc, 'two')
+    assert.equal(document, 'two')
   })
 
   await t.test('should write to a path', async function () {
@@ -261,13 +261,13 @@ test('output', async function (t) {
       streamError: stderr.stream
     })
 
-    const doc = String(await fs.readFile(new URL('one.txt', cwd)))
+    const document = String(await fs.readFile(new URL('one.txt', cwd)))
 
     await fs.truncate(new URL('one.txt', cwd))
 
     assert.equal(code, 0)
     assert.equal(stderr(), 'one.txt: written\n')
-    assert.equal(doc, 'two')
+    assert.equal(document, 'two')
   })
 
   await t.test('should not write without file-path', async function () {
@@ -291,7 +291,7 @@ test('output', async function (t) {
       streamError: stderr.stream
     })
 
-    const doc = String(await fs.readFile(new URL('one.txt', cwd)))
+    const document = String(await fs.readFile(new URL('one.txt', cwd)))
 
     assert.equal(code, 1)
     assert.equal(
@@ -303,7 +303,7 @@ test('output', async function (t) {
         '    Error: Cannot write file without an output path'
       ].join('\n')
     )
-    assert.equal(doc, '')
+    assert.equal(document, '')
   })
 
   await t.test('should fail when writing files to one path', async function () {

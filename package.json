@@ -53,13 +53,12 @@
   },
   "devDependencies": {
     "@types/parse-json": "^4.0.0",
-    "@types/ungap__structured-clone": "^0.3.0",
-    "c8": "^8.0.0",
+    "@types/ungap__structured-clone": "^1.0.0",
+    "c8": "^9.0.0",
     "prettier": "^3.0.0",
     "remark": "^15.0.0",
     "remark-cli": "^12.0.0",
-    "remark-gfm": "^4.0.0",
-    "remark-preset-wooorm": "^9.0.0",
+    "remark-preset-wooorm": "^10.0.0",
     "remark-toc": "^9.0.0",
     "strip-ansi": "^7.0.0",
     "type-coverage": "^2.0.0",
@@ -67,7 +66,7 @@
     "unified": "^11.0.0",
     "vfile-reporter-json": "^4.0.0",
     "vfile-reporter-pretty": "^7.0.0",
-    "xo": "^0.56.0"
+    "xo": "^0.58.0"
   },
   "scripts": {
     "build": "tsc --build --clean && tsc --build && type-coverage",
@@ -87,16 +86,7 @@
   },
   "remarkConfig": {
     "plugins": [
-      "remark-preset-wooorm",
-      [
-        "remark-preset-wooorm/node_modules/remark-gfm/index.js",
-        false
-      ],
-      "remark-gfm",
-      [
-        "remark-lint-list-item-indent",
-        "space"
-      ]
+      "remark-preset-wooorm"
     ]
   },
   "xo": {
@@ -112,6 +102,7 @@
     "prettier": true,
     "rules": {
       "complexity": "off",
+      "logical-assignment-operators": "off",
       "no-await-in-loop": "off",
       "no-unused-expressions": "off",
       "unicorn/no-this-assignment": "off",
