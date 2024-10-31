@@ -4,7 +4,7 @@
 
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
-import {sep} from 'node:path'
+import path from 'node:path'
 import test from 'node:test'
 import {promisify} from 'node:util'
 import {engine} from 'unified-engine'
@@ -129,6 +129,6 @@ test('completers', async function (t) {
 
     assert.equal(code, 0)
     assert.equal(document, '')
-    assert.equal(stderr(), 'foo.txt > nested' + sep + 'foo.txt: written\n')
+    assert.equal(stderr(), 'foo.txt > nested' + path.sep + 'foo.txt: written\n')
   })
 })

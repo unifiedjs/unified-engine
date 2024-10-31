@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import {sep} from 'node:path'
+import path from 'node:path'
 import test from 'node:test'
 import {promisify} from 'node:util'
 import {engine} from 'unified-engine'
@@ -258,8 +258,8 @@ test('configuration', async function (t) {
         0,
         4,
         [
-          'nested' + sep + 'four.txt: no issues found',
-          'nested' + sep + 'three.txt: no issues found',
+          'nested' + path.sep + 'four.txt: no issues found',
+          'nested' + path.sep + 'three.txt: no issues found',
           'one.txt: no issues found',
           'two.txt: no issues found',
           ''
@@ -323,8 +323,8 @@ test('configuration', async function (t) {
         0,
         4,
         [
-          'nested' + sep + 'four.txt: no issues found',
-          'nested' + sep + 'three.txt: no issues found',
+          'nested' + path.sep + 'four.txt: no issues found',
+          'nested' + path.sep + 'three.txt: no issues found',
           'one.txt: no issues found',
           'two.txt: no issues found',
           ''
@@ -351,8 +351,8 @@ test('configuration', async function (t) {
       [
         0,
         [
-          'nested' + sep + 'three.txt: no issues found',
-          'nested' + sep + 'two.txt: no issues found',
+          'nested' + path.sep + 'three.txt: no issues found',
+          'nested' + path.sep + 'two.txt: no issues found',
           'one.txt: no issues found',
           ''
         ].join('\n')
@@ -419,7 +419,7 @@ test('configuration', async function (t) {
       [
         1,
         [
-          'packages' + sep + 'deep' + sep + 'one.txt',
+          'packages' + path.sep + 'deep' + path.sep + 'one.txt',
           ' error Cannot process file',
           '  [cause]:',
           '    Error: Cannot parse file `package.json`'

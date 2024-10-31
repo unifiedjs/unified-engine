@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import {fileURLToPath} from 'node:url'
-import {join, relative, sep} from 'node:path'
+import path from 'node:path'
 import test from 'node:test'
 import {promisify} from 'node:util'
 import {engine} from 'unified-engine'
@@ -61,7 +61,7 @@ test('ignore', async function (t) {
       assert.equal(
         stderr(),
         [
-          'nested' + sep + 'three.txt: no issues found',
+          'nested' + path.sep + 'three.txt: no issues found',
           'one.txt: no issues found',
           ''
         ].join('\n')
@@ -86,7 +86,7 @@ test('ignore', async function (t) {
     assert.equal(
       stderr(),
       [
-        'nested' + sep + 'three.txt: no issues found',
+        'nested' + path.sep + 'three.txt: no issues found',
         'one.txt: no issues found',
         ''
       ].join('\n')
@@ -108,7 +108,7 @@ test('ignore', async function (t) {
     assert.equal(
       stderr(),
       [
-        '.hidden' + sep + 'two.txt: no issues found',
+        '.hidden' + path.sep + 'two.txt: no issues found',
         'one.txt: no issues found',
         ''
       ].join('\n')
@@ -147,7 +147,7 @@ test('ignore', async function (t) {
       assert.equal(
         stderr(),
         [
-          'node_modules' + sep + 'two.txt: no issues found',
+          'node_modules' + path.sep + 'two.txt: no issues found',
           'one.txt: no issues found',
           ''
         ].join('\n')
@@ -172,8 +172,8 @@ test('ignore', async function (t) {
     assert.equal(
       stderr(),
       [
-        'nested' + sep + 'three.txt: no issues found',
-        'nested' + sep + 'two.txt: no issues found',
+        'nested' + path.sep + 'three.txt: no issues found',
+        'nested' + path.sep + 'two.txt: no issues found',
         'one.txt: no issues found',
         ''
       ].join('\n')
@@ -226,7 +226,7 @@ test('ignore', async function (t) {
         cwd: new URL('sibling-ignore/', fixtures),
         extensions: ['txt'],
         files: ['.'],
-        ignorePath: join('deep', 'ignore'),
+        ignorePath: path.join('deep', 'ignore'),
         ignorePatterns: ['files/two.txt'],
         processor: noop,
         streamError: stderr.stream
@@ -236,8 +236,8 @@ test('ignore', async function (t) {
       assert.equal(
         stderr(),
         [
-          join('deep', 'files', 'two.txt') + ': no issues found',
-          join('files', 'one.txt') + ': no issues found',
+          path.join('deep', 'files', 'two.txt') + ': no issues found',
+          path.join('files', 'one.txt') + ': no issues found',
           ''
         ].join('\n')
       )
@@ -251,7 +251,7 @@ test('ignore', async function (t) {
       cwd: new URL('sibling-ignore/', fixtures),
       extensions: ['txt'],
       files: ['.'],
-      ignorePath: join('deep', 'ignore'),
+      ignorePath: path.join('deep', 'ignore'),
       ignorePathResolveFrom: 'cwd',
       processor: noop,
       streamError: stderr.stream
@@ -261,9 +261,9 @@ test('ignore', async function (t) {
     assert.equal(
       stderr(),
       [
-        join('deep', 'files', 'one.txt') + ': no issues found',
-        join('deep', 'files', 'two.txt') + ': no issues found',
-        join('files', 'two.txt') + ': no issues found',
+        path.join('deep', 'files', 'one.txt') + ': no issues found',
+        path.join('deep', 'files', 'two.txt') + ': no issues found',
+        path.join('files', 'two.txt') + ': no issues found',
         ''
       ].join('\n')
     )
@@ -288,7 +288,8 @@ test('ignore', async function (t) {
     assert.equal(code, 0)
     assert.equal(
       stderr(),
-      relative(fileURLToPath(cwd), fileURLToPath(url)) + ': no issues found\n'
+      path.relative(fileURLToPath(cwd), fileURLToPath(url)) +
+        ': no issues found\n'
     )
   })
 })

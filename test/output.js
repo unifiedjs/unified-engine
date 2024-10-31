@@ -6,7 +6,7 @@
 
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
-import {sep} from 'node:path'
+import path from 'node:path'
 import test from 'node:test'
 import {promisify} from 'node:util'
 import {engine} from 'unified-engine'
@@ -212,7 +212,7 @@ test('output', async function (t) {
     await fs.unlink(new URL('nested/one.txt', cwd))
 
     assert.equal(code, 0)
-    assert.equal(stderr(), 'one.txt > nested' + sep + 'one.txt: written\n')
+    assert.equal(stderr(), 'one.txt > nested' + path.sep + 'one.txt: written\n')
     assert.equal(input, '')
     assert.equal(output, 'two')
   })
@@ -333,7 +333,7 @@ test('output', async function (t) {
         cwd,
         extensions: ['txt'],
         files: ['.'],
-        output: 'three' + sep,
+        output: 'three' + path.sep,
         processor: noop,
         streamError: stderr.stream
       })

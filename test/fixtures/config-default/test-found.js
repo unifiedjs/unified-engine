@@ -3,6 +3,8 @@
 
 const assert = require('node:assert/strict')
 
+module.exports = check
+
 /**
  * @this {Processor}
  *   Processor.
@@ -11,7 +13,7 @@ const assert = require('node:assert/strict')
  * @returns {undefined}
  *   Nothing.
  */
-module.exports = function (options) {
+function check(options) {
   assert(typeof globalThis.unifiedEngineTestCalls === 'number')
   assert(globalThis.unifiedEngineTestValues)
   globalThis.unifiedEngineTestCalls++

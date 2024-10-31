@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
-import {sep} from 'node:path'
+import path from 'node:path'
 import {PassThrough} from 'node:stream'
 import test from 'node:test'
 import {promisify} from 'node:util'
@@ -40,7 +40,7 @@ test('file-path', async function (t) {
 
     const code = await run({
       cwd,
-      filePath: 'foo' + sep + 'bar.baz',
+      filePath: 'foo' + path.sep + 'bar.baz',
       processor: noop,
       streamError: stderr.stream,
       streamIn: stream,
@@ -49,7 +49,7 @@ test('file-path', async function (t) {
 
     assert.equal(code, 0)
     assert.equal(stdout(), '1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n')
-    assert.equal(stderr(), 'foo' + sep + 'bar.baz: no issues found\n')
+    assert.equal(stderr(), 'foo' + path.sep + 'bar.baz: no issues found\n')
 
     function send() {
       if (++index > 10) {

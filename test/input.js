@@ -4,7 +4,7 @@
 
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
-import {join, sep} from 'node:path'
+import path from 'node:path'
 import {PassThrough} from 'node:stream'
 import test from 'node:test'
 import {promisify} from 'node:util'
@@ -133,8 +133,8 @@ test('input', async function (t) {
       [
         'bar.text: no issues found',
         'foo.txt: no issues found',
-        'nested' + sep + 'quux.text: no issues found',
-        'nested' + sep + 'qux.txt: no issues found',
+        'nested' + path.sep + 'quux.text: no issues found',
+        'nested' + path.sep + 'qux.txt: no issues found',
         ''
       ].join('\n')
     )
@@ -155,8 +155,8 @@ test('input', async function (t) {
     assert.equal(
       stderr(),
       [
-        'nested' + sep + 'quux.text: no issues found',
-        'nested' + sep + 'qux.txt: no issues found',
+        'nested' + path.sep + 'quux.text: no issues found',
+        'nested' + path.sep + 'qux.txt: no issues found',
         ''
       ].join('\n')
     )
@@ -179,8 +179,8 @@ test('input', async function (t) {
       assert.equal(
         stderr(),
         [
-          'nested' + sep + 'no-3.txt: no issues found',
-          'nested' + sep + 'no-4.text: no issues found',
+          'nested' + path.sep + 'no-3.txt: no issues found',
+          'nested' + path.sep + 'no-4.text: no issues found',
           ''
         ].join('\n')
       )
@@ -204,8 +204,8 @@ test('input', async function (t) {
       assert.equal(
         stderr(),
         [
-          'nested' + sep + 'no-3.txt: no issues found',
-          'nested' + sep + 'no-4.text: no issues found',
+          'nested' + path.sep + 'no-3.txt: no issues found',
+          'nested' + path.sep + 'no-4.text: no issues found',
           ''
         ].join('\n')
       )
@@ -227,8 +227,8 @@ test('input', async function (t) {
     assert.equal(
       stderr(),
       [
-        'nested' + sep + 'no-3.txt: no issues found',
-        'nested' + sep + 'no-4.text: no issues found',
+        'nested' + path.sep + 'no-3.txt: no issues found',
+        'nested' + path.sep + 'no-4.text: no issues found',
         ''
       ].join('\n')
     )
@@ -247,7 +247,7 @@ test('input', async function (t) {
     })
 
     assert.equal(code, 0)
-    assert.equal(stderr(), 'nested' + sep + 'three.txt: no issues found\n')
+    assert.equal(stderr(), 'nested' + path.sep + 'three.txt: no issues found\n')
   })
 
   await t.test(
@@ -268,12 +268,12 @@ test('input', async function (t) {
         stderr(),
         [
           'nested' +
-            sep +
+            path.sep +
             'node_modules' +
-            sep +
+            path.sep +
             'ignore-two.txt: no issues found',
-          'nested' + sep + 'two.txt: no issues found',
-          'node_modules' + sep + 'ignore-one.txt: no issues found',
+          'nested' + path.sep + 'two.txt: no issues found',
+          'node_modules' + path.sep + 'ignore-one.txt: no issues found',
           'one.txt: no issues found',
           ''
         ].join('\n')
@@ -301,8 +301,8 @@ test('input', async function (t) {
     assert.equal(
       stderr(),
       [
-        'nested' + sep + 'three.txt: no issues found',
-        'nested' + sep + 'two.txt',
+        'nested' + path.sep + 'three.txt: no issues found',
+        'nested' + path.sep + 'two.txt',
         ' error Cannot process specified file: it’s ignored',
         '',
         'one.txt: no issues found',
@@ -422,7 +422,7 @@ test('input', async function (t) {
     'should not attempt to read files with `value` (4)',
     async function () {
       const stderr = spy()
-      const cwd = join('test', 'fixtures', 'empty')
+      const cwd = path.join('test', 'fixtures', 'empty')
       const file = new VFile({value: 'foo'})
 
       await fs.mkdir(cwd, {recursive: true})
@@ -437,7 +437,7 @@ test('input', async function (t) {
       assert.equal(code, 0)
       assert.equal(
         stderr(),
-        'test' + sep + 'fixtures' + sep + 'empty: no issues found\n'
+        'test' + path.sep + 'fixtures' + path.sep + 'empty: no issues found\n'
       )
     }
   )
@@ -457,8 +457,8 @@ test('input', async function (t) {
     assert.equal(
       stderr(),
       [
-        'nested' + sep + 'three.txt: no issues found',
-        'nested' + sep + 'two.txt',
+        'nested' + path.sep + 'three.txt: no issues found',
+        'nested' + path.sep + 'two.txt',
         ' error Cannot process specified file: it’s ignored',
         '',
         'one.txt: no issues found',
@@ -492,7 +492,7 @@ test('input', async function (t) {
       assert.equal(
         stderr(),
         [
-          'nested' + sep + 'three.txt: no issues found',
+          'nested' + path.sep + 'three.txt: no issues found',
           'one.txt: no issues found',
           ''
         ].join('\n')
@@ -518,7 +518,7 @@ test('input', async function (t) {
       assert.equal(
         stderr(),
         [
-          'nested' + sep + 'three.txt: no issues found',
+          'nested' + path.sep + 'three.txt: no issues found',
           'one.txt: no issues found',
           ''
         ].join('\n')
@@ -616,7 +616,7 @@ test('input', async function (t) {
     })
 
     assert.equal(code, 0)
-    assert.equal(stderr(), 'folder' + sep + 'two.txt: no issues found\n')
+    assert.equal(stderr(), 'folder' + path.sep + 'two.txt: no issues found\n')
   })
 
   await t.test('should search if given files', async function () {
@@ -635,8 +635,8 @@ test('input', async function (t) {
     assert.equal(
       stderr(),
       [
-        'nested' + sep + 'three.txt: no issues found',
-        'nested' + sep + 'two.txt: no issues found',
+        'nested' + path.sep + 'three.txt: no issues found',
+        'nested' + path.sep + 'two.txt: no issues found',
         'one.txt: no issues found',
         ''
       ].join('\n')

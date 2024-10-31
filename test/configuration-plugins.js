@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import {sep} from 'node:path'
+import path from 'node:path'
 import test from 'node:test'
 import {promisify} from 'node:util'
 import {engine} from 'unified-engine'
@@ -27,7 +27,7 @@ test('configuration (plugins)', async function (t) {
     })
 
     assert.equal(code, 0)
-    assert.equal(stderr(), 'nested' + sep + 'one.txt: no issues found\n')
+    assert.equal(stderr(), 'nested' + path.sep + 'one.txt: no issues found\n')
     assert.equal(globalThis.unifiedEngineTestCalls, 1)
   })
 
