@@ -1,15 +1,14 @@
 /**
- * @typedef {import('unified-engine').Preset['plugins']} Plugins
- * @typedef {import('unified-engine').Preset['settings']} Settings
- * @typedef {import('../lib/configuration.js').Configuration} Configuration
+ * @import {Preset} from 'unified-engine'
+ * @import {Configuration} from '../lib/configuration.js'
  */
 
 /**
  * @typedef RawValue
  *   Format of our example custom config.
- * @property {Settings} options
+ * @property {Preset['settings']} options
  *   Settings.
- * @property {Plugins} plugs
+ * @property {Preset['plugins']} plugs
  *   Plugins.
  */
 

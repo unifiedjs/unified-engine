@@ -1,5 +1,5 @@
 // @ts-expect-error: import for types in CJS works fine.
-/** @typedef {import('unified').Processor} Processor */
+/** @import {Processor} from 'unified' */
 
 const assert = require('node:assert/strict')
 

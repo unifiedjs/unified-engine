@@ -1,4 +1,8 @@
-/** @type {import('unified-engine').Preset} */
+/**
+ * @import {Preset} from 'unified-engine'
+ */
+
+/** @type {Preset} */
 const config = {
   plugins: [
     ['./array-to-object.js', ['charlie']],

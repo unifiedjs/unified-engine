@@ -1,5 +1,5 @@
 /**
- * @typedef {import('unified-engine').FileSet} FileSet
+ * @import {FileSet} from 'unified-engine'
  */
 
 import assert from 'node:assert/strict'

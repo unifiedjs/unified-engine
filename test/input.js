@@ -1,5 +1,6 @@
 /**
- * @typedef {import('unist').Node} Node
+ * @import {Node} from 'unist'
+ * @import {Plugin} from 'unified'
  */
 
 import assert from 'node:assert/strict'
@@ -391,7 +392,7 @@ test('input', async function (t) {
           })
         ],
         processor: noop().use(
-          /** @type {import('unified').Plugin<[], Node>} */
+          /** @type {Plugin<[], Node>} */
           function () {
             return function (_, file) {
               file.message('!')

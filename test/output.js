@@ -1,7 +1,7 @@
 /**
- * @typedef {import('unist').Literal} Literal
- *
- * @typedef {import('./types.js').SomeCustomResultExample} SomeCustomResultExample
+ * @import {Literal} from 'unist'
+ * @import {Compiler, Plugin} from 'unified'
+ * @import {SomeCustomResultExample} from './types.js'
  */
 
 import assert from 'node:assert/strict'
@@ -28,7 +28,7 @@ test('output', async function (t) {
       extensions: ['txt'],
       files: ['.'],
       processor: noop().use(
-        /** @type {import('unified').Plugin<[], Literal>} */
+        /** @type {Plugin<[], Literal>} */
         function () {
           return function (tree) {
             tree.value = 'two'
@@ -53,7 +53,7 @@ test('output', async function (t) {
       extensions: ['txt'],
       files: ['one.txt'],
       processor: noop().use(
-        /** @type {import('unified').Plugin<[], Literal>} */
+        /** @type {Plugin<[], Literal>} */
         function () {
           return function (tree) {
             tree.value = 'two'
@@ -80,7 +80,7 @@ test('output', async function (t) {
       files: ['one.txt'],
       out: false,
       processor: noop().use(
-        /** @type {import('unified').Plugin<[], Literal>} */
+        /** @type {Plugin<[], Literal>} */
         function () {
           return function (tree) {
             tree.value = 'two'
@@ -106,7 +106,7 @@ test('output', async function (t) {
       extensions: ['txt'],
       files: ['.'],
       processor: noop().use(
-        /** @type {import('unified').Plugin<[], Literal>} */
+        /** @type {Plugin<[], Literal>} */
         function () {
           return function (tree) {
             tree.value = 'two'
@@ -136,7 +136,7 @@ test('output', async function (t) {
       files: ['.'],
       output: true,
       processor: noop().use(
-        /** @type {import('unified').Plugin<[], Literal>} */
+        /** @type {Plugin<[], Literal>} */
         function () {
           return function (tree) {
             tree.value = 'two'
@@ -165,7 +165,7 @@ test('output', async function (t) {
       files: ['one.txt'],
       output: 'four.txt',
       processor: noop().use(
-        /** @type {import('unified').Plugin<[], Literal>} */
+        /** @type {Plugin<[], Literal>} */
         function () {
           return function (tree) {
             tree.value = 'two'
@@ -196,7 +196,7 @@ test('output', async function (t) {
       files: ['one.txt'],
       output: new URL('nested/', cwd),
       processor: noop().use(
-        /** @type {import('unified').Plugin<[], Literal>} */
+        /** @type {Plugin<[], Literal>} */
         function () {
           return function (tree) {
             tree.value = 'two'
@@ -251,7 +251,7 @@ test('output', async function (t) {
       files: [new VFile(new URL('one.txt', cwd))],
       output: true,
       processor: noop().use(
-        /** @type {import('unified').Plugin<[], Literal>} */
+        /** @type {Plugin<[], Literal>} */
         function () {
           return function (tree) {
             tree.value = 'two'
@@ -280,7 +280,7 @@ test('output', async function (t) {
       files: ['one.txt'],
       output: true,
       processor: noop().use(
-        /** @type {import('unified').Plugin<[], Literal>} */
+        /** @type {Plugin<[], Literal>} */
         function () {
           return function (tree, file) {
             tree.value = 'two'
@@ -394,10 +394,10 @@ test('output', async function (t) {
       extensions: ['txt'],
       files: ['one.txt'],
       processor: noop().use(
-        /** @type {import('unified').Plugin<[], Literal, Uint8Array>} */
+        /** @type {Plugin<[], Literal, Uint8Array>} */
         // @ts-expect-error: TS doesn’t get `this`.
         function () {
-          /** @type {import('unified').Compiler<Literal, Uint8Array>} */
+          /** @type {Compiler<Literal, Uint8Array>} */
           this.compiler = function () {
             return new TextEncoder().encode('Hi! 🤷‍♂️')
           }
@@ -422,10 +422,10 @@ test('output', async function (t) {
       extensions: ['txt'],
       files: ['one.txt'],
       processor: noop().use(
-        /** @type {import('unified').Plugin<[], Literal, string>} */
+        /** @type {Plugin<[], Literal, string>} */
         // @ts-expect-error: TS doesn’t get `this`.
         function () {
-          /** @type {import('unified').Compiler<Literal, any>} */
+          /** @type {Compiler<Literal, any>} */
           this.compiler = function () {
             // This would need to be typed in `CompileResults`.
             return undefined
@@ -452,10 +452,10 @@ test('output', async function (t) {
       extensions: ['txt'],
       files: ['one.txt'],
       processor: noop().use(
-        /** @type {import('unified').Plugin<[], Literal, SomeCustomResultExample>} */
+        /** @type {Plugin<[], Literal, SomeCustomResultExample>} */
         // @ts-expect-error: TS doesn’t get `this`.
         function () {
-          /** @type {import('unified').Compiler<Literal, SomeCustomResultExample>} */
+          /** @type {Compiler<Literal, SomeCustomResultExample>} */
           this.compiler = function () {
             return {kind: 'some-virtual-dom'}
           }

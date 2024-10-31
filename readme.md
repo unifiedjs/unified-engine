@@ -120,7 +120,7 @@ files, and more.
 
 ```js
 /**
- * @typedef {import('unified-engine').Callback} Callback
+ * @import {Callback} from 'unified-engine'
  */
 
 import process from 'node:process'

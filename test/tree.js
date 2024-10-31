@@ -1,5 +1,6 @@
 /**
- * @typedef {import('unist').Literal} Literal
+ * @import {Literal} from 'unist'
+ * @import {Plugin} from 'unified'
  */
 
 import assert from 'node:assert/strict'
@@ -46,7 +47,7 @@ test('tree', async function (t) {
         files: ['doc'],
         output: true,
         processor: noop().use(
-          /** @type {import('unified').Plugin<[], Literal>} */
+          /** @type {Plugin<[], Literal>} */
           function () {
             return function (tree) {
               tree.value = 'two'
@@ -77,7 +78,7 @@ test('tree', async function (t) {
       files: ['doc'],
       output: true,
       processor: noop().use(
-        /** @type {import('unified').Plugin<[], Literal>} */
+        /** @type {Plugin<[], Literal>} */
         function () {
           return function (tree) {
             tree.value = 'two'
@@ -107,7 +108,7 @@ test('tree', async function (t) {
       files: ['.'],
       output: true,
       processor: noop().use(
-        /** @type {import('unified').Plugin<[], Literal>} */
+        /** @type {Plugin<[], Literal>} */
         function () {
           return function (tree) {
             tree.value = 'two'

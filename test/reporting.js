@@ -1,6 +1,7 @@
 /**
- * @typedef {import('unist').Literal} Literal
- * @typedef {import('vfile').VFile} VFile
+ * @import {Literal} from 'unist'
+ * @import {Plugin} from 'unified'
+ * @import {VFile} from 'vfile'
  */
 
 import {fileURLToPath} from 'node:url'
@@ -44,7 +45,7 @@ test('reporting', async function (t) {
       files: ['one.txt'],
       frail: true,
       processor: noop().use(
-        /** @type {import('unified').Plugin<[], Literal>} */
+        /** @type {Plugin<[], Literal>} */
         function () {
           return function (_, file) {
             file.message('Warning')
@@ -68,7 +69,7 @@ test('reporting', async function (t) {
         extensions: ['txt'],
         files: ['.'],
         processor: noop().use(
-          /** @type {import('unified').Plugin<[], Literal>} */
+          /** @type {Plugin<[], Literal>} */
           function () {
             return function (_, file) {
               if (file.stem === 'two') {
@@ -115,7 +116,7 @@ test('reporting', async function (t) {
         extensions: ['txt'],
         files: ['.'],
         processor: noop().use(
-          /** @type {import('unified').Plugin<[], Literal>} */
+          /** @type {Plugin<[], Literal>} */
           function () {
             return function (_, file) {
               file.message('Warning')
@@ -143,7 +144,7 @@ test('reporting', async function (t) {
       extensions: ['txt'],
       files: ['.'],
       processor: noop().use(
-        /** @type {import('unified').Plugin<[], Literal>} */
+        /** @type {Plugin<[], Literal>} */
         function () {
           return function (_, file) {
             const message = file.message('x')
@@ -216,7 +217,7 @@ test('reporting', async function (t) {
         extensions: ['txt'],
         files: ['.'],
         processor: noop().use(
-          /** @type {import('unified').Plugin<[], Literal>} */
+          /** @type {Plugin<[], Literal>} */
           function () {
             return function (_, file) {
               if (file.stem === 'two') {
@@ -265,7 +266,7 @@ test('reporting', async function (t) {
         extensions: ['txt'],
         files: ['.'],
         processor: noop().use(
-          /** @type {import('unified').Plugin<[], Literal>} */
+          /** @type {Plugin<[], Literal>} */
           function () {
             return function (_, file) {
               if (file.stem === 'one') {
