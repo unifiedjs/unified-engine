@@ -1,32 +1,9 @@
 {
-  "name": "unified-engine",
-  "version": "11.2.1",
-  "description": "unified engine to process multiple files, lettings users configure from the file system",
-  "license": "MIT",
-  "keywords": [
-    "engine",
-    "processor",
-    "unified"
-  ],
-  "repository": "unifiedjs/unified-engine",
-  "bugs": "https://github.com/unifiedjs/unified-engine/issues",
   "author": "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
-  "funding": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/unified"
-  },
+  "bugs": "https://github.com/unifiedjs/unified-engine/issues",
   "contributors": [
-    "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
-    "Christian Murphy <christian.murphy.42@gmail.com>"
-  ],
-  "sideEffects": false,
-  "type": "module",
-  "exports": "./index.js",
-  "files": [
-    "lib/",
-    "index.d.ts.map",
-    "index.d.ts",
-    "index.js"
+    "Christian Murphy <christian.murphy.42@gmail.com>",
+    "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)"
   ],
   "dependencies": {
     "@types/concat-stream": "^2.0.0",
@@ -51,6 +28,7 @@
     "vfile-statistics": "^3.0.0",
     "yaml": "^2.0.0"
   },
+  "description": "unified engine to process multiple files, lettings users configure from the file system",
   "devDependencies": {
     "@types/extend": "^3.0.0",
     "@types/parse-json": "^4.0.0",
@@ -68,14 +46,24 @@
     "vfile-reporter-pretty": "^7.0.0",
     "xo": "^0.59.0"
   },
-  "scripts": {
-    "build": "tsc --build --clean && tsc --build && type-coverage",
-    "format": "remark . --frail --output --quiet && prettier . --log-level warn --write && xo --fix",
-    "prepack": "npm run build && npm run format",
-    "test": "npm run build && npm run format && npm run test-coverage",
-    "test-api": "node --conditions development test/index.js",
-    "test-coverage": "c8 --100 --check-coverage --reporter lcov npm run test-api"
+  "exports": "./index.js",
+  "files": [
+    "lib/",
+    "index.d.ts.map",
+    "index.d.ts",
+    "index.js"
+  ],
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/unified"
   },
+  "keywords": [
+    "engine",
+    "processor",
+    "unified"
+  ],
+  "license": "MIT",
+  "name": "unified-engine",
   "prettier": {
     "bracketSpacing": false,
     "singleQuote": true,
@@ -89,6 +77,26 @@
       "remark-preset-wooorm"
     ]
   },
+  "repository": "unifiedjs/unified-engine",
+  "scripts": {
+    "build": "tsc --build --clean && tsc --build && type-coverage",
+    "format": "remark . --frail --output --quiet && prettier . --log-level warn --write && xo --fix",
+    "test-api": "node --conditions development test/index.js",
+    "test-coverage": "c8 --100 --check-coverage --reporter lcov npm run test-api",
+    "test": "npm run build && npm run format && npm run test-coverage"
+  },
+  "sideEffects": false,
+  "typeCoverage": {
+    "atLeast": 100,
+    "#": "needed `any`s",
+    "ignoreFiles": [
+      "lib/index.d.ts",
+      "lib/configuration.d.ts"
+    ],
+    "strict": true
+  },
+  "type": "module",
+  "version": "11.2.1",
   "xo": {
     "overrides": [
       {
@@ -110,16 +118,5 @@
       "unicorn/prefer-event-target": "off",
       "unicorn/prefer-string-replace-all": "off"
     }
-  },
-  "typeCoverage": {
-    "atLeast": 100,
-    "detail": true,
-    "ignoreCatch": true,
-    "#": "needed `any`s",
-    "ignoreFiles": [
-      "lib/index.d.ts",
-      "lib/configuration.d.ts"
-    ],
-    "strict": true
   }
 }
