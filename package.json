@@ -15,7 +15,7 @@
     "debug": "^4.0.0",
     "extend": "^3.0.0",
     "glob": "^10.0.0",
-    "ignore": "^6.0.0",
+    "ignore": "^7.0.0",
     "is-empty": "^1.0.0",
     "is-plain-obj": "^4.0.0",
     "load-plugin": "^6.0.0",
