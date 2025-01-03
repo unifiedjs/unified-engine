@@ -44,7 +44,7 @@
     "unified": "^11.0.0",
     "vfile-reporter-json": "^4.0.0",
     "vfile-reporter-pretty": "^7.0.0",
-    "xo": "^0.59.0"
+    "xo": "^0.60.0"
   },
   "exports": "./index.js",
   "files": [
