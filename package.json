@@ -31,12 +31,11 @@
   "description": "unified engine to process multiple files, lettings users configure from the file system",
   "devDependencies": {
     "@types/extend": "^3.0.0",
-    "@types/parse-json": "^4.0.0",
     "c8": "^10.0.0",
     "prettier": "^3.0.0",
     "remark": "^15.0.0",
     "remark-cli": "^12.0.0",
-    "remark-preset-wooorm": "^10.0.0",
+    "remark-preset-wooorm": "^11.0.0",
     "remark-toc": "^9.0.0",
     "strip-ansi": "^7.0.0",
     "type-coverage": "^2.0.0",
