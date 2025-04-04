@@ -611,7 +611,7 @@ test/{input,tree}/
 If we had an ignore file `folder/.remarkignore`, with the value: `index.txt`,
 and our file system looked as follows:
 
-```console
+```text
 folder/.remarkignore
 folder/index.txt
 index.txt
@@ -656,7 +656,7 @@ engine(
 
 Yields:
 
-```console
+```text
 example.md: no issues found
 ```
 
@@ -849,7 +849,7 @@ engine(
 
 Yields:
 
-```console
+```text
 ~/alpha/bravo/charlie.md
   1:1  warning  Missing newline character at end of file  final-newline  remark-lint
 
@@ -1048,7 +1048,7 @@ Where `doc.md` looks as follows:
 
 Yields:
 
-```console
+```text
 root[1] (1:1-2:1, 0-27)
 └─ paragraph[1] (1:1-1:27, 0-26)
    └─ text: "foo" (1:2-1:5, 1-4)
@@ -1361,7 +1361,7 @@ engine(
 
 Yields:
 
-```console
+```text
 <stdin>
   1:1  warning  Missing newline character at end of file  final-newline  remark-lint
 
