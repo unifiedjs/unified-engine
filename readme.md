@@ -611,7 +611,7 @@ test/{input,tree}/
 If we had an ignore file `folder/.remarkignore`, with the value: `index.txt`,
 and our file system looked as follows:
 
-```txt
+```text
 folder/.remarkignore
 folder/index.txt
 index.txt
@@ -656,7 +656,7 @@ engine(
 
 Yields:
 
-```txt
+```text
 example.md: no issues found
 ```
 
@@ -849,7 +849,7 @@ engine(
 
 Yields:
 
-```txt
+```text
 ~/alpha/bravo/charlie.md
   1:1  warning  Missing newline character at end of file  final-newline  remark-lint
 
@@ -1048,7 +1048,7 @@ Where `doc.md` looks as follows:
 
 Yields:
 
-```txt
+```text
 root[1] (1:1-2:1, 0-27)
 └─ paragraph[1] (1:1-1:27, 0-26)
    └─ text: "foo" (1:2-1:5, 1-4)
@@ -1361,7 +1361,7 @@ engine(
 
 Yields:
 
-```txt
+```text
 <stdin>
   1:1  warning  Missing newline character at end of file  final-newline  remark-lint
 
@@ -1579,51 +1579,77 @@ abide by its terms.
 
 <!-- Definitions -->
 
-[build-badge]: https://github.com/unifiedjs/unified-engine/workflows/main/badge.svg
+[api-callback]: #callback
 
-[build]: https://github.com/unifiedjs/unified-engine/actions
+[api-completer]: #completer
 
-[coverage-badge]: https://img.shields.io/codecov/c/github/unifiedjs/unified-engine.svg
+[api-config-result]: #configresult
 
-[coverage]: https://codecov.io/github/unifiedjs/unified-engine
+[api-config-transform]: #configtransform
 
-[downloads-badge]: https://img.shields.io/npm/dm/unified-engine.svg
+[api-configuration]: #configuration
 
-[downloads]: https://www.npmjs.com/package/unified-engine
+[api-context]: #context
 
-[sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
+[api-engine]: #engineoptions-callback
 
-[backers-badge]: https://opencollective.com/unified/backers/badge.svg
+[api-file-set]: #fileset
 
-[collective]: https://opencollective.com/unified
+[api-options]: #options
 
-[chat-badge]: https://img.shields.io/badge/chat-discussions-success.svg
+[api-preset]: #preset
 
-[chat]: https://github.com/unifiedjs/unified/discussions
+[api-resolve-from]: #resolvefrom
 
-[npm]: https://docs.npmjs.com/cli/install
-
-[esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
-
-[typescript]: https://www.typescriptlang.org
-
-[health]: https://github.com/unifiedjs/.github
-
-[contributing]: https://github.com/unifiedjs/.github/blob/main/contributing.md
-
-[support]: https://github.com/unifiedjs/.github/blob/main/support.md
-
-[coc]: https://github.com/unifiedjs/.github/blob/main/code-of-conduct.md
-
-[license]: license
+[api-vfile-reporter]: #vfilereporter
 
 [author]: https://wooorm.com
 
+[backers-badge]: https://opencollective.com/unified/backers/badge.svg
+
+[build]: https://github.com/unifiedjs/unified-engine/actions
+
+[build-badge]: https://github.com/unifiedjs/unified-engine/workflows/main/badge.svg
+
+[chat]: https://github.com/unifiedjs/unified/discussions
+
+[chat-badge]: https://img.shields.io/badge/chat-discussions-success.svg
+
+[coc]: https://github.com/unifiedjs/.github/blob/main/code-of-conduct.md
+
+[collective]: https://opencollective.com/unified
+
+[config-files]: #config-files
+
+[contributing]: https://github.com/unifiedjs/.github/blob/main/contributing.md
+
+[coverage]: https://codecov.io/github/unifiedjs/unified-engine
+
+[coverage-badge]: https://img.shields.io/codecov/c/github/unifiedjs/unified-engine.svg
+
+[downloads]: https://www.npmjs.com/package/unified-engine
+
+[downloads-badge]: https://img.shields.io/npm/dm/unified-engine.svg
+
+[esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
+
 [gitignore]: https://git-scm.com/docs/gitignore
+
+[health]: https://github.com/unifiedjs/.github
+
+[ignore-files]: #ignore-files
+
+[license]: license
 
 [node-glob]: https://github.com/isaacs/node-glob#glob-primer
 
 [node-ignore]: https://github.com/kaelzhang/node-ignore
+
+[node-readable-stream]: https://nodejs.org/api/stream.html#readable-streams
+
+[node-writable-stream]: https://nodejs.org/api/stream.html#writable-streams
+
+[npm]: https://docs.npmjs.com/cli/install
 
 [remark]: https://github.com/remarkjs/remark
 
@@ -1637,15 +1663,21 @@ abide by its terms.
 
 [remark-unlink]: https://github.com/remarkjs/remark-unlink
 
-[unified]: https://github.com/unifiedjs/unified
+[sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
 
-[unified-processor]: https://github.com/unifiedjs/unified#processor-1
+[support]: https://github.com/unifiedjs/.github/blob/main/support.md
+
+[typescript]: https://www.typescriptlang.org
+
+[unified]: https://github.com/unifiedjs/unified
 
 [unified-args]: https://github.com/unifiedjs/unified-args
 
 [unified-engine-gulp]: https://github.com/unifiedjs/unified-engine-gulp
 
 [unified-language-server]: https://github.com/unifiedjs/unified-language-server
+
+[unified-processor]: https://github.com/unifiedjs/unified#processor-1
 
 [unified-settings]: https://github.com/unifiedjs/unified#settings
 
@@ -1658,35 +1690,3 @@ abide by its terms.
 [vfile-reporter-json]: https://github.com/vfile/vfile-reporter-json
 
 [vfile-reporter-options]: https://github.com/vfile/vfile-reporter#options
-
-[node-readable-stream]: https://nodejs.org/api/stream.html#readable-streams
-
-[node-writable-stream]: https://nodejs.org/api/stream.html#writable-streams
-
-[config-files]: #config-files
-
-[ignore-files]: #ignore-files
-
-[api-configuration]: #configuration
-
-[api-engine]: #engineoptions-callback
-
-[api-completer]: #completer
-
-[api-callback]: #callback
-
-[api-config-result]: #configresult
-
-[api-config-transform]: #configtransform
-
-[api-context]: #context
-
-[api-file-set]: #fileset
-
-[api-options]: #options
-
-[api-preset]: #preset
-
-[api-resolve-from]: #resolvefrom
-
-[api-vfile-reporter]: #vfilereporter
