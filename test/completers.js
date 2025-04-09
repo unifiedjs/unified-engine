@@ -6,12 +6,10 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import test from 'node:test'
-import {promisify} from 'node:util'
 import {engine} from 'unified-engine'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const run = promisify(engine)
 const fixtures = new URL('fixtures/', import.meta.url)
 
 test('completers', async function (t) {
@@ -23,7 +21,7 @@ test('completers', async function (t) {
     // `pluginId` can be used for those to ensure the completer runs once.
     otherCompleter.pluginId = 'foo'
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('two-files/', fixtures),
       files: ['one.txt'],
       plugins: [
@@ -61,7 +59,7 @@ test('completers', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
 
     /**
@@ -108,7 +106,7 @@ test('completers', async function (t) {
   await t.test('should support `fileSet.add` from plugins', async function () {
     const cwd = new URL('extensions/', fixtures)
     const stderr = spy()
-    const code = await run({
+    const result = await engine({
       cwd,
       files: ['foo.txt'],
       output: 'nested/',
@@ -127,7 +125,7 @@ test('completers', async function (t) {
 
     await fs.unlink(url)
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(document, '')
     assert.equal(stderr(), 'foo.txt > nested' + path.sep + 'foo.txt: written\n')
   })

@@ -1,20 +1,18 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import {promisify} from 'node:util'
 import {engine} from 'unified-engine'
 import {cleanError} from './util/clean-error.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
 const fixtures = new URL('fixtures/', import.meta.url)
-const run = promisify(engine)
 
 test('configuration-presets', async function (t) {
   await t.test('should fail on invalid `presets`', async function () {
     const root = new URL('config-presets-invalid/', fixtures)
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: root,
       extensions: ['txt'],
       files: ['.'],
@@ -23,7 +21,7 @@ test('configuration-presets', async function (t) {
       rcName: '.foorc'
     })
 
-    assert.equal(code, 1)
+    assert.equal(result.code, 1)
     assert.equal(
       cleanError(stderr(), 4),
       [
@@ -43,7 +41,7 @@ test('configuration-presets', async function (t) {
       globalThis.unifiedEngineTestCalls = 0
       globalThis.unifiedEngineTestValues = {}
 
-      const code = await run({
+      const result = await engine({
         cwd: new URL('config-presets-local/', fixtures),
         extensions: ['txt'],
         files: ['.'],
@@ -52,7 +50,7 @@ test('configuration-presets', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 0)
+      assert.equal(result.code, 0)
       assert.equal(stderr(), 'one.txt: no issues found\n')
       assert.equal(globalThis.unifiedEngineTestCalls, 2)
 
@@ -67,7 +65,7 @@ test('configuration-presets', async function (t) {
   await t.test('should handle missing plugins in presets', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('config-presets-missing-plugin/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -76,7 +74,7 @@ test('configuration-presets', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 1)
+    assert.equal(result.code, 1)
     assert.equal(
       cleanError(stderr(), 4),
       [
@@ -94,7 +92,7 @@ test('configuration-presets', async function (t) {
     globalThis.unifiedEngineTestCalls = 0
     globalThis.unifiedEngineTestValues = {}
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('config-plugins-reconfigure/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -103,7 +101,7 @@ test('configuration-presets', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
     assert.equal(globalThis.unifiedEngineTestCalls, 5)
     assert.deepEqual(globalThis.unifiedEngineTestValues, {
@@ -121,7 +119,7 @@ test('configuration-presets', async function (t) {
     globalThis.unifiedEngineTestCalls = 0
     globalThis.unifiedEngineTestValues = {}
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('config-preset-plugins-reconfigure/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -130,7 +128,7 @@ test('configuration-presets', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
     assert.equal(globalThis.unifiedEngineTestCalls, 1)
     assert.deepEqual(globalThis.unifiedEngineTestValues, {
@@ -143,7 +141,7 @@ test('configuration-presets', async function (t) {
   await t.test('should reconfigure: turn plugins off', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('config-plugins-reconfigure-off/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -152,7 +150,7 @@ test('configuration-presets', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
   })
 
@@ -160,7 +158,7 @@ test('configuration-presets', async function (t) {
     const stderr = spy()
     let calls = 0
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('config-settings-reconfigure-a/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -176,7 +174,7 @@ test('configuration-presets', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
     assert.equal(calls, 1)
   })
@@ -185,7 +183,7 @@ test('configuration-presets', async function (t) {
     const stderr = spy()
     let calls = 0
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('config-settings-reconfigure-b/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -201,7 +199,7 @@ test('configuration-presets', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
     assert.equal(calls, 1)
   })

@@ -1,11 +1,9 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import {promisify} from 'node:util'
 import {engine} from 'unified-engine'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const run = promisify(engine)
 const fixtures = new URL('fixtures/', import.meta.url)
 
 test('settings', async function (t) {
@@ -13,7 +11,7 @@ test('settings', async function (t) {
     const stderr = spy()
     let called = false
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('one-file/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -29,7 +27,7 @@ test('settings', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
     assert.equal(called, true)
   })
@@ -38,7 +36,7 @@ test('settings', async function (t) {
     const stderr = spy()
     let called = false
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('config-settings-cascade/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -55,7 +53,7 @@ test('settings', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
     assert.equal(called, true)
   })
@@ -66,7 +64,7 @@ test('plugins', async function (t) {
     const stderr = spy()
     let calls = 0
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('one-file/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -96,7 +94,7 @@ test('plugins', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
     assert.equal(calls, 2)
   })
@@ -107,7 +105,7 @@ test('plugins', async function (t) {
     globalThis.unifiedEngineTestCalls = 0
     globalThis.unifiedEngineTestValues = {}
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('config-plugins-basic-reconfigure/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -119,7 +117,7 @@ test('plugins', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
     assert.equal(globalThis.unifiedEngineTestCalls, 1)
     assert.deepEqual(
@@ -135,7 +133,7 @@ test('plugins', async function (t) {
     globalThis.unifiedEngineTestCalls = 0
     globalThis.unifiedEngineTestValues = {}
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('config-plugins-basic-reconfigure/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -147,7 +145,7 @@ test('plugins', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
     assert.equal(globalThis.unifiedEngineTestCalls, 1)
     assert.deepEqual(

@@ -3,18 +3,16 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import {PassThrough} from 'node:stream'
 import test from 'node:test'
-import {promisify} from 'node:util'
 import {engine} from 'unified-engine'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const run = promisify(engine)
 const fixtures = new URL('fixtures/', import.meta.url)
 
 test('file-path', async function (t) {
   await t.test('should throw on `filePath` with files', async function () {
     try {
-      await run({
+      await engine({
         cwd: new URL('simple-structure/', fixtures),
         extensions: ['txt'],
         filePath: 'qux/quux.foo',
@@ -38,7 +36,7 @@ test('file-path', async function (t) {
 
     send()
 
-    const code = await run({
+    const result = await engine({
       cwd,
       filePath: 'foo' + path.sep + 'bar.baz',
       processor: noop,
@@ -47,7 +45,7 @@ test('file-path', async function (t) {
       streamOut: stdout.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stdout(), '1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n')
     assert.equal(stderr(), 'foo' + path.sep + 'bar.baz: no issues found\n')
 

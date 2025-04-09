@@ -1,12 +1,10 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import {promisify} from 'node:util'
 import {engine} from 'unified-engine'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
 const fixtures = new URL('fixtures/', import.meta.url)
-const run = promisify(engine)
 
 test('`defaultConfig`', async function (t) {
   const defaultConfig = {
@@ -22,7 +20,7 @@ test('`defaultConfig`', async function (t) {
       globalThis.unifiedEngineTestCalls = 0
       globalThis.unifiedEngineTestValues = {}
 
-      const code = await run({
+      const result = await engine({
         cwd: new URL('config-default/', fixtures),
         defaultConfig,
         extensions: ['txt'],
@@ -32,7 +30,7 @@ test('`defaultConfig`', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 0)
+      assert.equal(result.code, 0)
       assert.equal(stderr(), 'one.txt: no issues found\n')
       assert.equal(globalThis.unifiedEngineTestCalls, 1)
       assert.deepEqual(globalThis.unifiedEngineTestValues, {
@@ -50,7 +48,7 @@ test('`defaultConfig`', async function (t) {
       globalThis.unifiedEngineTestCalls = 0
       globalThis.unifiedEngineTestValues = {}
 
-      const code = await run({
+      const result = await engine({
         cwd: new URL('config-default/', fixtures),
         defaultConfig,
         extensions: ['txt'],
@@ -60,7 +58,7 @@ test('`defaultConfig`', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 0)
+      assert.equal(result.code, 0)
       assert.equal(stderr(), 'one.txt: no issues found\n')
       assert.equal(globalThis.unifiedEngineTestCalls, 1)
       assert.deepEqual(

@@ -1,13 +1,11 @@
 import assert from 'node:assert/strict'
 import path from 'node:path'
 import test from 'node:test'
-import {promisify} from 'node:util'
 import {engine} from 'unified-engine'
 import {cleanError} from './util/clean-error.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const run = promisify(engine)
 const fixtures = new URL('fixtures/', import.meta.url)
 
 test('configuration', async function (t) {
@@ -16,7 +14,7 @@ test('configuration', async function (t) {
     async function () {
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd: new URL('one-file/', fixtures),
         extensions: ['txt'],
         files: ['.'],
@@ -26,7 +24,7 @@ test('configuration', async function (t) {
       })
 
       assert.deepEqual(
-        [code, cleanError(stderr(), 4)],
+        [result.code, cleanError(stderr(), 4)],
         [
           1,
           [
@@ -45,7 +43,7 @@ test('configuration', async function (t) {
     async function () {
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd: new URL('malformed-rc-empty/', fixtures),
         extensions: ['txt'],
         files: ['.'],
@@ -55,7 +53,7 @@ test('configuration', async function (t) {
       })
 
       assert.deepEqual(
-        [code, cleanError(stderr(), 4)],
+        [result.code, cleanError(stderr(), 4)],
         [
           1,
           [
@@ -74,7 +72,7 @@ test('configuration', async function (t) {
     async function () {
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd: new URL('malformed-rc-invalid/', fixtures),
         extensions: ['txt'],
         files: ['.'],
@@ -84,7 +82,7 @@ test('configuration', async function (t) {
       })
 
       assert.deepEqual(
-        [code, cleanError(stderr(), 4)],
+        [result.code, cleanError(stderr(), 4)],
         [
           1,
           [
@@ -101,7 +99,7 @@ test('configuration', async function (t) {
   await t.test('should support `.rc.js` scripts (1)', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('malformed-rc-script/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -111,7 +109,7 @@ test('configuration', async function (t) {
     })
 
     assert.deepEqual(
-      [code, cleanError(stderr(), 4)],
+      [result.code, cleanError(stderr(), 4)],
       [
         1,
         [
@@ -127,7 +125,7 @@ test('configuration', async function (t) {
   await t.test('should support `.rc.js` scripts (2)', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('rc-script/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -136,13 +134,13 @@ test('configuration', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.deepEqual([code, stderr()], [0, 'one.txt: no issues found\n'])
+    assert.deepEqual([result.code, stderr()], [0, 'one.txt: no issues found\n'])
   })
 
   await t.test('should support `.rc.js` scripts (3)', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('rc-script/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -151,14 +149,14 @@ test('configuration', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.deepEqual([code, stderr()], [0, 'one.txt: no issues found\n'])
+    assert.deepEqual([result.code, stderr()], [0, 'one.txt: no issues found\n'])
   })
 
   await t.test('should support `.rc.mjs` module', async function () {
     const stderr = spy()
     let calls = 0
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('rc-module-mjs/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -174,7 +172,7 @@ test('configuration', async function (t) {
     })
 
     assert.deepEqual(
-      [code, calls, stderr()],
+      [result.code, calls, stderr()],
       [0, 1, 'one.txt: no issues found\n']
     )
   })
@@ -183,7 +181,7 @@ test('configuration', async function (t) {
     const stderr = spy()
     let calls = 0
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('rc-module-cjs/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -199,7 +197,7 @@ test('configuration', async function (t) {
     })
 
     assert.deepEqual(
-      [code, calls, stderr()],
+      [result.code, calls, stderr()],
       [0, 1, 'one.txt: no issues found\n']
     )
   })
@@ -207,7 +205,7 @@ test('configuration', async function (t) {
   await t.test('should support `.rc.yaml` config files', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('malformed-rc-yaml/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -217,7 +215,7 @@ test('configuration', async function (t) {
     })
 
     assert.deepEqual(
-      [code, cleanError(stderr(), 4)],
+      [result.code, cleanError(stderr(), 4)],
       [
         1,
         [
@@ -234,7 +232,7 @@ test('configuration', async function (t) {
     const stderr = spy()
     let calls = 0
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('rc-file/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -253,7 +251,7 @@ test('configuration', async function (t) {
     })
 
     assert.deepEqual(
-      [code, calls, stderr()],
+      [result.code, calls, stderr()],
       [
         0,
         4,
@@ -271,7 +269,7 @@ test('configuration', async function (t) {
   await t.test('should support searching package files', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('malformed-package-file/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -281,7 +279,7 @@ test('configuration', async function (t) {
     })
 
     assert.deepEqual(
-      [code, cleanError(stderr(), 4)],
+      [result.code, cleanError(stderr(), 4)],
       [
         1,
         [
@@ -298,7 +296,7 @@ test('configuration', async function (t) {
     const stderr = spy()
     let calls = 0
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('rc-file/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -318,7 +316,7 @@ test('configuration', async function (t) {
     })
 
     assert.deepEqual(
-      [code, calls, stderr()],
+      [result.code, calls, stderr()],
       [
         0,
         4,
@@ -336,7 +334,7 @@ test('configuration', async function (t) {
   await t.test('should support no config files', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('simple-structure/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -347,7 +345,7 @@ test('configuration', async function (t) {
     })
 
     assert.deepEqual(
-      [code, stderr()],
+      [result.code, stderr()],
       [
         0,
         [
@@ -365,7 +363,7 @@ test('configuration', async function (t) {
     async function () {
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd: new URL('malformed-rc-script/', fixtures),
         detectConfig: false,
         extensions: ['txt'],
@@ -375,7 +373,10 @@ test('configuration', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.deepEqual([code, stderr()], [0, 'one.txt: no issues found\n'])
+      assert.deepEqual(
+        [result.code, stderr()],
+        [0, 'one.txt: no issues found\n']
+      )
     }
   )
 
@@ -383,7 +384,7 @@ test('configuration', async function (t) {
     const stderr = spy()
     let calls = 0
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('config-settings/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -397,7 +398,7 @@ test('configuration', async function (t) {
     })
 
     assert.deepEqual(
-      [code, calls, stderr()],
+      [result.code, calls, stderr()],
       [0, 1, 'one.txt: no issues found\n']
     )
   })
@@ -405,7 +406,7 @@ test('configuration', async function (t) {
   await t.test('should ignore unconfigured `packages.json`', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('config-monorepo-package/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -415,7 +416,7 @@ test('configuration', async function (t) {
     })
 
     assert.deepEqual(
-      [code, cleanError(stderr(), 4)],
+      [result.code, cleanError(stderr(), 4)],
       [
         1,
         [

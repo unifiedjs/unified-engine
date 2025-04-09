@@ -3,6 +3,7 @@
  * @typedef {import('./lib/file-set.js').Completer} Completer
  * @typedef {import('./lib/index.js').Callback} Callback
  * @typedef {import('./lib/configuration.js').ConfigTransform} ConfigTransform
+ * @typedef {import('./lib/index.js').ContextWithCode} ContextWithCode
  * @typedef {import('./lib/index.js').Context} Context
  * @typedef {import('./lib/file-set.js').FileSet} FileSet
  * @typedef {import('./lib/index.js').Options} Options

@@ -7,21 +7,19 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import {PassThrough} from 'node:stream'
 import test from 'node:test'
-import {promisify} from 'node:util'
 import {VFile} from 'vfile'
 import {engine} from 'unified-engine'
 import {cleanError} from './util/clean-error.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const run = promisify(engine)
 const fixtures = new URL('fixtures/', import.meta.url)
 
 test('tree', async function (t) {
   await t.test('should fail on malformed input', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('malformed-tree/', fixtures),
       files: ['doc.json'],
       processor: noop,
@@ -29,7 +27,7 @@ test('tree', async function (t) {
       treeIn: true
     })
 
-    assert.equal(code, 1)
+    assert.equal(result.code, 1)
     assert.equal(
       cleanError(stderr(), 2),
       'doc.json\n error Cannot read file as JSON'
@@ -42,7 +40,7 @@ test('tree', async function (t) {
       const cwd = new URL('tree/', fixtures)
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd,
         files: ['doc'],
         output: true,
@@ -62,7 +60,7 @@ test('tree', async function (t) {
 
       await fs.unlink(new URL('doc.json', cwd))
 
-      assert.equal(code, 0)
+      assert.equal(result.code, 0)
       assert.equal(stderr(), 'doc > doc.json: written\n')
       assert.equal(document, '{\n  "type": "text",\n  "value": "two"\n}\n')
     }
@@ -72,7 +70,7 @@ test('tree', async function (t) {
     const cwd = new URL('tree/', fixtures)
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd,
       extensions: ['foo'],
       files: ['doc'],
@@ -93,7 +91,7 @@ test('tree', async function (t) {
 
     await fs.unlink(new URL('doc.foo', cwd))
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'doc > doc.foo: written\n')
     assert.equal(document, 'two')
   })
@@ -102,7 +100,7 @@ test('tree', async function (t) {
     const cwd = new URL('one-file/', fixtures)
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd,
       extensions: ['txt'],
       files: ['.'],
@@ -123,7 +121,7 @@ test('tree', async function (t) {
 
     await fs.unlink(new URL('one.json', cwd))
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt > one.json: written\n')
     assert.equal(document, '{\n  "type": "text",\n  "value": "two"\n}\n')
   })
@@ -135,7 +133,7 @@ test('tree', async function (t) {
 
     setImmediate(send)
 
-    const code = await run({
+    const result = await engine({
       processor: noop,
       streamError: stderr.stream,
       streamIn: stdin,
@@ -143,7 +141,7 @@ test('tree', async function (t) {
       treeOut: true
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), '<stdin>: no issues found\n')
     assert.equal(stdout(), '{\n  "type": "text",\n  "value": "\\n"\n}\n')
 
@@ -159,7 +157,7 @@ test('tree', async function (t) {
 
     setImmediate(send)
 
-    const code = await run({
+    const result = await engine({
       processor: noop,
       streamError: stderr.stream,
       streamIn: stdin,
@@ -167,7 +165,7 @@ test('tree', async function (t) {
       treeIn: true
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), '<stdin>: no issues found\n')
     assert.equal(stdout(), '\n')
 
@@ -180,7 +178,7 @@ test('tree', async function (t) {
     const cwd = new URL('one-file/', fixtures)
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd,
       files: [new VFile(new URL('one.txt', cwd))],
       output: 'bar.json',
@@ -191,7 +189,7 @@ test('tree', async function (t) {
 
     await fs.unlink(new URL('bar.json', cwd))
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt > bar.json: written\n')
   })
 })

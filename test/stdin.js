@@ -2,12 +2,10 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import {PassThrough} from 'node:stream'
 import test from 'node:test'
-import {promisify} from 'node:util'
 import {engine} from 'unified-engine'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const run = promisify(engine)
 const fixtures = new URL('fixtures/', import.meta.url)
 
 test('stdin', async function (t) {
@@ -22,7 +20,7 @@ test('stdin', async function (t) {
 
     setImmediate(send)
 
-    const code = await run({
+    const result = await engine({
       cwd,
       processor: noop,
       streamIn: stream,
@@ -30,7 +28,7 @@ test('stdin', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), '<stdin>: no issues found\n')
     assert.equal(stdout(), '1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n')
 
@@ -55,7 +53,7 @@ test('stdin', async function (t) {
 
     setImmediate(send)
 
-    const code = await run({
+    const result = await engine({
       cwd,
       out: false,
       processor: noop,
@@ -64,7 +62,7 @@ test('stdin', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), '<stdin>: no issues found\n')
     assert.equal(stdout(), '')
 
@@ -86,7 +84,7 @@ test('stdin', async function (t) {
 
     setImmediate(send)
 
-    const code = await run({
+    const result = await engine({
       processor: noop().use(function () {
         assert.deepEqual(
           this.data('settings'),
@@ -102,7 +100,7 @@ test('stdin', async function (t) {
       rcName: '.foorc'
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), '<stdin>: no issues found\n')
     assert.equal(stdout(), '1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n')
 

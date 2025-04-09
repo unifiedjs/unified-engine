@@ -8,14 +8,12 @@ import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import test from 'node:test'
-import {promisify} from 'node:util'
 import {engine} from 'unified-engine'
 import {VFile} from 'vfile'
 import {cleanError} from './util/clean-error.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const run = promisify(engine)
 const fixtures = new URL('fixtures/', import.meta.url)
 
 test('output', async function (t) {
@@ -23,7 +21,7 @@ test('output', async function (t) {
     const stderr = spy()
     const stdout = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('one-file/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -39,7 +37,7 @@ test('output', async function (t) {
       streamOut: stdout.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
     assert.equal(stdout(), '')
   })
@@ -48,7 +46,7 @@ test('output', async function (t) {
     const stdout = spy()
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('one-file/', fixtures),
       extensions: ['txt'],
       files: ['one.txt'],
@@ -64,7 +62,7 @@ test('output', async function (t) {
       streamOut: stdout.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
     assert.equal(stdout(), 'two')
   })
@@ -74,7 +72,7 @@ test('output', async function (t) {
     const stdout = spy()
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd,
       extensions: ['txt'],
       files: ['one.txt'],
@@ -91,7 +89,7 @@ test('output', async function (t) {
       streamOut: stdout.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
     assert.equal(stdout(), '')
   })
@@ -101,7 +99,7 @@ test('output', async function (t) {
     const stdout = spy()
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd,
       extensions: ['txt'],
       files: ['.'],
@@ -118,7 +116,7 @@ test('output', async function (t) {
       out: false
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(
       stderr(),
       'one.txt: no issues found\ntwo.txt: no issues found\n'
@@ -130,7 +128,7 @@ test('output', async function (t) {
     const cwd = new URL('one-file/', fixtures)
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd,
       extensions: ['txt'],
       files: ['.'],
@@ -150,7 +148,7 @@ test('output', async function (t) {
     const document = String(await fs.readFile(url))
     await fs.truncate(url)
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: written\n')
     assert.equal(document, 'two')
   })
@@ -159,7 +157,7 @@ test('output', async function (t) {
     const cwd = new URL('simple-structure/', fixtures)
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd,
       extensions: ['txt'],
       files: ['one.txt'],
@@ -180,7 +178,7 @@ test('output', async function (t) {
 
     await fs.unlink(new URL('four.txt', cwd))
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt > four.txt: written\n')
     assert.equal(input, '')
     assert.equal(output, 'two')
@@ -190,7 +188,7 @@ test('output', async function (t) {
     const cwd = new URL('simple-structure/', fixtures)
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd,
       extensions: ['txt'],
       files: ['one.txt'],
@@ -211,7 +209,7 @@ test('output', async function (t) {
 
     await fs.unlink(new URL('nested/one.txt', cwd))
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt > nested' + path.sep + 'one.txt: written\n')
     assert.equal(input, '')
     assert.equal(output, 'two')
@@ -221,7 +219,7 @@ test('output', async function (t) {
     const cwd = new URL('simple-structure/', fixtures)
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd,
       extensions: ['txt'],
       files: ['one.txt'],
@@ -230,7 +228,7 @@ test('output', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 1)
+    assert.equal(result.code, 1)
     assert.equal(
       cleanError(stderr(), 4),
       [
@@ -246,7 +244,7 @@ test('output', async function (t) {
     const cwd = new URL('one-file/', fixtures)
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd,
       files: [new VFile(new URL('one.txt', cwd))],
       output: true,
@@ -265,7 +263,7 @@ test('output', async function (t) {
 
     await fs.truncate(new URL('one.txt', cwd))
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: written\n')
     assert.equal(document, 'two')
   })
@@ -274,7 +272,7 @@ test('output', async function (t) {
     const cwd = new URL('one-file/', fixtures)
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd,
       extensions: ['txt'],
       files: ['one.txt'],
@@ -293,7 +291,7 @@ test('output', async function (t) {
 
     const document = String(await fs.readFile(new URL('one.txt', cwd)))
 
-    assert.equal(code, 1)
+    assert.equal(result.code, 1)
     assert.equal(
       cleanError(stderr(), 4),
       [
@@ -310,7 +308,7 @@ test('output', async function (t) {
     const cwd = new URL('two-files/', fixtures)
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd,
       extensions: ['txt'],
       files: ['.'],
@@ -319,7 +317,7 @@ test('output', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 1)
+    assert.equal(result.code, 1)
     assert.match(stderr(), /Cannot write multiple files to single output/)
   })
 
@@ -329,7 +327,7 @@ test('output', async function (t) {
       const cwd = new URL('two-files/', fixtures)
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd,
         extensions: ['txt'],
         files: ['.'],
@@ -338,7 +336,7 @@ test('output', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 1)
+      assert.equal(result.code, 1)
       assert.equal(
         cleanError(stderr(), 4),
         [
@@ -360,7 +358,7 @@ test('output', async function (t) {
 
       await fs.mkdir(cwd, {recursive: true})
 
-      const code = await run({
+      const result = await engine({
         cwd,
         extensions: ['txt'],
         files: ['one.txt'],
@@ -369,7 +367,7 @@ test('output', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 1)
+      assert.equal(result.code, 1)
       assert.equal(
         cleanError(stderr(), 2),
         ['one.txt', ' error No such file or folder'].join('\n')
@@ -389,7 +387,7 @@ test('output', async function (t) {
     const stderr = spy()
     const stdout = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd,
       extensions: ['txt'],
       files: ['one.txt'],
@@ -407,7 +405,7 @@ test('output', async function (t) {
       streamOut: stdout.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
     assert.equal(stdout(), 'Hi! 🤷‍♂️')
   })
@@ -417,7 +415,7 @@ test('output', async function (t) {
     const stderr = spy()
     const stdout = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd,
       extensions: ['txt'],
       files: ['one.txt'],
@@ -436,7 +434,7 @@ test('output', async function (t) {
       streamOut: stdout.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
     // The `trim` is for windows.
     assert.equal(stdout().trim(), 'alpha')
@@ -447,7 +445,7 @@ test('output', async function (t) {
     const stderr = spy()
     const stdout = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd,
       extensions: ['txt'],
       files: ['one.txt'],
@@ -465,7 +463,7 @@ test('output', async function (t) {
       streamOut: stdout.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
     // The `trim` is for windows.
     assert.equal(stdout().trim(), 'alpha')

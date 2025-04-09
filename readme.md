@@ -17,12 +17,13 @@
 * [Install](#install)
 * [Use](#use)
 * [API](#api)
-  * [`engine(options, callback)`](#engineoptions-callback)
+  * [`engine(options, callback?)`](#engineoptions-callback)
   * [`Configuration`](#configuration)
   * [`Completer`](#completer)
   * [`Callback`](#callback)
   * [`ConfigResult`](#configresult)
   * [`ConfigTransform`](#configtransform)
+  * [`ContextWithCode`](#contextwithcode)
   * [`Context`](#context)
   * [`FileSet`](#fileset)
   * [`Options`](#options)
@@ -154,7 +155,7 @@ This package exports the identifiers [`Configuration`][api-configuration] and
 [`engine`][api-engine].
 There is no default export.
 
-### `engine(options, callback)`
+### `engine(options, callback?)`
 
 Process.
 
@@ -162,12 +163,13 @@ Process.
 
 * `options` ([`Options`][api-options], required)
   — configuration
-* `callback` ([`Callback`][api-callback], required)
-  — configuration
+* `callback` ([`Callback`][api-callback], optional)
+  — callback
 
 ###### Returns
 
-Nothing (`undefined`).
+If a callback is given, nothing (`undefined`).
+Otherwise [`Promise<ContextWithCode>`][api-context-with-code].
 
 ### `Configuration`
 
@@ -249,6 +251,20 @@ Transform arbitrary configs to our format (TypeScript type).
 ###### Returns
 
 Our config format ([`Preset`][api-preset]).
+
+### `ContextWithCode`
+
+Processing context with code (TypeScript type).
+
+###### Extends
+
+* [`Context`][api-context]
+
+###### Fields
+
+* `code` (`0` or `1`)
+  — exit code,
+  `0` if successful or `1` if unsuccessful
 
 ### `Context`
 
@@ -1538,6 +1554,7 @@ It exports the additional types
 [`Callback`][api-callback],
 [`ConfigResult`][api-config-result],
 [`ConfigTransform`][api-config-transform],
+[`ContextWithCode`][api-context-with-code],
 [`Context`][api-context],
 [`FileSet`][api-file-set],
 [`Options`][api-options],
@@ -1590,6 +1607,8 @@ abide by its terms.
 [api-configuration]: #configuration
 
 [api-context]: #context
+
+[api-context-with-code]: #contextwithcode
 
 [api-engine]: #engineoptions-callback
 

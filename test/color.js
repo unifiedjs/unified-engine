@@ -1,13 +1,11 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs/promises'
 import test from 'node:test'
-import {promisify} from 'node:util'
 import {engine} from 'unified-engine'
 import {cleanError} from './util/clean-error.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const run = promisify(engine)
 const fixtures = new URL('fixtures/', import.meta.url)
 
 test('color', async function (t) {
@@ -17,7 +15,7 @@ test('color', async function (t) {
 
     await fs.mkdir(cwd, {recursive: true})
 
-    const code = await run({
+    const result = await engine({
       color: true,
       cwd,
       files: ['readme.md'],
@@ -25,7 +23,7 @@ test('color', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 1)
+    assert.equal(result.code, 1)
     assert.equal(
       cleanError(stderr()),
       [

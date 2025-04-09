@@ -8,14 +8,12 @@ import {fileURLToPath} from 'node:url'
 import assert from 'node:assert/strict'
 import process from 'node:process'
 import test from 'node:test'
-import {promisify} from 'node:util'
 import stripAnsi from 'strip-ansi'
 import vfileReporterPretty from 'vfile-reporter-pretty'
 import {engine} from 'unified-engine'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const run = promisify(engine)
 const fixtures = new URL('fixtures/', import.meta.url)
 const windows = process.platform === 'win32'
 
@@ -40,7 +38,7 @@ test('reporting', async function (t) {
   await t.test('should fail for warnings with `frail`', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('one-file/', fixtures),
       files: ['one.txt'],
       frail: true,
@@ -55,7 +53,7 @@ test('reporting', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 1)
+    assert.equal(result.code, 1)
     assert.equal(stderr(), 'one.txt\n warning Warning\n\n⚠ 1 warning\n')
   })
 
@@ -64,7 +62,7 @@ test('reporting', async function (t) {
     async function () {
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd: new URL('two-files/', fixtures),
         extensions: ['txt'],
         files: ['.'],
@@ -82,7 +80,7 @@ test('reporting', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 0)
+      assert.equal(result.code, 0)
       assert.equal(stderr(), 'two.txt\n warning Warning\n\n⚠ 1 warning\n')
     }
   )
@@ -92,7 +90,7 @@ test('reporting', async function (t) {
     async function () {
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd: new URL('one-file/', fixtures),
         extensions: ['txt'],
         files: ['.'],
@@ -101,7 +99,7 @@ test('reporting', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 0)
+      assert.equal(result.code, 0)
       assert.equal(stderr(), '')
     }
   )
@@ -111,7 +109,7 @@ test('reporting', async function (t) {
     async function () {
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd: new URL('two-files/', fixtures),
         extensions: ['txt'],
         files: ['.'],
@@ -131,7 +129,7 @@ test('reporting', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 1)
+      assert.equal(result.code, 1)
       assert.equal(stderr(), 'two.txt\n error Error\n\n✖ 1 error\n')
     }
   )
@@ -139,7 +137,7 @@ test('reporting', async function (t) {
   await t.test('should report extra info w/ `verbose`', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('one-file/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -157,7 +155,7 @@ test('reporting', async function (t) {
       verbose: true
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(
       stderr(),
       [
@@ -177,7 +175,7 @@ test('reporting', async function (t) {
   await t.test('should support custom given reporters', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('two-files/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -186,14 +184,14 @@ test('reporting', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), '')
   })
 
   await t.test('should support async reporters', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('two-files/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -202,7 +200,7 @@ test('reporting', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), '')
   })
 
@@ -212,7 +210,7 @@ test('reporting', async function (t) {
       const stderr = spy()
       const cwd = new URL('two-files/', fixtures)
 
-      const code = await run({
+      const result = await engine({
         cwd,
         extensions: ['txt'],
         files: ['.'],
@@ -231,7 +229,7 @@ test('reporting', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 1)
+      assert.equal(result.code, 1)
       assert.equal(
         stderr(),
         JSON.stringify(
@@ -261,7 +259,7 @@ test('reporting', async function (t) {
     async function () {
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd: new URL('two-files/', fixtures),
         extensions: ['txt'],
         files: ['.'],
@@ -279,7 +277,7 @@ test('reporting', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 0)
+      assert.equal(result.code, 0)
       assert.equal(
         stripAnsi(stderr()),
         '\n  one.txt\n  ⚠  Info!  \n\n  1 warning\n'
@@ -289,7 +287,7 @@ test('reporting', async function (t) {
 
   await t.test('should fail on an unfound reporter', async function () {
     try {
-      await run({
+      await engine({
         cwd: new URL('one-file/', fixtures),
         extensions: ['txt'],
         files: ['.'],

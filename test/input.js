@@ -8,7 +8,6 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import {PassThrough} from 'node:stream'
 import test from 'node:test'
-import {promisify} from 'node:util'
 import {unified} from 'unified'
 import {VFile} from 'vfile'
 import {engine} from 'unified-engine'
@@ -16,7 +15,6 @@ import {cleanError} from './util/clean-error.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const run = promisify(engine)
 const fixtures = new URL('fixtures/', import.meta.url)
 
 test('input', async function (t) {
@@ -32,7 +30,7 @@ test('input', async function (t) {
     })
 
     try {
-      await run({processor: unified(), streamIn: stream})
+      await engine({processor: unified(), streamIn: stream})
       assert.fail()
     } catch (error) {
       assert.match(String(error), /No input/)
@@ -47,13 +45,13 @@ test('input', async function (t) {
       streamIn.end('')
     })
 
-    const code = await run({
+    const result = await engine({
       processor: noop,
       streamError: stderr.stream,
       streamIn
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), '<stdin>: no issues found\n')
   })
 
@@ -63,14 +61,14 @@ test('input', async function (t) {
 
     await fs.mkdir(cwd, {recursive: true})
 
-    const code = await run({
+    const result = await engine({
       cwd,
       files: ['.'],
       processor: unified(),
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), '')
   })
 
@@ -80,14 +78,14 @@ test('input', async function (t) {
 
     await fs.mkdir(cwd, {recursive: true})
 
-    const code = await run({
+    const result = await engine({
       cwd,
       files: ['readme.md'],
       processor: unified(),
       streamError: stderr.stream
     })
 
-    assert.equal(code, 1)
+    assert.equal(result.code, 1)
     assert.equal(
       cleanError(stderr()),
       [
@@ -105,7 +103,7 @@ test('input', async function (t) {
   await t.test('should not report unfound given folders', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('directory/', fixtures),
       extensions: ['txt'],
       files: ['empty/'],
@@ -113,14 +111,14 @@ test('input', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), '')
   })
 
   await t.test('should search for extensions', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('extensions/', fixtures),
       extensions: ['txt', '.text'],
       files: ['.'],
@@ -128,7 +126,7 @@ test('input', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(
       stderr(),
       [
@@ -144,7 +142,7 @@ test('input', async function (t) {
   await t.test('should search a folder for extensions', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('extensions/', fixtures),
       extensions: ['txt', 'text'],
       files: ['nested'],
@@ -152,7 +150,7 @@ test('input', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(
       stderr(),
       [
@@ -168,7 +166,7 @@ test('input', async function (t) {
     async function () {
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd: new URL('globs/', fixtures),
         extensions: [],
         files: ['*/*.+(txt|text)'],
@@ -176,7 +174,7 @@ test('input', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 0)
+      assert.equal(result.code, 0)
       assert.equal(
         stderr(),
         [
@@ -193,7 +191,7 @@ test('input', async function (t) {
     async function () {
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd: new URL('globs/', fixtures),
         extensions: [],
         files: ['*/*.txt', '*/*.text'],
@@ -201,7 +199,7 @@ test('input', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 0)
+      assert.equal(result.code, 0)
       assert.equal(
         stderr(),
         [
@@ -216,7 +214,7 @@ test('input', async function (t) {
   await t.test('should search for globs matching dirs', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('globs/', fixtures),
       extensions: [],
       files: ['**/nested'],
@@ -224,7 +222,7 @@ test('input', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(
       stderr(),
       [
@@ -239,7 +237,7 @@ test('input', async function (t) {
     const cwd = new URL('ignore-file/', fixtures)
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd,
       files: [new VFile(new URL('nested', cwd))],
       ignoreName: '.fooignore',
@@ -247,7 +245,7 @@ test('input', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'nested' + path.sep + 'three.txt: no issues found\n')
   })
 
@@ -256,7 +254,7 @@ test('input', async function (t) {
     async function () {
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd: new URL('globs-ignore/', fixtures),
         extensions: [],
         files: ['**/*.txt'],
@@ -264,7 +262,7 @@ test('input', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 0)
+      assert.equal(result.code, 0)
       assert.equal(
         stderr(),
         [
@@ -286,7 +284,7 @@ test('input', async function (t) {
     const cwd = new URL('ignore-file/', fixtures)
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd,
       files: [
         new VFile(new URL('one.txt', cwd)),
@@ -298,7 +296,7 @@ test('input', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 1)
+    assert.equal(result.code, 1)
     assert.equal(
       stderr(),
       [
@@ -320,7 +318,7 @@ test('input', async function (t) {
       const cwd = new URL('ignore-file/', fixtures)
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd,
         files: [
           new VFile({
@@ -333,7 +331,7 @@ test('input', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 1)
+      assert.equal(result.code, 1)
       assert.equal(
         stderr(),
         [
@@ -353,7 +351,7 @@ test('input', async function (t) {
       const stderr = spy()
       const cwd = new URL('ignore-file/', fixtures)
 
-      const code = await run({
+      const result = await engine({
         cwd,
         ignoreName: '.fooignore',
         files: [
@@ -366,7 +364,7 @@ test('input', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 0)
+      assert.equal(result.code, 0)
       assert.equal(stderr(), 'not-existing-2.txt: no issues found\n')
     }
   )
@@ -379,7 +377,7 @@ test('input', async function (t) {
 
       await fs.mkdir(cwd, {recursive: true})
 
-      const code = await run({
+      const result = await engine({
         cwd,
         files: [
           new VFile({
@@ -402,7 +400,7 @@ test('input', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 0)
+      assert.equal(result.code, 0)
       assert.equal(
         stderr(),
         [
@@ -428,14 +426,14 @@ test('input', async function (t) {
 
       await fs.mkdir(cwd, {recursive: true})
 
-      const code = await run({
+      const result = await engine({
         cwd,
         files: [file],
         processor: noop,
         streamError: stderr.stream
       })
 
-      assert.equal(code, 0)
+      assert.equal(result.code, 0)
       assert.equal(
         stderr(),
         'test' + path.sep + 'fixtures' + path.sep + 'empty: no issues found\n'
@@ -446,7 +444,7 @@ test('input', async function (t) {
   await t.test('should include given ignored files (#2)', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('ignore-file/', fixtures),
       ignoreName: '.fooignore',
       files: ['**/*.txt'],
@@ -454,7 +452,7 @@ test('input', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 1)
+    assert.equal(result.code, 1)
     assert.equal(
       stderr(),
       [
@@ -476,7 +474,7 @@ test('input', async function (t) {
       const cwd = new URL('ignore-file/', fixtures)
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd,
         files: [
           new VFile(new URL('one.txt', cwd)),
@@ -489,7 +487,7 @@ test('input', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 0)
+      assert.equal(result.code, 0)
       assert.equal(
         stderr(),
         [
@@ -506,7 +504,7 @@ test('input', async function (t) {
     async function () {
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd: new URL('ignore-file/', fixtures),
         files: ['**/*.txt'],
         ignoreName: '.fooignore',
@@ -515,7 +513,7 @@ test('input', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 0)
+      assert.equal(result.code, 0)
       assert.equal(
         stderr(),
         [
@@ -534,7 +532,7 @@ test('input', async function (t) {
       await fs.mkdir(cwd, {recursive: true})
 
       try {
-        await run({
+        await engine({
           cwd,
           files: ['.'],
           ignoreUnconfigured: true,
@@ -559,7 +557,7 @@ test('input', async function (t) {
       await fs.mkdir(cwd, {recursive: true})
 
       try {
-        await run({
+        await engine({
           cwd,
           files: ['.'],
           ignoreUnconfigured: true,
@@ -583,7 +581,7 @@ test('input', async function (t) {
       await fs.mkdir(cwd, {recursive: true})
 
       try {
-        await run({
+        await engine({
           cwd,
           detectConfig: false,
           files: ['.'],
@@ -606,7 +604,7 @@ test('input', async function (t) {
   await t.test('should report', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('config-ignore-unconfigured/', fixtures),
       files: ['.'],
       extensions: ['txt'],
@@ -616,7 +614,7 @@ test('input', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'folder' + path.sep + 'two.txt: no issues found\n')
   })
 
@@ -624,7 +622,7 @@ test('input', async function (t) {
     const cwd = new URL('simple-structure/', fixtures)
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd,
       extensions: ['txt'],
       files: ['nested', new VFile(new URL('one.txt', cwd))],
@@ -632,7 +630,7 @@ test('input', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(
       stderr(),
       [
@@ -652,7 +650,7 @@ test('input', async function (t) {
 
       await fs.mkdir(cwd, {recursive: true})
 
-      const code = await run({
+      const result = await engine({
         cwd,
         files: [
           new VFile({
@@ -664,7 +662,7 @@ test('input', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 0)
+      assert.equal(result.code, 0)
       assert.equal(stderr(), 'this-does-not-exist.txt: no issues found\n')
     }
   )

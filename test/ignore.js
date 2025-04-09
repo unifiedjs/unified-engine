@@ -3,13 +3,11 @@ import fs from 'node:fs/promises'
 import {fileURLToPath} from 'node:url'
 import path from 'node:path'
 import test from 'node:test'
-import {promisify} from 'node:util'
 import {engine} from 'unified-engine'
 import {cleanError} from './util/clean-error.js'
 import {noop} from './util/noop-processor.js'
 import {spy} from './util/spy.js'
 
-const run = promisify(engine)
 const fixtures = new URL('fixtures/', import.meta.url)
 
 test('ignore', async function (t) {
@@ -18,7 +16,7 @@ test('ignore', async function (t) {
     async function () {
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd: new URL('simple-structure/', fixtures),
         detectIgnore: false,
         extensions: ['txt'],
@@ -28,7 +26,7 @@ test('ignore', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 1)
+      assert.equal(result.code, 1)
       assert.equal(
         cleanError(stderr(), 4),
         [
@@ -47,7 +45,7 @@ test('ignore', async function (t) {
       const cwd = new URL('ignore-file/', fixtures)
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd,
         detectIgnore: false,
         extensions: ['txt'],
@@ -57,7 +55,7 @@ test('ignore', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 0)
+      assert.equal(result.code, 0)
       assert.equal(
         stderr(),
         [
@@ -72,7 +70,7 @@ test('ignore', async function (t) {
   await t.test('should support searching ignore files', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('ignore-file/', fixtures),
       detectIgnore: true,
       extensions: ['txt'],
@@ -82,7 +80,7 @@ test('ignore', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(
       stderr(),
       [
@@ -96,7 +94,7 @@ test('ignore', async function (t) {
   await t.test('should look into hidden files', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('hidden-directory/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -104,7 +102,7 @@ test('ignore', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(
       stderr(),
       [
@@ -118,7 +116,7 @@ test('ignore', async function (t) {
   await t.test('should not look into `node_modules`', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('node-modules-directory/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -126,7 +124,7 @@ test('ignore', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
   })
 
@@ -135,7 +133,7 @@ test('ignore', async function (t) {
     async function () {
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd: new URL('node-modules-directory/', fixtures),
         extensions: ['txt'],
         files: ['node_modules/', '.'],
@@ -143,7 +141,7 @@ test('ignore', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 0)
+      assert.equal(result.code, 0)
       assert.equal(
         stderr(),
         [
@@ -158,7 +156,7 @@ test('ignore', async function (t) {
   await t.test('should support no ignore files', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('simple-structure/', fixtures),
       detectIgnore: true,
       extensions: ['txt'],
@@ -168,7 +166,7 @@ test('ignore', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(
       stderr(),
       [
@@ -183,7 +181,7 @@ test('ignore', async function (t) {
   await t.test('should support ignore patterns', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('simple-structure/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -192,7 +190,7 @@ test('ignore', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
   })
 
@@ -201,7 +199,7 @@ test('ignore', async function (t) {
     async function () {
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd: new URL('ignore-file/', fixtures),
         detectIgnore: true,
         extensions: ['txt'],
@@ -212,7 +210,7 @@ test('ignore', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 0)
+      assert.equal(result.code, 0)
       assert.equal(stderr(), 'one.txt: no issues found\n')
     }
   )
@@ -222,7 +220,7 @@ test('ignore', async function (t) {
     async function () {
       const stderr = spy()
 
-      const code = await run({
+      const result = await engine({
         cwd: new URL('sibling-ignore/', fixtures),
         extensions: ['txt'],
         files: ['.'],
@@ -232,7 +230,7 @@ test('ignore', async function (t) {
         streamError: stderr.stream
       })
 
-      assert.equal(code, 0)
+      assert.equal(result.code, 0)
       assert.equal(
         stderr(),
         [
@@ -247,7 +245,7 @@ test('ignore', async function (t) {
   await t.test('`ignorePathResolveFrom`', async function () {
     const stderr = spy()
 
-    const code = await run({
+    const result = await engine({
       cwd: new URL('sibling-ignore/', fixtures),
       extensions: ['txt'],
       files: ['.'],
@@ -257,7 +255,7 @@ test('ignore', async function (t) {
       streamError: stderr.stream
     })
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(
       stderr(),
       [
@@ -276,7 +274,7 @@ test('ignore', async function (t) {
 
     await fs.writeFile(url, '')
 
-    const code = await run({
+    const result = await engine({
       cwd,
       files: [url],
       processor: noop,
@@ -285,7 +283,7 @@ test('ignore', async function (t) {
 
     await fs.unlink(url)
 
-    assert.equal(code, 0)
+    assert.equal(result.code, 0)
     assert.equal(
       stderr(),
       path.relative(fileURLToPath(cwd), fileURLToPath(url)) +
