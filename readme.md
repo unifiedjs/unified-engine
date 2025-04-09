@@ -19,6 +19,7 @@
 * [API](#api)
   * [`engine(options, callback?)`](#engineoptions-callback)
   * [`Configuration`](#configuration)
+  * [`Ignore`](#ignore)
   * [`Completer`](#completer)
   * [`Callback`](#callback)
   * [`ConfigResult`](#configresult)
@@ -151,7 +152,7 @@ function done(error, code) {
 
 ## API
 
-This package exports the identifiers [`Configuration`][api-configuration] and
+This package exports the identifiers [`Configuration`][api-configuration], [`Ignore`][api-ignore] and
 [`engine`][api-engine].
 There is no default export.
 
@@ -174,6 +175,13 @@ Otherwise [`Promise<ContextWithCode>`][api-context-with-code].
 ### `Configuration`
 
 Internal class to load configuration files.
+
+Exposed to build more complex integrations.
+
+### `Ignore`
+
+Internal class to load ignore file for checking
+whether this file should be ignored.
 
 Exposed to build more complex integrations.
 
@@ -1613,6 +1621,8 @@ abide by its terms.
 [api-engine]: #engineoptions-callback
 
 [api-file-set]: #fileset
+
+[api-ignore]: #ignore
 
 [api-options]: #options
 

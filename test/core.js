@@ -7,6 +7,7 @@ test('engine', async function (t) {
   await t.test('should expose the public api', async function () {
     assert.deepEqual(Object.keys(await import('unified-engine')).sort(), [
       'Configuration',
+      'Ignore',
       'engine'
     ])
   })
