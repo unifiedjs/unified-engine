@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import path from 'node:path'
+import process from 'node:process'
 import test from 'node:test'
 import {engine} from 'unified-engine'
 import {cleanError} from './util/clean-error.js'
@@ -201,6 +202,86 @@ test('configuration', async function (t) {
       [0, 1, 'one.txt: no issues found\n']
     )
   })
+
+  if (process.features.typescript) {
+    await t.test(
+      'should prefer `.rc.js` scripts over `.rc.ts`',
+      async function () {
+        const stderr = spy()
+        let calls = 0
+
+        const result = await engine({
+          cwd: new URL('mixed-rc-script/', fixtures),
+          extensions: ['txt'],
+          files: ['.'],
+          plugins: [
+            function () {
+              assert.deepEqual(this.data('settings'), {})
+              calls++
+            }
+          ],
+          processor: noop,
+          rcName: '.foorc',
+          streamError: stderr.stream
+        })
+
+        assert.deepEqual(
+          [result.code, calls, stderr()],
+          [0, 1, 'one.txt: no issues found\n']
+        )
+      }
+    )
+
+    await t.test('should support `.rc.mts` module', async function () {
+      const stderr = spy()
+      let calls = 0
+
+      const result = await engine({
+        cwd: new URL('rc-module-mts/', fixtures),
+        extensions: ['txt'],
+        files: ['.'],
+        plugins: [
+          function () {
+            assert.deepEqual(this.data('settings'), {foo: 'bar'})
+            calls++
+          }
+        ],
+        processor: noop,
+        rcName: '.foorc',
+        streamError: stderr.stream
+      })
+
+      assert.deepEqual(
+        [result.code, calls, stderr()],
+        [0, 1, 'one.txt: no issues found\n']
+      )
+    })
+
+    await t.test('should support `.rc.cts` module', async function () {
+      const stderr = spy()
+      let calls = 0
+
+      const result = await engine({
+        cwd: new URL('rc-module-cts/', fixtures),
+        extensions: ['txt'],
+        files: ['.'],
+        plugins: [
+          function () {
+            assert.deepEqual(this.data('settings'), {foo: 'bar'})
+            calls++
+          }
+        ],
+        processor: noop,
+        rcName: '.foorc',
+        streamError: stderr.stream
+      })
+
+      assert.deepEqual(
+        [result.code, calls, stderr()],
+        [0, 1, 'one.txt: no issues found\n']
+      )
+    })
+  }
 
   await t.test('should support `.rc.yaml` config files', async function () {
     const stderr = spy()

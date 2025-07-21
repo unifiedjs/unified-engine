@@ -1223,7 +1223,11 @@ engine(
 
 This example processes `readme.md` and allows configuration from `.remarkrc`,
 `.remarkrc.json`, `.remarkrc.yml`, `.remarkrc.yaml`, `.remarkrc.js`,
-`.remarkrc.cjs`, and `.remarkrc.mjs` files.
+`.remarkrc.cjs`, `.remarkrc.mjs`, `.remarkrc.ts`, `.remarkrc.cts`, and
+`.remarkrc.mts` files.
+
+Note: TypeScript support relies on Node.js itself, so it requires Node.js 22.7+
+with `--experimental-transform-types` flag enabled or 23.6+ by default.
 
 ```js
 import {remark} from 'remark'
