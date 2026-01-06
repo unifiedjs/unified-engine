@@ -184,6 +184,76 @@ test('output', async function (t) {
     assert.equal(output, 'two')
   })
 
+  await t.test(
+    'should write binary in Uint8Array to a path',
+    async function () {
+      const cwd = new URL('simple-structure/', fixtures)
+      const stderr = spy()
+      const result = await engine({
+        cwd,
+        extensions: ['txt'],
+        files: ['one.txt'],
+        output: 'five.bin',
+        processor: noop().use(
+          /** @type {Plugin<[], Literal, Uint8Array>} */
+          // @ts-expect-error: TS doesn’t get `this`.
+          function () {
+            /** @type {Compiler<Literal, Uint8Array>} */
+            this.compiler = function () {
+              return new Uint8Array([0xde, 0xad, 0xbe, 0xef])
+            }
+          }
+        ),
+        streamError: stderr.stream
+      })
+
+      const input = String(await fs.readFile(new URL('one.txt', cwd)))
+      const output = new Uint8Array(await fs.readFile(new URL('five.bin', cwd)))
+
+      await fs.unlink(new URL('five.bin', cwd))
+
+      assert.equal(result.code, 0)
+      assert.equal(stderr(), 'one.txt > five.bin: written\n')
+      assert.equal(input, '')
+      assert.deepStrictEqual(output, new Uint8Array([0xde, 0xad, 0xbe, 0xef]))
+    }
+  )
+
+  await t.test(
+    'should write utf-8 text in Uint8Array to a path',
+    async function () {
+      const cwd = new URL('simple-structure/', fixtures)
+      const stderr = spy()
+      const result = await engine({
+        cwd,
+        extensions: ['txt'],
+        files: ['one.txt'],
+        output: 'six.bin',
+        processor: noop().use(
+          /** @type {Plugin<[], Literal, Uint8Array>} */
+          // @ts-expect-error: TS doesn’t get `this`.
+          function () {
+            /** @type {Compiler<Literal, Uint8Array>} */
+            this.compiler = function () {
+              return new TextEncoder().encode('Hi! 🤷‍♂️')
+            }
+          }
+        ),
+        streamError: stderr.stream
+      })
+
+      const input = String(await fs.readFile(new URL('one.txt', cwd)))
+      const output = new Uint8Array(await fs.readFile(new URL('six.bin', cwd)))
+
+      await fs.unlink(new URL('six.bin', cwd))
+
+      assert.equal(result.code, 0)
+      assert.equal(stderr(), 'one.txt > six.bin: written\n')
+      assert.equal(input, '')
+      assert.deepStrictEqual(output, new TextEncoder().encode('Hi! 🤷‍♂️'))
+    }
+  )
+
   await t.test('should write to folders and support URLs', async function () {
     const cwd = new URL('simple-structure/', fixtures)
     const stderr = spy()
