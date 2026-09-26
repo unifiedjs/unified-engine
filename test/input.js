@@ -233,6 +233,33 @@ test('input', async function (t) {
     )
   })
 
+  await t.test(
+    'should not follow symlinked folders in globs',
+    async function () {
+      const cwd = new URL('globs-symlink/', fixtures)
+      const link = new URL('link', cwd)
+      const stderr = spy()
+
+      // Remove a link left behind by an earlier, interrupted run.
+      await fs.rm(link, {force: true})
+      // Junction, so that Windows needs no extra permissions.
+      await fs.symlink(new URL('folder', cwd), link, 'junction')
+
+      const result = await engine({
+        cwd,
+        extensions: [],
+        files: ['*/*.txt'],
+        processor: noop,
+        streamError: stderr.stream
+      })
+
+      await fs.unlink(link)
+
+      assert.equal(result.code, 0)
+      assert.equal(stderr(), 'folder' + path.sep + 'one.txt: no issues found\n')
+    }
+  )
+
   await t.test('should search vfile’s pointing to folders', async function () {
     const cwd = new URL('ignore-file/', fixtures)
     const stderr = spy()
