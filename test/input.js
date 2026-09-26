@@ -55,6 +55,22 @@ test('input', async function (t) {
     assert.equal(stderr(), '<stdin>: no issues found\n')
   })
 
+  await t.test('should fail when `streamIn` errors', async function () {
+    const streamIn = new PassThrough()
+    const streamError = new Error('Cannot read `streamIn`')
+
+    setImmediate(function () {
+      streamIn.destroy(streamError)
+    })
+
+    try {
+      await engine({processor: noop, streamIn})
+      assert.fail()
+    } catch (error) {
+      assert.equal(error, streamError)
+    }
+  })
+
   await t.test('should not fail on unmatched given globs', async function () {
     const cwd = new URL('empty/', fixtures)
     const stderr = spy()
