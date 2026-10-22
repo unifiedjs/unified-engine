@@ -35,6 +35,44 @@ if (!windows) {
 }
 
 test('reporting', async function (t) {
+  await t.test(
+    'should report files that get a fatal message while being transformed',
+    async function () {
+      const stderr = spy()
+
+      const result = await engine({
+        cwd: new URL('two-files/', fixtures),
+        files: ['one.txt', 'two.txt'],
+        processor: noop().use(
+          /** @type {Plugin<[], Literal>} */
+          function () {
+            return async function (_, file) {
+              if (file.stem === 'one') {
+                // The file is fatal before it’s done transforming, while
+                // `two.txt` finishes and is queued.
+                file.message('Error').fatal = true
+                await new Promise(function (resolve) {
+                  setTimeout(resolve, 20)
+                })
+              } else {
+                await new Promise(function (resolve) {
+                  setTimeout(resolve, 5)
+                })
+              }
+            }
+          }
+        ),
+        streamError: stderr.stream
+      })
+
+      assert.equal(result.code, 1)
+      assert.equal(
+        stderr(),
+        'one.txt\n error Error\n\ntwo.txt: no issues found\n\n✖ 1 error\n'
+      )
+    }
+  )
+
   await t.test('should fail for warnings with `frail`', async function () {
     const stderr = spy()
 
