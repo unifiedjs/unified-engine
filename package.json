@@ -6,12 +6,10 @@
     "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)"
   ],
   "dependencies": {
-    "@types/concat-stream": "^2.0.0",
     "@types/debug": "^4.0.0",
     "@types/is-empty": "^1.0.0",
     "@types/node": "^22.0.0",
     "@types/unist": "^3.0.0",
-    "concat-stream": "^2.0.0",
     "debug": "^4.0.0",
     "extend": "^3.0.0",
     "glob": "^10.0.0",
