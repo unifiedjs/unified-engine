@@ -51,6 +51,27 @@ test('configuration (plugins)', async function (t) {
   )
 
   await t.test(
+    'should support an ESM plugin w/ a `.ts` extname',
+    async function () {
+      const stderr = spy()
+
+      globalThis.unifiedEngineTestCalls = 0
+
+      const result = await engine({
+        cwd: new URL('config-plugins-esm-ts/', fixtures),
+        files: ['one.txt'],
+        processor: noop(),
+        rcName: '.foorc',
+        streamError: stderr.stream
+      })
+
+      assert.equal(result.code, 0)
+      assert.equal(stderr(), 'one.txt: no issues found\n')
+      assert.equal(globalThis.unifiedEngineTestCalls, 1)
+    }
+  )
+
+  await t.test(
     'should support an ESM plugin w/ a `.js` extname',
     async function () {
       const stderr = spy()

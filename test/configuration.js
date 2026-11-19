@@ -202,6 +202,56 @@ test('configuration', async function (t) {
     )
   })
 
+  await t.test('should support `.rc.ts` module', async function () {
+    const stderr = spy()
+    let calls = 0
+
+    const result = await engine({
+      cwd: new URL('rc-module-ts/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      plugins: [
+        function () {
+          assert.deepEqual(this.data('settings'), {foo: 'bar'})
+          calls++
+        }
+      ],
+      processor: noop,
+      rcName: '.foorc',
+      streamError: stderr.stream
+    })
+
+    assert.deepEqual(
+      [result.code, calls, stderr()],
+      [0, 1, 'one.txt: no issues found\n']
+    )
+  })
+
+  await t.test('should prefer `.rc.js` over `.rc.ts`', async function () {
+    const stderr = spy()
+    let calls = 0
+
+    const result = await engine({
+      cwd: new URL('rc-module-js-and-ts/', fixtures),
+      extensions: ['txt'],
+      files: ['.'],
+      plugins: [
+        function () {
+          assert.deepEqual(this.data('settings'), {foo: 'bar'})
+          calls++
+        }
+      ],
+      processor: noop,
+      rcName: '.foorc',
+      streamError: stderr.stream
+    })
+
+    assert.deepEqual(
+      [result.code, calls, stderr()],
+      [0, 1, 'one.txt: no issues found\n']
+    )
+  })
+
   await t.test('should support `.rc.yaml` config files', async function () {
     const stderr = spy()
 

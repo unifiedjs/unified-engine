@@ -70,7 +70,7 @@ const xoConfig = [
     ]
   },
   {
-    files: ['test/**/*.{js,mjs}'],
+    files: ['test/**/*.{js,mjs,ts}'],
     rules: {
       // Wrong for helpers in `test/util/`.
       'node-test/no-import-test-files': 'off',

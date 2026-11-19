@@ -481,13 +481,14 @@ on, depending on the following options:
 
 * if `options.rcName` is given, `$rcName` (JSON), `$rcName.js` (CommonJS or
   ESM depending on the `type` field of the closest `package.json`),
-  `$rcName.cjs` (CommonJS), `$rcName.mjs` (ESM), `$rcName.yml` (YAML),
-  and `$rcName.yaml` (YAML) are loaded
+  `$rcName.cjs` (CommonJS), `$rcName.mjs` (ESM), `$rcName.ts` (TypeScript),
+  `$rcName.yml` (YAML), and `$rcName.yaml` (YAML) are loaded
 * if `options.packageField` is given, `package.json` (JSON) files are loaded
   and the configuration at their `$packageField` field is used
 
 The first file that is searched for in a folder is used as the configuration.
 If no file is found, the parent folder is searched, and so on.
+TS files are loaded with the [type stripping][nodejs-type-stripping].
 
 The schema (type) of rc files is [`Preset`][api-preset].
 
@@ -1220,7 +1221,7 @@ engine(
 
 This example processes `readme.md` and allows configuration from `.remarkrc`,
 `.remarkrc.json`, `.remarkrc.yml`, `.remarkrc.yaml`, `.remarkrc.js`,
-`.remarkrc.cjs`, and `.remarkrc.mjs` files.
+`.remarkrc.cjs`, `.remarkrc.mjs`, and `.remarkrc.ts` files.
 
 ```js
 import {remark} from 'remark'
@@ -1685,6 +1686,8 @@ abide by its terms.
 [nodejs-fs-glob]: https://nodejs.org/api/fs.html#fsglobpattern-options-callback
 
 [nodejs-readable-stream]: https://nodejs.org/api/stream.html#readable-streams
+
+[nodejs-type-stripping]: https://nodejs.org/api/typescript.html#type-stripping
 
 [nodejs-writable-stream]: https://nodejs.org/api/stream.html#writable-streams
 
