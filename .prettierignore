@@ -1,5 +1,5 @@
+*.md
 coverage/
-test/fixtures/malformed-rc-yaml/.foorc.yaml
 test/fixtures/malformed-package-file/one.txt
 test/fixtures/malformed-package-file/package.json
-*.md
+test/fixtures/malformed-rc-yaml/.foorc.yaml
