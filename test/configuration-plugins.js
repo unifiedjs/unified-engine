@@ -189,16 +189,14 @@ test('configuration (plugins)', async function (t) {
 
     assert.equal(result.code, 1)
     assert.equal(
-      cleanError(stderr(), 8),
+      cleanError(stderr(), 6),
       [
         'one.txt',
         ' error Cannot process file',
         '  [cause]:',
         '    Error: Cannot parse file `package.json`',
         '  [cause]:',
-        '    Error: Expected preset or plugin, not `false`, at `test.js`',
-        '  [cause]:',
-        '    Error: Expected preset, not `false`'
+        '    Error: Expected preset or plugin, not `false`, at `test.js`'
       ].join('\n')
     )
   })

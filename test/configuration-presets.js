@@ -86,9 +86,7 @@ test('configuration-presets', async function (t) {
         '  [cause]:',
         '    Error: Cannot parse file `.foorc`',
         '  [cause]:',
-        '    Error: Expected preset or plugin, not `[object Object]`, at `preset' +
-          path.sep +
-          'index.js`',
+        '    Error: Cannot load preset `preset' + path.sep + 'index.js`',
         '  [cause]:',
         '    Error: Cannot import `plugin.js`'
       ].join('\n')
