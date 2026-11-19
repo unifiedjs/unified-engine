@@ -32,8 +32,8 @@ test('completers', async function (t) {
             'should have an `add` method'
           )
 
-          // The completer is added multiple times, but it’s detected that its the
-          // same function so it runs once.
+          // The completer is added multiple times, but it’s detected that it’s
+          // the same function, so it runs once.
           assert.equal(
             set.use(completer),
             set,

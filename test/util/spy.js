@@ -13,7 +13,7 @@ export function spy() {
    * @param {unknown} chunk
    *   Thing.
    * @returns {boolean}
-   *   Whether the write was succesful (yes).
+   *   Whether the write was successful (yes).
    */
   // @ts-expect-error: TS can’t apply overloads I think?.
   stream.write = function (chunk, encoding, callback) {

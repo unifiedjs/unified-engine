@@ -441,7 +441,7 @@ test('configuration', async function (t) {
     )
   })
 
-  await t.test('should ignore unconfigured `packages.json`', async function () {
+  await t.test('should ignore unconfigured `package.json`', async function () {
     const stderr = spy()
 
     const result = await engine({

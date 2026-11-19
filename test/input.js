@@ -270,7 +270,7 @@ test('input', async function (t) {
     }
   )
 
-  await t.test('should search vfile’s pointing to folders', async function () {
+  await t.test('should search vfiles pointing to folders', async function () {
     const cwd = new URL('ignore-file/', fixtures)
     const stderr = spy()
 

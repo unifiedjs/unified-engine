@@ -1,8 +1,7 @@
 /**
  * Clean an error so that it’s easier to test.
  *
- * This particularly removed error cause messages, which change across Node
- * versions.
+ * This removes error cause messages, which change across Node versions.
  * It also drops file paths, which differ across platforms,
  * and stack frames, which differ across Node versions.
  *
@@ -16,7 +15,7 @@
 export function cleanError(value, max) {
   return (
     value
-      // Clean syscal errors
+      // Clean syscall errors.
       .replace(/( *Error: [A-Z]+:)[^\n]*/g, '$1…')
 
       .replace(/\(.+[/\\]/g, '(')

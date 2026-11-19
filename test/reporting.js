@@ -112,7 +112,7 @@ test('reporting', async function (t) {
   })
 
   await t.test(
-    'should not report succesful files when `quiet` (#1)',
+    'should not report successful files when `quiet` (#1)',
     async function () {
       const stderr = spy()
 
@@ -140,7 +140,7 @@ test('reporting', async function (t) {
   )
 
   await t.test(
-    'should not report succesful files when `quiet` (#2)',
+    'should not report successful files when `quiet` (#2)',
     async function () {
       const stderr = spy()
 
@@ -159,7 +159,7 @@ test('reporting', async function (t) {
   )
 
   await t.test(
-    'should not report succesful files when `silent`',
+    'should not report successful files when `silent`',
     async function () {
       const stderr = spy()
 

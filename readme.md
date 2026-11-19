@@ -4,7 +4,7 @@
 [![Coverage][badge-coverage-image]][badge-coverage-url]
 [![Downloads][badge-downloads-image]][badge-downloads-url]
 
-**[unified][github-unified]** engine to process multiple files, lettings users
+**[unified][github-unified]** engine to process multiple files, letting users
 [configure][section-config-files] from the file system.
 
 ## Contents
@@ -117,33 +117,22 @@ extension with **[remark][github-remark]**, allows
 ignoring files from `.remarkignore` files, and more.
 
 ```js
-/**
- * @import {Callback} from 'unified-engine'
- */
-
 import process from 'node:process'
 import {remark} from 'remark'
 import {engine} from 'unified-engine'
 
-engine(
-  {
-    color: true,
-    extensions: ['md', 'markdown', 'mkd', 'mkdn', 'mkdown'],
-    files: ['.'],
-    ignoreName: '.remarkignore',
-    packageField: 'remarkConfig',
-    pluginPrefix: 'remark',
-    processor: remark,
-    rcName: '.remarkrc'
-  },
-  done
-)
+const result = await engine({
+  color: true,
+  extensions: ['md', 'markdown', 'mkd', 'mkdn', 'mkdown'],
+  files: ['.'],
+  ignoreName: '.remarkignore',
+  packageField: 'remarkConfig',
+  pluginPrefix: 'remark',
+  processor: remark,
+  rcName: '.remarkrc'
+})
 
-/** @type {Callback} */
-function done(error, code) {
-  if (error) throw error
-  process.exitCode = code
-}
+process.exitCode = result.code
 ```
 
 ## API
@@ -167,6 +156,10 @@ Process.
 
 If a callback is given, nothing (`undefined`).
 Otherwise [`Promise<ContextWithCode>`][api-context-with-code].
+
+The promise rejects (or the callback gets an error) when the engine itself
+fails, such as on invalid options.
+Problems in files do not: they are reported and make `code` `1`.
 
 ### `Configuration`
 
@@ -227,8 +220,8 @@ type).
 
 ###### Fields
 
-* `filePath` (`string`)
-  — file path of found configuration
+* `filePath` (`string` or `undefined`)
+  — file path of found configuration, if any
 * `plugins` (`Array<PluginTuple>` from `unified`)
   — resolved plugins
 * `settings` ([`Settings` from `unified`][github-unified-settings])
@@ -294,7 +287,7 @@ None.
 * `add(file: VFile | string): this`
   — add a file; the given file is processed like other files with a few
   differences: it’s ignored when their file path is already added, never
-  written to the file system or `streamOut`, and not included in the  report
+  written to the file system or `streamOut`, and not included in the report
 
 ### `Options`
 
@@ -326,7 +319,7 @@ Configuration (TypeScript type).
 * `filePath` (`URL` or `string`, optional)
   — file path to process the given file on `streamIn` as
 * `files` (`Array<URL | VFile | string>`, optional)
-  — paths or [globs][nodejs-fs-glob] to files and folder, or virtual files, to
+  — paths or [globs][nodejs-fs-glob] to files and folders, or virtual files, to
   process
 * `frail` (`boolean`, default: `false`)
   — call back with an unsuccessful (`1`) code on warnings as well as errors
@@ -345,8 +338,10 @@ Configuration (TypeScript type).
   either `rcName` or `packageField` must be defined too; cannot be combined
   with `rcPath` or `detectConfig: false`
 * `inspect` (`boolean`, default: `false`)
-  — whether to output a formatted syntax tree for debugging
-* `out` (`boolean`, default: `false`)
+  — whether to output a formatted syntax tree for debugging; changes the
+  extension of files to `.txt`
+* `out` (`boolean`, default: `true` when reading from `streamIn` or when one
+  file is given, `false` otherwise)
   — whether to write the processed file to `streamOut`
 * `output` (`URL`, `boolean` or `string`, default: `false`)
   — whether to write successfully processed files, and where to; when `true`,
@@ -386,18 +381,19 @@ Configuration (TypeScript type).
   — stream to write the report (if any) to
 * `streamIn` ([`ReadableStream`][nodejs-readable-stream] from Node.js,
   default: `process.stdin`)
-  — stream to read from if no files are found or given
+  — stream to read from if no files are given
 * `streamOut` ([`WritableStream`][nodejs-writable-stream] from Node.js,
   default: `process.stdout`)
   — stream to write processed files to, nothing is streamed if either `out`
-  is `false`, `output` is not `false`, multiple files are processed, or a
+  is `false` (the default for multiple files), `output` is not `false`, or a
   fatal error occurred while processing a file
 * `tree` (`boolean`, default: `false`)
   — whether to treat both input and output as a syntax tree
 * `treeIn` (`boolean`, default: `options.tree`)
   — whether to treat input as a syntax tree
 * `treeOut` (`boolean`, default: `options.tree`)
-  — whether to output as a syntax tree
+  — whether to output as a syntax tree; changes the extension of files to
+  `.json`
 * `verbose` (`boolean`, default: `false`)
   — report extra info; given to the reporter
 
@@ -426,7 +422,7 @@ type Preset = {
   settings?: Settings | undefined
 }
 
-type Pluggable = Plugin | PluginTuple | UnifiedPreset
+type Pluggable = Plugin | PluginTupleSupportingSpecifiers | UnifiedPreset
 type PluggableList = Array<Pluggable>
 type PluggableMap = Record<string, unknown>
 type Plugin = UnifiedPlugin | string
@@ -447,7 +443,7 @@ type ResolveFrom = 'cwd' | 'dir';
 
 ### `VFileReporter`
 
-Transform arbitrary configs to our format (TypeScript type).
+Reporter (TypeScript type).
 
 This is essentially the interface of [`vfile-reporter`][github-vfile-reporter],
 with added support for unknown fields in options and async support.
@@ -456,8 +452,7 @@ with added support for unknown fields in options and async support.
 
 * `files` ([`Array<VFile>`][github-vfile])
   — files
-* `options` ([`Options`][github-vfile-reporter-options] from `vfile-reporter`,
-  optional)
+* `options` ([`Options`][github-vfile-reporter-options] from `vfile-reporter`)
   — configuration
 
 ###### Returns
@@ -479,18 +474,31 @@ regardless of `options.detectConfig` and `options.rcName`.
 Otherwise, configuration files are detected if `options.detectConfig` is turned
 on, depending on the following options:
 
-* if `options.rcName` is given, `$rcName` (JSON), `$rcName.js` (CommonJS or
+* if `options.rcName` is given, `$rcName` (JSON), `$rcName.json` (JSON),
+  `$rcName.cjs` (CommonJS), `$rcName.mjs` (ESM), `$rcName.js` (CommonJS or
   ESM depending on the `type` field of the closest `package.json`),
-  `$rcName.cjs` (CommonJS), `$rcName.mjs` (ESM), `$rcName.ts` (TypeScript),
-  `$rcName.yml` (YAML), and `$rcName.yaml` (YAML) are loaded
-* if `options.packageField` is given, `package.json` (JSON) files are loaded
-  and the configuration at their `$packageField` field is used
+  `$rcName.ts` (TypeScript), `$rcName.yaml` (YAML), and `$rcName.yml` (YAML)
+  are searched for, in that order
+* if `options.packageField` is given, `package.json` (JSON) files are searched
+  for after that, and the configuration at their `$packageField` field is used;
+  `package.json` files without that field are skipped
 
-The first file that is searched for in a folder is used as the configuration.
+The first file that is found in a folder is used as the configuration.
 If no file is found, the parent folder is searched, and so on.
 TS files are loaded with the [type stripping][nodejs-type-stripping].
 
 The schema (type) of rc files is [`Preset`][api-preset].
+Setting the options of a plugin to `false` turns that plugin off, which is
+useful for plugins that come from presets:
+
+```json
+{
+  "plugins": [
+    "remark-preset-lint-recommended",
+    ["remark-lint-list-item-bullet-indent", false]
+  ]
+}
+```
 
 ### Examples
 
@@ -500,7 +508,7 @@ An example **rc** file could look as follows:
 {
   "plugins": [
     "remark-inline-links",
-    "remark-lint-recommended"
+    "remark-preset-lint-recommended"
   ],
   "settings": {
     "bullet": "*",
@@ -515,20 +523,20 @@ Another example, **rc.js**, could look as follows:
 ```js
 exports.plugins = [
   './script/natural-language.js',
-  'remark-lint-recommended',
+  'remark-preset-lint-recommended',
   'remark-license'
 ]
 
 exports.settings = {bullet: '*'}
 ```
 
-When using ESM (ECMAScript modules), **rc.mjs** could look as folows:
+When using ESM (ECMAScript modules), **rc.mjs** could look as follows:
 
 ```js
 export default {
   plugins: [
     './script/natural-language.js',
-    'remark-lint-recommended',
+    'remark-preset-lint-recommended',
     'remark-license'
   ],
   settings: {bullet: '*'}
@@ -537,7 +545,7 @@ export default {
 
 Another example, **rc.yaml**, could look as follows:
 
-```js
+```yaml
 plugins:
   - 'rehype-document'
   - 'rehype-preset-minify'
@@ -565,7 +573,7 @@ Otherwise, ignore files are detected if `options.detectIgnore` is turned on and
 
 The first file named `$ignoreName` in the parent folder of a checked file is
 used.
-Or, if no file is found, the parent folder if searched, and so on.
+Or, if no file is found, the parent folder is searched, and so on.
 
 ### Extra ignoring
 
@@ -582,7 +590,7 @@ configuration file by turning on `options.ignoreUnconfigured`.
 
 Ignoring is used when searching for files in folders.
 If paths (including those expanded from [globs][nodejs-fs-glob]) are passed in
-that are ignored, an error is thrown.
+that are ignored, they get a fatal error, so the code is `1`.
 These files can be silently ignored by turning on `options.silentlyIgnore`.
 
 Normally, files are ignored based on the path of the found ignore file and the
@@ -641,6 +649,11 @@ Normally, **unified** plugins receive a single `options` argument upon attaching
 If a plugin is attached by **unified-engine**, a second argument is given:
 [`FileSet`][api-file-set].
 
+Compilers can return a `string` or a `Uint8Array`, which is written as is to
+the file system or `streamOut`, so binary formats work too.
+Other results, such as React nodes, are stored at `file.result` and are not
+written.
+
 ## Examples
 
 `unified-engine` can be configured extensively by engine authors.
@@ -681,7 +694,7 @@ example.md: no issues found
 ### `options.configTransform`
 
 To support custom rc files, that have a different format than what the engine
-supports, pass as [`ConfigTransform`][api-config-transform].
+supports, pass a [`ConfigTransform`][api-config-transform].
 
 This example processes `readme.md` and loads options from `custom` (from a
 `package.json`).
@@ -963,7 +976,7 @@ engine(
 ### `options.ignorePathResolveFrom`
 
 This example processes files in the current working directory with an `md`
-extension and takes a reusable configuration file from a dependency.
+extension and takes a reusable ignore file from a dependency.
 
 ```js
 import {remark} from 'remark'
@@ -1334,7 +1347,7 @@ engine(
     out: false,
     plugins: [remarkPresetLintRecommended],
     processor: remark(),
-    streamErr: fs.createWriteStream('report.txt')
+    streamError: fs.createWriteStream('report.txt')
   },
   function (error) {
     if (error) throw error
@@ -1533,15 +1546,22 @@ Where `doc.md` looks as follows:
 [foo](https://example.com)
 ```
 
-Yields:
+Yields (positional info left out for brevity):
 
 ```json
 {
-  "type": "paragraph",
-  "children": [{
-    "type": "text",
-    "value": "foo"
-  }]
+  "type": "root",
+  "children": [
+    {
+      "type": "paragraph",
+      "children": [
+        {
+          "type": "text",
+          "value": "foo"
+        }
+      ]
+    }
+  ]
 }
 ```
 
