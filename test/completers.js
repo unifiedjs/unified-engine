@@ -109,6 +109,52 @@ test('completers', async function (t) {
     }
   })
 
+  await t.test(
+    'should support `fileSet.add` from completers',
+    async function () {
+      const stderr = spy()
+      /** @type {Array<string | undefined>} */
+      const transformed = []
+      let calls = 0
+
+      const result = await engine({
+        cwd: new URL('two-files/', fixtures),
+        files: ['one.txt'],
+        plugins: [
+          function (_, fileSet) {
+            const set = /** @type {FileSet} */ (fileSet)
+
+            set.use(completer)
+
+            return function (_, file) {
+              transformed.push(file.stem)
+            }
+          }
+        ],
+        processor: noop,
+        streamError: stderr.stream
+      })
+
+      assert.equal(result.code, 0)
+      assert.equal(stderr(), 'one.txt: no issues found\n')
+      assert.equal(calls, 1)
+      assert.deepEqual(transformed, ['one', 'two'])
+
+      /**
+       * Completer that adds a file.
+       *
+       * @param {FileSet} set
+       *   Set.
+       * @returns {undefined}
+       *   Nothing.
+       */
+      function completer(set) {
+        calls++
+        set.add('two.txt')
+      }
+    }
+  )
+
   await t.test('should support `fileSet.add` from plugins', async function () {
     const cwd = new URL('extensions/', fixtures)
     const stderr = spy()
