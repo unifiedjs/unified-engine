@@ -2,6 +2,7 @@
  * @import {Literal} from 'unist'
  * @import {Compiler, Plugin} from 'unified'
  * @import {SomeCustomResultExample} from './types.js'
+ * @import {FileSet} from 'unified-engine'
  */
 
 import assert from 'node:assert/strict'
@@ -406,6 +407,33 @@ test('output', async function (t) {
     assert.equal(stderr(), 'one.txt: no issues found\n')
     assert.equal(stdout(), 'Hi! 🤷‍♂️')
   })
+
+  await t.test(
+    'should write to a file path w/ files added by plugins',
+    async function () {
+      const cwd = new URL('two-files/', fixtures)
+      const stderr = spy()
+
+      const result = await engine({
+        cwd,
+        files: ['one.txt'],
+        output: 'out.txt',
+        plugins: [
+          function (_, fileSet) {
+            const set = /** @type {FileSet} */ (fileSet)
+            set.add('two.txt')
+          }
+        ],
+        processor: noop,
+        streamError: stderr.stream
+      })
+
+      await fs.unlink(new URL('out.txt', cwd))
+
+      assert.equal(result.code, 0)
+      assert.equal(stderr(), 'one.txt > out.txt: written\n')
+    }
+  )
 
   await t.test('should write binary to the file system', async function () {
     const cwd = new URL('simple-structure/', fixtures)
