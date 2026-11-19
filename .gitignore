@@ -1,10 +1,10 @@
+.DS_Store
 *.d.cts
 *.d.mts
 *.d.ts
 *.log
 *.map
 *.tsbuildinfo
-.DS_Store
 /node_modules/
 coverage/
 yarn.lock
