@@ -267,6 +267,27 @@ test('ignore', async function (t) {
     )
   })
 
+  await t.test(
+    'should report a missing file once w/ a missing `ignorePath`',
+    async function () {
+      const result = await engine({
+        cwd: new URL('two-files/', fixtures),
+        files: ['missing.txt', 'one.txt'],
+        ignorePath: 'missing',
+        processor: noop,
+        streamError: spy().stream
+      })
+
+      assert.equal(result.code, 1)
+      assert.deepEqual(
+        result.files.map(function (file) {
+          return file.path
+        }),
+        ['missing.txt', 'one.txt']
+      )
+    }
+  )
+
   await t.test('should support higher positioned files', async function () {
     const stderr = spy()
     const cwd = new URL('empty/', fixtures)
