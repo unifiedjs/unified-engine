@@ -65,8 +65,8 @@
   "name": "unified-engine",
   "prettier": {
     "bracketSpacing": false,
-    "singleQuote": true,
     "semi": false,
+    "singleQuote": true,
     "tabWidth": 2,
     "trailingComma": "none",
     "useTabs": false
@@ -79,9 +79,9 @@
   "repository": "unifiedjs/unified-engine",
   "scripts": {
     "build": "tsc --build --clean && tsc --build && type-coverage",
-    "format": "remark . --frail --output --quiet && prettier . --log-level warn --write && xo --fix",
+    "format": "remark --frail --output --quiet -- . && prettier --log-level warn --write -- . && xo --fix",
     "test-api": "node --conditions development test/index.js",
-    "test-coverage": "c8 --100 --check-coverage --reporter lcov npm run test-api",
+    "test-coverage": "c8 --100 --check-coverage --reporter lcov -- npm run test-api",
     "test": "npm run build && npm run format && npm run test-coverage"
   },
   "sideEffects": false,
