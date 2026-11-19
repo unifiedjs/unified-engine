@@ -43,6 +43,48 @@ test('reporting', async function (t) {
     }
   })
 
+  await t.test(
+    'should wait for files that become fatal while transforming',
+    async function () {
+      const stderr = spy()
+      /** @type {() => undefined} */
+      let resolveTwo = function () {}
+      /** @type {Promise<undefined>} */
+      const twoTransformed = new Promise(function (resolve) {
+        resolveTwo = function () {
+          resolve(undefined)
+        }
+      })
+
+      const result = await engine({
+        cwd: new URL('two-files/', fixtures),
+        files: ['one.txt', 'two.txt'],
+        processor: noop().use(
+          /** @type {Plugin<[], Literal>} */
+          function () {
+            return async function (_, file) {
+              if (file.stem === 'one') {
+                file.message('Error').fatal = true
+                // Let `two.txt` be queued first.
+                await twoTransformed
+                await new Promise(setImmediate)
+              } else {
+                resolveTwo()
+              }
+            }
+          }
+        ),
+        streamError: stderr.stream
+      })
+
+      assert.equal(result.code, 1)
+      assert.equal(
+        stderr(),
+        'one.txt\n error Error\n\ntwo.txt: no issues found\n\n✖ 1 error\n'
+      )
+    }
+  )
+
   await t.test('should fail for warnings with `frail`', async function () {
     const stderr = spy()
 
