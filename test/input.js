@@ -60,12 +60,9 @@ test('input', async function (t) {
       streamIn.destroy(streamError)
     })
 
-    try {
-      await engine({processor: noop, streamIn})
-      assert.fail()
-    } catch (error) {
-      assert.equal(error, streamError)
-    }
+    await assert.rejects(engine({processor: noop, streamIn}), function (error) {
+      return error === streamError
+    })
   })
 
   await t.test('should not fail on unmatched given globs', async function () {

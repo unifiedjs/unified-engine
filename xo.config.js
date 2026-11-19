@@ -90,6 +90,8 @@ const xoConfig = [
     files: ['package.json'],
     rules: {
       'package-json/no-orphan-types': 'off',
+      // `@types/node` is `*` on purpose: see GH-87.
+      'package-json/no-wildcard-dependencies': 'off',
       'package-json/require-engines': 'off',
       'package-json/sort-files': 'off',
       'package-json/sort-properties': 'off'
