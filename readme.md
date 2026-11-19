@@ -1,14 +1,11 @@
 # unified-engine
 
-[![Build][build-badge]][build]
-[![Coverage][coverage-badge]][coverage]
-[![Downloads][downloads-badge]][downloads]
-[![Sponsors][sponsors-badge]][collective]
-[![Backers][backers-badge]][collective]
-[![Chat][chat-badge]][chat]
+[![Build][badge-build-image]][badge-build-url]
+[![Coverage][badge-coverage-image]][badge-coverage-url]
+[![Downloads][badge-downloads-image]][badge-downloads-url]
 
-**[unified][]** engine to process multiple files, lettings users
-[configure][config-files] from the file system.
+**[unified][github-unified]** engine to process multiple files, lettings users
+[configure][section-config-files] from the file system.
 
 ## Contents
 
@@ -84,29 +81,29 @@
 ## What is this?
 
 This package is the engine.
-It’s what you use underneath when you use [`remark-cli`][remark-cli] or a
+It’s what you use underneath when you use [`remark-cli`][github-remark-cli] or a
 language server.
 Compared to unified, this deals with multiple files, often from the file
-system, and with [configuration files][config-files] and
-[ignore files][ignore-files].
+system, and with [configuration files][section-config-files] and
+[ignore files][section-ignore-files].
 
 ## When should I use this?
 
 You typically use something that wraps this, such as:
 
-* [`unified-args`][unified-args]
+* [`unified-args`][github-unified-args]
   — create CLIs
-* [`unified-engine-gulp`][unified-engine-gulp]
+* [`unified-engine-gulp`][github-unified-engine-gulp]
   — create Gulp plugins
-* [`unified-language-server`][unified-language-server]
+* [`unified-language-server`][github-unified-language-server]
   — create language servers
 
 You can use this to make such things.
 
 ## Install
 
-This package is [ESM only][esm].
-In Node.js (version 16+), install with [npm][]:
+This package is [ESM only][github-gist-esm].
+In Node.js (version 16+), install with [npm][npmjs-install]:
 
 ```sh
 npm install unified-engine
@@ -114,10 +111,10 @@ npm install unified-engine
 
 ## Use
 
-The following example processes all files in the current folder with a
-markdown extension with **[remark][]**, allows [configuration][config-files]
-from `.remarkrc` and `package.json` files, ignoring files from `.remarkignore`
-files, and more.
+The following example processes all files in the current folder with a markdown
+extension with **[remark][github-remark]**, allows
+[configuration][section-config-files] from `.remarkrc` and `package.json` files,
+ignoring files from `.remarkignore` files, and more.
 
 ```js
 /**
@@ -234,7 +231,7 @@ type).
   — file path of found configuration
 * `plugins` (`Array<PluginTuple>` from `unified`)
   — resolved plugins
-* `settings` ([`Settings` from `unified`][unified-settings])
+* `settings` ([`Settings` from `unified`][github-unified-settings])
   — resolved settings
 
 ### `ConfigTransform`
@@ -274,7 +271,7 @@ Processing context (TypeScript type).
 
 * `fileSet` ([`FileSet`][api-file-set])
   — internally used info
-* `files` ([`Array<VFile>`][vfile])
+* `files` ([`Array<VFile>`][github-vfile])
   — processed files
 
 ### `FileSet`
@@ -329,7 +326,7 @@ Configuration (TypeScript type).
 * `filePath` (`URL` or `string`, optional)
   — file path to process the given file on `streamIn` as
 * `files` (`Array<URL | VFile | string>`, optional)
-  — paths or [globs][node-glob] to files and folder, or virtual files, to
+  — paths or [globs][github-node-glob] to files and folder, or virtual files, to
   process
 * `frail` (`boolean`, default: `false`)
   — call back with an unsuccessful (`1`) code on warnings as well as errors
@@ -363,7 +360,7 @@ Configuration (TypeScript type).
   — prefix to use when searching for plugins
 * `plugins` ([`Preset['plugins']`][api-preset], optional)
   — plugins to use
-* `processor` ([`Processor`][unified-processor], **required**)
+* `processor` ([`Processor`][github-unified-processor], **required**)
   — unified processor to transform files
 * `quiet` (`boolean`, default: `false`)
   — do not report successful files; given to the reporter
@@ -375,22 +372,22 @@ Configuration (TypeScript type).
   `vfile-reporter`)
   — reporter to use; if a `string` is passed, it’s loaded from `cwd`, and
   `'vfile-reporter-'` can be omitted
-* `reporterOptions` ([`Options`][vfile-reporter-options] from
+* `reporterOptions` ([`Options`][github-vfile-reporter-options] from
   `vfile-reporter`, optional)
   — config to pass to the used reporter
-* `settings` ([`Settings`][unified-settings] from `unified`, optional)
+* `settings` ([`Settings`][github-unified-settings] from `unified`, optional)
   — configuration for the parser and compiler of the processor
 * `silent` (`boolean`, default: `false`)
   — report only fatal errors; given to the reporter
 * `silentlyIgnore` (`boolean`, default: `false`)
   — skip given files if they are ignored
-* `streamError` ([`WritableStream`][node-writable-stream] from Node.js,
+* `streamError` ([`WritableStream`][nodejs-writable-stream] from Node.js,
   default: `process.stderr`)
   — stream to write the report (if any) to
-* `streamIn` ([`ReadableStream`][node-readable-stream] from Node.js,
+* `streamIn` ([`ReadableStream`][nodejs-readable-stream] from Node.js,
   default: `process.stdin`)
   — stream to read from if no files are found or given
-* `streamOut` ([`WritableStream`][node-writable-stream] from Node.js,
+* `streamOut` ([`WritableStream`][nodejs-writable-stream] from Node.js,
   default: `process.stdout`)
   — stream to write processed files to, nothing is streamed if either `out`
   is `false`, `output` is not `false`, multiple files are processed, or a
@@ -452,14 +449,14 @@ type ResolveFrom = 'cwd' | 'dir';
 
 Transform arbitrary configs to our format (TypeScript type).
 
-This is essentially the interface of [`vfile-reporter`][vfile-reporter], with
-added support for unknown fields in options and async support.
+This is essentially the interface of [`vfile-reporter`][github-vfile-reporter],
+with added support for unknown fields in options and async support.
 
 ###### Parameters
 
-* `files` ([`Array<VFile>`][vfile])
+* `files` ([`Array<VFile>`][github-vfile])
   — files
-* `options` ([`Options`][vfile-reporter-options] from `vfile-reporter`,
+* `options` ([`Options`][github-vfile-reporter-options] from `vfile-reporter`,
   optional)
   — configuration
 
@@ -583,8 +580,8 @@ configuration file by turning on `options.ignoreUnconfigured`.
 ### Ignoring
 
 Ignoring is used when searching for files in folders.
-If paths (including those expanded from [globs][node-glob]) are passed in that
-are ignored, an error is thrown.
+If paths (including those expanded from [globs][github-node-glob]) are passed in
+that are ignored, an error is thrown.
 These files can be silently ignored by turning on `options.silentlyIgnore`.
 
 Normally, files are ignored based on the path of the found ignore file and the
@@ -601,11 +598,11 @@ for matching files, but `node_modules` are normally not searched.
 Pass paths (or globs) to the `node_modules` you want to include in
 `options.files` to search them.
 
-The format for ignore files is the same as [`.gitignore`][gitignore], so it’s
-possible to pass a `.gitignore` in as `options.ignorePath`.
+The format for ignore files is the same as [`.gitignore`][git-scm-gitignore], so
+it’s possible to pass a `.gitignore` in as `options.ignorePath`.
 
-[`node-ignore`][node-ignore] is used under the hood, see its documentation
-for more information.
+[`node-ignore`][github-node-ignore] is used under the hood, see its
+documentation for more information.
 
 ### Examples
 
@@ -894,8 +891,8 @@ engine(
 
 ### `options.frail`
 
-This example uses [`remark-lint`][remark-lint] to lint `readme.md` and exits
-with the given exit code.
+This example uses [`remark-lint`][github-remark-lint] to lint `readme.md` and
+exits with the given exit code.
 Normally, only errors turn the `code` to `1`, but in `frail` mode lint warnings
 result in the same.
 
@@ -1034,9 +1031,9 @@ engine(
 ### `options.inspect`
 
 This example shows a module which reads and parses `doc.md`, then
-[`remark-unlink`][remark-unlink] transforms the syntax tree, the tree is
-formatted with [`unist-util-inspect`][unist-util-inspect], and finally written
-to **stdout**(4).
+[`remark-unlink`][github-remark-unlink] transforms the syntax tree, the tree is
+formatted with [`unist-util-inspect`][github-unist-util-inspect], and finally
+written to **stdout**(4).
 
 ```js
 import {remark} from 'remark'
@@ -1072,8 +1069,8 @@ root[1] (1:1-2:1, 0-27)
 
 ### `options.out`
 
-This example uses [`remark-lint`][remark-lint] to lint `readme.md`, writes the
-report, and ignores the serialized document.
+This example uses [`remark-lint`][github-remark-lint] to lint `readme.md`,
+writes the report, and ignores the serialized document.
 
 ```js
 import {remark} from 'remark'
@@ -1141,7 +1138,7 @@ engine(
 This example processes `readme.md` and loads the
 `preset-lint-recommended` plugin.
 Because `pluginPrefix` is given, this resolves to
-[`remark-preset-lint-recommended`][remark-preset-lint-recommended] (from
+[`remark-preset-lint-recommended`][github-remark-preset-lint-recommended] (from
 `node_modules/`) if available.
 
 ```js
@@ -1164,7 +1161,7 @@ engine(
 ### `options.plugins`
 
 This example processes `readme.md` and loads the
-[`remark-preset-lint-recommended`][remark-preset-lint-recommended]
+[`remark-preset-lint-recommended`][github-remark-preset-lint-recommended]
 preset.
 
 ```js
@@ -1185,8 +1182,8 @@ engine(
 
 ### `options.processor`
 
-This example reformats **stdin**(4) using [remark][], writes the report
-to **stderr**(4), and formatted document to **stdout**(4).
+This example reformats **stdin**(4) using [remark][github-remark], writes the
+report to **stderr**(4), and formatted document to **stdout**(4).
 
 ```js
 import {remark} from 'remark'
@@ -1199,7 +1196,7 @@ engine({processor: remark}, function (error) {
 
 ### `options.quiet`
 
-This example uses [`remark-lint`][remark-lint] to lint `readme.md`.
+This example uses [`remark-lint`][github-remark-lint] to lint `readme.md`.
 Nothing is reported if the file processed successfully.
 
 ```js
@@ -1257,8 +1254,8 @@ engine(
 
 This example processes all HTML files in the current folder with rehype,
 configures the processor with `.rehyperc` files, and prints a report in
-JSON using [`vfile-reporter-json`][vfile-reporter-json] with
-[reporter options][vfile-reporter-options].
+JSON using [`vfile-reporter-json`][github-vfile-reporter-json] with
+[reporter options][github-vfile-reporter-options].
 
 ```js
 import {rehype} from 'rehype'
@@ -1282,7 +1279,7 @@ engine(
 ### `options.settings`
 
 This example processes `readme.md` and configures the compiler
-([`remark-stringify`][remark-stringify]) with `bullet: '+'`.
+([`remark-stringify`][github-remark-stringify]) with `bullet: '+'`.
 
 ```js
 import {remark} from 'remark'
@@ -1298,8 +1295,9 @@ engine(
 
 ### `options.silent`
 
-This example uses [`remark-lint`][remark-lint] to lint `readme.md` but does not
-report any warnings or success messages, only fatal errors, if they occur.
+This example uses [`remark-lint`][github-remark-lint] to lint `readme.md` but
+does not report any warnings or success messages, only fatal errors, if they
+occur.
 
 ```js
 import {remark} from 'remark'
@@ -1320,8 +1318,8 @@ engine(
 
 ### `options.streamError`
 
-This example uses [`remark-lint`][remark-lint] to lint `readme.md` and writes
-the report to `report.txt`.
+This example uses [`remark-lint`][github-remark-lint] to lint `readme.md` and
+writes the report to `report.txt`.
 
 ```js
 import fs from 'node:fs'
@@ -1345,7 +1343,7 @@ engine(
 
 ### `options.streamIn`
 
-This example uses [`remark-lint`][remark-lint] to lint an incoming
+This example uses [`remark-lint`][github-remark-lint] to lint an incoming
 stream.
 
 ```js
@@ -1408,7 +1406,7 @@ engine(
 
 ### `options.tree`
 
-This example reads `tree.json`, then [`remark-unlink`][remark-unlink]
+This example reads `tree.json`, then [`remark-unlink`][github-remark-unlink]
 transforms the syntax tree, and the transformed tree is written to
 **stdout**(4).
 
@@ -1460,7 +1458,7 @@ Yields:
 
 ### `options.treeIn`
 
-This example reads `tree.json`, then [`remark-unlink`][remark-unlink]
+This example reads `tree.json`, then [`remark-unlink`][github-remark-unlink]
 transforms the syntax tree, the tree is serialized, and the resulting document
 is written to **stdout**(4).
 
@@ -1507,8 +1505,8 @@ foo
 ### `options.treeOut`
 
 This example shows a module which reads and parses `doc.md`, then
-[`remark-unlink`][remark-unlink] transforms the syntax tree, and the tree is
-written to **stdout**(4).
+[`remark-unlink`][github-remark-unlink] transforms the syntax tree, and the tree
+is written to **stdout**(4).
 
 ```js
 import {remark} from 'remark'
@@ -1582,17 +1580,17 @@ with packages from npm and changes made by contributors.
 
 ## Contribute
 
-See [`contributing.md`][contributing] in [`unifiedjs/.github`][health] for ways
-to get started.
-See [`support.md`][support] for ways to get help.
+See [`contributing.md`][health-contributing] in [`unifiedjs/.github`][health]
+for ways to get started.
+See [`support.md`][health-support] for ways to get help.
 
-This project has a [code of conduct][coc].
+This project has a [code of conduct][health-coc].
 By interacting with this repository, organization, or community you agree to
 abide by its terms.
 
 ## License
 
-[MIT][license] © [Titus Wormer][author]
+[MIT][file-license] © [Titus Wormer][wooorm]
 
 <!-- Definitions -->
 
@@ -1622,90 +1620,80 @@ abide by its terms.
 
 [api-vfile-reporter]: #vfilereporter
 
-[author]: https://wooorm.com
+[badge-build-image]: https://github.com/unifiedjs/unified-engine/workflows/main/badge.svg
 
-[backers-badge]: https://opencollective.com/unified/backers/badge.svg
+[badge-build-url]: https://github.com/unifiedjs/unified-engine/actions
 
-[build]: https://github.com/unifiedjs/unified-engine/actions
+[badge-coverage-image]: https://img.shields.io/codecov/c/github/unifiedjs/unified-engine.svg
 
-[build-badge]: https://github.com/unifiedjs/unified-engine/workflows/main/badge.svg
+[badge-coverage-url]: https://codecov.io/github/unifiedjs/unified-engine
 
-[chat]: https://github.com/unifiedjs/unified/discussions
+[badge-downloads-image]: https://img.shields.io/npm/dm/unified-engine.svg
 
-[chat-badge]: https://img.shields.io/badge/chat-discussions-success.svg
+[badge-downloads-url]: https://www.npmjs.com/package/unified-engine
 
-[coc]: https://github.com/unifiedjs/.github/blob/main/code-of-conduct.md
+[file-license]: license
 
-[collective]: https://opencollective.com/unified
+[git-scm-gitignore]: https://git-scm.com/docs/gitignore
 
-[config-files]: #config-files
+[github-gist-esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
 
-[contributing]: https://github.com/unifiedjs/.github/blob/main/contributing.md
+[github-node-glob]: https://github.com/isaacs/node-glob#glob-primer
 
-[coverage]: https://codecov.io/github/unifiedjs/unified-engine
+[github-node-ignore]: https://github.com/kaelzhang/node-ignore
 
-[coverage-badge]: https://img.shields.io/codecov/c/github/unifiedjs/unified-engine.svg
+[github-remark]: https://github.com/remarkjs/remark
 
-[downloads]: https://www.npmjs.com/package/unified-engine
+[github-remark-cli]: https://github.com/remarkjs/remark/tree/main/packages/remark-cli#readme
 
-[downloads-badge]: https://img.shields.io/npm/dm/unified-engine.svg
+[github-remark-lint]: https://github.com/remarkjs/remark-lint
 
-[esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
+[github-remark-preset-lint-recommended]: https://github.com/remarkjs/remark-lint/tree/main/packages/remark-preset-lint-recommended
 
-[gitignore]: https://git-scm.com/docs/gitignore
+[github-remark-stringify]: https://github.com/remarkjs/remark/tree/main/packages/remark-stringify
+
+[github-remark-unlink]: https://github.com/remarkjs/remark-unlink
+
+[github-unified]: https://github.com/unifiedjs/unified
+
+[github-unified-args]: https://github.com/unifiedjs/unified-args
+
+[github-unified-engine-gulp]: https://github.com/unifiedjs/unified-engine-gulp
+
+[github-unified-language-server]: https://github.com/unifiedjs/unified-language-server
+
+[github-unified-processor]: https://github.com/unifiedjs/unified#processor-1
+
+[github-unified-settings]: https://github.com/unifiedjs/unified#settings
+
+[github-unist-util-inspect]: https://github.com/syntax-tree/unist-util-inspect
+
+[github-vfile]: https://github.com/vfile/vfile
+
+[github-vfile-reporter]: https://github.com/vfile/vfile-reporter
+
+[github-vfile-reporter-json]: https://github.com/vfile/vfile-reporter-json
+
+[github-vfile-reporter-options]: https://github.com/vfile/vfile-reporter#options
 
 [health]: https://github.com/unifiedjs/.github
 
-[ignore-files]: #ignore-files
+[health-coc]: https://github.com/unifiedjs/.github/blob/main/code-of-conduct.md
 
-[license]: license
+[health-contributing]: https://github.com/unifiedjs/.github/blob/main/contributing.md
 
-[node-glob]: https://github.com/isaacs/node-glob#glob-primer
+[health-support]: https://github.com/unifiedjs/.github/blob/main/support.md
 
-[node-ignore]: https://github.com/kaelzhang/node-ignore
+[nodejs-readable-stream]: https://nodejs.org/api/stream.html#readable-streams
 
-[node-readable-stream]: https://nodejs.org/api/stream.html#readable-streams
+[nodejs-writable-stream]: https://nodejs.org/api/stream.html#writable-streams
 
-[node-writable-stream]: https://nodejs.org/api/stream.html#writable-streams
+[npmjs-install]: https://docs.npmjs.com/cli/install
 
-[npm]: https://docs.npmjs.com/cli/install
+[section-config-files]: #config-files
 
-[remark]: https://github.com/remarkjs/remark
-
-[remark-cli]: https://github.com/remarkjs/remark/tree/main/packages/remark-cli#readme
-
-[remark-lint]: https://github.com/remarkjs/remark-lint
-
-[remark-preset-lint-recommended]: https://github.com/remarkjs/remark-lint/tree/main/packages/remark-preset-lint-recommended
-
-[remark-stringify]: https://github.com/remarkjs/remark/tree/main/packages/remark-stringify
-
-[remark-unlink]: https://github.com/remarkjs/remark-unlink
-
-[sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
-
-[support]: https://github.com/unifiedjs/.github/blob/main/support.md
+[section-ignore-files]: #ignore-files
 
 [typescript]: https://www.typescriptlang.org
 
-[unified]: https://github.com/unifiedjs/unified
-
-[unified-args]: https://github.com/unifiedjs/unified-args
-
-[unified-engine-gulp]: https://github.com/unifiedjs/unified-engine-gulp
-
-[unified-language-server]: https://github.com/unifiedjs/unified-language-server
-
-[unified-processor]: https://github.com/unifiedjs/unified#processor-1
-
-[unified-settings]: https://github.com/unifiedjs/unified#settings
-
-[unist-util-inspect]: https://github.com/syntax-tree/unist-util-inspect
-
-[vfile]: https://github.com/vfile/vfile
-
-[vfile-reporter]: https://github.com/vfile/vfile-reporter
-
-[vfile-reporter-json]: https://github.com/vfile/vfile-reporter-json
-
-[vfile-reporter-options]: https://github.com/vfile/vfile-reporter#options
+[wooorm]: https://wooorm.com
