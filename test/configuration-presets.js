@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import path from 'node:path'
 import test from 'node:test'
 import {engine} from 'unified-engine'
 import {cleanError} from './util/clean-error.js'
@@ -23,12 +24,14 @@ test('configuration-presets', async function (t) {
 
     assert.equal(result.code, 1)
     assert.equal(
-      cleanError(stderr(), 4),
+      cleanError(stderr(), 6),
       [
         'one.txt',
         ' error Cannot process file',
         '  [cause]:',
-        '    Error: Cannot parse file `.foorc`'
+        '    Error: Cannot parse file `.foorc`',
+        '  [cause]:',
+        '    Error: Expected a list or object of plugins, not `./preset`'
       ].join('\n')
     )
   })
@@ -76,12 +79,18 @@ test('configuration-presets', async function (t) {
 
     assert.equal(result.code, 1)
     assert.equal(
-      cleanError(stderr(), 4),
+      cleanError(stderr(), 8),
       [
         'one.txt',
         ' error Cannot process file',
         '  [cause]:',
-        '    Error: Cannot parse file `.foorc`'
+        '    Error: Cannot parse file `.foorc`',
+        '  [cause]:',
+        '    Error: Expected preset or plugin, not `[object Object]`, at `preset' +
+          path.sep +
+          'index.js`',
+        '  [cause]:',
+        '    Error: Cannot import `plugin.js`'
       ].join('\n')
     )
   })

@@ -113,8 +113,7 @@ test('output', async function (t) {
         }
       ),
       streamError: stderr.stream,
-      streamOut: stdout.stream,
-      out: false
+      streamOut: stdout.stream
     })
 
     assert.equal(result.code, 0)

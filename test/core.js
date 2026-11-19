@@ -1,7 +1,14 @@
+/**
+ * @import {Callback} from 'unified-engine'
+ */
+
 import assert from 'node:assert/strict'
+import {PassThrough} from 'node:stream'
 import test from 'node:test'
 import {unified} from 'unified'
 import {engine} from 'unified-engine'
+import {noop} from './util/noop-processor.js'
+import {spy} from './util/spy.js'
 
 test('engine', async function (t) {
   await t.test('should expose the public api', async function () {
@@ -46,10 +53,53 @@ test('engine', async function (t) {
     }
   )
 
-  await t.test('should work w/o `callback`', async function () {
-    try {
-      await engine({processor: unified()})
-      assert.fail()
-    } catch {}
+  await t.test('should support a `callback`', async function () {
+    const streamIn = new PassThrough()
+    const stdout = spy()
+    /** @type {unknown} */
+    let returned
+
+    streamIn.end('x')
+
+    /** @type {Parameters<Callback>} */
+    const parameters = await new Promise(function (resolve) {
+      returned = engine(
+        {
+          processor: noop,
+          streamError: spy().stream,
+          streamIn,
+          streamOut: stdout.stream
+        },
+        function (...parameters) {
+          resolve(parameters)
+        }
+      )
+    })
+
+    assert.equal(returned, undefined)
+    assert.equal(parameters[0], undefined)
+    assert.equal(parameters[1], 0)
+    assert.equal(parameters[2]?.files.length, 1)
+    assert.equal(stdout(), 'x')
+  })
+
+  await t.test('should return a promise w/o `callback`', async function () {
+    const streamIn = new PassThrough()
+
+    streamIn.end('x')
+
+    const stdout = spy()
+
+    const result = await engine({
+      processor: noop,
+      streamError: spy().stream,
+      streamIn,
+      streamOut: stdout.stream
+    })
+
+    assert.equal(result.code, 0)
+    assert.equal(result.files.length, 1)
+    assert.deepEqual(result.fileSet.valueOf(), result.files)
+    assert.equal(stdout(), 'x')
   })
 })

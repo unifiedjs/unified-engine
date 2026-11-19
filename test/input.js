@@ -110,7 +110,7 @@ test('input', async function (t) {
     )
   })
 
-  await t.test('should not report unfound given folders', async function () {
+  await t.test('should not report given folders w/o files', async function () {
     const stderr = spy()
 
     const result = await engine({
@@ -317,7 +317,7 @@ test('input', async function (t) {
     }
   )
 
-  await t.test('should include given ignored files (#1)', async function () {
+  await t.test('should fail on given ignored vfiles', async function () {
     const cwd = new URL('ignore-file/', fixtures)
     const stderr = spy()
 
@@ -478,32 +478,35 @@ test('input', async function (t) {
     }
   )
 
-  await t.test('should include given ignored files (#2)', async function () {
-    const stderr = spy()
+  await t.test(
+    'should fail on ignored files matched by a glob',
+    async function () {
+      const stderr = spy()
 
-    const result = await engine({
-      cwd: new URL('ignore-file/', fixtures),
-      ignoreName: '.fooignore',
-      files: ['**/*.txt'],
-      processor: noop,
-      streamError: stderr.stream
-    })
+      const result = await engine({
+        cwd: new URL('ignore-file/', fixtures),
+        ignoreName: '.fooignore',
+        files: ['**/*.txt'],
+        processor: noop,
+        streamError: stderr.stream
+      })
 
-    assert.equal(result.code, 1)
-    assert.equal(
-      stderr(),
-      [
-        'nested' + path.sep + 'three.txt: no issues found',
-        'nested' + path.sep + 'two.txt',
-        ' error Cannot process specified file: it’s ignored',
-        '',
-        'one.txt: no issues found',
-        '',
-        '✖ 1 error',
-        ''
-      ].join('\n')
-    )
-  })
+      assert.equal(result.code, 1)
+      assert.equal(
+        stderr(),
+        [
+          'nested' + path.sep + 'three.txt: no issues found',
+          'nested' + path.sep + 'two.txt',
+          ' error Cannot process specified file: it’s ignored',
+          '',
+          'one.txt: no issues found',
+          '',
+          '✖ 1 error',
+          ''
+        ].join('\n')
+      )
+    }
+  )
 
   await t.test(
     'silentlyIgnore: skip detected ignored files (#1)',
@@ -620,22 +623,25 @@ test('input', async function (t) {
     }
   )
 
-  await t.test('should report', async function () {
-    const stderr = spy()
+  await t.test(
+    'should ignore files w/o config w/ `ignoreUnconfigured`',
+    async function () {
+      const stderr = spy()
 
-    const result = await engine({
-      cwd: new URL('config-ignore-unconfigured/', fixtures),
-      files: ['.'],
-      extensions: ['txt'],
-      ignoreUnconfigured: true,
-      processor: noop,
-      rcName: '.foorc',
-      streamError: stderr.stream
-    })
+      const result = await engine({
+        cwd: new URL('config-ignore-unconfigured/', fixtures),
+        files: ['.'],
+        extensions: ['txt'],
+        ignoreUnconfigured: true,
+        processor: noop,
+        rcName: '.foorc',
+        streamError: stderr.stream
+      })
 
-    assert.equal(result.code, 0)
-    assert.equal(stderr(), 'folder' + path.sep + 'two.txt: no issues found\n')
-  })
+      assert.equal(result.code, 0)
+      assert.equal(stderr(), 'folder' + path.sep + 'two.txt: no issues found\n')
+    }
+  )
 
   await t.test('should search if given files', async function () {
     const cwd = new URL('simple-structure/', fixtures)

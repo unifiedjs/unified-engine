@@ -3,7 +3,8 @@
  *
  * This particularly removed error cause messages, which change across Node
  * versions.
- * It also drops file paths, which differ across platforms.
+ * It also drops file paths, which differ across platforms,
+ * and stack frames, which differ across Node versions.
  *
  * @param {string} value
  *   Error, report, or stack.
@@ -22,6 +23,9 @@ export function cleanError(value, max) {
       .replace(/file:.+\//g, '')
       .replace(/\d+:\d+/g, '1:1')
       .split('\n')
+      .filter(function (line) {
+        return !/^ +at /.test(line)
+      })
       .slice(0, max || Infinity)
       .join('\n')
   )

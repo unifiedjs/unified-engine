@@ -1,6 +1,4 @@
 import assert from 'node:assert/strict'
-import fs from 'node:fs/promises'
-import {fileURLToPath} from 'node:url'
 import path from 'node:path'
 import test from 'node:test'
 import {engine} from 'unified-engine'
@@ -290,25 +288,15 @@ test('ignore', async function (t) {
 
   await t.test('should support higher positioned files', async function () {
     const stderr = spy()
-    const cwd = new URL('empty/', fixtures)
-    const url = new URL('../../../example.txt', import.meta.url)
-
-    await fs.writeFile(url, '')
 
     const result = await engine({
-      cwd,
-      files: [url],
+      cwd: new URL('simple-structure/nested/', fixtures),
+      files: [new URL('simple-structure/one.txt', fixtures)],
       processor: noop,
       streamError: stderr.stream
     })
 
-    await fs.unlink(url)
-
     assert.equal(result.code, 0)
-    assert.equal(
-      stderr(),
-      path.relative(fileURLToPath(cwd), fileURLToPath(url)) +
-        ': no issues found\n'
-    )
+    assert.equal(stderr(), '..' + path.sep + 'one.txt: no issues found\n')
   })
 })

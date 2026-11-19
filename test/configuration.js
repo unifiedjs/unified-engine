@@ -96,7 +96,7 @@ test('configuration', async function (t) {
     }
   )
 
-  await t.test('should support `.rc.js` scripts (1)', async function () {
+  await t.test('should fail on a malformed `.rc.js` script', async function () {
     const stderr = spy()
 
     const result = await engine({
@@ -122,22 +122,7 @@ test('configuration', async function (t) {
     )
   })
 
-  await t.test('should support `.rc.js` scripts (2)', async function () {
-    const stderr = spy()
-
-    const result = await engine({
-      cwd: new URL('rc-script/', fixtures),
-      extensions: ['txt'],
-      files: ['.'],
-      processor: noop,
-      rcName: '.foorc',
-      streamError: stderr.stream
-    })
-
-    assert.deepEqual([result.code, stderr()], [0, 'one.txt: no issues found\n'])
-  })
-
-  await t.test('should support `.rc.js` scripts (3)', async function () {
+  await t.test('should support a `.rc.js` script', async function () {
     const stderr = spy()
 
     const result = await engine({
@@ -252,7 +237,7 @@ test('configuration', async function (t) {
     )
   })
 
-  await t.test('should support `.rc.yaml` config files', async function () {
+  await t.test('should fail on a malformed `.rc.yaml` file', async function () {
     const stderr = spy()
 
     const result = await engine({
@@ -278,7 +263,7 @@ test('configuration', async function (t) {
     )
   })
 
-  await t.test('should support custom rc files', async function () {
+  await t.test('should support `rcPath`', async function () {
     const stderr = spy()
     let calls = 0
 
@@ -316,33 +301,36 @@ test('configuration', async function (t) {
     )
   })
 
-  await t.test('should support searching package files', async function () {
-    const stderr = spy()
+  await t.test(
+    'should fail on a malformed `package.json` file',
+    async function () {
+      const stderr = spy()
 
-    const result = await engine({
-      cwd: new URL('malformed-package-file/', fixtures),
-      extensions: ['txt'],
-      files: ['.'],
-      packageField: 'fooConfig',
-      processor: noop,
-      streamError: stderr.stream
-    })
+      const result = await engine({
+        cwd: new URL('malformed-package-file/', fixtures),
+        extensions: ['txt'],
+        files: ['.'],
+        packageField: 'fooConfig',
+        processor: noop,
+        streamError: stderr.stream
+      })
 
-    assert.deepEqual(
-      [result.code, cleanError(stderr(), 4)],
-      [
-        1,
+      assert.deepEqual(
+        [result.code, cleanError(stderr(), 4)],
         [
-          'one.txt',
-          ' error Cannot process file',
-          '  [cause]:',
-          '    Error: Cannot parse file `package.json`'
-        ].join('\n')
-      ]
-    )
-  })
+          1,
+          [
+            'one.txt',
+            ' error Cannot process file',
+            '  [cause]:',
+            '    Error: Cannot parse file `package.json`'
+          ].join('\n')
+        ]
+      )
+    }
+  )
 
-  await t.test('should support custom rc files', async function () {
+  await t.test('should support `rcName`', async function () {
     const stderr = spy()
     let calls = 0
 
@@ -430,7 +418,7 @@ test('configuration', async function (t) {
     }
   )
 
-  await t.test('should cascade `settings`', async function () {
+  await t.test('should use `settings` from a config file', async function () {
     const stderr = spy()
     let calls = 0
 

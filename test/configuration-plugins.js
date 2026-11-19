@@ -9,25 +9,28 @@ import {spy} from './util/spy.js'
 const fixtures = new URL('fixtures/', import.meta.url)
 
 test('configuration (plugins)', async function (t) {
-  await t.test('should cascade `plugins`', async function () {
-    const stderr = spy()
+  await t.test(
+    'should use `plugins` from the closest config file',
+    async function () {
+      const stderr = spy()
 
-    globalThis.unifiedEngineTestCalls = 0
+      globalThis.unifiedEngineTestCalls = 0
 
-    const result = await engine({
-      cwd: new URL('config-plugins-cascade/', fixtures),
-      extensions: ['txt'],
-      files: ['.'],
-      packageField: 'fooConfig',
-      processor: noop(),
-      rcName: '.foorc',
-      streamError: stderr.stream
-    })
+      const result = await engine({
+        cwd: new URL('config-plugins-cascade/', fixtures),
+        extensions: ['txt'],
+        files: ['.'],
+        packageField: 'fooConfig',
+        processor: noop(),
+        rcName: '.foorc',
+        streamError: stderr.stream
+      })
 
-    assert.equal(result.code, 0)
-    assert.equal(stderr(), 'nested' + path.sep + 'one.txt: no issues found\n')
-    assert.equal(globalThis.unifiedEngineTestCalls, 1)
-  })
+      assert.equal(result.code, 0)
+      assert.equal(stderr(), 'nested' + path.sep + 'one.txt: no issues found\n')
+      assert.equal(globalThis.unifiedEngineTestCalls, 1)
+    }
+  )
 
   await t.test(
     'should support an ESM plugin w/ an `.mjs` extname',
@@ -106,12 +109,16 @@ test('configuration (plugins)', async function (t) {
 
     assert.equal(result.code, 1)
     assert.equal(
-      cleanError(stderr(), 4),
+      cleanError(stderr(), 8),
       [
         'one.txt',
         ' error Cannot process file',
         '  [cause]:',
-        '    Error: Cannot parse file `package.json`'
+        '    Error: Cannot parse file `package.json`',
+        '  [cause]:',
+        '    Error: Cannot import `test.js`',
+        '  [cause]:',
+        '    Error: Boom!'
       ].join('\n')
     )
   })
@@ -130,12 +137,16 @@ test('configuration (plugins)', async function (t) {
 
     assert.equal(result.code, 1)
     assert.equal(
-      cleanError(stderr(), 4),
+      cleanError(stderr(), 8),
       [
         'one.txt',
         ' error Cannot process file',
         '  [cause]:',
-        '    Error: Cannot parse file `package.json`'
+        '    Error: Cannot parse file `package.json`',
+        '  [cause]:',
+        '    Error: Cannot import `test.js`',
+        '  [cause]:',
+        '    Error: Expected a plugin or preset exported as the default export'
       ].join('\n')
     )
   })
@@ -178,12 +189,16 @@ test('configuration (plugins)', async function (t) {
 
     assert.equal(result.code, 1)
     assert.equal(
-      cleanError(stderr(), 4),
+      cleanError(stderr(), 8),
       [
         'one.txt',
         ' error Cannot process file',
         '  [cause]:',
-        '    Error: Cannot parse file `package.json`'
+        '    Error: Cannot parse file `package.json`',
+        '  [cause]:',
+        '    Error: Expected preset or plugin, not `false`, at `test.js`',
+        '  [cause]:',
+        '    Error: Expected preset, not `false`'
       ].join('\n')
     )
   })

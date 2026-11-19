@@ -15,11 +15,8 @@ const fixtures = new URL('fixtures/', import.meta.url)
 test('completers', async function (t) {
   await t.test('should pass `fileSet` to plugins', async function () {
     const stderr = spy()
-
-    // Most often, completers cannot be detected to be the same because they are
-    // created inside attachers.
-    // `pluginId` can be used for those to ensure the completer runs once.
-    otherCompleter.pluginId = 'foo'
+    let calls = 0
+    let otherCalls = 0
 
     const result = await engine({
       cwd: new URL('two-files/', fixtures),
@@ -43,7 +40,24 @@ test('completers', async function (t) {
             'should be able to `use` a completer'
           )
 
+          // Most often, completers cannot be detected to be the same because
+          // they are created inside attachers.
+          // `pluginId` can be used for those to ensure the completer runs once.
+          otherCompleter.pluginId = 'foo'
           set.use(otherCompleter)
+
+          /**
+           * Second completer, a new function each time.
+           *
+           * @param {FileSet} set
+           *   Set.
+           * @returns {undefined}
+           *   Nothing.
+           */
+          function otherCompleter(set) {
+            otherCalls++
+            checkSet(set, 2)
+          }
 
           // First, this plugin is attached for `one.txt`, where it adds `two.txt`.
           // Then, this plugin is attached for `two.txt`, but it does not re-add
@@ -61,18 +75,8 @@ test('completers', async function (t) {
 
     assert.equal(result.code, 0)
     assert.equal(stderr(), 'one.txt: no issues found\n')
-
-    /**
-     * Second completer.
-     *
-     * @param {FileSet} set
-     *   Set.
-     * @returns {undefined}
-     *   Nothing.
-     */
-    function otherCompleter(set) {
-      checkSet(set, 2)
-    }
+    assert.equal(calls, 1)
+    assert.equal(otherCalls, 1)
 
     /**
      * First completer.
@@ -83,6 +87,7 @@ test('completers', async function (t) {
      *   Nothing.
      */
     function completer(set) {
+      calls++
       checkSet(set, 1)
     }
 

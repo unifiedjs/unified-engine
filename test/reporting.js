@@ -29,17 +29,21 @@ const vfileReporterPrettyAsync = async function (files) {
   return vfileReporterPretty(files)
 }
 
-// See: <https://github.com/sindresorhus/eslint-formatter-pretty/blob/159b30a/index.js#L90-L93>.
-const original = process.env.CI
-
-if (!windows) {
-  process.env.CI = 'true'
-}
-
 test('reporting', async function (t) {
-  t.after(function () {
+  // See: <https://github.com/sindresorhus/eslint-formatter-pretty/blob/159b30a/index.js#L90-L93>.
+  const ci = process.env.CI
+
+  t.before(function () {
     if (!windows) {
-      process.env.CI = original
+      process.env.CI = 'true'
+    }
+  })
+
+  t.after(function () {
+    if (ci === undefined) {
+      delete process.env.CI
+    } else {
+      process.env.CI = ci
     }
   })
 
