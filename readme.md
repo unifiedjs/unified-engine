@@ -326,7 +326,7 @@ Configuration (TypeScript type).
 * `filePath` (`URL` or `string`, optional)
   — file path to process the given file on `streamIn` as
 * `files` (`Array<URL | VFile | string>`, optional)
-  — paths or [globs][github-node-glob] to files and folder, or virtual files, to
+  — paths or [globs][nodejs-fs-glob] to files and folder, or virtual files, to
   process
 * `frail` (`boolean`, default: `false`)
   — call back with an unsuccessful (`1`) code on warnings as well as errors
@@ -580,7 +580,7 @@ configuration file by turning on `options.ignoreUnconfigured`.
 ### Ignoring
 
 Ignoring is used when searching for files in folders.
-If paths (including those expanded from [globs][github-node-glob]) are passed in
+If paths (including those expanded from [globs][nodejs-fs-glob]) are passed in
 that are ignored, an error is thrown.
 These files can be silently ignored by turning on `options.silentlyIgnore`.
 
@@ -1638,8 +1638,6 @@ abide by its terms.
 
 [github-gist-esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
 
-[github-node-glob]: https://github.com/isaacs/node-glob#glob-primer
-
 [github-node-ignore]: https://github.com/kaelzhang/node-ignore
 
 [github-remark]: https://github.com/remarkjs/remark
@@ -1683,6 +1681,8 @@ abide by its terms.
 [health-contributing]: https://github.com/unifiedjs/.github/blob/main/contributing.md
 
 [health-support]: https://github.com/unifiedjs/.github/blob/main/support.md
+
+[nodejs-fs-glob]: https://nodejs.org/api/fs.html#fsglobpattern-options-callback
 
 [nodejs-readable-stream]: https://nodejs.org/api/stream.html#readable-streams
 
