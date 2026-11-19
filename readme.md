@@ -72,7 +72,6 @@
   * [`options.tree`](#optionstree)
   * [`options.treeIn`](#optionstreein)
   * [`options.treeOut`](#optionstreeout)
-* [Types](#types)
 * [Compatibility](#compatibility)
 * [Security](#security)
 * [Contribute](#contribute)
@@ -137,8 +136,22 @@ process.exitCode = result.code
 
 ## API
 
-This package exports the identifiers [`Configuration`][api-configuration] and
+This package exports the identifiers
+[`Configuration`][api-configuration]
+and
 [`engine`][api-engine].
+It exports the additional [TypeScript][] types
+[`Callback`][api-callback],
+[`Completer`][api-completer],
+[`ConfigResult`][api-config-result],
+[`ConfigTransform`][api-config-transform],
+[`Context`][api-context],
+[`ContextWithCode`][api-context-with-code],
+[`FileSet`][api-file-set],
+[`Options`][api-options],
+[`Preset`][api-preset],
+[`ResolveFrom`][api-resolve-from],
+and [`VFileReporter`][api-vfile-reporter].
 There is no default export.
 
 ### `engine(options, callback?)`
@@ -1564,22 +1577,6 @@ Yields (positional info left out for brevity):
   ]
 }
 ```
-
-## Types
-
-This package is fully typed with [TypeScript][].
-It exports the additional types
-[`Completer`][api-completer],
-[`Callback`][api-callback],
-[`ConfigResult`][api-config-result],
-[`ConfigTransform`][api-config-transform],
-[`ContextWithCode`][api-context-with-code],
-[`Context`][api-context],
-[`FileSet`][api-file-set],
-[`Options`][api-options],
-[`Preset`][api-preset],
-[`ResolveFrom`][api-resolve-from], and
-[`VFileReporter`][api-vfile-reporter].
 
 ## Compatibility
 
