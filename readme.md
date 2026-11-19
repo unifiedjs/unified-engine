@@ -103,7 +103,7 @@ You can use this to make such things.
 ## Install
 
 This package is [ESM only][github-gist-esm].
-In Node.js (version 16+), install with [npm][npmjs-install]:
+In Node.js (version 22.19+), install with [npm][npmjs-install]:
 
 ```sh
 npm install unified-engine
@@ -1567,8 +1567,8 @@ versions of Node.js.
 
 When we cut a new major release, we drop support for unmaintained versions of
 Node.
-This means we try to keep the current release line, `unified-engine@^11`,
-compatible with Node.js 16.
+This means we try to keep the current release line, `unified-engine@12`,
+compatible with Node.js 22.19+.
 
 ## Security
 

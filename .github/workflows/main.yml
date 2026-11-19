@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         node:
-          - lts/krypton
+          - lts/jod
           - node
         os:
           - ubuntu-latest
