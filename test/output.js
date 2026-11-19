@@ -407,6 +407,63 @@ test('output', async function (t) {
     assert.equal(stdout(), 'Hi! 🤷‍♂️')
   })
 
+  await t.test('should write binary to the file system', async function () {
+    const cwd = new URL('simple-structure/', fixtures)
+    const stderr = spy()
+    const value = new Uint8Array([0xde, 0xad, 0xbe, 0xef])
+
+    const result = await engine({
+      cwd,
+      files: ['one.txt'],
+      output: 'one.bin',
+      processor: noop().use(
+        /** @type {Plugin<[], Literal, Uint8Array>} */
+        // @ts-expect-error: TS doesn’t get `this`.
+        function () {
+          /** @type {Compiler<Literal, Uint8Array>} */
+          this.compiler = function () {
+            return value
+          }
+        }
+      ),
+      streamError: stderr.stream
+    })
+
+    const output = new Uint8Array(await fs.readFile(new URL('one.bin', cwd)))
+    await fs.unlink(new URL('one.bin', cwd))
+
+    assert.equal(result.code, 0)
+    assert.equal(stderr(), 'one.txt > one.bin: written\n')
+    assert.deepEqual(output, value)
+  })
+
+  await t.test('should write binary to stdout', async function () {
+    const stderr = spy()
+    const stdout = spy()
+    const value = new Uint8Array([0xde, 0xad, 0xbe, 0xef])
+
+    const result = await engine({
+      cwd: new URL('filled-file/', fixtures),
+      files: ['one.txt'],
+      processor: noop().use(
+        /** @type {Plugin<[], Literal, Uint8Array>} */
+        // @ts-expect-error: TS doesn’t get `this`.
+        function () {
+          /** @type {Compiler<Literal, Uint8Array>} */
+          this.compiler = function () {
+            return value
+          }
+        }
+      ),
+      streamError: stderr.stream,
+      streamOut: stdout.stream
+    })
+
+    assert.equal(result.code, 0)
+    assert.equal(stderr(), 'one.txt: no issues found\n')
+    assert.deepEqual(stdout.chunks, [value])
+  })
+
   await t.test('should ignore nullish compilers', async function () {
     const cwd = new URL('filled-file/', fixtures)
     const stderr = spy()

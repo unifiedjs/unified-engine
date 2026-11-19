@@ -27,12 +27,19 @@ export function spy() {
     return true
   }
 
+  done.chunks = output
   done.stream = stream
 
   return done
 
   function done() {
     stream.write = originalWrite
-    return output.join('')
+    return output
+      .map(function (chunk) {
+        return chunk instanceof Uint8Array
+          ? new TextDecoder().decode(chunk)
+          : chunk
+      })
+      .join('')
   }
 }
