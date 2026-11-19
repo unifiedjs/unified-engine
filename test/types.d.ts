@@ -5,9 +5,7 @@ export interface SomeCustomResultExample {
 
 // We put some state in `globalThis` to track tests work.
 declare global {
-  // eslint-disable-next-line no-var -- has to be `var` for `globalThis`.
   var unifiedEngineTestCalls: number | undefined
-  // eslint-disable-next-line no-var -- has to be `var` for `globalThis`.
   var unifiedEngineTestValues: unknown | undefined
 }
 

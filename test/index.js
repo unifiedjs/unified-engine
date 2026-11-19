@@ -1,4 +1,4 @@
-/* eslint-disable import/no-unassigned-import */
+/* eslint-disable import-x/no-unassigned-import -- these files register tests. */
 import './color.js'
 import './completers.js'
 import './configuration.js'
@@ -16,4 +16,3 @@ import './reporting.js'
 import './settings-and-plugins.js'
 import './stdin.js'
 import './tree.js'
-/* eslint-enable import/no-unassigned-import */

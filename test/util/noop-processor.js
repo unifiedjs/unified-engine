@@ -17,8 +17,12 @@ function parse() {
   self.parser = parser
 
   /**
+   * Parse a document.
+   *
    * @param {string} document
+   *   Document.
    * @returns {Literal}
+   *   Tree.
    */
   function parser(document) {
     return {type: 'text', value: document}
@@ -40,8 +44,12 @@ function stringify() {
   self.compiler = compiler
 
   /**
+   * Serialize a tree.
+   *
    * @param {Literal} tree
+   *   Tree.
    * @returns {string}
+   *   Document.
    */
   function compiler(tree) {
     return String(tree.value)

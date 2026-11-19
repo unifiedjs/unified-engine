@@ -7,7 +7,7 @@ import assert from 'node:assert/strict'
  *   Nothing.
  */
 export default function plugin(options) {
-  assert(typeof globalThis.unifiedEngineTestCalls === 'number')
+  assert.ok(typeof globalThis.unifiedEngineTestCalls === 'number')
   globalThis.unifiedEngineTestCalls++
   globalThis.unifiedEngineTestValues = options
 }

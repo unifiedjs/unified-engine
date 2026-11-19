@@ -18,6 +18,8 @@ const fixtures = new URL('fixtures/', import.meta.url)
 const windows = process.platform === 'win32'
 
 /**
+ * Report with `vfile-reporter-pretty`, async.
+ *
  * @param {Array<VFile>} files
  *   Files.
  * @returns {Promise<string>}
@@ -35,6 +37,12 @@ if (!windows) {
 }
 
 test('reporting', async function (t) {
+  t.after(function () {
+    if (!windows) {
+      process.env.CI = original
+    }
+  })
+
   await t.test('should fail for warnings with `frail`', async function () {
     const stderr = spy()
 
@@ -286,7 +294,7 @@ test('reporting', async function (t) {
   )
 
   await t.test('should fail on an unfound reporter', async function () {
-    try {
+    await assert.rejects(async function () {
       await engine({
         cwd: new URL('one-file/', fixtures),
         extensions: ['txt'],
@@ -294,13 +302,6 @@ test('reporting', async function (t) {
         processor: noop(),
         reporter: 'missing'
       })
-      assert.fail()
-    } catch (error) {
-      assert.match(String(error), /Cannot find reporter `missing`/)
-    }
+    }, /Cannot find reporter `missing`/)
   })
-
-  if (!windows) {
-    process.env.CI = original
-  }
 })

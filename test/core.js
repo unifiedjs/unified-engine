@@ -12,55 +12,37 @@ test('engine', async function (t) {
   })
 
   await t.test('should fail when w/o options', async function () {
-    try {
+    await assert.rejects(async function () {
       // @ts-expect-error: check how the runtime handles `null`.
       await engine(null)
-      assert.fail()
-    } catch (error) {
-      assert.match(String(error), /Missing `processor`/)
-    }
+    }, /Missing `processor`/)
   })
 
   await t.test('should fail when w/o processor', async function () {
-    try {
+    await assert.rejects(async function () {
       // @ts-expect-error: check how the runtime handles `processor` missing.
       await engine({})
-      assert.fail()
-    } catch (error) {
-      assert.match(String(error), /Missing `processor`/)
-    }
+    }, /Missing `processor`/)
   })
 
   await t.test('should fail w/ `output` and w/ `out`', async function () {
-    try {
+    await assert.rejects(async function () {
       await engine({out: true, output: true, processor: unified()})
-      assert.fail()
-    } catch (error) {
-      assert.match(String(error), /Cannot accept both `output` and `out`/)
-    }
+    }, /Cannot accept both `output` and `out`/)
   })
 
   await t.test('should fail w/ `detectConfig` w/o `rcName`', async function () {
-    try {
+    await assert.rejects(async function () {
       await engine({detectConfig: true, processor: unified()})
-      assert.fail()
-    } catch (error) {
-      assert.match(
-        String(error),
-        /Missing `rcName` or `packageField` with `detectConfig`/
-      )
-    }
+    }, /Missing `rcName` or `packageField` with `detectConfig`/)
   })
 
   await t.test(
     'should fail w/ `detectIgnore` w/o `ignoreName`',
     async function () {
-      try {
+      await assert.rejects(async function () {
         await engine({detectIgnore: true, processor: unified()})
-        assert.fail()
-      } catch (error) {
-        assert.match(String(error), /Missing `ignoreName` with `detectIgnore`/)
-      }
+      }, /Missing `ignoreName` with `detectIgnore`/)
     }
   )
 

@@ -11,7 +11,7 @@ const fixtures = new URL('fixtures/', import.meta.url)
 
 test('file-path', async function (t) {
   await t.test('should throw on `filePath` with files', async function () {
-    try {
+    await assert.rejects(async function () {
       await engine({
         cwd: new URL('simple-structure/', fixtures),
         extensions: ['txt'],
@@ -19,10 +19,7 @@ test('file-path', async function (t) {
         files: ['.'],
         processor: noop
       })
-      assert.fail()
-    } catch (error) {
-      assert.match(String(error), /Do not pass both `filePath` and real files/)
-    }
+    }, /Do not pass both `filePath` and real files/)
   })
 
   await t.test('should support `filePath`', async function () {

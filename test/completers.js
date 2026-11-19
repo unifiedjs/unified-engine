@@ -63,6 +63,8 @@ test('completers', async function (t) {
     assert.equal(stderr(), 'one.txt: no issues found\n')
 
     /**
+     * Second completer.
+     *
      * @param {FileSet} set
      *   Set.
      * @returns {undefined}
@@ -73,6 +75,8 @@ test('completers', async function (t) {
     }
 
     /**
+     * First completer.
+     *
      * @param {FileSet} set
      *   Set.
      * @returns {undefined}
@@ -83,6 +87,8 @@ test('completers', async function (t) {
     }
 
     /**
+     * Check a file set.
+     *
      * @param {FileSet} set
      *   Set.
      * @param {number} nr

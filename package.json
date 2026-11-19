@@ -31,7 +31,7 @@
   "description": "unified engine to process multiple files, lettings users configure from the file system",
   "devDependencies": {
     "@types/extend": "^3.0.0",
-    "c8": "^10.0.0",
+    "c8": "^12.0.0",
     "prettier": "^3.0.0",
     "remark": "^15.0.0",
     "remark-cli": "^12.0.0",
@@ -39,11 +39,11 @@
     "remark-toc": "^9.0.0",
     "strip-ansi": "^7.0.0",
     "type-coverage": "^2.0.0",
-    "typescript": "^5.0.0",
+    "typescript": "^6.0.0",
     "unified": "^11.0.0",
     "vfile-reporter-json": "^4.0.0",
     "vfile-reporter-pretty": "^7.0.0",
-    "xo": "^0.60.0"
+    "xo": "^5.0.0"
   },
   "exports": "./index.js",
   "files": [
@@ -95,27 +95,5 @@
     "strict": true
   },
   "type": "module",
-  "version": "11.2.2",
-  "xo": {
-    "overrides": [
-      {
-        "files": "test/fixtures/**/*.js",
-        "rules": {
-          "unicorn/no-empty-file": "off",
-          "unicorn/prefer-module": "off"
-        }
-      }
-    ],
-    "prettier": true,
-    "rules": {
-      "complexity": "off",
-      "logical-assignment-operators": "off",
-      "no-await-in-loop": "off",
-      "no-unused-expressions": "off",
-      "unicorn/no-this-assignment": "off",
-      "unicorn/prefer-at": "off",
-      "unicorn/prefer-event-target": "off",
-      "unicorn/prefer-string-replace-all": "off"
-    }
-  }
+  "version": "11.2.2"
 }

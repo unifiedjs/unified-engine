@@ -29,12 +29,9 @@ test('input', async function (t) {
       stream.end()
     })
 
-    try {
+    await assert.rejects(async function () {
       await engine({processor: unified(), streamIn: stream})
-      assert.fail()
-    } catch (error) {
-      assert.match(String(error), /No input/)
-    }
+    }, /No input/)
   })
 
   await t.test('should not fail on empty input stream', async function () {
@@ -531,7 +528,7 @@ test('input', async function (t) {
       const cwd = new URL('empty/', fixtures)
       await fs.mkdir(cwd, {recursive: true})
 
-      try {
+      await assert.rejects(async function () {
         await engine({
           cwd,
           files: ['.'],
@@ -540,13 +537,7 @@ test('input', async function (t) {
           rcPath: '123',
           streamError: spy().stream
         })
-        assert.fail()
-      } catch (error) {
-        assert.match(
-          String(error),
-          /Cannot accept both `rcPath` and `ignoreUnconfigured`/
-        )
-      }
+      }, /Cannot accept both `rcPath` and `ignoreUnconfigured`/)
     }
   )
 
@@ -556,7 +547,7 @@ test('input', async function (t) {
       const cwd = new URL('empty/', fixtures)
       await fs.mkdir(cwd, {recursive: true})
 
-      try {
+      await assert.rejects(async function () {
         await engine({
           cwd,
           files: ['.'],
@@ -564,13 +555,7 @@ test('input', async function (t) {
           processor: unified(),
           streamError: spy().stream
         })
-        assert.fail()
-      } catch (error) {
-        assert.match(
-          String(error),
-          /Missing `rcName` or `packageField` with `ignoreUnconfigured`/
-        )
-      }
+      }, /Missing `rcName` or `packageField` with `ignoreUnconfigured`/)
     }
   )
 
@@ -580,7 +565,7 @@ test('input', async function (t) {
       const cwd = new URL('empty/', fixtures)
       await fs.mkdir(cwd, {recursive: true})
 
-      try {
+      await assert.rejects(async function () {
         await engine({
           cwd,
           detectConfig: false,
@@ -591,13 +576,7 @@ test('input', async function (t) {
           rcName: 'x',
           streamError: spy().stream
         })
-        assert.fail()
-      } catch (error) {
-        assert.match(
-          String(error),
-          /Cannot use `detectConfig: false` with `ignoreUnconfigured`/
-        )
-      }
+      }, /Cannot use `detectConfig: false` with `ignoreUnconfigured`/)
     }
   )
 

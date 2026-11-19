@@ -373,12 +373,9 @@ test('output', async function (t) {
         ['one.txt', ' error No such file or folder'].join('\n')
       )
 
-      try {
+      await assert.rejects(async function () {
         await fs.readFile(targetFile)
-        assert.fail()
-      } catch (error) {
-        assert.match(String(error), /no such file or directory/)
-      }
+      }, /no such file or directory/)
     }
   )
 

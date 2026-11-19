@@ -31,6 +31,8 @@ test('`configTransform`', async function (t) {
       engine(
         {
           /**
+           * Transform our custom config format.
+           *
            * @param {RawValue} raw
            *   Format of our example custom config.
            * @returns
@@ -54,13 +56,13 @@ test('`configTransform`', async function (t) {
           /** @type {Configuration} */
           // @ts-expect-error: access the internals
           const config = result.configuration
-          const cache = config.findUp.cache
+          const {cache} = config.findUp
           const keys = Object.keys(cache)
 
           assert.equal(keys.length, 1)
           const value = cache[keys[0]]
-          assert(typeof value === 'object')
-          assert('settings' in value)
+          assert.ok(typeof value === 'object')
+          assert.ok('settings' in value)
           assert.deepEqual(value.settings, {foxtrot: true})
           assert.deepEqual(value.plugins[0][1], {golf: false})
 

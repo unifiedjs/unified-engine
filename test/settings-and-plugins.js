@@ -76,6 +76,8 @@ test('plugins', async function (t) {
         },
         [
           /**
+           * Plugin.
+           *
            * @param {unknown} options
            *   Configuration.
            * @returns

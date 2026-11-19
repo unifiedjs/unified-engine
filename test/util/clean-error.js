@@ -22,7 +22,7 @@ export function cleanError(value, max) {
       .replace(/file:.+\//g, '')
       .replace(/\d+:\d+/g, '1:1')
       .split('\n')
-      .slice(0, max || Number.POSITIVE_INFINITY)
+      .slice(0, max || Infinity)
       .join('\n')
   )
 }
